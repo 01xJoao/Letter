@@ -202,6 +202,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\letter_round.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\letter_round%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\letter_round%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%401x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -232,6 +236,7 @@
     <Folder Include="Resources\Assets.xcassets\board_mail.imageset\" />
     <Folder Include="Resources\Assets.xcassets\board_chat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_round_big.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
