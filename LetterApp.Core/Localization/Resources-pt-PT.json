@@ -1,0 +1,14 @@
+﻿[
+  {
+    "key": "OnBoardingViewModel_LetterHelloWorld",
+    "translated": "Bem-vindo ao Letter!"
+  },
+  {
+    "key": "OnBoardingViewModel_Register",
+    "translated": "Registar"
+  },
+  {
+    "key": "OnBoardingViewModel_Call",
+    "translated": "Mensagens & Chamadas"
+  }
+]

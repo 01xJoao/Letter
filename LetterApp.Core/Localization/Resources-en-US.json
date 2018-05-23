@@ -1,0 +1,138 @@
+﻿[
+  {
+    "key": "Code_E101",
+    "translated": "Wrong Email or Password, try again"
+  },
+  {
+    "key": "Code_E102",
+    "translated": "Account not yet activated, please activate your account"
+  },
+  {
+    "key": "Code_E103",
+    "translated": "Your account has been desactivated"
+  },
+  {
+    "key": "Code_E104",
+    "translated": "No user associated with this email"
+  },
+  {
+    "key": "Code_E105",
+    "translated": "Something went wrong, please try again"
+  },
+  {
+    "key": "Code_E106",
+    "translated": "Wrong verification code, try again or request a new one"
+  },
+  {
+    "key": "Code_E107",
+    "translated": "No division found with this code"
+  },
+  {
+    "key": "Code_E108",
+    "translated": "Your email domain is not valid for this division"
+  },
+  {
+    "key": "Code_E109",
+    "translated": "Wrong password, try again"
+  },
+  {
+    "key": "Code_E110",
+    "translated": "Email already in use"
+  },
+  {
+    "key": "Code_E111",
+    "translated": "Wrong activation code, try again or request a new one"
+  },
+  {
+    "key": "Code_E112",
+    "translated": "Organization not found"
+  },
+  {
+    "key": "Code_E113",
+    "translated": "Your email domain is not valid in this organization"
+  },
+  {
+    "key": "Code_E114",
+    "translated": "Organization has no divisions, try again later"
+  },
+  {
+    "key": "Code_E115",
+    "translated": "Wrong access code"
+  },
+  {
+    "key": "Code_E116",
+    "translated": "No positions found"
+  },
+  {
+    "key": "Code_S201",
+    "translated": "Password successfully changed"
+  },
+  {
+    "key": "Code_S202",
+    "translated": "Registration completed"
+  },
+  {
+    "key": "Code_S203",
+    "translated": "New position defined"
+  },
+  {
+    "key": "Code_S204",
+    "translated": "Updated"
+  },
+  {
+    "key": "Code_S205",
+    "translated": "Your account was been deactivated"
+  },
+  {
+    "key": "Code_S206",
+    "translated": "You left a division"
+  },
+  {
+    "key": "OnBoardingViewModel_LetterHelloWorld",
+    "translated": "Welcome to Letter"
+  },
+  {
+    "key": "OnBoardingViewModel_LetterSlogan",
+    "translated": "Type Something..."
+  },
+  {
+    "key": "OnBoardingViewModel_Register",
+    "translated": "Register"
+  },
+  {
+    "key": "OnBoardingViewModel_RegisterSubtitle",
+    "translated": "Register with your organization email and instantly get access to your colleagues!"
+  },
+  {
+    "key": "OnBoardingViewModel_Call",
+    "translated": "Chat & Call"
+  },
+  {
+    "key": "OnBoardingViewModel_CallSubtitle",
+    "translated": "Send private messages or call someone for free!"
+  },
+  {
+    "key": "OnBoardingViewModel_SignIn",
+    "translated": "Already have an account? Sign In"
+  },
+  {
+    "key": "OnBoardingViewModel_SignUp",
+    "translated": "Sign Up"
+  },
+  {
+    "key": "MainViewModel_ChatTab",
+    "translated": "Chats"
+  },
+  {
+    "key": "MainViewModel_CallTab",
+    "translated": "Calls"
+  },
+  {
+    "key": "MainViewModel_ContactTab",
+    "translated": "Contacts"
+  },
+  {
+    "key": "MainViewModel_ProfileTab",
+    "translated": "Profile"
+  }
+]
