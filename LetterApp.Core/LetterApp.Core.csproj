@@ -32,6 +32,7 @@
   <ItemGroup>
     <None Remove="Localization\Resources-en-US.json" />
     <None Remove="Localization\Resources-pt-PT.json" />
+    <None Remove="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Localization\Resources-en-US.json" />
