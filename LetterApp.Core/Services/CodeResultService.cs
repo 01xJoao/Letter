@@ -9,6 +9,11 @@ namespace LetterApp.Core.Services
     {
         private Dictionary<int, string> CodeDictionary = new Dictionary<int, string>();
 
+        public CodeResultService()
+        {
+            SetCodes();
+        }
+
         public void SetCodes()
         {
             CodeDictionary.Add(101, Login_WrongPassword);

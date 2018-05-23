@@ -5,29 +5,43 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LetterApp.Core.Services.Interfaces;
 using Realms;
+using SharpRaven;
+using SharpRaven.Data;
 
 namespace LetterApp.Core.ViewModels.Abstractions
 {
     public abstract class XViewModel : IXViewModel, INotifyPropertyChanged
     {
-        protected Realm Realm;
-
         private static IXNavigationService _navigationService;
         protected static IXNavigationService NavigationService = _navigationService ?? (_navigationService = App.Container.GetInstance<IXNavigationService>());
+
+        private static IRavenService _ravenService;
+        private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
         public event PropertyChangedEventHandler PropertyChanged;
         private static readonly PropertyChangedEventArgs AllPropertiesChanged = new PropertyChangedEventArgs(string.Empty);
 
+        private Realm _realm;
+        public Realm Realm
+        {
+            get => _realm;
+            set => _realm = value;
+        }
+
         private bool _isBusy;
         public bool IsBusy
         {
-            get { return _isBusy; }
-            set { _isBusy = value; RaisePropertyChanged(nameof(IsBusy)); }
+            get => _isBusy;
+            set 
+            { 
+                _isBusy = value; 
+                RaisePropertyChanged(nameof(IsBusy)); 
+            }
         }
 
         public void InitializeViewModel()
         {
-            Realm = Realm.GetInstance();
+            _realm = Realm.GetInstance();
             InitializeAsync();
         }
 

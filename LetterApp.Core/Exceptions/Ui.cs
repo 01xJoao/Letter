@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using LetterApp.Core.Services.Interfaces;
+using SharpRaven.Data;
 
 namespace LetterApp.Core.Exceptions
 {
@@ -10,8 +11,13 @@ namespace LetterApp.Core.Exceptions
         private static IDialogService _dialogService;
         private static IDialogService DialogService => _dialogService ?? (_dialogService = App.Container.GetInstance<IDialogService>());
 
+        private static IRavenService _ravenService;
+        private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
+
         public static void Handle(TaskCanceledException e)
         {
+            RavenService.Raven.Capture(new SentryEvent(e));
+
             DialogService.ShowAlert(nameof(e), e.ToString());
         }
 

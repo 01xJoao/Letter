@@ -18,7 +18,6 @@ namespace LetterApp.Core.ViewModels
         public override async Task InitializeAsync()
         {
             await Task.Delay(1);
-            _errorCodeService.SetCodes();
             await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
         }
     }
