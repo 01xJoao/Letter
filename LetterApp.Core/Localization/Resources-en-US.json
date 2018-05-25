@@ -134,5 +134,25 @@
   {
     "key": "MainViewModel_ProfileTab",
     "translated": "Profile"
+  },
+  {
+    "key": "LoginViewModel_EmailLabel",
+    "translated": "Email"
+  },
+  {
+    "key": "LoginViewModel_PasswordLabel",
+    "translated": "Password"
+  },
+  {
+    "key": "LoginViewModel_ForgotPassButton",
+    "translated": "Forgot Password?"
+  },
+  {
+    "key": "LoginViewModel_SignUpButton",
+    "translated": "First time using Letter? Sign Up!"
+  },
+  {
+    "key": "LoginViewModel_SignInButton",
+    "translated": "Sign In"
   }
 ]
