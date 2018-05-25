@@ -1,0 +1,319 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProjectGuid>{A2EA23D7-FA55-43F9-A9C0-A5C98BEE9EA6}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LetterApp.iOS</RootNamespace>
+    <AssemblyName>LetterApp.iOS</AssemblyName>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchFastDev>true</MtouchFastDev>
+    <IOSDebuggerPort>61746</IOSDebuggerPort>
+    <MtouchLink>None</MtouchLink>
+    <MtouchArch>x86_64</MtouchArch>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
+    <MtouchVerbosity></MtouchVerbosity>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <DefineConstants></DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <MtouchFloat32>true</MtouchFloat32>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>ARM64</MtouchArch>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchVerbosity></MtouchVerbosity>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <DefineConstants></DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchLink>None</MtouchLink>
+    <MtouchArch>x86_64</MtouchArch>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchVerbosity></MtouchVerbosity>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <DeviceSpecificBuild>true</DeviceSpecificBuild>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchFastDev>true</MtouchFastDev>
+    <MtouchFloat32>true</MtouchFloat32>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <IOSDebuggerPort>13666</IOSDebuggerPort>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>ARM64</MtouchArch>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchVerbosity></MtouchVerbosity>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.iOS" />
+    <Reference Include="MBProgressHUD">
+      <HintPath>..\packages\mbprogresshud.0.9.2.0\lib\Xamarin.iOS\MBProgressHUD.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media">
+      <HintPath>..\packages\Xam.Plugin.Media.4.0.0.4-beta\lib\xamarinios10\Plugin.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.0.6.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="SimpleInjector">
+      <HintPath>..\packages\SimpleInjector.4.3.0\lib\netstandard1.3\SimpleInjector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WebP.Touch">
+      <HintPath>..\packages\WebP.Touch.1.0.8\lib\Xamarin.iOS10\WebP.Touch.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading">
+      <HintPath>..\packages\Xamarin.FFImageLoading.2.3.6\lib\Xamarin.iOS10\FFImageLoading.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Platform">
+      <HintPath>..\packages\Xamarin.FFImageLoading.2.3.6\lib\Xamarin.iOS10\FFImageLoading.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Transformations">
+      <HintPath>..\packages\Xamarin.FFImageLoading.Transformations.2.3.6\lib\Xamarin.iOS10\FFImageLoading.Transformations.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Permissions">
+      <HintPath>..\packages\Plugin.Permissions.3.0.0.12-beta\lib\xamarinios10\Plugin.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm.DataBinding">
+      <HintPath>..\packages\Realm.DataBinding.1.2.0\lib\Xamarin.iOS10\Realm.DataBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq">
+      <HintPath>..\packages\Remotion.Linq.2.1.2\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm">
+      <HintPath>..\packages\Realm.Database.3.0.0\lib\netstandard1.4\Realm.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm.Sync">
+      <HintPath>..\packages\Realm.3.0.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration.ConfigurationManager">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpRaven">
+      <HintPath>..\packages\SharpRaven.2.4.0\lib\netstandard2.0\SharpRaven.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Group.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Group%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Group%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchImage.launchimage\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\contacts.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\contacts%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\contacts%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user-outline.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\call.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\call%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\call%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_logo.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_logo.imageset\letter_log.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_logo.imageset\letter_log%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_logo.imageset\letter_log%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_mail.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_chat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_chat.imageset\chat.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_chat.imageset\chat%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_chat.imageset\chat%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_mail.imageset\Group 2.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_mail.imageset\Group 2%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\board_mail.imageset\Group 2%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\letter_round.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\letter_round%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round.imageset\letter_round%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%401x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Assets.xcassets\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_contacts.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_profile.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_chats.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+    <Folder Include="Sources\" />
+    <Folder Include="Views\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\CustomViews\" />
+    <Folder Include="Views\Loading\" />
+    <Folder Include="Views\OnBoarding\" />
+    <Folder Include="Views\TabBar\" />
+    <Folder Include="Views\TabBar\CallListViewController\" />
+    <Folder Include="Views\TabBar\ChatListViewController\" />
+    <Folder Include="Views\TabBar\ContactListViewController\" />
+    <Folder Include="Views\TabBar\UserProfileViewController\" />
+    <Folder Include="Resources\Assets.xcassets\letter_logo.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\board_mail.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\board_chat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_round.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_round_big.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ChatListViewController\ChatListViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\CallListViewController\CallListViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\ContactListViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\UserProfileViewController.xib" />
+    <InterfaceDefinition Include="Views\OnBoarding\BoardPageViewController.xib" />
+    <InterfaceDefinition Include="Views\OnBoarding\OnBoardingViewController.xib" />
+    <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+    <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="Helpers\MemoryUtility.cs" />
+    <Compile Include="Interfaces\IXiOSView.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="Views\Loading\LoadingViewController.cs" />
+    <Compile Include="Views\Loading\LoadingViewController.designer.cs">
+      <DependentUpon>LoadingViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\XiOSNavigationService.cs" />
+    <Compile Include="Views\Base\XViewController.cs" />
+    <Compile Include="Views\Base\XTabBarViewController.cs" />
+    <Compile Include="Views\Base\MainViewController.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\ChatListViewController.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\ChatListViewController.designer.cs">
+      <DependentUpon>ChatListViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\CallListViewController\CallListViewController.cs" />
+    <Compile Include="Views\TabBar\CallListViewController\CallListViewController.designer.cs">
+      <DependentUpon>CallListViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\ContactListViewController.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\ContactListViewController.designer.cs">
+      <DependentUpon>ContactListViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\UserProfileViewController\UserProfileViewController.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\UserProfileViewController.designer.cs">
+      <DependentUpon>UserProfileViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Colors.cs" />
+    <Compile Include="Services\PlatformSpecificService.cs" />
+    <Compile Include="Helpers\CustomUIExtensions.cs" />
+    <Compile Include="Views\Base\RootViewController.cs" />
+    <Compile Include="Interfaces\IRootView.cs" />
+    <Compile Include="Views\Base\XBoardPageViewController.cs" />
+    <Compile Include="Views\OnBoarding\BoardPageViewController.cs" />
+    <Compile Include="Views\OnBoarding\BoardPageViewController.designer.cs">
+      <DependentUpon>BoardPageViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OnBoarding\OnBoardingViewController.cs" />
+    <Compile Include="Views\OnBoarding\OnBoardingViewController.designer.cs">
+      <DependentUpon>OnBoardingViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\OnBoardPageDataSource.cs" />
+    <Compile Include="Helpers\Animations.cs" />
+    <Compile Include="Helpers\UIButtonExtensions.cs" />
+    <Compile Include="Helpers\UITextFieldExtensions.cs" />
+    <Compile Include="Helpers\UILabelExtensions.cs" />
+    <Compile Include="Helpers\LocalConstants.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
+      <Project>{848E6633-3205-4E4B-BAF3-7A61FC5631EC}</Project>
+      <Name>LetterApp.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
+  <Import Project="..\packages\Realm.Database.3.0.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.0.0\build\Realm.Database.targets')" />
+  <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
+</Project>
