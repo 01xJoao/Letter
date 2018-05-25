@@ -17,7 +17,6 @@ namespace LetterApp.Core.Exceptions
         public static void Handle(TaskCanceledException e)
         {
             RavenService.Raven.Capture(new SentryEvent(e));
-
             DialogService.ShowAlert(nameof(e), e.ToString());
         }
 
@@ -38,11 +37,13 @@ namespace LetterApp.Core.Exceptions
 
         public static void Handle(ServerErrorException e)
         {
+            RavenService.Raven.Capture(new SentryEvent(e));
             DialogService.ShowAlert(nameof(e), e.ToString());
         }
 
         public static void Handle(Exception e)
         {
+            RavenService.Raven.Capture(new SentryEvent(e));
             //if (!Plugin.Connectivity.CrossConnectivity.Current.IsConnected)
             //{
             //    Dialogs.ShowAlert(UiMessages.NoInternetErrorMessage, UiMessages.NoInternetErrorTitle);

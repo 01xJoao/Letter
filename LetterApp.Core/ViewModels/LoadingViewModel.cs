@@ -8,12 +8,7 @@ namespace LetterApp.Core.ViewModels
 {
     public class LoadingViewModel : XViewModel
     {
-        private ICodeResultService _errorCodeService;
-
-        public LoadingViewModel(ICodeResultService errorCodeService)
-        {
-            _errorCodeService = errorCodeService;
-        }
+        public LoadingViewModel() {}
 
         public override async Task InitializeAsync()
         {
