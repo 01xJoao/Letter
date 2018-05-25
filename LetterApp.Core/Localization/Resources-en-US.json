@@ -137,7 +137,7 @@
   },
   {
     "key": "LoginViewModel_EmailLabel",
-    "translated": "Email"
+    "translated": "Email address"
   },
   {
     "key": "LoginViewModel_PasswordLabel",
