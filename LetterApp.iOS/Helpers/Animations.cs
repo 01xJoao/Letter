@@ -163,5 +163,13 @@ namespace LetterApp.iOS.Helpers
                 onFinished
             );
         }
+
+        public static void AnimateBackground(UIView bgView, nfloat value)
+        {
+            UIView.Animate(0.3f, 0, UIViewAnimationOptions.BeginFromCurrentState, () =>
+            {
+                bgView.Frame = new CGRect(bgView.Frame.X, bgView.Frame.Y - value, bgView.Frame.Width, bgView.Frame.Height);
+            }, null);
+        }
     }
 }

@@ -13,6 +13,12 @@ namespace LetterApp.iOS.Views.Login
 	partial class LoginViewController
 	{
 		[Outlet]
+		UIKit.UIView _backgroundView { get; set; }
+
+		[Outlet]
+		UIKit.UIView _buttonView { get; set; }
+
+		[Outlet]
 		UIKit.NSLayoutConstraint _emailHeightConstraint { get; set; }
 
 		[Outlet]
@@ -50,22 +56,20 @@ namespace LetterApp.iOS.Views.Login
 
 		[Outlet]
 		UIKit.UIButton _signUpButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _topViewHeightConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (_emailLabel != null) {
-				_emailLabel.Dispose ();
-				_emailLabel = null;
-			}
-
-			if (_emailTextField != null) {
-				_emailTextField.Dispose ();
-				_emailTextField = null;
-			}
-
 			if (_emailHeightConstraint != null) {
 				_emailHeightConstraint.Dispose ();
 				_emailHeightConstraint = null;
+			}
+
+			if (_emailLabel != null) {
+				_emailLabel.Dispose ();
+				_emailLabel = null;
 			}
 
 			if (_emailLineView != null) {
@@ -73,29 +77,9 @@ namespace LetterApp.iOS.Views.Login
 				_emailLineView = null;
 			}
 
-			if (_passwordLabel != null) {
-				_passwordLabel.Dispose ();
-				_passwordLabel = null;
-			}
-
-			if (_passwordTextField != null) {
-				_passwordTextField.Dispose ();
-				_passwordTextField = null;
-			}
-
-			if (_passwordHeightConstraint != null) {
-				_passwordHeightConstraint.Dispose ();
-				_passwordHeightConstraint = null;
-			}
-
-			if (_passwordWithConstraint != null) {
-				_passwordWithConstraint.Dispose ();
-				_passwordWithConstraint = null;
-			}
-
-			if (_passwordLineView != null) {
-				_passwordLineView.Dispose ();
-				_passwordLineView = null;
+			if (_emailTextField != null) {
+				_emailTextField.Dispose ();
+				_emailTextField = null;
 			}
 
 			if (_forgotPassButton != null) {
@@ -103,19 +87,59 @@ namespace LetterApp.iOS.Views.Login
 				_forgotPassButton = null;
 			}
 
-			if (_signUpButton != null) {
-				_signUpButton.Dispose ();
-				_signUpButton = null;
-			}
-
 			if (_formContainerView != null) {
 				_formContainerView.Dispose ();
 				_formContainerView = null;
 			}
 
+			if (_passwordHeightConstraint != null) {
+				_passwordHeightConstraint.Dispose ();
+				_passwordHeightConstraint = null;
+			}
+
+			if (_passwordLabel != null) {
+				_passwordLabel.Dispose ();
+				_passwordLabel = null;
+			}
+
+			if (_passwordLineView != null) {
+				_passwordLineView.Dispose ();
+				_passwordLineView = null;
+			}
+
+			if (_passwordTextField != null) {
+				_passwordTextField.Dispose ();
+				_passwordTextField = null;
+			}
+
+			if (_passwordWithConstraint != null) {
+				_passwordWithConstraint.Dispose ();
+				_passwordWithConstraint = null;
+			}
+
 			if (_signInButton != null) {
 				_signInButton.Dispose ();
 				_signInButton = null;
+			}
+
+			if (_signUpButton != null) {
+				_signUpButton.Dispose ();
+				_signUpButton = null;
+			}
+
+			if (_buttonView != null) {
+				_buttonView.Dispose ();
+				_buttonView = null;
+			}
+
+			if (_backgroundView != null) {
+				_backgroundView.Dispose ();
+				_backgroundView = null;
+			}
+
+			if (_topViewHeightConstraint != null) {
+				_topViewHeightConstraint.Dispose ();
+				_topViewHeightConstraint = null;
 			}
 		}
 	}

@@ -10,11 +10,14 @@ namespace LetterApp.iOS.Views.Login
 {
     public partial class LoginViewController : XViewController<LoginViewModel>, IRootView
     {
+        public override bool HandlesKeyboardNotifications => true;
+
         public LoginViewController() : base("LoginViewController", null) {}
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             SetupView();
 
             _forgotPassButton.TouchUpInside -= OnforgotPassButton_TouchUpInside;
@@ -44,16 +47,36 @@ namespace LetterApp.iOS.Views.Login
 
         private void SetupView()
         {
-            UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel, UIReturnKeyType.Next);
-
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 14f, ViewModel.SignUpButton);
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
             UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 13f, ViewModel.ForgotPasswordButton);
 
+            UIButton keyboardButton = new UIButton();
+            UIButtonExtensions.SetupButtonAppearance(keyboardButton, Colors.White, 16f, ViewModel.SignInButton);
+            keyboardButton.TouchUpInside -= OnSignInButton_TouchUpInside;
+            keyboardButton.TouchUpInside += OnSignInButton_TouchUpInside;
+
+            _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
+            UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel,
+                                             UIReturnKeyType.Next, keyboardButton);
+            
             _forgotPassButton.SetNeedsLayout();
             _forgotPassButton.LayoutIfNeeded();
+
+            _passwordTextField.SecureTextEntry = true;
             _passwordWithConstraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (_forgotPassButton.Frame.Width + 7);
-            UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, UIReturnKeyType.Default, true);
+            UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, 
+                                             UIReturnKeyType.Default, keyboardButton);
+        }
+
+        public override void OnKeyboardNotification(UIKeyboardEventArgs args)
+        {
+            base.OnKeyboardNotification(args);
+
+            if (args.FrameEnd.Y < args.FrameBegin.Y)
+                Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
+            else if ( args.FrameEnd.Y > args.FrameBegin.Y)
+                Animations.AnimateBackground(this.View, -LocalConstants.Login_HeightAnimation);
         }
 
         public override void ViewWillAppear(bool animated)

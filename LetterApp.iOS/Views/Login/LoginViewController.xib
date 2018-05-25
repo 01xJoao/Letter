@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
+                <outlet property="_backgroundView" destination="S0R-hR-3Cs" id="XH8-Qv-2a0"/>
+                <outlet property="_buttonView" destination="18F-Jq-Swe" id="e0i-oE-Sl7"/>
                 <outlet property="_emailHeightConstraint" destination="AHY-Vo-2b7" id="FuF-zW-YCb"/>
                 <outlet property="_emailLabel" destination="Aiw-me-Jho" id="cwe-jo-JVx"/>
                 <outlet property="_emailLineView" destination="zck-fK-7dI" id="8pT-SW-yeM"/>
@@ -24,6 +26,7 @@
                 <outlet property="_passwordWithConstraint" destination="lHt-gQ-Hao" id="EDR-sx-i19"/>
                 <outlet property="_signInButton" destination="iCQ-Vu-rjA" id="VsB-84-5VP"/>
                 <outlet property="_signUpButton" destination="v38-mR-ipz" id="sb3-Oa-9jV"/>
+                <outlet property="_topViewHeightConstraint" destination="a6I-P2-cAs" id="6h7-bX-6dI"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>

@@ -1,9 +1,7 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.iOS.Interfaces;
-using LetterApp.iOS.Services;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Base
@@ -27,8 +25,11 @@ namespace LetterApp.iOS.Views.Base
             else
                 ViewModel.Prepare();
 
-            ViewModel.InitializeViewModel();
+            if (HandlesKeyboardNotifications)
+                RegisterForKeyboardNotifications();
 
+            ViewModel.InitializeViewModel();
+            DismissKeyboardOnBackgroundTap();
             this.EdgesForExtendedLayout = UIRectEdge.None;
         }
 
@@ -43,5 +44,31 @@ namespace LetterApp.iOS.Views.Base
             ViewModel.Disappearing();
             base.ViewWillDisappear(animated);
         }
+
+        #region Keyboard
+
+        public virtual bool HandlesKeyboardNotifications => false;
+
+        protected void RegisterForKeyboardNotifications()
+        {
+            UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(e));
+            UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(e));
+        }
+
+        public virtual void OnKeyboardNotification(UIKeyboardEventArgs args)
+        {
+            if (!this.IsViewLoaded)
+                return;
+        }
+
+        protected void DismissKeyboardOnBackgroundTap()
+        {
+            var tap = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            tap.AddTarget(() => View.EndEditing(true));
+            View.AddGestureRecognizer(tap);
+        }
+
+
+        #endregion
     }
 }
