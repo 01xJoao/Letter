@@ -237,6 +237,7 @@
     <Folder Include="Resources\Assets.xcassets\board_chat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round_big.imageset\" />
+    <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -247,6 +248,7 @@
     <InterfaceDefinition Include="Views\OnBoarding\BoardPageViewController.xib" />
     <InterfaceDefinition Include="Views\OnBoarding\OnBoardingViewController.xib" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -304,6 +306,10 @@
     <Compile Include="Helpers\UITextFieldExtensions.cs" />
     <Compile Include="Helpers\UILabelExtensions.cs" />
     <Compile Include="Helpers\LocalConstants.cs" />
+    <Compile Include="Views\Login\LoginViewController.cs" />
+    <Compile Include="Views\Login\LoginViewController.designer.cs">
+      <DependentUpon>LoginViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
