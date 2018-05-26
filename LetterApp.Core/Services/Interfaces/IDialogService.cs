@@ -8,7 +8,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<string> ShowInput(string title = "", string confirmButtonText = null, string cancelButtonText = null, string hint = "", InputType inputType = InputType.Number);
         Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options);
         void ShowAlert(string title, AlertType alertType);
-        void ShowLoading(string title = "", string text = "");
+        void ShowLoading();
         void HideLoading();
     }
 

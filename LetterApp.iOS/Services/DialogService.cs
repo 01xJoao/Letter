@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Airbnb.Lottie;
+using CoreGraphics;
 using LetterApp.Core.Services.Interfaces;
+using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.CustomViews.Dialog;
+using MBProgressHUD;
+using UIKit;
 
 namespace LetterApp.iOS.Services
 {
     public class DialogService : IDialogService
     {
+        //MTMBProgressHUD progressDialog;
+        LOTAnimationView _lottieAnimation;
+
         public void ShowAlert(string title, AlertType alertType)
         {
             var alertVC = AlertView.Create();
@@ -23,14 +31,25 @@ namespace LetterApp.iOS.Services
             throw new NotImplementedException();
         }
 
-        public void ShowLoading(string title = "", string text = "")
+        public void ShowLoading()
         {
-            throw new NotImplementedException();
+            HideLoading();
+
+            _lottieAnimation = LOTAnimationView.AnimationNamed("loading");
+            _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+
+            var view = ((AppDelegate)UIApplication.SharedApplication.Delegate).Window;
+            _lottieAnimation.Frame = new CGRect(0, 0, view.Bounds.Size.Width, view.Bounds.Size.Height);
+
+            view.AddSubview(_lottieAnimation);
+            _lottieAnimation.Play();
         }
 
         public void HideLoading()
         {
-            throw new NotImplementedException();
+            _lottieAnimation?.Pause();
+            _lottieAnimation?.RemoveFromSuperview();
+            _lottieAnimation = null;
         }
     }
 }

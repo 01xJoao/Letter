@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using CoreGraphics;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
@@ -20,6 +21,9 @@ namespace LetterApp.iOS.Views.Login
 
             SetupView();
 
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
             _forgotPassButton.TouchUpInside -= OnforgotPassButton_TouchUpInside;
             _forgotPassButton.TouchUpInside += OnforgotPassButton_TouchUpInside;
 
@@ -28,6 +32,19 @@ namespace LetterApp.iOS.Views.Login
 
             _signInButton.TouchUpInside -= OnSignInButton_TouchUpInside;
             _signInButton.TouchUpInside += OnSignInButton_TouchUpInside;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.IsBusy):
+                    Loading();
+                    break;
+                    
+                default:
+                    break;
+            }
         }
 
         private void OnforgotPassButton_TouchUpInside(object sender, EventArgs e)
@@ -46,6 +63,29 @@ namespace LetterApp.iOS.Views.Login
                 ViewModel.SignInCommand.Execute(new Tuple<string, string>(_emailTextField.Text, _passwordTextField.Text));
             
             View.EndEditing(true);
+        }
+
+
+        private void Loading()
+        {
+            if(ViewModel.IsBusy)
+            {
+                if(LoadAnimation.Frame != _signInButton.Frame)
+                {
+                    LoadAnimation.Frame = _signInButton.Frame;
+                    _signInButton.AddSubview(LoadAnimation);
+                }
+
+                _signInButton.SetTitle("", UIControlState.Normal);
+                LoadAnimation.Hidden = false;
+                LoadAnimation.Play();
+            }
+            else
+            {
+                LoadAnimation.Hidden = true;
+                LoadAnimation.Pause();
+                _signInButton.SetTitle(ViewModel.SignInButton, UIControlState.Normal);
+            }
         }
 
         private void SetupView()

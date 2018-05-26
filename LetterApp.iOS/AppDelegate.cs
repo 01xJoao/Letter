@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Foundation;
-using LetterApp.iOS.Helpers;
+﻿using Foundation;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 

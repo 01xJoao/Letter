@@ -1,4 +1,7 @@
-﻿using Foundation;
+﻿using System;
+using Airbnb.Lottie;
+using CoreGraphics;
+using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.iOS.Interfaces;
@@ -11,6 +14,7 @@ namespace LetterApp.iOS.Views.Base
         public TViewModel ViewModel { get; private set; }
         public object ParameterData { get; set; }
         public virtual bool ShowAsPresentView => false;
+        public LOTAnimationView LoadAnimation;
 
         public XViewController(string nibName, NSBundle bundle) : base(nibName, bundle) { }
 
@@ -28,9 +32,20 @@ namespace LetterApp.iOS.Views.Base
             if (HandlesKeyboardNotifications)
                 RegisterForKeyboardNotifications();
 
+            LoadingAnimation();
             ViewModel.InitializeViewModel();
             DismissKeyboardOnBackgroundTap();
+
+
             this.EdgesForExtendedLayout = UIRectEdge.None;
+        }
+
+        private void LoadingAnimation()
+        {
+            LoadAnimation = LOTAnimationView.AnimationNamed("loading_white");
+            LoadAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+            LoadAnimation.LoopAnimation = true;
+            LoadAnimation.Hidden = true;
         }
 
         public override void ViewWillAppear(bool animated)

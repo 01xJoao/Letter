@@ -53,7 +53,12 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         public void Dismiss(float delay)
         {
             if (this != null)
-                Animations.SlideVerticaly(this, false, true, delay: delay);
+                Animations.SlideVerticaly(this, false, true, onFinished: () => CleanFromMemory(), delay: delay);
+        }
+
+        private void CleanFromMemory()
+        {
+            MemoryUtility.ReleaseUIViewWithChildren(this);
         }
     }
 }
