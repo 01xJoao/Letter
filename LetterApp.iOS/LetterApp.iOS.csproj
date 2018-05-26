@@ -256,7 +256,6 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertView.xib" />
-    <InterfaceDefinition Include="Resources\Views\CustomViews\Dialog\AlertViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

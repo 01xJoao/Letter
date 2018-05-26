@@ -371,12 +371,7 @@ namespace LetterApp.Tests
 
         private async Task<UserModel> GetLoginAsync()
         {
-            var loginRequest = new UserRequestModel
-            {
-                Email = email,
-                Password = password
-            };
-
+            var loginRequest = new UserRequestModel(email, password);
             var serializedObject = JsonConvert.SerializeObject(loginRequest);
             var content = new StringContent(serializedObject, Encoding.UTF8, "application/json");
             var httpResponseMessage = await httpClient.PostAsync("users/login", content);
