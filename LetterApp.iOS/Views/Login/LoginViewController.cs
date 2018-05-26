@@ -51,12 +51,13 @@ namespace LetterApp.iOS.Views.Login
 
         private void OnforgotPassButton_TouchUpInside(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (ViewModel.ForgotPassCommand.CanExecute())
+                ViewModel.ForgotPassCommand.Execute();
         }
 
         private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
@@ -125,7 +126,6 @@ namespace LetterApp.iOS.Views.Login
                 Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
             else if (args.FrameEnd.Y > args.FrameBegin.Y)
                 Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
-
         }
 
         public override void ViewWillAppear(bool animated)

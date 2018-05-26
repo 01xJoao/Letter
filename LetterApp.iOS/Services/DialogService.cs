@@ -12,7 +12,6 @@ namespace LetterApp.iOS.Services
 {
     public class DialogService : IDialogService
     {
-        //MTMBProgressHUD progressDialog;
         LOTAnimationView _lottieAnimation;
 
         public void ShowAlert(string title, AlertType alertType)
@@ -21,9 +20,14 @@ namespace LetterApp.iOS.Services
             alertVC.Configure(title, alertType);
         }
 
-        public Task<string> ShowInput(string title = "", string confirmButtonText = null, string cancelButtonText = null, string hint = "", InputType inputType = InputType.Number)
+        public Task<string> ShowInput(string title = "", string confirmButtonText = null, string hint = "", InputType inputType = InputType.Text)
         {
-            throw new NotImplementedException();
+            var tcs = new TaskCompletionSource<string>();
+
+            var inputTextView = new InputTextViewController(title, confirmButtonText, hint, inputType, val => tcs.TrySetResult(val), () => tcs.TrySetResult(null));
+            inputTextView.Show();
+
+            return tcs.Task;
         }
 
         public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)

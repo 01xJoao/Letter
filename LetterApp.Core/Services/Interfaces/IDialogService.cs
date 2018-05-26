@@ -5,9 +5,9 @@ namespace LetterApp.Core.Services.Interfaces
 {
     public interface IDialogService
     {
-        Task<string> ShowInput(string title = "", string confirmButtonText = null, string cancelButtonText = null, string hint = "", InputType inputType = InputType.Number);
-        Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options);
         void ShowAlert(string title, AlertType alertType);
+        Task<string> ShowInput(string title = "", string confirmButtonText = null, string hint = "", InputType inputType = InputType.Text);
+        Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options);
         void ShowLoading();
         void HideLoading();
     }
@@ -23,9 +23,10 @@ namespace LetterApp.Core.Services.Interfaces
     public enum InputType
     {
         Null,
+        Email,
         Text,
         Number,
-        Phome
+        Phone
     }
 
     public enum OptionsType

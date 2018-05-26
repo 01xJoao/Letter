@@ -213,6 +213,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\baseline_close_white_24pt_1x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\baseline_close_white_24pt_2x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\baseline_close_white_24pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\baseline_close_black_24pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\baseline_close_black_24pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\baseline_close_black_24pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -247,6 +251,7 @@
     <Folder Include="Views\Login\" />
     <Folder Include="Views\CustomViews\Dialog\" />
     <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_black.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -259,6 +264,7 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -324,6 +330,10 @@
     <Compile Include="Views\CustomViews\Dialog\AlertView.cs" />
     <Compile Include="Views\CustomViews\Dialog\AlertView.designer.cs">
       <DependentUpon>AlertView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Dialog\InputTextViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\InputTextViewController.designer.cs">
+      <DependentUpon>InputTextViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<Tuple<string,string>> _signInCommand;
         public XPCommand<Tuple<string, string>> SignInCommand => _signInCommand ?? (_signInCommand = new XPCommand<Tuple<string, string>>(async (value) => await SignIn(value), CanLogin));
 
+        private XPCommand _forgotPassCommand;
+        public XPCommand ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand(async () => await ForgotPass(), CanExecute));
+
         public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, ICodeResultService codeResultService)
         {
             _authService = authService;
@@ -55,7 +58,20 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task ForgotPass()
+        {
+            try
+            {
+                var email = await _dialogService.ShowInput(EnterEmail, ConfirmButton, EmailHint, InputType.Email);
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
         private bool CanLogin(Tuple<string, string> value) => !IsBusy && !string.IsNullOrEmpty(value.Item1) && !string.IsNullOrEmpty(value.Item2);
+        private bool CanExecute() => !IsBusy;
 
         #region Resources
 
@@ -64,6 +80,9 @@ namespace LetterApp.Core.ViewModels
         public string ForgotPasswordButton => L10N.Localize("LoginViewModel_ForgotPassButton");
         public string SignUpButton => L10N.Localize("LoginViewModel_SignUpButton");
         public string SignInButton => L10N.Localize("LoginViewModel_SignInButton");
+        public string EnterEmail => L10N.Localize("LoginViewModel_EnterEmail");
+        public string EmailHint => L10N.Localize("LoginViewModel_EmailHint");
+        public string ConfirmButton => L10N.Localize("LoginViewModel_SendCode");
 
         #endregion
     }
