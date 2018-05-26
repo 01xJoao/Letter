@@ -29,6 +29,9 @@ namespace LetterApp.Core.Services
         {
             try
             {
+                if(!VerifyInternetConnection())
+                    throw new NoInternetException();
+
                 var contentPost = CreateSerializedHttpContent(body);
 
                 //if (needsHeaderCheck)

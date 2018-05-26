@@ -67,21 +67,21 @@ namespace LetterApp.iOS.Views.Login
             View.EndEditing(true);
         }
 
-
         private void Loading()
         {
             if(ViewModel.IsBusy)
             {
-                if(_loadAnimation.Frame != _signInButton.Frame)
+                if(_loadAnimation == null)
                 {
-                    _loadAnimation.Frame = _signInButton.Frame;
-                    _signInButton.AddSubview(_loadAnimation);
                     _loadAnimation = LOTAnimationView.AnimationNamed("loading_white");
                     _loadAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+                    _loadAnimation.Frame = _signInButton.Frame;
+                    _signInButton.AddSubview(_loadAnimation);
                     _loadAnimation.LoopAnimation = true;
                 }
 
                 _signInButton.SetTitle("", UIControlState.Normal);
+                _loadAnimation.AnimationProgress = 0;
                 _loadAnimation.Hidden = false;
                 _loadAnimation.Play();
             }
