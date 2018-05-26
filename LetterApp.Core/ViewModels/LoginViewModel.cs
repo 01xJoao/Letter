@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
@@ -13,13 +14,17 @@ namespace LetterApp.Core.ViewModels
     public class LoginViewModel : XViewModel
     {
         private IAuthenticationService _authService;
+        private IDialogService _dialogService;
+        private ICodeResultService _codeResultService;
 
         private XPCommand<Tuple<string,string>> _signInCommand;
         public XPCommand<Tuple<string, string>> SignInCommand => _signInCommand ?? (_signInCommand = new XPCommand<Tuple<string, string>>(async (value) => await SignIn(value), CanLogin));
 
-        public LoginViewModel(IAuthenticationService authService)
+        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, ICodeResultService codeResultService)
         {
             _authService = authService;
+            _dialogService = dialogService;
+            _codeResultService = codeResultService;
         }
 
         private async Task SignIn(Tuple<string,string> value)
@@ -33,13 +38,12 @@ namespace LetterApp.Core.ViewModels
                 if(currentUser.Code == null)
                     Realm.Write(() => Realm.Add(currentUser, true));
                 else
-                {
-                    //Wrong Email or Password
-                }
+                    _dialogService.ShowAlert(_codeResultService.GetCodeDescription((int)currentUser.Code), AlertType.Error);
             }
             catch (Exception ex)
             {
                 RavenService.Raven.Capture(new SentryEvent(ex));
+                Ui.Handle(ex as dynamic);
             }
             finally
             {

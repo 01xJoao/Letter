@@ -206,6 +206,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%401x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\baseline_close_white_24pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\baseline_close_white_24pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\baseline_close_white_24pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -238,6 +242,8 @@
     <Folder Include="Resources\Assets.xcassets\letter_round.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round_big.imageset\" />
     <Folder Include="Views\Login\" />
+    <Folder Include="Views\CustomViews\Dialog\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -249,6 +255,7 @@
     <InterfaceDefinition Include="Views\OnBoarding\OnBoardingViewController.xib" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -310,6 +317,11 @@
     <Compile Include="Views\Login\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomViews\Dialog\AlertViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertViewController.designer.cs">
+      <DependentUpon>AlertViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\DialogService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

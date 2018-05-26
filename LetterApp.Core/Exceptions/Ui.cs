@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Threading.Tasks;
+using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using SharpRaven.Data;
 
@@ -14,31 +15,32 @@ namespace LetterApp.Core.Exceptions
         private static IRavenService _ravenService;
         private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
+
         public static void Handle(TaskCanceledException e)
         {
             RavenService.Raven.Capture(new SentryEvent(e));
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            DialogService.ShowAlert(e.ToString(), AlertType.Error);
         }
 
         public static void Handle(WrongCredentialsException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            DialogService.ShowAlert(e.ToString(), AlertType.Error);
         }
 
         public static void Handle(SessionTimeoutException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            DialogService.ShowAlert(e.ToString(), AlertType.Error);
         }
 
         public static void Handle(NoInternetException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            DialogService.ShowAlert(L10N.Localize("Dialogs_InternetException"), AlertType.Error);
         }
 
         public static void Handle(ServerErrorException e)
         {
             RavenService.Raven.Capture(new SentryEvent(e));
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            //DialogService.ShowAlert(nameof(e), e.ToString());
         }
 
         public static void Handle(Exception e)
@@ -51,7 +53,7 @@ namespace LetterApp.Core.Exceptions
             //}
 
             #if DEBUG
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            DialogService.ShowAlert(e.ToString(), AlertType.Error);
             #endif
         }
     }
