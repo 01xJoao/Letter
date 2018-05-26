@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Airbnb.Lottie;
 using CoreGraphics;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
@@ -12,6 +13,7 @@ namespace LetterApp.iOS.Views.Login
     public partial class LoginViewController : XViewController<LoginViewModel>, IRootView
     {
         public override bool HandlesKeyboardNotifications => true;
+        private LOTAnimationView _loadAnimation;
 
         public LoginViewController() : base("LoginViewController", null) {}
 
@@ -70,20 +72,23 @@ namespace LetterApp.iOS.Views.Login
         {
             if(ViewModel.IsBusy)
             {
-                if(LoadAnimation.Frame != _signInButton.Frame)
+                if(_loadAnimation.Frame != _signInButton.Frame)
                 {
-                    LoadAnimation.Frame = _signInButton.Frame;
-                    _signInButton.AddSubview(LoadAnimation);
+                    _loadAnimation.Frame = _signInButton.Frame;
+                    _signInButton.AddSubview(_loadAnimation);
+                    _loadAnimation = LOTAnimationView.AnimationNamed("loading_white");
+                    _loadAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+                    _loadAnimation.LoopAnimation = true;
                 }
 
                 _signInButton.SetTitle("", UIControlState.Normal);
-                LoadAnimation.Hidden = false;
-                LoadAnimation.Play();
+                _loadAnimation.Hidden = false;
+                _loadAnimation.Play();
             }
             else
             {
-                LoadAnimation.Hidden = true;
-                LoadAnimation.Pause();
+                _loadAnimation.Hidden = true;
+                _loadAnimation.Pause();
                 _signInButton.SetTitle(ViewModel.SignInButton, UIControlState.Normal);
             }
         }
