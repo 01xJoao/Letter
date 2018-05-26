@@ -5,6 +5,7 @@ using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
+using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.RequestModels;
 using SharpRaven.Data;
@@ -36,7 +37,10 @@ namespace LetterApp.Core.ViewModels
                 var currentUser = await _authService.LoginAsync(userRequest);
 
                 if(currentUser.Code == null)
+                {
                     Realm.Write(() => Realm.Add(currentUser, true));
+                    await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                }
                 else
                     _dialogService.ShowAlert(_codeResultService.GetCodeDescription((int)currentUser.Code), AlertType.Error);
             }

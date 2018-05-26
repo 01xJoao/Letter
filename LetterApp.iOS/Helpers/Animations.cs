@@ -171,5 +171,13 @@ namespace LetterApp.iOS.Helpers
                 bgView.Frame = new CGRect(bgView.Frame.X, bgView.Frame.Y - value, bgView.Frame.Width, bgView.Frame.Height);
             }, null);
         }
+
+        public static void BackgroundToDefault(UIView bgView, CGRect defaultPosition)
+        {
+            UIView.Animate(0.3f, 0, UIViewAnimationOptions.BeginFromCurrentState, () =>
+            {
+                bgView.Frame = defaultPosition;
+            }, null);
+        }
     }
 }

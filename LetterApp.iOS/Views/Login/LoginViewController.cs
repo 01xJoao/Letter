@@ -11,6 +11,7 @@ namespace LetterApp.iOS.Views.Login
     public partial class LoginViewController : XViewController<LoginViewModel>, IRootView
     {
         public override bool HandlesKeyboardNotifications => true;
+        CGRect _mainViewFrame;
 
         public LoginViewController() : base("LoginViewController", null) {}
 
@@ -50,6 +51,9 @@ namespace LetterApp.iOS.Views.Login
 
         private void SetupView()
         {
+
+            _mainViewFrame = this.View.Frame;
+
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 14f, ViewModel.SignUpButton);
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
             UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 13f, ViewModel.ForgotPasswordButton);
@@ -78,8 +82,9 @@ namespace LetterApp.iOS.Views.Login
 
             if (args.FrameEnd.Y < args.FrameBegin.Y)
                 Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
-            else if ( args.FrameEnd.Y > args.FrameBegin.Y)
-                Animations.AnimateBackground(this.View, -LocalConstants.Login_HeightAnimation);
+            else if (args.FrameEnd.Y > args.FrameBegin.Y)
+                Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
+
         }
 
         public override void ViewWillAppear(bool animated)
