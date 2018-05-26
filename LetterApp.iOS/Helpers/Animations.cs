@@ -128,7 +128,7 @@ namespace LetterApp.iOS.Helpers
             );
         }
 
-        public static void SlideVerticaly(this UIView view, bool isIn, bool fromTop, double duration = 0.3, Action onFinished = null, double delay = 0)
+        public static void SlideVerticaly(this UIView view, bool isIn, bool fromTop, double duration = 0.3, Action onFinished = null, float delay = 0)
         {
             var minAlpha = (nfloat)0.0f;
             var maxAlpha = (nfloat)1.0f;

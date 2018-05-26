@@ -1,5 +1,6 @@
 ﻿using System;
 using CoreGraphics;
+using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Helpers;
@@ -41,27 +42,23 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
                     break;
             }
 
-            UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.White, 15f);
-            _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
-            _closeButton.TintColor = Colors.White;
-
-            _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
-            _closeButton.TouchUpInside += OnCloseButton_TouchUpInside;
+            UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.White, 14f);
+            //_closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
+            //_closeButton.TintColor = Colors.White;
+            _closeButton.Hidden = true;
         }
-
-        private void OnCloseButton_TouchUpInside(object sender, EventArgs e) => Dismiss(0);
 
         public void Show()
         {
             View.Frame = new CGRect(0,0,UIApplication.SharedApplication.KeyWindow.Bounds.Width, LocalConstants.AlertDialogSize);
             UIApplication.SharedApplication.KeyWindow.AddSubview(View);
-            Animations.SlideVerticaly(this.View, true, true, 0.3f, onFinished: () => Dismiss(3));
+            Animations.SlideVerticaly(this.View, true, true, onFinished: () => Dismiss(2.5f));
         }
 
-        public void Dismiss(int delay)
+        public void Dismiss(float delay)
         {
             if(this.View != null && this.ViewIfLoaded?.Window != null)
-                Animations.SlideVerticaly(this.View, false, true, 0.3f, delay: delay);
+                Animations.SlideVerticaly(this.View, false, true, delay: delay);
         }
 
         public override void ViewDidDisappear(bool animated)
