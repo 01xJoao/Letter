@@ -255,7 +255,8 @@
     <InterfaceDefinition Include="Views\OnBoarding\OnBoardingViewController.xib" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
-    <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertView.xib" />
+    <InterfaceDefinition Include="Resources\Views\CustomViews\Dialog\AlertViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -317,11 +318,11 @@
     <Compile Include="Views\Login\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomViews\Dialog\AlertViewController.cs" />
-    <Compile Include="Views\CustomViews\Dialog\AlertViewController.designer.cs">
-      <DependentUpon>AlertViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertView.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertView.designer.cs">
+      <DependentUpon>AlertView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

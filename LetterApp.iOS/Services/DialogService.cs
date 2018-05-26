@@ -9,8 +9,8 @@ namespace LetterApp.iOS.Services
     {
         public void ShowAlert(string title, AlertType alertType)
         {
-            var alertVC = new AlertViewController(title, alertType);
-            alertVC.Show();
+            var alertVC = AlertView.Create();
+            alertVC.Configure(title, alertType);
         }
 
         public Task<string> ShowInput(string title = "", string confirmButtonText = null, string cancelButtonText = null, string hint = "", InputType inputType = InputType.Number)

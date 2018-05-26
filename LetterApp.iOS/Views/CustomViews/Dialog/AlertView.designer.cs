@@ -9,8 +9,7 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.CustomViews.Dialog
 {
-	[Register ("AlertViewController")]
-	partial class AlertViewController
+	partial class AlertView
 	{
 		[Outlet]
 		UIKit.UIView _backgroundView { get; set; }
@@ -28,14 +27,14 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 				_backgroundView = null;
 			}
 
-			if (_titleLabel != null) {
-				_titleLabel.Dispose ();
-				_titleLabel = null;
-			}
-
 			if (_closeButton != null) {
 				_closeButton.Dispose ();
 				_closeButton = null;
+			}
+
+			if (_titleLabel != null) {
+				_titleLabel.Dispose ();
+				_titleLabel = null;
 			}
 		}
 	}
