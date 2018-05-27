@@ -5,6 +5,6 @@ namespace LetterApp.Models.DTO.ReceivedModels
 {
     public class BaseModel
     {
-        public int? StatusCode { get; set; }
+        public int StatusCode { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand<Tuple<string, string>> SignInCommand => _signInCommand ?? (_signInCommand = new XPCommand<Tuple<string, string>>(async (value) => await SignIn(value), CanLogin));
 
         private XPCommand<string> _forgotPassCommand;
-        public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPass(email), CanExecute));
+        public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPassword(email), CanExecute));
 
         public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService codeResultService)
         {
@@ -83,7 +83,7 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private async Task ForgotPass(string emailInput)
+        private async Task ForgotPassword(string emailInput)
         {
             try
             {

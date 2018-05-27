@@ -41,7 +41,7 @@ namespace LetterApp.Core.ViewModels.Abstractions
 
         public void InitializeViewModel()
         {
-            var config = new RealmConfiguration() { SchemaVersion = 1 };
+            var config = new RealmConfiguration() { SchemaVersion = 2 };
             _realm = Realm.GetInstance(config);
             InitializeAsync();
         }

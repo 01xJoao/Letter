@@ -40,7 +40,7 @@ namespace LetterApp.Core.Services
 
         public string GetStatusCodeDescription(int? code)
         {
-            if(code != null)
+            if(code != null && code != 0)
                 return CodeDictionary[(int)code];
             
             return CodeNull;

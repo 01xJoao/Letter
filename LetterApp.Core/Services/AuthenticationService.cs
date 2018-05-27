@@ -16,12 +16,12 @@ namespace LetterApp.Core.Services
             _webService = webService;
         }
 
-        public async Task<UserModel> LoginAsync(UserRequestModel userLoginRequest, CancellationToken ct)
+        public async Task<UserModel> LoginAsync(UserRequestModel userLoginRequest)
         {
             return await _webService.PostAsync<UserModel>("users/login", userLoginRequest, needsHeaderCheck: false).ConfigureAwait(false);
         }
 
-        public async Task<BaseModel> SendActivationCode(string email, string isActivation, CancellationToken ct)
+        public async Task<BaseModel> SendActivationCode(string email, string isActivation)
         {
             return await _webService.GetAsync<BaseModel>($"registration/resendcode/{email}/{isActivation}", needsHeaderCheck: false).ConfigureAwait(false);
         }

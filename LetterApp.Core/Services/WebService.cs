@@ -21,7 +21,6 @@ namespace LetterApp.Core.Services
         private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
         private static readonly string _basePath = @"http://www.lettermessenger.com/api/";
-        private JsonSerializerSettings _jsonSettings;
 
         private HttpClient _httpClient;
         private HttpClient HttpClient => _httpClient ?? (_httpClient = new HttpClient(new RetryHandler(new HttpClientHandler())){ BaseAddress = new Uri(_basePath) });
@@ -47,7 +46,6 @@ namespace LetterApp.Core.Services
                 await EnsureSuccessRequest(response);
                 var result = await DeserializeAsync<T>(response).ConfigureAwait(false);
                 return result;
-
             }
             catch (Exception e)
             {
@@ -141,11 +139,6 @@ namespace LetterApp.Core.Services
         //    return token;
         //}
 
-        public bool VerifyInternetConnection()
-        {
-            return Connectivity.NetworkAccess == NetworkAccess.Internet;
-        }
-
         private async Task<T> DeserializeAsync<T>(HttpResponseMessage httpResponseMessage)
         {
             if (!httpResponseMessage.IsSuccessStatusCode)
@@ -153,18 +146,20 @@ namespace LetterApp.Core.Services
 
             var json = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            if (_jsonSettings == null)
+            var jsonSettings = new JsonSerializerSettings
             {
-                _jsonSettings = new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented,
-                    ContractResolver= new NullToEmptyStringResolver(),
-                    Converters = { new JsonConvert<T>() }
-                };
-            }
+                Formatting = Formatting.Indented,
+                ContractResolver = new NullToEmptyStringResolver(),
+                Converters = { new JsonConvert<T>() }
+            };
 
-            var deserializedData = JsonConvert.DeserializeObject<T>(json, _jsonSettings);
+            var deserializedData = JsonConvert.DeserializeObject<T>(json, jsonSettings);
             return deserializedData;
+        }
+
+        public bool VerifyInternetConnection()
+        {
+            return Connectivity.NetworkAccess == NetworkAccess.Internet;
         }
     }
 }
