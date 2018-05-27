@@ -124,13 +124,23 @@ namespace LetterApp.iOS.Views.Login
             base.OnKeyboardNotification(args);
 
             //checking if this view is visible
-            if(UIApplication.SharedApplication.KeyWindow.Subviews.Length == 1)
+            if(ShouldAnimate())
             {
                 if (args.FrameEnd.Y < args.FrameBegin.Y)
                     Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
                 else if (args.FrameEnd.Y > args.FrameBegin.Y)
                     Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
             }
+        }
+
+        private bool ShouldAnimate()
+        {
+            if (UIApplication.SharedApplication.KeyWindow.Subviews.Length <= 1)
+                return true;
+            else if(UIApplication.SharedApplication.KeyWindow.Subviews.Last().Frame != this.View.Frame)
+                return true;
+
+            return false;
         }
 
         public override void ViewWillAppear(bool animated)
