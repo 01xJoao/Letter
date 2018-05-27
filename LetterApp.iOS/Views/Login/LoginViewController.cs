@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using Airbnb.Lottie;
 using CoreGraphics;
 using LetterApp.Core.ViewModels;
@@ -122,10 +123,14 @@ namespace LetterApp.iOS.Views.Login
         {
             base.OnKeyboardNotification(args);
 
-            if (args.FrameEnd.Y < args.FrameBegin.Y)
-                Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
-            else if (args.FrameEnd.Y > args.FrameBegin.Y)
-                Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
+            //checking if this view is visible
+            if(UIApplication.SharedApplication.KeyWindow.Subviews.Length == 1)
+            {
+                if (args.FrameEnd.Y < args.FrameBegin.Y)
+                    Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
+                else if (args.FrameEnd.Y > args.FrameBegin.Y)
+                    Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
+            }
         }
 
         public override void ViewWillAppear(bool animated)
