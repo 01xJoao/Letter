@@ -61,14 +61,28 @@ namespace LetterApp.Core.Services
 
         public async Task<T> GetAsync<T>(string requestUri, CancellationToken ct = default(CancellationToken), bool needsHeaderCheck = true)
         {
-            //if (needsHeaderCheck)
+            try
+            {
+                if (!VerifyInternetConnection())
+                    throw new NoInternetException();
+
+                //if (needsHeaderCheck)
                 //await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
 
-            var response = await HttpClient.GetAsync(requestUri, ct);
-            Debug.WriteLine(response);
+                var response = await HttpClient.GetAsync(requestUri, ct);
+                Debug.WriteLine(response);
 
-            var obj = await DeserializeAsync<T>(response);
-            return obj;
+                var obj = await DeserializeAsync<T>(response);
+                return obj;
+            }
+            catch (Exception e)
+            {
+                if (!(e is WrongCredentialsException) && !VerifyInternetConnection())
+                    throw new NoInternetException(e.Message);
+
+                RavenService.Raven.Capture(new SentryEvent(e));
+                throw;
+            }
         }
 
         private async Task EnsureSuccessRequest(HttpResponseMessage response)

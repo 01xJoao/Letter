@@ -35,21 +35,23 @@ namespace LetterApp.iOS.Services
             throw new NotImplementedException();
         }
 
-        public void ShowLoading()
+        public void StartLoading()
         {
-            HideLoading();
+            StopLoading();
 
             _lottieAnimation = LOTAnimationView.AnimationNamed("loading");
             _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
 
             var view = ((AppDelegate)UIApplication.SharedApplication.Delegate).Window;
-            _lottieAnimation.Frame = new CGRect(0, 0, view.Bounds.Size.Width, view.Bounds.Size.Height);
+            _lottieAnimation.Frame = new CGRect(0, 0, view.Bounds.Size.Width * 0.5,  view.Bounds.Size.Height * 0.5);
+            _lottieAnimation.Center = view.Center;
 
             view.AddSubview(_lottieAnimation);
+            _lottieAnimation.LoopAnimation = true;
             _lottieAnimation.Play();
         }
 
-        public void HideLoading()
+        public void StopLoading()
         {
             _lottieAnimation?.Pause();
             _lottieAnimation?.RemoveFromSuperview();

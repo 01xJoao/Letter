@@ -1,5 +1,9 @@
 ﻿[
   {
+    "key": "Code_Null",
+    "translated": "Something went very wrong, try again."
+  },
+  {
     "key": "Code_E101",
     "translated": "Email or password is invalid, try again."
   },

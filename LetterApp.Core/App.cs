@@ -21,7 +21,7 @@ namespace LetterApp.Core
 
         public static void Initialize()
         {
-            InitializeDatabase();
+            //InitializeDatabase();
             InitializeIoC();
         }
 
@@ -70,7 +70,7 @@ namespace LetterApp.Core
         private static void InitializeDatabase()
         {
             //Update SchemaVersion if necessary
-            var config = new RealmConfiguration() { SchemaVersion = 0 };
+            var config = new RealmConfiguration() { SchemaVersion = 1 };
             Realm.GetInstance(config);
         }
     }

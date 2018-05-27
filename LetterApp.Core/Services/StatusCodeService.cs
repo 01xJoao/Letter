@@ -5,14 +5,11 @@ using LetterApp.Core.Services.Interfaces;
 
 namespace LetterApp.Core.Services
 {
-    public class CodeResultService : ICodeResultService
+    public class StatusCodeService : IStatusCodeService
     {
         private Dictionary<int, string> CodeDictionary = new Dictionary<int, string>();
 
-        public CodeResultService()
-        {
-            SetCodes();
-        }
+        public StatusCodeService() => SetCodes();
 
         public void SetCodes()
         {
@@ -41,9 +38,12 @@ namespace LetterApp.Core.Services
             CodeDictionary.Add(206, User_DivisionLeft);
         }
 
-        public string GetCodeDescription(int code)
+        public string GetStatusCodeDescription(int? code)
         {
-            return CodeDictionary[code];
+            if(code != null)
+                return CodeDictionary[(int)code];
+            
+            return CodeNull;
         }
 
         #region resources
@@ -73,6 +73,9 @@ namespace LetterApp.Core.Services
         string User_Update => L10N.Localize("Code_S204");
         string User_Desactivate => L10N.Localize("Code_S205");
         string User_DivisionLeft => L10N.Localize("Code_S206");
+
+        //Null Code
+        string CodeNull => L10N.Localize("Code_Null");
 
         #endregion
     }

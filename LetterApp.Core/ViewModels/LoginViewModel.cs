@@ -16,7 +16,14 @@ namespace LetterApp.Core.ViewModels
     {
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
-        private ICodeResultService _codeResultService;
+        private IStatusCodeService _codeResultService;
+
+        private bool _tryingToLogin;
+        public bool TryingToLogin
+        {
+            get => _tryingToLogin;
+            set => SetProperty(ref _tryingToLogin, value);
+        }
 
         private bool _isValidEmail = true;
         public bool IsValidEmail
@@ -31,7 +38,7 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _forgotPassCommand;
         public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPass(email), CanExecute));
 
-        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, ICodeResultService codeResultService)
+        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService codeResultService)
         {
             _authService = authService;
             _dialogService = dialogService;
@@ -46,22 +53,23 @@ namespace LetterApp.Core.ViewModels
                 return;
             }
             else
-                IsValidEmail = true;
+                _isValidEmail = true;
 
             IsBusy = true;
+            TryingToLogin = true;
 
             try
             {
                 var userRequest = new UserRequestModel(value.Item1, value.Item2);
                 var currentUser = await _authService.LoginAsync(userRequest);
 
-                if(currentUser.Code == null)
+                if(currentUser.StatusCode == 200)
                 {
                     Realm.Write(() => Realm.Add(currentUser, true));
                     await NavigationService.NavigateAsync<MainViewModel, object>(null);
                 }
                 else
-                    _dialogService.ShowAlert(_codeResultService.GetCodeDescription((int)currentUser.Code), AlertType.Error);
+                    _dialogService.ShowAlert(_codeResultService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
             }
             catch (Exception ex)
             {
@@ -71,6 +79,7 @@ namespace LetterApp.Core.ViewModels
             finally
             {
                 IsBusy = false;
+                TryingToLogin = false;
             }
         }
 
@@ -82,17 +91,22 @@ namespace LetterApp.Core.ViewModels
 
                 if(!string.IsNullOrEmpty(email) && EmailUtils.IsValidEmail(email))
                 {
+                    _dialogService.StartLoading();
                     var result = await _authService.SendActivationCode(email, "false");
 
-                    if (result.Code == 200)
+                    if (result.StatusCode == 200)
                         await NavigationService.NavigateAsync<RecoverPasswordViewModel, object>(null);
                     else
-                        _dialogService.ShowAlert(_codeResultService.GetCodeDescription((int)result.Code), AlertType.Error);
+                        _dialogService.ShowAlert(_codeResultService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);
                 }
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _dialogService.StopLoading();
             }
         }
 

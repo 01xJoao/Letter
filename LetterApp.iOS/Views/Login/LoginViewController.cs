@@ -41,7 +41,7 @@ namespace LetterApp.iOS.Views.Login
         {
             switch (e.PropertyName)
             {
-                case nameof(ViewModel.IsBusy):
+                case nameof(ViewModel.TryingToLogin):
                     Loading();
                     break;
                 case nameof(ViewModel.IsValidEmail):
@@ -73,7 +73,7 @@ namespace LetterApp.iOS.Views.Login
 
         private void Loading()
         {
-            if(ViewModel.IsBusy)
+            if(ViewModel.TryingToLogin)
             {
                 if(_loadAnimation == null)
                 {
@@ -108,6 +108,7 @@ namespace LetterApp.iOS.Views.Login
             keyboardButton.TouchUpInside -= OnSignInButton_TouchUpInside;
             keyboardButton.TouchUpInside += OnSignInButton_TouchUpInside;
 
+            _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
             _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
             UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel,
                                              UIReturnKeyType.Next, keyboardButton);
