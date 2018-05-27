@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Drawing;
-using CoreAnimation;
-using CoreGraphics;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Helpers;
 using UIKit;
@@ -84,10 +82,14 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
         private void OnConfirmButton_TouchUpInside(object sender, EventArgs e)
         {
-            if(!string.IsNullOrEmpty(_textField.Text))
+            if(EmailUtils.IsValidEmail(_textField.Text))
             {
                 _positiveButton.Invoke(_textField.Text);
                 Dismiss();
+            }
+            else
+            {
+                _indicatorView.BackgroundColor = Colors.Red;
             }
         }
 

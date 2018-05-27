@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
@@ -17,6 +18,13 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private ICodeResultService _codeResultService;
 
+        private bool _isValidEmail = true;
+        public bool IsValidEmail
+        {
+            get => _isValidEmail;
+            set => SetProperty(ref _isValidEmail, value);
+        }
+
         private XPCommand<Tuple<string,string>> _signInCommand;
         public XPCommand<Tuple<string, string>> SignInCommand => _signInCommand ?? (_signInCommand = new XPCommand<Tuple<string, string>>(async (value) => await SignIn(value), CanLogin));
 
@@ -32,7 +40,16 @@ namespace LetterApp.Core.ViewModels
 
         private async Task SignIn(Tuple<string,string> value)
         {
+            if (!EmailUtils.IsValidEmail(value.Item1))
+            {
+                IsValidEmail = false;
+                return;
+            }
+            else
+                IsValidEmail = true;
+
             IsBusy = true;
+
             try
             {
                 var userRequest = new UserRequestModel(value.Item1, value.Item2);
@@ -62,8 +79,16 @@ namespace LetterApp.Core.ViewModels
             try
             {
                 var email = await _dialogService.ShowTextInput(EnterEmail, emailInput, ConfirmButton, EmailHint, InputType.Email);
-                if(!string.IsNullOrEmpty(email))
-                    await NavigationService.NavigateAsync<RecoverPasswordViewModel, object>(null);
+
+                if(!string.IsNullOrEmpty(email) && EmailUtils.IsValidEmail(email))
+                {
+                    var result = await _authService.SendActivationCode(email, "false");
+
+                    if (result.Code == 200)
+                        await NavigationService.NavigateAsync<RecoverPasswordViewModel, object>(null);
+                    else
+                        _dialogService.ShowAlert(_codeResultService.GetCodeDescription((int)result.Code), AlertType.Error);
+                }
             }
             catch (Exception ex)
             {

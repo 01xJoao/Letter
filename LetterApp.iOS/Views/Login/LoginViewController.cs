@@ -44,7 +44,9 @@ namespace LetterApp.iOS.Views.Login
                 case nameof(ViewModel.IsBusy):
                     Loading();
                     break;
-                    
+                case nameof(ViewModel.IsValidEmail):
+                    InvalidMail();
+                    break;
                 default:
                     break;
             }
@@ -123,7 +125,6 @@ namespace LetterApp.iOS.Views.Login
         {
             base.OnKeyboardNotification(args);
 
-            //checking if this view is visible
             if(ShouldAnimate())
             {
                 if (args.FrameEnd.Y < args.FrameBegin.Y)
@@ -133,13 +134,19 @@ namespace LetterApp.iOS.Views.Login
             }
         }
 
+        private void InvalidMail()
+        {
+            _emailLineView.BackgroundColor = Colors.Red;
+        }
+
         private bool ShouldAnimate()
         {
-            if (UIApplication.SharedApplication.KeyWindow.Subviews.Length <= 1)
-                return true;
-            else if(UIApplication.SharedApplication.KeyWindow.Subviews.Last().Frame != this.View.Frame)
-                return true;
+            var viewsInScreen = UIApplication.SharedApplication.KeyWindow.Subviews;
 
+            //checking if this view is visible
+            if (viewsInScreen.Length <= 1 || viewsInScreen.Last().Frame != this.View.Frame)
+                return true;
+            
             return false;
         }
 

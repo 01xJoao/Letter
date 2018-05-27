@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -34,10 +35,15 @@ namespace LetterApp.Core.Services
 
                 var contentPost = CreateSerializedHttpContent(body);
 
+                Debug.WriteLine(contentPost);
+
                 //if (needsHeaderCheck)
                 //    await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
 
+
                 var response = await HttpClient.PostAsync(resource, contentPost, ct).ConfigureAwait(false);
+                Debug.WriteLine(response);
+
                 await EnsureSuccessRequest(response);
                 var result = await DeserializeAsync<T>(response).ConfigureAwait(false);
                 return result;
@@ -51,6 +57,18 @@ namespace LetterApp.Core.Services
                 RavenService.Raven.Capture(new SentryEvent(e));
                 throw;
             }
+        }
+
+        public async Task<T> GetAsync<T>(string requestUri, CancellationToken ct = default(CancellationToken), bool needsHeaderCheck = true)
+        {
+            //if (needsHeaderCheck)
+                //await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
+
+            var response = await HttpClient.GetAsync(requestUri, ct);
+            Debug.WriteLine(response);
+
+            var obj = await DeserializeAsync<T>(response);
+            return obj;
         }
 
         private async Task EnsureSuccessRequest(HttpResponseMessage response)
