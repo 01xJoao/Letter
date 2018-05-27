@@ -33,6 +33,8 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         {
             base.ViewDidLoad();
 
+            DismissKeyboardOnBackgroundTap();
+
             View.Alpha = 0.7f;
 
             switch (_inputType)
@@ -110,6 +112,13 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         private void CleanFromMemory()
         {
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
+        }
+
+        protected void DismissKeyboardOnBackgroundTap()
+        {
+            var tap = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            tap.AddTarget(() => View.EndEditing(true));
+            View.AddGestureRecognizer(tap);
         }
     }
 }

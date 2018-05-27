@@ -73,7 +73,6 @@ namespace LetterApp.iOS.Views.Base
             View.AddGestureRecognizer(tap);
         }
 
-
         #endregion
     }
 }
