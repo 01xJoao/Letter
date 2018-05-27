@@ -20,11 +20,11 @@ namespace LetterApp.iOS.Services
             alertVC.Configure(title, alertType);
         }
 
-        public Task<string> ShowInput(string title = "", string confirmButtonText = null, string hint = "", InputType inputType = InputType.Text)
+        public Task<string> ShowTextInput(string title = "", string inputContent = "", string confirmButtonText = "", string hint = "", InputType inputType = InputType.Text)
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var inputTextView = new InputTextViewController(title, confirmButtonText, hint, inputType, val => tcs.TrySetResult(val), () => tcs.TrySetResult(null));
+            var inputTextView = new InputTextViewController(title, inputContent, confirmButtonText, hint, inputType, val => tcs.TrySetResult(val), () => tcs.TrySetResult(null));
             inputTextView.Show();
 
             return tcs.Task;

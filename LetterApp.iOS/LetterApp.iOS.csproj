@@ -252,6 +252,8 @@
     <Folder Include="Views\CustomViews\Dialog\" />
     <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
     <Folder Include="Resources\Assets.xcassets\close_black.imageset\" />
+    <Folder Include="Views\Register\" />
+    <Folder Include="Views\RecoverPassword\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -265,6 +267,7 @@
     <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertView.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
+    <InterfaceDefinition Include="Views\RecoverPassword\RecoverPasswordViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -334,6 +337,10 @@
     <Compile Include="Views\CustomViews\Dialog\InputTextViewController.cs" />
     <Compile Include="Views\CustomViews\Dialog\InputTextViewController.designer.cs">
       <DependentUpon>InputTextViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.cs" />
+    <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.designer.cs">
+      <DependentUpon>RecoverPasswordViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

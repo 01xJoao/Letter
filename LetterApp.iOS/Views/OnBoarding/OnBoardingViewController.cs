@@ -77,7 +77,7 @@ namespace LetterApp.iOS.Views.OnBoarding
 
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
         {
-            ViewModel.OpenLoginViewCommand.Execute(this);
+            ViewModel.OpenLoginViewCommand.Execute();
         }
 
 		public override void ViewWillAppear(bool animated)

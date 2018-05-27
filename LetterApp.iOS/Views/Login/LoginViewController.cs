@@ -51,8 +51,8 @@ namespace LetterApp.iOS.Views.Login
 
         private void OnforgotPassButton_TouchUpInside(object sender, EventArgs e)
         {
-            if (ViewModel.ForgotPassCommand.CanExecute())
-                ViewModel.ForgotPassCommand.Execute();
+            if (ViewModel.ForgotPassCommand.CanExecute(null))
+                ViewModel.ForgotPassCommand.Execute(_emailTextField.Text);
         }
 
         private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)

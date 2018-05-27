@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CoreGraphics;
+using Foundation;
 using LetterApp.iOS.Helpers;
 using UIKit;
 
@@ -13,6 +14,7 @@ namespace LetterApp.iOS.Views.Base
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            this.NavigationController.SetNavigationBarHidden(true, false);
         }
 
         public void AddViewToRoot(UIViewController viewController, bool isAnimated = true)
@@ -29,7 +31,7 @@ namespace LetterApp.iOS.Views.Base
             this.View.AddSubview(viewController.View);
 
             this.AddChildViewController(viewController);
-            viewController.WillMoveToParentViewController(this);
+            this.WillMoveToParentViewController(this);
 
             if (isAnimated && viewController.View.Subviews.Length > 0)
                 Animations.Fade(viewController.View.Subviews[0], true);

@@ -6,7 +6,6 @@ using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
-using LetterApp.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.RequestModels;
 using SharpRaven.Data;
 
@@ -21,8 +20,8 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<Tuple<string,string>> _signInCommand;
         public XPCommand<Tuple<string, string>> SignInCommand => _signInCommand ?? (_signInCommand = new XPCommand<Tuple<string, string>>(async (value) => await SignIn(value), CanLogin));
 
-        private XPCommand _forgotPassCommand;
-        public XPCommand ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand(async () => await ForgotPass(), CanExecute));
+        private XPCommand<string> _forgotPassCommand;
+        public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPass(email), CanExecute));
 
         public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, ICodeResultService codeResultService)
         {
@@ -58,11 +57,13 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private async Task ForgotPass()
+        private async Task ForgotPass(string emailInput)
         {
             try
             {
-                var email = await _dialogService.ShowInput(EnterEmail, ConfirmButton, EmailHint, InputType.Email);
+                var email = await _dialogService.ShowTextInput(EnterEmail, emailInput, ConfirmButton, EmailHint, InputType.Email);
+                if(!string.IsNullOrEmpty(email))
+                    await NavigationService.NavigateAsync<RecoverPasswordViewModel, object>(null);
             }
             catch (Exception ex)
             {
@@ -71,7 +72,7 @@ namespace LetterApp.Core.ViewModels
         }
 
         private bool CanLogin(Tuple<string, string> value) => !IsBusy && !string.IsNullOrEmpty(value.Item1) && !string.IsNullOrEmpty(value.Item2);
-        private bool CanExecute() => !IsBusy;
+        private bool CanExecute(object args) => !IsBusy;
 
         #region Resources
 
