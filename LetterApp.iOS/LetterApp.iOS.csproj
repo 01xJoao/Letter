@@ -325,7 +325,7 @@
     <Compile Include="Views\OnBoarding\OnBoardingViewController.designer.cs">
       <DependentUpon>OnBoardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sources\OnBoardPageDataSource.cs" />
+    <Compile Include="Sources\OnBoardPageSource.cs" />
     <Compile Include="Helpers\Animations.cs" />
     <Compile Include="Helpers\UIButtonExtensions.cs" />
     <Compile Include="Helpers\UITextFieldExtensions.cs" />

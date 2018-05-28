@@ -122,10 +122,7 @@ namespace LetterApp.iOS.Views.Login
             }
         }
 
-        private void InvalidMail()
-        {
-            _emailLineView.BackgroundColor = Colors.Red;
-        }
+        private void InvalidMail() => _emailLineView.BackgroundColor = Colors.Red;
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs args)
         {

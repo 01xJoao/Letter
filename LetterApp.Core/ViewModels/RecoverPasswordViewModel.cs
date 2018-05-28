@@ -20,7 +20,7 @@ namespace LetterApp.Core.ViewModels
 
         #region Resources
 
-        public string ChangePassTitle => L10N.Localize("RecoverPasswordViewModel_ChangePassTitle");
+        public string NewPassTitle => L10N.Localize("RecoverPasswordViewModel_NewPassTitle");
 
         #endregion
     }

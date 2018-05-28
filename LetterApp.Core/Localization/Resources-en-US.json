@@ -176,7 +176,7 @@
     "translated": "Send"
   },
   {
-    "key": "RecoverPasswordViewModel_ChangePassTitle",
-    "translated": "Change Password"
+    "key": "RecoverPasswordViewModel_NewPassTitle",
+    "translated": "New Password"
   }
 ]

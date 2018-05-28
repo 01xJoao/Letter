@@ -15,33 +15,50 @@ namespace LetterApp.iOS.Views.RecoverPassword
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
             SetupView();
-        }
 
-        private void SetupView()
-        {
-            UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.ChangePassTitle, Colors.Black, 17f, UIFontWeight.Semibold);
-            _closeButton.SetImage(UIImage.FromBundle("close_black_big"), UIControlState.Normal);
-            _closeButton.TintColor = Colors.Black;
-            _tableView.BackgroundColor = Colors.MainBlue3;
+            _submitButton.TouchUpInside -= OnSubmitButton_TouchUpInside;
+            _submitButton.TouchUpInside += OnSubmitButton_TouchUpInside;
+
+            _requestCodeButton.TouchUpInside -= OnRequestCodeButton_TouchUpInside;
+            _requestCodeButton.TouchUpInside += OnRequestCodeButton_TouchUpInside;
 
             _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
             _closeButton.TouchUpInside += OnCloseButton_TouchUpInside;
         }
 
-        private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
+        private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void OnRequestCodeButton_TouchUpInside(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.CloseViewCommand.Execute();
+        }
+
+        private void SetupView()
+        {
+            UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewPassTitle, Colors.Black, 17f, UIFontWeight.Semibold);
+            _closeButton.SetImage(UIImage.FromBundle("close_black_big"), UIControlState.Normal);
+            _closeButton.TintColor = Colors.Black;
+            _backgroundView.BackgroundColor = Colors.MainBlue4;
+            _formView.BackgroundColor = Colors.MainBlue4;
+
+            //UITextFieldExtensions.SetupField(this.View, 0, );
+
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             if ((NavigationController == null && IsMovingFromParentViewController) || (ParentViewController != null && ParentViewController.IsBeingDismissed))
-            {
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
-                MemoryUtility.ReleaseUITableViewCell(_tableView);
-            }
+            
             base.ViewWillDisappear(animated);
         }
     }
