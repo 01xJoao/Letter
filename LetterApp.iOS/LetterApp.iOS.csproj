@@ -222,6 +222,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\close_black_big.imageset\close.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_black_big.imageset\close%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_black_big.imageset\close%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white_big.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white_big.imageset\close.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white_big.imageset\close%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white_big.imageset\close%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -260,6 +264,7 @@
     <Folder Include="Views\Register\" />
     <Folder Include="Views\RecoverPassword\" />
     <Folder Include="Resources\Assets.xcassets\close_black_big.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white_big.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
