@@ -174,5 +174,9 @@
   {
     "key": "LoginViewModel_SendCode",
     "translated": "Send"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ChangePassTitle",
+    "translated": "Change Password"
   }
 ]

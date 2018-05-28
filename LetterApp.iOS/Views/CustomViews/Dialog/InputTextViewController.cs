@@ -70,7 +70,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
                 _indicatorLabel.Alpha = 1;
             }
 
-            _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
+            _closeButton.SetImage(UIImage.FromBundle("close_black_big"), UIControlState.Normal);
             _closeButton.TintColor = Colors.Black;
 
             _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;

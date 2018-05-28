@@ -1,21 +1,50 @@
-﻿// WARNING
+// WARNING
 //
-// This file has been generated automatically by Xamarin Studio from the outlets and
-// actions declared in your storyboard file.
-// Manual changes to this file will not be maintained.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
+// Manual changes to this file may not be handled correctly.
 //
 using Foundation;
-using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
 namespace LetterApp.iOS.Views.RecoverPassword
 {
-    [Register("RecoverPasswordViewController")]
-    partial class RecoverPasswordViewController
-    {
-        void ReleaseDesignerOutlets()
-        {
-        }
-    }
+	[Register ("RecoverPasswordViewController")]
+	partial class RecoverPasswordViewController
+	{
+		[Outlet]
+		UIKit.UIButton _closeButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView _navigationBarView { get; set; }
+
+		[Outlet]
+		UIKit.UITableView _tableView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _titleLabel { get; set; }
+		
+		void ReleaseDesignerOutlets ()
+		{
+			if (_navigationBarView != null) {
+				_navigationBarView.Dispose ();
+				_navigationBarView = null;
+			}
+
+			if (_closeButton != null) {
+				_closeButton.Dispose ();
+				_closeButton = null;
+			}
+
+			if (_titleLabel != null) {
+				_titleLabel.Dispose ();
+				_titleLabel = null;
+			}
+
+			if (_tableView != null) {
+				_tableView.Dispose ();
+				_tableView = null;
+			}
+		}
+	}
 }

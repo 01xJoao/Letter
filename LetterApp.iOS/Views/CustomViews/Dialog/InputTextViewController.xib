@@ -88,17 +88,17 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaM-BR-MMo">
-                            <rect key="frame" x="277.5" y="12" width="32" height="32"/>
+                            <rect key="frame" x="286.5" y="15" width="20" height="20"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="32" id="I7o-0e-rhe"/>
-                                <constraint firstAttribute="width" constant="32" id="jbE-jn-91O"/>
+                                <constraint firstAttribute="height" constant="20" id="I7o-0e-rhe"/>
+                                <constraint firstAttribute="width" constant="20" id="jbE-jn-91O"/>
                             </constraints>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="aaM-BR-MMo" secondAttribute="trailing" constant="12" id="1vy-Ib-Fl8"/>
-                        <constraint firstItem="aaM-BR-MMo" firstAttribute="top" secondItem="k7Y-Ns-Hex" secondAttribute="top" constant="12" id="9VD-Z3-XgM"/>
+                        <constraint firstAttribute="trailing" secondItem="aaM-BR-MMo" secondAttribute="trailing" constant="15" id="1vy-Ib-Fl8"/>
+                        <constraint firstItem="aaM-BR-MMo" firstAttribute="top" secondItem="k7Y-Ns-Hex" secondAttribute="top" constant="15" id="9VD-Z3-XgM"/>
                         <constraint firstItem="0wL-lo-HDc" firstAttribute="leading" secondItem="z6U-KZ-Nhw" secondAttribute="leading" id="Anp-YR-RBr"/>
                         <constraint firstItem="rN1-Ja-I0c" firstAttribute="trailing" secondItem="0wL-lo-HDc" secondAttribute="trailing" id="HDU-eC-8RN"/>
                         <constraint firstItem="AQr-1o-2PQ" firstAttribute="top" secondItem="z6U-KZ-Nhw" secondAttribute="bottom" constant="30" id="IbE-6p-IDO"/>
