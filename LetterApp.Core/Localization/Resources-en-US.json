@@ -153,7 +153,7 @@
   },
   {
     "key": "LoginViewModel_ForgotPassButton",
-    "translated": "Forgot Password?"
+    "translated": "Forgot password?"
   },
   {
     "key": "LoginViewModel_SignUpButton",
@@ -178,5 +178,25 @@
   {
     "key": "RecoverPasswordViewModel_NewPassTitle",
     "translated": "New Password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailAddress",
+    "translated": "Email address"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ConfirmPass",
+    "translated": "Confirm password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Code",
+    "translated": "Verification code"
+  },
+  { 
+    "key": "RecoverPasswordViewModel_RequestAgain",
+    "translated": "Request again"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Submit",
+    "translated": "Submit"
   }
 ]

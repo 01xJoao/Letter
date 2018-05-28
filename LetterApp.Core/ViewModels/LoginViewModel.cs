@@ -94,7 +94,7 @@ namespace LetterApp.Core.ViewModels
                     var result = await _authService.SendActivationCode(email, "false");
 
                     if (result.StatusCode == 200)
-                        await NavigationService.NavigateAsync<RecoverPasswordViewModel, object>(null);
+                        await NavigationService.NavigateAsync<RecoverPasswordViewModel, string>(email);
                     else
                         _dialogService.ShowAlert(_codeResultService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);
                 }

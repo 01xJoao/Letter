@@ -1,7 +1,4 @@
-﻿using System;
-using Airbnb.Lottie;
-using CoreGraphics;
-using Foundation;
+﻿using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.iOS.Interfaces;
@@ -11,6 +8,7 @@ namespace LetterApp.iOS.Views.Base
 {
     public abstract class XViewController<TViewModel> : UIViewController, IXiOSView where TViewModel : class, IXViewModel
     {
+        public bool ViewIsVisible { get; set; }
         public TViewModel ViewModel { get; private set; }
         public object ParameterData { get; set; }
         public virtual bool ShowAsPresentView => false;
@@ -41,12 +39,14 @@ namespace LetterApp.iOS.Views.Base
         public override void ViewWillAppear(bool animated)
         {
             ViewModel.Appearing();
+            ViewIsVisible = true;
             base.ViewWillAppear(animated);
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             ViewModel.Disappearing();
+            ViewIsVisible = false;
             base.ViewWillDisappear(animated);
         }
 
@@ -56,15 +56,11 @@ namespace LetterApp.iOS.Views.Base
 
         protected void RegisterForKeyboardNotifications()
         {
-            UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(e));
-            UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(e));
+            UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(true));
+            UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(false));
         }
 
-        public virtual void OnKeyboardNotification(UIKeyboardEventArgs args)
-        {
-            if (!this.IsViewLoaded)
-                return;
-        }
+        public virtual void OnKeyboardNotification(bool changeKeyboardState) {}
 
         protected void DismissKeyboardOnBackgroundTap()
         {

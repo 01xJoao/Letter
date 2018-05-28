@@ -33,7 +33,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
             DismissKeyboardOnBackgroundTap();
 
-            View.Alpha = 0.7f;
+            this.View.Alpha = 0.3f;
 
             switch (_inputType)
             {

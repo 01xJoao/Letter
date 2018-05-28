@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Airbnb.Lottie;
-using CoreGraphics;
+using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -14,7 +14,8 @@ namespace LetterApp.iOS.Views.Login
     public partial class LoginViewController : XViewController<LoginViewModel>, IRootView
     {
         public override bool HandlesKeyboardNotifications => true;
-        private LOTAnimationView _loadAnimation;
+        private LOTAnimationView _lottieAnimation;
+        private bool keyboardViewState;
 
         public LoginViewController() : base("LoginViewController", null) {}
 
@@ -77,74 +78,49 @@ namespace LetterApp.iOS.Views.Login
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
             UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 13f, ViewModel.ForgotPasswordButton);
 
+            _forgotPassButton.SetNeedsLayout();
+            _forgotPassButton.LayoutIfNeeded();
+
             UIButton keyboardButton = new UIButton();
             UIButtonExtensions.SetupButtonAppearance(keyboardButton, Colors.White, 16f, ViewModel.SignInButton);
             keyboardButton.TouchUpInside -= OnSignInButton_TouchUpInside;
             keyboardButton.TouchUpInside += OnSignInButton_TouchUpInside;
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
-            _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
             UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel,
                                              UIReturnKeyType.Next, keyboardButton);
             
-            _forgotPassButton.SetNeedsLayout();
-            _forgotPassButton.LayoutIfNeeded();
-
             _passwordTextField.SecureTextEntry = true;
             _passwordWithConstraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (_forgotPassButton.Frame.Width + 7);
             UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, 
                                              UIReturnKeyType.Default, keyboardButton);
+
+            _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
         }
 
         private void Loading()
         {
-            if (ViewModel.IsSigningIn)
-            {
-                if (_loadAnimation == null)
-                {
-                    _loadAnimation = LOTAnimationView.AnimationNamed("loading_white");
-                    _loadAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
-                    _loadAnimation.Frame = _signInButton.Frame;
-                    _signInButton.AddSubview(_loadAnimation);
-                    _loadAnimation.LoopAnimation = true;
-                }
-
-                _signInButton.SetTitle("", UIControlState.Normal);
-                _loadAnimation.AnimationProgress = 0;
-                _loadAnimation.Hidden = false;
-                _loadAnimation.Play();
-            }
-            else
-            {
-                _loadAnimation.Hidden = true;
-                _loadAnimation.Pause();
-                _signInButton.SetTitle(ViewModel.SignInButton, UIControlState.Normal);
-            }
+            _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
         }
 
         private void InvalidMail() => _emailLineView.BackgroundColor = Colors.Red;
 
-        public override void OnKeyboardNotification(UIKeyboardEventArgs args)
+        public override void OnKeyboardNotification(bool changeKeyboardState)
         {
-            base.OnKeyboardNotification(args);
-
-            if(ShouldAnimate())
+            if (ShouldAnimateView() && keyboardViewState != changeKeyboardState)
             {
-                if (args.FrameEnd.Y < args.FrameBegin.Y)
-                    Animations.AnimateBackground(this.View, LocalConstants.Login_HeightAnimation);
-                else if (args.FrameEnd.Y > args.FrameBegin.Y)
-                    Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
+                keyboardViewState = changeKeyboardState;
+                UIViewAnimationExtensions.AnimateBackgroundView(this.View, LocalConstants.Login_HeightAnimation, keyboardViewState);
             }
         }
 
-        private bool ShouldAnimate()
+        private bool ShouldAnimateView()
         {
             var viewsInScreen = UIApplication.SharedApplication.KeyWindow.Subviews;
 
-            //checking if this view is visible
-            if (viewsInScreen.Length <= 1 || viewsInScreen.Last().Frame != this.View.Frame)
+            if ((viewsInScreen.Length == 1 || viewsInScreen.Last().Frame != this.View.Frame) && ViewIsVisible)
                 return true;
-            
+
             return false;
         }
 

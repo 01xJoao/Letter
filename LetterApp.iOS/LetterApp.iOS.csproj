@@ -353,6 +353,7 @@
     <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.designer.cs">
       <DependentUpon>RecoverPasswordViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\UIViewAnimationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

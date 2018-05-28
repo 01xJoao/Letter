@@ -55,6 +55,9 @@ namespace LetterApp.iOS.Services
                 var presentViewProperty = viewController?.GetType()?.GetProperty("ShowAsPresentView");
                 bool showAsModal = (bool)presentViewProperty?.GetValue(viewController);
 
+                if(MasterNavigationController == null)
+                    SetRootViewController(new MainViewController());
+
                 if (showAsModal)
                     MasterNavigationController.PresentViewController(viewController, true, null);
                 else
