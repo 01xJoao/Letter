@@ -14,7 +14,6 @@ namespace LetterApp.iOS.Views.OnBoarding
     public partial class OnBoardingViewController : XViewController<OnBoardingViewModel>, IRootView
     {
         private UIPageViewController _pageViewController;
-        private OnBoardPageDataSource _onBoardPageSource;
 
         public OnBoardingViewController() : base("OnBoardingViewController", null) {}
 
@@ -36,8 +35,8 @@ namespace LetterApp.iOS.Views.OnBoarding
                 new BoardPageViewController(2, ViewModel.CallTitle, ViewModel.CallSubtitle, "board_chat")
             };
 
-            _onBoardPageSource = new OnBoardPageDataSource(viewControllers);
-            _pageViewController.DataSource = _onBoardPageSource;
+            var onBoardPageSource = new OnBoardPageDataSource(viewControllers);
+            _pageViewController.DataSource = onBoardPageSource;
             _pageViewController.SetViewControllers(new UIViewController[] { viewControllers.FirstOrDefault() }, UIPageViewControllerNavigationDirection.Forward, false, null);
 
             this.AddChildViewController(_pageViewController);
@@ -58,6 +57,11 @@ namespace LetterApp.iOS.Views.OnBoarding
             }
         }
 
+        private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.OpenLoginViewCommand.Execute();
+        }
+
         public override void ViewDidLayoutSubviews()
 		{
             base.ViewDidLayoutSubviews();
@@ -73,11 +77,6 @@ namespace LetterApp.iOS.Views.OnBoarding
 
             _pageParent.BackgroundColor = Colors.MainBlue;
             _pageContainer.BackgroundColor = Colors.MainBlue;
-        }
-
-        private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
-        {
-            ViewModel.OpenLoginViewCommand.Execute();
         }
 
 		public override void ViewWillAppear(bool animated)

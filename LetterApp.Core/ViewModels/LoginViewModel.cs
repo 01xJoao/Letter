@@ -18,18 +18,18 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _codeResultService;
 
-        private bool _tryingToLogin;
-        public bool TryingToLogin
-        {
-            get => _tryingToLogin;
-            set => SetProperty(ref _tryingToLogin, value);
-        }
-
         private bool _isValidEmail = true;
         public bool IsValidEmail
         {
             get => _isValidEmail;
             set => SetProperty(ref _isValidEmail, value);
+        }
+
+        private bool _isSigningIn;
+        public bool IsSigningIn
+        {
+            get => _isSigningIn;
+            set => SetProperty(ref _isSigningIn, value);
         }
 
         private XPCommand<Tuple<string,string>> _signInCommand;
@@ -52,11 +52,10 @@ namespace LetterApp.Core.ViewModels
                 IsValidEmail = false;
                 return;
             }
-            else
-                _isValidEmail = true;
 
+            _isValidEmail  = true;
+            IsSigningIn = true;
             IsBusy = true;
-            TryingToLogin = true;
 
             try
             {
@@ -79,7 +78,7 @@ namespace LetterApp.Core.ViewModels
             finally
             {
                 IsBusy = false;
-                TryingToLogin = false;
+                IsSigningIn = false;
             }
         }
 

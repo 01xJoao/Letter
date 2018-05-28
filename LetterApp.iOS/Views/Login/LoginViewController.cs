@@ -41,11 +41,11 @@ namespace LetterApp.iOS.Views.Login
         {
             switch (e.PropertyName)
             {
-                case nameof(ViewModel.TryingToLogin):
-                    Loading();
-                    break;
                 case nameof(ViewModel.IsValidEmail):
                     InvalidMail();
+                    break;
+                case nameof(ViewModel.IsSigningIn):
+                    Loading();
                     break;
                 default:
                     break;
@@ -69,32 +69,6 @@ namespace LetterApp.iOS.Views.Login
                 ViewModel.SignInCommand.Execute(new Tuple<string, string>(_emailTextField.Text, _passwordTextField.Text));
             
             View.EndEditing(true);
-        }
-
-        private void Loading()
-        {
-            if(ViewModel.TryingToLogin)
-            {
-                if(_loadAnimation == null)
-                {
-                    _loadAnimation = LOTAnimationView.AnimationNamed("loading_white");
-                    _loadAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
-                    _loadAnimation.Frame = _signInButton.Frame;
-                    _signInButton.AddSubview(_loadAnimation);
-                    _loadAnimation.LoopAnimation = true;
-                }
-
-                _signInButton.SetTitle("", UIControlState.Normal);
-                _loadAnimation.AnimationProgress = 0;
-                _loadAnimation.Hidden = false;
-                _loadAnimation.Play();
-            }
-            else
-            {
-                _loadAnimation.Hidden = true;
-                _loadAnimation.Pause();
-                _signInButton.SetTitle(ViewModel.SignInButton, UIControlState.Normal);
-            }
         }
 
         private void SetupView()
@@ -122,6 +96,37 @@ namespace LetterApp.iOS.Views.Login
                                              UIReturnKeyType.Default, keyboardButton);
         }
 
+        private void Loading()
+        {
+            if (ViewModel.IsSigningIn)
+            {
+                if (_loadAnimation == null)
+                {
+                    _loadAnimation = LOTAnimationView.AnimationNamed("loading_white");
+                    _loadAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+                    _loadAnimation.Frame = _signInButton.Frame;
+                    _signInButton.AddSubview(_loadAnimation);
+                    _loadAnimation.LoopAnimation = true;
+                }
+
+                _signInButton.SetTitle("", UIControlState.Normal);
+                _loadAnimation.AnimationProgress = 0;
+                _loadAnimation.Hidden = false;
+                _loadAnimation.Play();
+            }
+            else
+            {
+                _loadAnimation.Hidden = true;
+                _loadAnimation.Pause();
+                _signInButton.SetTitle(ViewModel.SignInButton, UIControlState.Normal);
+            }
+        }
+
+        private void InvalidMail()
+        {
+            _emailLineView.BackgroundColor = Colors.Red;
+        }
+
         public override void OnKeyboardNotification(UIKeyboardEventArgs args)
         {
             base.OnKeyboardNotification(args);
@@ -133,11 +138,6 @@ namespace LetterApp.iOS.Views.Login
                 else if (args.FrameEnd.Y > args.FrameBegin.Y)
                     Animations.BackgroundToDefault(this.View, UIScreen.MainScreen.Bounds);
             }
-        }
-
-        private void InvalidMail()
-        {
-            _emailLineView.BackgroundColor = Colors.Red;
         }
 
         private bool ShouldAnimate()
