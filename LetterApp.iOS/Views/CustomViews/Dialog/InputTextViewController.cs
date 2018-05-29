@@ -110,16 +110,16 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             UIView.AnimateNotify(0.3, () => View.Alpha = 0, (finished) => CleanFromMemory());
         }
 
-        private void CleanFromMemory()
-        {
-            MemoryUtility.ReleaseUIViewWithChildren(this.View);
-        }
-
         protected void DismissKeyboardOnBackgroundTap()
         {
             var tap = new UITapGestureRecognizer { CancelsTouchesInView = false };
             tap.AddTarget(() => View.EndEditing(true));
             View.AddGestureRecognizer(tap);
+        }
+
+        private void CleanFromMemory()
+        {
+            MemoryUtility.ReleaseUIViewWithChildren(this.View);
         }
     }
 }
