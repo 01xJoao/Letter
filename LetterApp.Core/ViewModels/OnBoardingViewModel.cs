@@ -9,12 +9,12 @@ namespace LetterApp.Core.ViewModels
 {
     public class OnBoardingViewModel : XViewModel
     {
-        private XPCommand<object> _openInformationViewCommand;
-        public XPCommand<object> OpenInformationViewCommand => _openInformationViewCommand ?? (_openInformationViewCommand = new XPCommand<object>(async (navigation) => await OpenInformationView(navigation)));
+        private XPCommand _openLoginViewCommand;
+        public XPCommand OpenLoginViewCommand => _openLoginViewCommand ?? (_openLoginViewCommand = new XPCommand(async () => await OpenLoginView()));
 
-        private async Task OpenInformationView(object navigation)
+        private async Task OpenLoginView()
         {
-            await NavigationService.NavigateAsync<MainViewModel, object>(navigation);
+            await NavigationService.NavigateAsync<LoginViewModel, object>(null);
         }
 
         #region Resources

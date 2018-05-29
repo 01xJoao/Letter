@@ -5,11 +5,11 @@ using UIKit;
 
 namespace LetterApp.iOS.Sources
 {
-    public class OnBoardPageDataSource : UIPageViewControllerDataSource
+    public class OnBoardPageSource : UIPageViewControllerDataSource
     {
         private readonly List<XBoardPageViewController> _viewControllersInPage;
 
-        public OnBoardPageDataSource(List<XBoardPageViewController> viewControllersInPage)
+        public OnBoardPageSource(List<XBoardPageViewController> viewControllersInPage)
         {
             _viewControllersInPage = viewControllersInPage;
         }

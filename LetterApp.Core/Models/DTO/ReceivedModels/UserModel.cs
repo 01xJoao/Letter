@@ -21,6 +21,6 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string Picture { get; set; }
         public string PubNubToken { get; set; }
         public string TimeCreated { get; set; }
-        public int? Code { get; set; }
+        public int? StatusCode { get; set; }
     }
 }

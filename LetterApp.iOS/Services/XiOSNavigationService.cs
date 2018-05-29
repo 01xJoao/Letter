@@ -39,15 +39,7 @@ namespace LetterApp.iOS.Services
             var xVC = viewController as IXiOSView;
 
             if (xVC != null && !data.IsNull())
-            {
-                if(data is UIViewController controller)
-                {
-                    controller.HidesBottomBarWhenPushed = true;
-                    MasterNavigationController = controller.NavigationController;
-                }
-                else
-                    xVC.ParameterData = data; 
-            }
+                xVC.ParameterData = data;
 
             return viewController;
         }
@@ -61,8 +53,12 @@ namespace LetterApp.iOS.Services
             else
             {
                 var presentViewProperty = viewController?.GetType()?.GetProperty("ShowAsPresentView");
+                bool showAsModal = (bool)presentViewProperty?.GetValue(viewController);
 
-                if ((bool)presentViewProperty?.GetValue(viewController))
+                if(MasterNavigationController == null)
+                    SetRootViewController(new MainViewController());
+
+                if (showAsModal)
                     MasterNavigationController.PresentViewController(viewController, true, null);
                 else
                     MasterNavigationController.PushViewController(viewController, true);
@@ -88,7 +84,8 @@ namespace LetterApp.iOS.Services
             {
                 using(var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                 {
-                    RootViewController = appDelegate.Window.RootViewController as RootViewController;
+                    RootViewController = appDelegate.RootController;
+                    MasterNavigationController = RootViewController.NavigationController;
                 }
             }
 

@@ -50,5 +50,11 @@ namespace LetterApp.iOS.Views.Base
             vc.TabBarItem.ImageInsets = new UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0);
             vc.TabBarItem.TitlePositionAdjustment = new UIOffset(0, -2);
         }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
     }
 }

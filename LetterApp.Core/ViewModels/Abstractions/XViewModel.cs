@@ -15,8 +15,8 @@ namespace LetterApp.Core.ViewModels.Abstractions
         private static IXNavigationService _navigationService;
         protected static IXNavigationService NavigationService = _navigationService ?? (_navigationService = App.Container.GetInstance<IXNavigationService>());
 
-        private static IRavenService _ravenService;
-        private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
+        public static IRavenService _ravenService;
+        public static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
         public event PropertyChangedEventHandler PropertyChanged;
         private static readonly PropertyChangedEventArgs AllPropertiesChanged = new PropertyChangedEventArgs(string.Empty);
@@ -41,7 +41,7 @@ namespace LetterApp.Core.ViewModels.Abstractions
 
         public void InitializeViewModel()
         {
-            _realm = Realm.GetInstance();
+            _realm = Realm.GetInstance(new RealmConfiguration { SchemaVersion = 3 });
             InitializeAsync();
         }
 

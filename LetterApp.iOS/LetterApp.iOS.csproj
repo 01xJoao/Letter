@@ -95,9 +95,6 @@
     <Reference Include="MBProgressHUD">
       <HintPath>..\packages\mbprogresshud.0.9.2.0\lib\Xamarin.iOS\MBProgressHUD.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Media">
-      <HintPath>..\packages\Xam.Plugin.Media.4.0.0.4-beta\lib\xamarinios10\Plugin.Media.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -122,14 +119,8 @@
     <Reference Include="FFImageLoading.Transformations">
       <HintPath>..\packages\Xamarin.FFImageLoading.Transformations.2.3.6\lib\Xamarin.iOS10\FFImageLoading.Transformations.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Permissions">
-      <HintPath>..\packages\Plugin.Permissions.3.0.0.12-beta\lib\xamarinios10\Plugin.Permissions.dll</HintPath>
-    </Reference>
     <Reference Include="Realm.DataBinding">
       <HintPath>..\packages\Realm.DataBinding.1.2.0\lib\Xamarin.iOS10\Realm.DataBinding.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Linq">
-      <HintPath>..\packages\Remotion.Linq.2.1.2\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -140,11 +131,23 @@
     <Reference Include="Realm.Sync">
       <HintPath>..\packages\Realm.3.0.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
     </Reference>
-    <Reference Include="System.Configuration.ConfigurationManager">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
     <Reference Include="SharpRaven">
       <HintPath>..\packages\SharpRaven.2.4.0\lib\netstandard2.0\SharpRaven.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Permissions">
+      <HintPath>..\packages\Plugin.Permissions.3.0.0.12\lib\xamarinios10\Plugin.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq">
+      <HintPath>..\packages\Remotion.Linq.2.2.0\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration.ConfigurationManager">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.1\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media">
+      <HintPath>..\packages\Xam.Plugin.Media.4.0.0.9\lib\xamarinios10\Plugin.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Lottie.iOS">
+      <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +158,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Group.png" />
@@ -176,10 +178,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user-outline.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call%403x.png" />
@@ -206,6 +204,18 @@
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%401x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -237,6 +247,17 @@
     <Folder Include="Resources\Assets.xcassets\board_chat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round_big.imageset\" />
+    <Folder Include="Views\Login\" />
+    <Folder Include="Views\CustomViews\Dialog\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_black.imageset\" />
+    <Folder Include="Views\Register\" />
+    <Folder Include="Views\RecoverPassword\" />
+    <Folder Include="Resources\Assets.xcassets\close_black_big.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white_big.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_black.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -247,6 +268,10 @@
     <InterfaceDefinition Include="Views\OnBoarding\BoardPageViewController.xib" />
     <InterfaceDefinition Include="Views\OnBoarding\OnBoardingViewController.xib" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
+    <InterfaceDefinition Include="Views\RecoverPassword\RecoverPasswordViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -298,12 +323,30 @@
     <Compile Include="Views\OnBoarding\OnBoardingViewController.designer.cs">
       <DependentUpon>OnBoardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sources\OnBoardPageDataSource.cs" />
+    <Compile Include="Sources\OnBoardPageSource.cs" />
     <Compile Include="Helpers\Animations.cs" />
     <Compile Include="Helpers\UIButtonExtensions.cs" />
     <Compile Include="Helpers\UITextFieldExtensions.cs" />
     <Compile Include="Helpers\UILabelExtensions.cs" />
     <Compile Include="Helpers\LocalConstants.cs" />
+    <Compile Include="Views\Login\LoginViewController.cs" />
+    <Compile Include="Views\Login\LoginViewController.designer.cs">
+      <DependentUpon>LoginViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertView.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertView.designer.cs">
+      <DependentUpon>AlertView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Dialog\InputTextViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\InputTextViewController.designer.cs">
+      <DependentUpon>InputTextViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.cs" />
+    <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.designer.cs">
+      <DependentUpon>RecoverPasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\UIViewAnimationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -311,9 +354,13 @@
       <Name>LetterApp.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\loading.json" />
+    <BundleResource Include="Resources\loading_white.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
   <Import Project="..\packages\Realm.Database.3.0.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.0.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
+  <Import Project="..\packages\Fody.2.5.0\build\Fody.targets" Condition="Exists('..\packages\Fody.2.5.0\build\Fody.targets')" />
 </Project>

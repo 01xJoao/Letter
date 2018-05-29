@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Foundation;
-using LetterApp.iOS.Helpers;
+﻿using Foundation;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 
@@ -14,11 +11,18 @@ namespace LetterApp.iOS
     {
         // class-level declarations
         public override UIWindow Window { get; set; }
+        public UINavigationController NavigationController;
+        public RootViewController RootController;
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
-            Window.RootViewController = new RootViewController();
+
+            NavigationController = new UINavigationController();
+            RootController = new RootViewController();
+            NavigationController.PushViewController(RootController, true);
+
+            Window.RootViewController = NavigationController;
             Window.MakeKeyAndVisible();
             Setup.Initialize();
 

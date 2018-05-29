@@ -5,12 +5,11 @@ namespace LetterApp.Core.Services.Interfaces
 {
     public interface IDialogService
     {
-        Task<bool> ShowAlert(string title = "", string message = "", AlertType alertType = AlertType.Error, string confirmButtonText = "", string cancelButtonText = null);
-        Task<string> ShowInput(string title = "", string confirmButtonText = null, string cancelButtonText = null, string hint = "", InputType inputType = InputType.Number);
+        void ShowAlert(string title, AlertType alertType, float duration = 2.5f);
+        Task<string> ShowTextInput(string title = "", string inputContent = "", string confirmButtonText = "", string hint = "", InputType inputType = InputType.Text);
         Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options);
-        //Task<DateTime> ShowDatePicker(DateTime minimumDate = default(DateTime), DateTime maximumDate = default(DateTime), DateTime defaultDate = default(DateTime));
-        void ShowLoading(string title = "", string text = "");
-        void HideLoading();
+        void StartLoading();
+        void StopLoading();
     }
 
     public enum AlertType
@@ -18,16 +17,16 @@ namespace LetterApp.Core.Services.Interfaces
         Null,
         Success,
         Error,
-        Timeout,
-        Info
+        Info,
     }
 
     public enum InputType
     {
         Null,
+        Email,
         Text,
         Number,
-        Phome
+        Phone
     }
 
     public enum OptionsType

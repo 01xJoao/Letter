@@ -5,6 +5,12 @@ namespace LetterApp.Models.DTO.RequestModels
 {
     public class UserRequestModel
     {
+        public UserRequestModel(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
+
         [JsonProperty("email")]
         public string Email { get; set; }
 

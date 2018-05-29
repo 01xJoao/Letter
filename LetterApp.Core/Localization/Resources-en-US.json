@@ -1,79 +1,83 @@
 ﻿[
   {
+    "key": "Code_Null",
+    "translated": "Something went very wrong, try again."
+  },
+  {
     "key": "Code_E101",
-    "translated": "Wrong Email or Password, try again"
+    "translated": "Email or password is invalid, try again."
   },
   {
     "key": "Code_E102",
-    "translated": "Account not yet activated, please activate your account"
+    "translated": "Account not yet activated, please activate your account."
   },
   {
     "key": "Code_E103",
-    "translated": "Your account has been desactivated"
+    "translated": "Your account has been desactivated."
   },
   {
     "key": "Code_E104",
-    "translated": "No user associated with this email"
+    "translated": "No user associated with this email."
   },
   {
     "key": "Code_E105",
-    "translated": "Something went wrong, please try again"
+    "translated": "Something went wrong, please try again."
   },
   {
     "key": "Code_E106",
-    "translated": "Wrong verification code, try again or request a new one"
+    "translated": "Wrong verification code, try again or request a new one."
   },
   {
     "key": "Code_E107",
-    "translated": "No division found with this code"
+    "translated": "No division found with this code."
   },
   {
     "key": "Code_E108",
-    "translated": "Your email domain is not valid for this division"
+    "translated": "Your email domain is not valid for this division."
   },
   {
     "key": "Code_E109",
-    "translated": "Wrong password, try again"
+    "translated": "Wrong password, try again."
   },
   {
     "key": "Code_E110",
-    "translated": "Email already in use"
+    "translated": "Email already in use."
   },
   {
     "key": "Code_E111",
-    "translated": "Wrong activation code, try again or request a new one"
+    "translated": "Wrong activation code, try again or request a new one."
   },
   {
     "key": "Code_E112",
-    "translated": "Organization not found"
+    "translated": "Organization not found."
   },
   {
     "key": "Code_E113",
-    "translated": "Your email domain is not valid in this organization"
+    "translated": "Your email domain is not valid in this organization."
   },
   {
     "key": "Code_E114",
-    "translated": "Organization has no divisions, try again later"
+    "translated": "Organization has no divisions, try again later."
   },
   {
     "key": "Code_E115",
-    "translated": "Wrong access code"
+    "translated": "Wrong access code."
   },
   {
     "key": "Code_E116",
-    "translated": "No positions found"
+    "translated": "No positions found."
   },
   {
     "key": "Code_S201",
-    "translated": "Password successfully changed"
+    "translated": "Password successfully changed."
   },
   {
     "key": "Code_S202",
-    "translated": "Registration completed"
+    "translated": "Registration completed."
   },
   {
     "key": "Code_S203",
-    "translated": "New position defined"
+    "translated": "New position defined."
   },
   {
     "key": "Code_S204",
@@ -81,11 +85,15 @@
   },
   {
     "key": "Code_S205",
-    "translated": "Your account was been deactivated"
+    "translated": "Your account was been deactivated."
   },
   {
     "key": "Code_S206",
-    "translated": "You left a division"
+    "translated": "You left a division."
+  },
+  {
+    "key": "Dialogs_InternetException",
+    "translated": "It seems you’re not connected to a network."
   },
   {
     "key": "OnBoardingViewModel_LetterHelloWorld",
@@ -134,5 +142,85 @@
   {
     "key": "MainViewModel_ProfileTab",
     "translated": "Profile"
+  },
+  {
+    "key": "LoginViewModel_EmailLabel",
+    "translated": "Email address"
+  },
+  {
+    "key": "LoginViewModel_PasswordLabel",
+    "translated": "Password"
+  },
+  {
+    "key": "LoginViewModel_ForgotPassButton",
+    "translated": "Forgot password?"
+  },
+  {
+    "key": "LoginViewModel_SignUpButton",
+    "translated": "First time using Letter? Sign Up!"
+  },
+  {
+    "key": "LoginViewModel_SignInButton",
+    "translated": "Sign In"
+  },
+  {
+    "key":  "LoginViewModel_EnterEmail",
+    "translated": "Enter your email address"
+  },
+  {
+    "key": "LoginViewModel_EmailHint",
+    "translated": "Organization email"
+  },
+  {
+    "key": "LoginViewModel_SendCode",
+    "translated": "Send"
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassTitle",
+    "translated": "New Password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailAddress",
+    "translated": "Email address"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ConfirmPass",
+    "translated": "Confirm password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Code",
+    "translated": "Verification code"
+  },
+  { 
+    "key": "RecoverPasswordViewModel_RequestAgain",
+    "translated": "Request again"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Submit",
+    "translated": "Submit"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ShowButton",
+    "translated": "Show"
+  },
+  {
+    "key": "RecoverPasswordViewModel_HideButton",
+    "translated": "Hide"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailConfirmation",
+    "translated": "We sent a email with a verification code. \n (Please check your SPAM folder)"
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordMatch",
+    "translated": "Passwords don't match, try again."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordWeak",
+    "translated": "Password not strong enought. \n Must be at least 8 characters long."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordChanged",
+    "translated": "Password changed suceffuly! \n Please Sign In."
   }
 ]

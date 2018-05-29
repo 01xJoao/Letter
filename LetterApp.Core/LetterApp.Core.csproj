@@ -9,9 +9,9 @@
     <PackageReference Include="SimpleInjector" Version="4.3.0" />
     <PackageReference Include="Xamarin.Essentials" Version="0.6.0-preview" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Xam.Plugin.Media" Version="4.0.0.4-beta" />
     <PackageReference Include="Realm" Version="3.0.0" />
     <PackageReference Include="SharpRaven" Version="2.4.0" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.0.9" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
