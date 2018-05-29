@@ -21,6 +21,7 @@ namespace LetterApp.iOS
             NavigationController = new UINavigationController();
             RootController = new RootViewController();
             NavigationController.PushViewController(RootController, true);
+
             Window.RootViewController = NavigationController;
             Window.MakeKeyAndVisible();
             Setup.Initialize();

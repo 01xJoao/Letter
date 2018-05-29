@@ -26,9 +26,6 @@ namespace LetterApp.iOS.Views.Base
             else
                 ViewModel.Prepare();
 
-            if (HandlesKeyboardNotifications)
-                RegisterForKeyboardNotifications();
-
             ViewModel.InitializeViewModel();
             DismissKeyboardOnBackgroundTap();
 
@@ -40,6 +37,10 @@ namespace LetterApp.iOS.Views.Base
         {
             ViewModel.Appearing();
             ViewIsVisible = true;
+
+            if (HandlesKeyboardNotifications)
+                RegisterForKeyboardNotifications(true);
+
             base.ViewWillAppear(animated);
         }
 
@@ -47,17 +48,31 @@ namespace LetterApp.iOS.Views.Base
         {
             ViewModel.Disappearing();
             ViewIsVisible = false;
+
+            if (HandlesKeyboardNotifications)
+                RegisterForKeyboardNotifications(false);
+            
             base.ViewWillDisappear(animated);
         }
 
         #region Keyboard
 
         public virtual bool HandlesKeyboardNotifications => false;
+        private NSObject _keyboardWillShow;
+        private NSObject _keyboardWillHide;
 
-        protected void RegisterForKeyboardNotifications()
+        protected void RegisterForKeyboardNotifications(bool shouldRegister)
         {
-            UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(true));
-            UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(false));
+            if(shouldRegister)
+            {
+                _keyboardWillShow = UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(true));
+                _keyboardWillHide = UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(false));
+            }
+            else
+            {
+                _keyboardWillShow?.Dispose();
+                _keyboardWillHide?.Dispose();
+            }
         }
 
         public virtual void OnKeyboardNotification(bool changeKeyboardState) {}

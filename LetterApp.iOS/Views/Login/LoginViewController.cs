@@ -76,7 +76,7 @@ namespace LetterApp.iOS.Views.Login
         {
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 14f, ViewModel.SignUpButton);
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
-            UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 13f, ViewModel.ForgotPasswordButton);
+            UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 12f, ViewModel.ForgotPasswordButton);
 
             _forgotPassButton.SetNeedsLayout();
             _forgotPassButton.LayoutIfNeeded();
@@ -104,7 +104,11 @@ namespace LetterApp.iOS.Views.Login
             _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
         }
 
-        private void InvalidMail() => _emailLineView.BackgroundColor = Colors.Red;
+        private void InvalidMail()
+        {
+            _emailLabel.TextColor = Colors.Red;  
+            _emailLineView.BackgroundColor = Colors.Red;  
+        } 
 
         public override void OnKeyboardNotification(bool changeKeyboardState)
         {

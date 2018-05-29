@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Airbnb.Lottie;
 using LetterApp.Core.ViewModels;
@@ -23,6 +24,9 @@ namespace LetterApp.iOS.Views.RecoverPassword
             base.ViewDidLoad();
             SetupView();
 
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
             _submitButton.TouchUpInside -= OnSubmitButton_TouchUpInside;
             _submitButton.TouchUpInside += OnSubmitButton_TouchUpInside;
 
@@ -39,9 +43,27 @@ namespace LetterApp.iOS.Views.RecoverPassword
             _confirmButton.TouchUpInside += OnConfirmButton_TouchUpInside;
         }
 
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.IsValidPassword):
+                    InvalidPassword();
+                    break;
+                case nameof(ViewModel.IsSubmiting):
+                    Loading();
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            var tuple = new Tuple<string, string, string>(_passwordTextField.Text, _confirmPassTextField.Text, _codeTextField.Text);
+
+            if (ViewModel.SubmitFormCommand.CanExecute(tuple))
+                ViewModel.SubmitFormCommand.Execute(tuple);
         }
 
         private void OnRequestCodeButton_TouchUpInside(object sender, EventArgs e)
@@ -52,7 +74,8 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
         {
-            ViewModel.CloseViewCommand.Execute();
+            if(ViewModel.CloseViewCommand.CanExecute())
+                ViewModel.CloseViewCommand.Execute();
         }
 
         private void OnPassButton_TouchUpInside(object sender, EventArgs e)
@@ -83,10 +106,10 @@ namespace LetterApp.iOS.Views.RecoverPassword
             _backgroundView.BackgroundColor = Colors.MainBlue4;
             _formView.BackgroundColor = Colors.MainBlue4;
 
-            UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 13f, ViewModel.RequestAgainButton);
+            UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 12f, ViewModel.RequestAgainButton);
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 16f, ViewModel.SubmitButton);
-            UIButtonExtensions.SetupButtonAppearance(_passButton, Colors.MainBlue, 13f, ViewModel.ShowButton);
-            UIButtonExtensions.SetupButtonAppearance(_confirmButton, Colors.MainBlue, 13f, ViewModel.ShowButton);
+            UIButtonExtensions.SetupButtonAppearance(_passButton, Colors.MainBlue, 12f, ViewModel.ShowButton);
+            UIButtonExtensions.SetupButtonAppearance(_confirmButton, Colors.MainBlue, 12f, ViewModel.ShowButton);
 
             ConfigureButton(_requestCodeButton, _codeWidthConstraint);
             ConfigureButton(_passButton, _passWidthConstraint);
@@ -111,6 +134,15 @@ namespace LetterApp.iOS.Views.RecoverPassword
             _codeTextField.SmartQuotesType = UITextSmartQuotesType.No;
             _codeTextField.SpellCheckingType = UITextSpellCheckingType.No;
             _codeTextField.AutocapitalizationType = UITextAutocapitalizationType.AllCharacters;
+        }
+
+        private void InvalidPassword()
+        {
+            _passwordIndicatorLabel.TextColor = Colors.Red;
+            _passwordIndicatorView.BackgroundColor = Colors.Red;
+
+            _confirmpassIndicatorLabel.TextColor = Colors.Red;
+            _confirmPassIndicatorView.BackgroundColor = Colors.Red;
         }
 
         private void ConfigureButton(UIButton button, NSLayoutConstraint constraint)
@@ -138,6 +170,7 @@ namespace LetterApp.iOS.Views.RecoverPassword
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+
         }
     }
 }

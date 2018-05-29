@@ -210,5 +210,17 @@
   {
     "key": "RecoverPasswordViewModel_EmailConfirmation",
     "translated": "We sent a email with a verification code. \n (Please check your SPAM folder)"
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordMatch",
+    "translated": "Passwords don't match, try again."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordWeak",
+    "translated": "Password not strong enought. \n Must be at least 8 characters long."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordChanged",
+    "translated": "Password changed suceffuly! \n Please Sign In."
   }
 ]

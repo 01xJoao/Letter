@@ -94,7 +94,10 @@ namespace LetterApp.Core.ViewModels
                     var result = await _authService.SendActivationCode(email, "false");
 
                     if (result.StatusCode == 200)
+                    {
                         await NavigationService.NavigateAsync<RecoverPasswordViewModel, string>(email);
+                        _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
+                    }
                     else
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);
                 }
@@ -119,9 +122,10 @@ namespace LetterApp.Core.ViewModels
         public string ForgotPasswordButton => L10N.Localize("LoginViewModel_ForgotPassButton");
         public string SignUpButton => L10N.Localize("LoginViewModel_SignUpButton");
         public string SignInButton => L10N.Localize("LoginViewModel_SignInButton");
-        public string EnterEmail => L10N.Localize("LoginViewModel_EnterEmail");
-        public string EmailHint => L10N.Localize("LoginViewModel_EmailHint");
-        public string ConfirmButton => L10N.Localize("LoginViewModel_SendCode");
+        private string EnterEmail => L10N.Localize("LoginViewModel_EnterEmail");
+        private string EmailHint => L10N.Localize("LoginViewModel_EmailHint");
+        private string ConfirmButton => L10N.Localize("LoginViewModel_SendCode");
+        private string EmailConfirmation => L10N.Localize("RecoverPasswordViewModel_EmailConfirmation");
 
         #endregion
     }

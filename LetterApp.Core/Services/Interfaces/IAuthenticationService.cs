@@ -10,5 +10,6 @@ namespace LetterApp.Core.Services.Interfaces
     {
         Task<UserModel> LoginAsync(UserRequestModel userLoginRequest);
         Task<BaseModel> SendActivationCode(string email, string isActivation);
+        Task<BaseModel> ChangePassword(PasswordChangeRequestModel passwordChange);
     }
 }
