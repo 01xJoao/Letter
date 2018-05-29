@@ -13,10 +13,16 @@ namespace LetterApp.iOS.Views.RecoverPassword
 	partial class RecoverPasswordViewController
 	{
 		[Outlet]
+		UIKit.NSLayoutConstraint _animationHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView _backgroundView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton _closeButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _codeHeightConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UILabel _codeIndicatorLabel { get; set; }
@@ -28,6 +34,15 @@ namespace LetterApp.iOS.Views.RecoverPassword
 		UIKit.UITextField _codeTextField { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _codeWidthConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIButton _confirmButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _confirmHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UILabel _confirmpassIndicatorLabel { get; set; }
 
 		[Outlet]
@@ -35,6 +50,12 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
 		[Outlet]
 		UIKit.UITextField _confirmPassTextField { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _confirmPassWidthConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _emailHeightConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UILabel _emailIndicatorLabel { get; set; }
@@ -53,6 +74,15 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
 		[Outlet]
 		UIKit.UIView _navigationBarView { get; set; }
+
+		[Outlet]
+		UIKit.UIButton _passButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _passHeightConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _passWidthConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UILabel _passwordIndicatorLabel { get; set; }
@@ -74,6 +104,11 @@ namespace LetterApp.iOS.Views.RecoverPassword
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_animationHeightConstraint != null) {
+				_animationHeightConstraint.Dispose ();
+				_animationHeightConstraint = null;
+			}
+
 			if (_backgroundView != null) {
 				_backgroundView.Dispose ();
 				_backgroundView = null;
@@ -82,6 +117,11 @@ namespace LetterApp.iOS.Views.RecoverPassword
 			if (_closeButton != null) {
 				_closeButton.Dispose ();
 				_closeButton = null;
+			}
+
+			if (_codeHeightConstraint != null) {
+				_codeHeightConstraint.Dispose ();
+				_codeHeightConstraint = null;
 			}
 
 			if (_codeIndicatorLabel != null) {
@@ -99,6 +139,16 @@ namespace LetterApp.iOS.Views.RecoverPassword
 				_codeTextField = null;
 			}
 
+			if (_codeWidthConstraint != null) {
+				_codeWidthConstraint.Dispose ();
+				_codeWidthConstraint = null;
+			}
+
+			if (_confirmHeightConstraint != null) {
+				_confirmHeightConstraint.Dispose ();
+				_confirmHeightConstraint = null;
+			}
+
 			if (_confirmpassIndicatorLabel != null) {
 				_confirmpassIndicatorLabel.Dispose ();
 				_confirmpassIndicatorLabel = null;
@@ -112,6 +162,11 @@ namespace LetterApp.iOS.Views.RecoverPassword
 			if (_confirmPassTextField != null) {
 				_confirmPassTextField.Dispose ();
 				_confirmPassTextField = null;
+			}
+
+			if (_emailHeightConstraint != null) {
+				_emailHeightConstraint.Dispose ();
+				_emailHeightConstraint = null;
 			}
 
 			if (_emailIndicatorLabel != null) {
@@ -129,6 +184,11 @@ namespace LetterApp.iOS.Views.RecoverPassword
 				_emailTextField = null;
 			}
 
+			if (_formView != null) {
+				_formView.Dispose ();
+				_formView = null;
+			}
+
 			if (_imageView != null) {
 				_imageView.Dispose ();
 				_imageView = null;
@@ -137,6 +197,11 @@ namespace LetterApp.iOS.Views.RecoverPassword
 			if (_navigationBarView != null) {
 				_navigationBarView.Dispose ();
 				_navigationBarView = null;
+			}
+
+			if (_passHeightConstraint != null) {
+				_passHeightConstraint.Dispose ();
+				_passHeightConstraint = null;
 			}
 
 			if (_passwordIndicatorLabel != null) {
@@ -169,9 +234,24 @@ namespace LetterApp.iOS.Views.RecoverPassword
 				_titleLabel = null;
 			}
 
-			if (_formView != null) {
-				_formView.Dispose ();
-				_formView = null;
+			if (_passButton != null) {
+				_passButton.Dispose ();
+				_passButton = null;
+			}
+
+			if (_confirmButton != null) {
+				_confirmButton.Dispose ();
+				_confirmButton = null;
+			}
+
+			if (_passWidthConstraint != null) {
+				_passWidthConstraint.Dispose ();
+				_passWidthConstraint = null;
+			}
+
+			if (_confirmPassWidthConstraint != null) {
+				_confirmPassWidthConstraint.Dispose ();
+				_confirmPassWidthConstraint = null;
 			}
 		}
 	}

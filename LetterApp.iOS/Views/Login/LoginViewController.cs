@@ -95,6 +95,7 @@ namespace LetterApp.iOS.Views.Login
             UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, 
                                              UIReturnKeyType.Default, keyboardButton);
 
+            _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
             _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
         }
 

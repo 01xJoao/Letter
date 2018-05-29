@@ -198,5 +198,13 @@
   {
     "key": "RecoverPasswordViewModel_Submit",
     "translated": "Submit"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ShowButton",
+    "translated": "Show"
+  },
+  {
+    "key": "RecoverPasswordViewModel_HideButton",
+    "translated": "Hide"
   }
 ]

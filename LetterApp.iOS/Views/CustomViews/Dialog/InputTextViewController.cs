@@ -53,6 +53,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
             _textField.AutocorrectionType = UITextAutocorrectionType.No;
 
+
             this.View.BackgroundColor = Colors.Black30;
 
             _backgroundView.Layer.CornerRadius = 2f;
@@ -70,7 +71,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
                 _indicatorLabel.Alpha = 1;
             }
 
-            _closeButton.SetImage(UIImage.FromBundle("close_black_big"), UIControlState.Normal);
+            _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
             _closeButton.TintColor = Colors.Black;
 
             _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
@@ -88,9 +89,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
                 Dismiss();
             }
             else
-            {
                 _indicatorView.BackgroundColor = Colors.Red;
-            }
         }
 
         private void OnCloseButton_TouchUpInside(object sender, EventArgs e)

@@ -40,6 +40,8 @@ namespace LetterApp.Core.ViewModels
         public string CodeLabel             => L10N.Localize("RecoverPasswordViewModel_Code");
         public string RequestAgainButton    => L10N.Localize("RecoverPasswordViewModel_RequestAgain");
         public string SubmitButton          => L10N.Localize("RecoverPasswordViewModel_Submit");
+        public string ShowButton            => L10N.Localize("RecoverPasswordViewModel_ShowButton");
+        public string HideButton            => L10N.Localize("RecoverPasswordViewModel_HideButton");
 
         #endregion
     }
