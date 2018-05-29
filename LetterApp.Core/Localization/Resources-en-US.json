@@ -206,5 +206,9 @@
   {
     "key": "RecoverPasswordViewModel_HideButton",
     "translated": "Hide"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailConfirmation",
+    "translated": "We sent a email with a verification code. \n (Please check your SPAM folder)"
   }
 ]

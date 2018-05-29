@@ -14,10 +14,10 @@ namespace LetterApp.iOS.Services
     {
         LOTAnimationView _lottieAnimation;
 
-        public void ShowAlert(string title, AlertType alertType)
+        public void ShowAlert(string title, AlertType alertType, float duration)
         {
             var alertVC = AlertView.Create();
-            alertVC.Configure(title, alertType);
+            alertVC.Configure(title, alertType, duration);
         }
 
         public Task<string> ShowTextInput(string title = "", string inputContent = "", string confirmButtonText = "", string hint = "", InputType inputType = InputType.Text)

@@ -10,13 +10,17 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
     [Register("AlertView")]
     public partial class AlertView : UIView
     {
+        private float _duration;
+
         public static readonly UINib Nib = UINib.FromName("AlertView", NSBundle.MainBundle);
         public AlertView(IntPtr handle) : base(handle) {}
         public static AlertView Create() => Nib.Instantiate(null, null)[0] as AlertView;
 
-        public void Configure(string title, AlertType alertType)
+        public void Configure(string title, AlertType alertType, float duration)
         {
             this.ClipsToBounds = true;
+
+            _duration = duration;
 
             UILabelExtensions.SetupLabelAppearance(_titleLabel, title, Colors.White, 14f);
 
@@ -47,7 +51,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         {
             this.Frame = new CGRect(0, UIApplication.SharedApplication.StatusBarFrame.Size.Height, UIApplication.SharedApplication.KeyWindow.Bounds.Width, LocalConstants.AlertDialogSize);
             UIApplication.SharedApplication.KeyWindow.Add(this);
-            Animations.SlideVerticaly(this, true, true, onFinished: () => Dismiss(2.5f));
+            Animations.SlideVerticaly(this, true, true, onFinished: () => Dismiss(_duration));
         }
 
         public void Dismiss(float delay)

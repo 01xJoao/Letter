@@ -46,7 +46,8 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void OnRequestCodeButton_TouchUpInside(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (ViewModel.ResendCodeCommand.CanExecute())
+                ViewModel.ResendCodeCommand.Execute();
         }
 
         private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
@@ -98,6 +99,11 @@ namespace LetterApp.iOS.Views.RecoverPassword
             UITextFieldExtensions.SetupField(this.View, 1, ViewModel.NewPassTitle, _passwordTextField, _passwordIndicatorView, _passHeightConstraint, _passwordIndicatorLabel, UIReturnKeyType.Next);
             UITextFieldExtensions.SetupField(this.View, 2, ViewModel.ConfirmPassLabel, _confirmPassTextField, _confirmPassIndicatorView, _confirmHeightConstraint, _confirmpassIndicatorLabel, UIReturnKeyType.Next);
             UITextFieldExtensions.SetupField(this.View, 3, ViewModel.CodeLabel, _codeTextField, _codeIndicatorView, _codeHeightConstraint, _codeIndicatorLabel, UIReturnKeyType.Default);
+
+            _emailTextField.Enabled = false;
+            _emailTextField.Text = ViewModel.Email;
+            _emailIndicatorLabel.TextColor = Colors.GrayIndicator;
+            _emailIndicatorLabel.Alpha = 1;
 
             _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
             _codeTextField.AutocorrectionType = UITextAutocorrectionType.No;

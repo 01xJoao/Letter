@@ -16,7 +16,7 @@ namespace LetterApp.Core.ViewModels
     {
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
-        private IStatusCodeService _codeResultService;
+        private IStatusCodeService _statusCodeService;
 
         private bool _isValidEmail = true;
         public bool IsValidEmail
@@ -38,11 +38,11 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _forgotPassCommand;
         public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPassword(email), CanExecute));
 
-        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService codeResultService)
+        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService)
         {
             _authService = authService;
             _dialogService = dialogService;
-            _codeResultService = codeResultService;
+            _statusCodeService = statusCodeService;
         }
 
         private async Task SignIn(Tuple<string,string> value)
@@ -68,7 +68,7 @@ namespace LetterApp.Core.ViewModels
                     await NavigationService.NavigateAsync<MainViewModel, object>(null);
                 }
                 else
-                    _dialogService.ShowAlert(_codeResultService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
             }
             catch (Exception ex)
             {
@@ -96,7 +96,7 @@ namespace LetterApp.Core.ViewModels
                     if (result.StatusCode == 200)
                         await NavigationService.NavigateAsync<RecoverPasswordViewModel, string>(email);
                     else
-                        _dialogService.ShowAlert(_codeResultService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);
                 }
             }
             catch (Exception ex)
