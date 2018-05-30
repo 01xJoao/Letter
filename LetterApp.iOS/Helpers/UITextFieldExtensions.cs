@@ -51,7 +51,7 @@ namespace LetterApp.iOS.Helpers
         private static bool TextFieldShouldReturn(UITextField textField, UIView view)
         {
             var nextTag = textField.Tag + 1;
-            var nextResponder = view.ViewWithTag(nextTag);
+            var nextResponder = view?.ViewWithTag(nextTag);
             return nextResponder != null && textField.ReturnKeyType == UIReturnKeyType.Next ? nextResponder.BecomeFirstResponder() : textField.ResignFirstResponder();
         }
 
@@ -62,6 +62,14 @@ namespace LetterApp.iOS.Helpers
             toolbar.BarTintColor = Colors.MainBlue;
             button.Frame = toolbar.Frame;
             toolbar.Items = new UIBarButtonItem[] { new UIBarButtonItem(button) };
+            textField.InputAccessoryView = toolbar;
+        }
+
+        public static void AddDoneButtonToNumericKeyboard(UITextField textField)
+        {
+            UIToolbar toolbar = new UIToolbar(new RectangleF(0.0f, 0.0f, 50.0f, 44.0f));
+            var doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, delegate { textField.ResignFirstResponder(); });
+            toolbar.Items = new UIBarButtonItem[] { new UIBarButtonItem (UIBarButtonSystemItem.FlexibleSpace),doneButton };
             textField.InputAccessoryView = toolbar;
         }
 

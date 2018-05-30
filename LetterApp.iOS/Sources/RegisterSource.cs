@@ -13,14 +13,14 @@ namespace LetterApp.iOS.Sources
     public class RegisterSource : UITableViewSource
     {
         [Weak] private UIView _viewControllerView;
-        private RegisterFormModel registerForm = new RegisterFormModel();
-        private Dictionary<string, string> _locationResources = new Dictionary<string, string>();
-        public event EventHandler<RegisterFormModel> OnSubmitClickEvent;
+        [Weak] private RegisterFormModel _registerForm;
+        [Weak] private Dictionary<string, string> _locationResources = new Dictionary<string, string>();
 
-        public RegisterSource(UITableView tableView, Dictionary<string, string> locationResources, UIView viewControllerView)
+        public RegisterSource(UITableView tableView, Dictionary<string, string> locationResources, RegisterFormModel registerForm, UIView viewControllerView)
         {
             _viewControllerView = viewControllerView;
             _locationResources = locationResources;
+            _registerForm = registerForm;
 
             tableView.RegisterNibForCellReuse(HeaderCell.Nib, HeaderCell.Key);
             tableView.RegisterNibForCellReuse(FormCell.Nib, FormCell.Key);
@@ -41,12 +41,12 @@ namespace LetterApp.iOS.Sources
                 case (int)Sections.Form:
                     var formCell = tableView.DequeueReusableCell(FormCell.Key) as FormCell;
                     string dictionaryKey = _locationResources?.ElementAt(indexPath.Row).Key;
-                    formCell.Configure(_locationResources[dictionaryKey], registerForm, _viewControllerView, indexPath.Row, (int)_locationResources.Count == indexPath.Row);
+                    formCell.Configure(_locationResources[dictionaryKey], _registerForm, _viewControllerView, indexPath.Row, (int)_locationResources.Count == indexPath.Row);
                     cell = formCell;
                     break;
                 case (int)Sections.Agreement:
                     var agreementCell = tableView.DequeueReusableCell(AgreementCell.Key) as AgreementCell;
-                    agreementCell.Configure(_locationResources["agreement"], registerForm);
+                    agreementCell.Configure(_locationResources["agreement"], _registerForm);
                     cell = agreementCell;
                     break;
             }
@@ -91,9 +91,9 @@ namespace LetterApp.iOS.Sources
             Firstname,
             LastName,
             Email,
-            Number,
             Password,
             VerifyPassword,
+            Number,
             Count
         }
     }

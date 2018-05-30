@@ -1,4 +1,5 @@
 ﻿using System;
+using LetterApp.Core.Models;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -18,6 +19,15 @@ namespace LetterApp.iOS.Views.Register
           
             SetupView();
             SetupTableView();
+
+            _submitButton.TouchUpInside -= OnSubmitButton_TouchUpInside;
+            _submitButton.TouchUpInside += OnSubmitButton_TouchUpInside;
+        }
+
+        private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
+        {
+            if (ViewModel.CreateAccountCommand.CanExecute())
+                ViewModel.CreateAccountCommand.Execute();
         }
 
         private void SetupView()
@@ -28,7 +38,7 @@ namespace LetterApp.iOS.Views.Register
 
         private void SetupTableView()
         {
-            var source = new RegisterSource(_tableView, ViewModel.LocationResources, this.View);
+            var source = new RegisterSource(_tableView, ViewModel.LocationResources, ViewModel.RegisterForm, this.View);
             _tableView.BackgroundColor = Colors.MainBlue4;
             _tableView.Source = source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;

@@ -1,16 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Models;
 using LetterApp.Core.ViewModels.Abstractions;
 
 namespace LetterApp.Core.ViewModels
 {
     public class RegisterViewModel : XViewModel
     {
+        public RegisterFormModel RegisterForm = new RegisterFormModel();
+
+        private XPCommand _createAccountCommand;
+        public XPCommand CreateAccountCommand => _createAccountCommand ?? (_createAccountCommand = new XPCommand(async () => await CreateAccount(), CanExecute));
+
         public RegisterViewModel()
         {
             SetL10NResources();
         }
+
+        private async Task CreateAccount()
+        {
+            
+        }
+
+        private bool CanExecute() => !IsBusy;
 
         #region resources
 
@@ -32,9 +47,9 @@ namespace LetterApp.Core.ViewModels
             LocationResources.Add("firstname", _firstname);
             LocationResources.Add("lastname", _lastname);
             LocationResources.Add("email", _email);
-            LocationResources.Add("number", _number);
             LocationResources.Add("passsword", _password);
             LocationResources.Add("confirmpassword", _confirmpassword);
+            LocationResources.Add("number", _number);
             LocationResources.Add("agreement", _agreement);
         }
 
