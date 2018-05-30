@@ -23,6 +23,9 @@ namespace LetterApp.iOS.Views.OnBoarding
 
             SetupView();
 
+            _signUpButton.TouchUpInside -= OnSignUpButton_TouchUpInside;
+            _signUpButton.TouchUpInside += OnSignUpButton_TouchUpInside;
+
             _signInButton.TouchUpInside -= OnSignInButton_TouchUpInside;
             _signInButton.TouchUpInside += OnSignInButton_TouchUpInside;
 
@@ -55,6 +58,11 @@ namespace LetterApp.iOS.Views.OnBoarding
                 var viewController = _pageViewController.ViewControllers[0] as XBoardPageViewController;
                 _pageControl.CurrentPage = viewController.Index;
             }
+        }
+
+        private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.OpenRegisterViewCommand.Execute();
         }
 
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)

@@ -35,6 +35,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<Tuple<string,string>> _signInCommand;
         public XPCommand<Tuple<string, string>> SignInCommand => _signInCommand ?? (_signInCommand = new XPCommand<Tuple<string, string>>(async (value) => await SignIn(value), CanLogin));
 
+        private XPCommand _openRegisterViewCommand;
+        public XPCommand OpenRegisterViewCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand(async () => await OpenRegisterView(), CanExecute));
+
         private XPCommand<string> _forgotPassCommand;
         public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPassword(email), CanExecute));
 
@@ -82,6 +85,11 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+                private async Task OpenRegisterView()
+        {
+            await NavigationService.NavigateAsync<RegisterViewModel, object>(null);
+        }
+
         private async Task ForgotPassword(string emailInput)
         {
             try
@@ -113,7 +121,8 @@ namespace LetterApp.Core.ViewModels
         }
 
         private bool CanLogin(Tuple<string, string> value) => !IsBusy && !string.IsNullOrEmpty(value.Item1) && !string.IsNullOrEmpty(value.Item2);
-        private bool CanExecute(object args) => !IsBusy;
+        private bool CanExecute(object args = null) => !IsBusy;
+        private bool CanExecute() => !IsBusy;
 
         #region Resources
 

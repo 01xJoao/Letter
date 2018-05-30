@@ -222,5 +222,29 @@
   {
     "key": "RecoverPasswordViewModel_PasswordChanged",
     "translated": "Password changed suceffuly! \n Please Sign In."
+  },
+  {
+    "key": "RegisterViewModel_FirstName",
+    "translated": "First name"
+  },
+  {
+    "key": "RegisterViewModel_LastName",
+    "translated": "Last name"
+  },
+  {
+    "key": "RegisterViewModel_PhoneNumber",
+    "translated": "Phone number"
+  },
+  {
+    "key": "RegisterViewModel_Agreement",
+    "translated": "By creating an account, you agree to <u>Letter's User Agreement</u> and <u>Privacy Policy</u>, and confirm that you're at least 18 years old."
+  },
+  {
+    "key": "RegisterViewModel_Title",
+    "translated": "Create Account"
+  },
+  {
+    "key": "RegisterViewModel_CreateAccountButton",
+    "translated": "Agree & Create Account"
   }
 ]

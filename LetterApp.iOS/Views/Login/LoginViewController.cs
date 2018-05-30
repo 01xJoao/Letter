@@ -61,7 +61,8 @@ namespace LetterApp.iOS.Views.Login
 
         private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            if (ViewModel.OpenRegisterViewCommand.CanExecute())
+                ViewModel.OpenRegisterViewCommand.Execute();
         }
 
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
