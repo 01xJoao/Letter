@@ -7,7 +7,7 @@ namespace LetterApp.iOS.Sources
 {
     public class OnBoardPageSource : UIPageViewControllerDataSource
     {
-        [Weak] private readonly List<XBoardPageViewController> _viewControllersInPage;
+        private readonly List<XBoardPageViewController> _viewControllersInPage;
 
         public OnBoardPageSource(List<XBoardPageViewController> viewControllersInPage)
         {

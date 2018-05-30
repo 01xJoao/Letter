@@ -66,9 +66,9 @@ namespace LetterApp.iOS.Views.Register
 
         public override void ViewDidDisappear(bool animated)
         {
-            base.ViewDidDisappear(animated);
             MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            base.ViewDidDisappear(animated);
         }
     }
 }

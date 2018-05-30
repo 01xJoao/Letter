@@ -22,7 +22,12 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CreateAccount()
         {
-            
+            //create account service
+
+            //if success:
+            await NavigationService.NavigateAsync<LoginViewModel, object>(null);
+            await NavigationService.Close(this);
+            await NavigationService.NavigateAsync<ActivateAccountViewModel, object>(null);
         }
 
         private bool CanExecute() => !IsBusy;

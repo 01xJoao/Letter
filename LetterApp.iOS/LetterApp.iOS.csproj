@@ -270,6 +270,7 @@
     <Folder Include="Resources\Assets.xcassets\checkbox_full.imageset\" />
     <Folder Include="Resources\Assets.xcassets\checkbox_empty.imageset\" />
     <Folder Include="Views\CustomViews\Cells\" />
+    <Folder Include="Views\ActivateAccount\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -289,6 +290,7 @@
     <InterfaceDefinition Include="Views\Register\Cells\FormCell.xib" />
     <InterfaceDefinition Include="Views\Register\Cells\AgreementCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\MainButtonCell.xib" />
+    <InterfaceDefinition Include="Views\ActivateAccount\ActivateAccountViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -385,6 +387,10 @@
     <Compile Include="Views\CustomViews\Cells\MainButtonCell.cs" />
     <Compile Include="Views\CustomViews\Cells\MainButtonCell.designer.cs">
       <DependentUpon>MainButtonCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ActivateAccount\ActivateAccountViewController.cs" />
+    <Compile Include="Views\ActivateAccount\ActivateAccountViewController.designer.cs">
+      <DependentUpon>ActivateAccountViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
