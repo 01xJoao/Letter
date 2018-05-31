@@ -3,10 +3,13 @@ using LetterApp.Core.ViewModels.Abstractions;
 
 namespace LetterApp.Core.ViewModels
 {
-    public class ActivateAccountViewModel : XViewModel
+    public class ActivateAccountViewModel : XViewModel<string>
     {
-        public ActivateAccountViewModel()
-        {
-        }
+        private string _email;
+
+        public ActivateAccountViewModel() {}
+
+        protected override void Prepare(string email) => _email = email;
+
     }
 }

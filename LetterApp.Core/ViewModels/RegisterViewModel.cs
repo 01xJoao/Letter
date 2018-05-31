@@ -90,7 +90,7 @@ namespace LetterApp.Core.ViewModels
                 {
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
                     await NavigationService.Close(this);
-                    await NavigationService.NavigateAsync<ActivateAccountViewModel, object>(null);
+                    await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(RegisterForm.EmailAddress);
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
                 }
                 else
