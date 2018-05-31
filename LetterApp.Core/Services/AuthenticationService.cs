@@ -30,5 +30,15 @@ namespace LetterApp.Core.Services
         {
             return await _webService.PostAsync<BaseModel>("users/forgotpassword", passwordChange, needsHeaderCheck: false).ConfigureAwait(false);
         }
+
+        public async Task<BaseModel> ActivateAccount(ActivationCodeRequestModel activationCode)
+        {
+            return await _webService.PostAsync<BaseModel>("registration/activate", activationCode, needsHeaderCheck: false).ConfigureAwait(false);
+        }
+
+        public async Task<BaseModel> CreateAccount(UserRegistrationRequestModel userAccount)
+        {
+            return await _webService.PostAsync<BaseModel>("registration/add", userAccount, needsHeaderCheck: false).ConfigureAwait(false);
+        }
     }
 }

@@ -12,6 +12,14 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _openLoginViewCommand;
         public XPCommand OpenLoginViewCommand => _openLoginViewCommand ?? (_openLoginViewCommand = new XPCommand(async () => await OpenLoginView()));
 
+        private XPCommand _openRegisterViewCommand;
+        public XPCommand OpenRegisterViewCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand(async () => await OpenRegisterView()));
+
+        private async Task OpenRegisterView()
+        {
+            await NavigationService.NavigateAsync<RegisterViewModel, object>(null);
+        }
+
         private async Task OpenLoginView()
         {
             await NavigationService.NavigateAsync<LoginViewModel, object>(null);

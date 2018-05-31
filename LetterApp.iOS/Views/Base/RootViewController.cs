@@ -19,6 +19,9 @@ namespace LetterApp.iOS.Views.Base
 
         public void AddViewToRoot(UIViewController viewController, bool isAnimated = true)
         {
+            if (_currentViewController?.GetType()?.Name == viewController.GetType().Name)
+                return;
+            
             if (_currentViewController != null)
             {
                 _currentViewController.RemoveFromParentViewController();

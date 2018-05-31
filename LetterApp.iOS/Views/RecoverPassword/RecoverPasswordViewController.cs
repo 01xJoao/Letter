@@ -169,8 +169,8 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         public override void ViewDidDisappear(bool animated)
         {
-            base.ViewWillDisappear(animated);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            base.ViewWillDisappear(animated);
         }
     }
 }

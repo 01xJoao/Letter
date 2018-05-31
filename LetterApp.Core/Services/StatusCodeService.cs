@@ -36,6 +36,7 @@ namespace LetterApp.Core.Services
             CodeDictionary.Add(204, User_Update);
             CodeDictionary.Add(205, User_Desactivate);
             CodeDictionary.Add(206, User_DivisionLeft);
+            CodeDictionary.Add(207, User_Created);
         }
 
         public string GetStatusCodeDescription(int? code)
@@ -49,30 +50,31 @@ namespace LetterApp.Core.Services
         #region resources
 
         //errors
-        string Login_WrongPassword => L10N.Localize("Code_E101");
-        string Login_AccountNotActive => L10N.Localize("Code_E102");
-        string Login_AccountDesactivated => L10N.Localize("Code_E103");
-        string Password_EmailNoMatch => L10N.Localize("Code_E104");
-        string Password_ErrorChanging => L10N.Localize("Code_E105");
-        string Password_VerificationCode => L10N.Localize("Code_E106");
-        string User_NoDivisionMatch => L10N.Localize("Code_E107");
-        string User_EmailDomain => L10N.Localize("Code_E108");
-        string User_WrongPassword => L10N.Localize("Code_E109");
-        string Registration_EmailInUse => L10N.Localize("Code_E110");
-        string Registration_WrongCode => L10N.Localize("Code_E111");
-        string Organization_NotFound => L10N.Localize("Code_E112");
-        string Organization_EmailNotValid => L10N.Localize("Code_E113");
-        string Organization_NoDivisions => L10N.Localize("Code_E114");
-        string Organization_WrongCode => L10N.Localize("Code_E115");
-        string Organization_NoPosition => L10N.Localize("Code_E116");
+        string Login_WrongPassword          => L10N.Localize("Code_E101");
+        string Login_AccountNotActive       => L10N.Localize("Code_E102");
+        string Login_AccountDesactivated    => L10N.Localize("Code_E103");
+        string Password_EmailNoMatch        => L10N.Localize("Code_E104");
+        string Password_ErrorChanging       => L10N.Localize("Code_E105");
+        string Password_VerificationCode    => L10N.Localize("Code_E106");
+        string User_NoDivisionMatch         => L10N.Localize("Code_E107");
+        string User_EmailDomain             => L10N.Localize("Code_E108");
+        string User_WrongPassword           => L10N.Localize("Code_E109");
+        string Registration_EmailInUse      => L10N.Localize("Code_E110");
+        string Registration_WrongCode       => L10N.Localize("Code_E111");
+        string Organization_NotFound        => L10N.Localize("Code_E112");
+        string Organization_EmailNotValid   => L10N.Localize("Code_E113");
+        string Organization_NoDivisions     => L10N.Localize("Code_E114");
+        string Organization_WrongCode       => L10N.Localize("Code_E115");
+        string Organization_NoPosition      => L10N.Localize("Code_E116");
 
         //success
-        string Password_Changed => L10N.Localize("Code_S201");
-        string User_DivisionSet => L10N.Localize("Code_S202");
-        string User_UpdatePosition => L10N.Localize("Code_S203");
-        string User_Update => L10N.Localize("Code_S204");
-        string User_Desactivate => L10N.Localize("Code_S205");
-        string User_DivisionLeft => L10N.Localize("Code_S206");
+        string Password_Changed     => L10N.Localize("Code_S201");
+        string User_DivisionSet     => L10N.Localize("Code_S202");
+        string User_UpdatePosition  => L10N.Localize("Code_S203");
+        string User_Update          => L10N.Localize("Code_S204");
+        string User_Desactivate     => L10N.Localize("Code_S205");
+        string User_DivisionLeft    => L10N.Localize("Code_S206");
+        string User_Created         => L10N.Localize("Code_S207");
 
         //Null Code
         string CodeNull => L10N.Localize("Code_Null");

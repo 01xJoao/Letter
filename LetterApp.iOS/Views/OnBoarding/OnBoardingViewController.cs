@@ -23,6 +23,9 @@ namespace LetterApp.iOS.Views.OnBoarding
 
             SetupView();
 
+            _signUpButton.TouchUpInside -= OnSignUpButton_TouchUpInside;
+            _signUpButton.TouchUpInside += OnSignUpButton_TouchUpInside;
+
             _signInButton.TouchUpInside -= OnSignInButton_TouchUpInside;
             _signInButton.TouchUpInside += OnSignInButton_TouchUpInside;
 
@@ -57,6 +60,11 @@ namespace LetterApp.iOS.Views.OnBoarding
             }
         }
 
+        private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.OpenRegisterViewCommand.Execute();
+        }
+
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
         {
             ViewModel.OpenLoginViewCommand.Execute();
@@ -74,7 +82,6 @@ namespace LetterApp.iOS.Views.OnBoarding
             _signInButton.SetAttributedTitle(new NSAttributedString(ViewModel.SignIn, underlineAttr), UIControlState.Normal);
 
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 16f, ViewModel.SignUp);
-
             _pageParent.BackgroundColor = Colors.MainBlue;
             _pageContainer.BackgroundColor = Colors.MainBlue;
         }

@@ -70,6 +70,7 @@ namespace LetterApp.Core.Services
                 var response = await HttpClient.GetAsync(requestUri, ct);
                 Debug.WriteLine(response);
 
+                await EnsureSuccessRequest(response);
                 var obj = await DeserializeAsync<T>(response);
                 return obj;
             }

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LetterApp.Models.DTO.RequestModels
 {
-    public class CommunUpdateRequestModel
+    public class UserCommunUpdateRequestModel
     {
         [JsonProperty("description")]
         public string Description { get; set; }

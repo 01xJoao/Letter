@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using Airbnb.Lottie;
-using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -61,7 +60,8 @@ namespace LetterApp.iOS.Views.Login
 
         private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            if (ViewModel.OpenRegisterViewCommand.CanExecute())
+                ViewModel.OpenRegisterViewCommand.Execute();
         }
 
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
