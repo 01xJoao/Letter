@@ -41,7 +41,7 @@ namespace LetterApp.iOS.Views.ActivateAccount
         private void SetupView()
         {
             UIButtonExtensions.SetupButtonAppearance(_button, Colors.White, 16f, ViewModel.SubmitButton);
-            UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 16f, ViewModel.ResendCodeButton);
+            UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 15f, ViewModel.ResendCodeButton);
             UILabelExtensions.SetupLabelAppearance(_activateLabel, ViewModel.ActivateLabel, Colors.GrayDivider, 14f);
             UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.Title, Colors.Black, 17f, UIFontWeight.Semibold);
 
