@@ -12,6 +12,6 @@ namespace LetterApp.Core.Services.Interfaces
         Task<BaseModel> SendActivationCode(string email, string isActivation);
         Task<BaseModel> ChangePassword(PasswordChangeRequestModel passwordChange);
         Task<BaseModel> CreateAccount(UserRegistrationRequestModel userAccount);
-        Task<BaseModel> ActivateAccount(ActivationCodeRequestModel passwordChange);
+        Task<BaseModel> ActivateAccount(ActivationCodeRequestModel activationCode);
     }
 }

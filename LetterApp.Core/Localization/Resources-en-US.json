@@ -93,7 +93,7 @@
   },
   {
     "key": "Code_S207",
-    "translated": "Account sucefully created! We sent a email with a activation code. (Check SPAM folder)"
+    "translated": "Account successfully created! We sent a email with a activation code."
   },
   {
     "key": "Dialogs_InternetException",
@@ -274,5 +274,29 @@
   {
     "key": "RegisterViewModel_DamnEmojis",
     "translated": "Please don't insert emojis 😘"
+  },
+  {
+    "key": "ActivateAccountViewModel_Title",
+    "translated": "Activate Account"
+  },
+  {
+    "key": "ActivateAccountViewModel_Submit",
+    "translated": "Submit"
+  },
+  {
+    "key": "ActivateAccountViewModel_PlaceHolder",
+    "translated": "Activation code"
+  },
+  {
+    "key": "ActivateAccountViewModel_ResendCodeButton",
+    "translated": "Resend Code"
+  },
+  {
+    "key": "ActivateAccountViewModel_ActivateLabel",
+    "translated": "You need to activate your account. \n Missing the email? Have you checked your Spam folder?"
+  },
+  {
+    "key": "ActivateAccountViewModel_ActivationCompleted",
+    "translated": "your account has been activated. \n Please Sign In."
   }
 ]

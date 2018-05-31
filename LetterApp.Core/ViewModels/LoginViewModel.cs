@@ -71,8 +71,12 @@ namespace LetterApp.Core.ViewModels
                     Realm.Write(() => Realm.Add(currentUser, true));
                     await NavigationService.NavigateAsync<MainViewModel, object>(null);
                 }
-                else
+                else if (currentUser.StatusCode == 102)
+                {
+                    await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(value.Item1);
+                    await Task.Delay(TimeSpan.FromSeconds(0.5));
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
+                }
             }
             catch (Exception ex)
             {
@@ -105,6 +109,7 @@ namespace LetterApp.Core.ViewModels
                     if (result.StatusCode == 200)
                     {
                         await NavigationService.NavigateAsync<RecoverPasswordViewModel, string>(email);
+                        await Task.Delay(TimeSpan.FromSeconds(0.5));
                         _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
                     }
                     else

@@ -91,6 +91,7 @@ namespace LetterApp.Core.ViewModels
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
                     await NavigationService.Close(this);
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(RegisterForm.EmailAddress);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
                 }
                 else
