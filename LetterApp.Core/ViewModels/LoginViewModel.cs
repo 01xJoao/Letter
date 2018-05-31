@@ -50,7 +50,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task SignIn(Tuple<string,string> value)
         {
-            if (!EmailUtils.IsValidEmail(value.Item1))
+            if (!EmailUtils.IsValidEmail(StringUtils.RemoveWhiteSpaces(value.Item1)))
             {
                 _dialogService.ShowAlert(InvalidEmail, AlertType.Error);
                 IsValidEmail = false;
@@ -63,7 +63,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var userRequest = new UserRequestModel(value.Item1, value.Item2);
+                var userRequest = new UserRequestModel(StringUtils.RemoveWhiteSpaces(value.Item1), value.Item2);
                 var currentUser = await _authService.LoginAsync(userRequest);
 
                 if(currentUser.StatusCode == 200)
@@ -97,7 +97,7 @@ namespace LetterApp.Core.ViewModels
             {
                 var email = await _dialogService.ShowTextInput(EnterEmail, emailInput, ConfirmButton, EmailHint, InputType.Email);
 
-                if(!string.IsNullOrEmpty(email) && EmailUtils.IsValidEmail(email))
+                if(!string.IsNullOrEmpty(email))
                 {
                     _dialogService.StartLoading();
                     var result = await _authService.SendActivationCode(email, "false");
@@ -122,7 +122,7 @@ namespace LetterApp.Core.ViewModels
         }
 
         private bool CanLogin(Tuple<string, string> value) => !IsBusy && !string.IsNullOrEmpty(value.Item1) && !string.IsNullOrEmpty(value.Item2);
-        private bool CanExecute(object args = null) => !IsBusy;
+        private bool CanExecute(object args) => !IsBusy;
         private bool CanExecute() => !IsBusy;
 
         #region Resources

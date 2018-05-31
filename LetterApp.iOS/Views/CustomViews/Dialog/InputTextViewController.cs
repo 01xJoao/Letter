@@ -83,13 +83,23 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
         private void OnConfirmButton_TouchUpInside(object sender, EventArgs e)
         {
-            if(EmailUtils.IsValidEmail(_textField.Text))
+            if(_inputType == InputType.Email)
+            {
+                _textField.Text = StringUtils.RemoveWhiteSpaces(_textField.Text);
+
+                if(EmailUtils.IsValidEmail(_textField.Text))
+                {
+                    _positiveButton.Invoke(_textField.Text);
+                    Dismiss();
+                }
+                else
+                    _indicatorView.BackgroundColor = Colors.Red;
+            }
+            else
             {
                 _positiveButton.Invoke(_textField.Text);
                 Dismiss();
             }
-            else
-                _indicatorView.BackgroundColor = Colors.Red;
         }
 
         private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
