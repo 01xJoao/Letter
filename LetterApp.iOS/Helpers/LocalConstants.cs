@@ -10,5 +10,6 @@ namespace LetterApp.iOS.Helpers
 
         public static nfloat Register_HeaderHeight => 100;
         public static nfloat Register_From => 63;
+        public static nfloat Register_ViewHeight => 80;
     }
 }

@@ -52,6 +52,7 @@ namespace LetterApp.Core.ViewModels
         {
             if (!EmailUtils.IsValidEmail(value.Item1))
             {
+                _dialogService.ShowAlert(InvalidEmail, AlertType.Error);
                 IsValidEmail = false;
                 return;
             }
@@ -135,6 +136,7 @@ namespace LetterApp.Core.ViewModels
         private string EmailHint => L10N.Localize("LoginViewModel_EmailHint");
         private string ConfirmButton => L10N.Localize("LoginViewModel_SendCode");
         private string EmailConfirmation => L10N.Localize("RecoverPasswordViewModel_EmailConfirmation");
+        private string InvalidEmail => L10N.Localize("LoginViewModel_InvalidEmail");
 
         #endregion
     }

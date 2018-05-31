@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using Airbnb.Lottie;
-using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;

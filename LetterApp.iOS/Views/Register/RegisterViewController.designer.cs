@@ -13,6 +13,9 @@ namespace LetterApp.iOS.Views.Register
 	partial class RegisterViewController
 	{
 		[Outlet]
+		UIKit.UIView _backgroundView { get; set; }
+
+		[Outlet]
 		UIKit.UIView _buttonView { get; set; }
 
 		[Outlet]
@@ -23,9 +26,9 @@ namespace LetterApp.iOS.Views.Register
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (_tableView != null) {
-				_tableView.Dispose ();
-				_tableView = null;
+			if (_backgroundView != null) {
+				_backgroundView.Dispose ();
+				_backgroundView = null;
 			}
 
 			if (_buttonView != null) {
@@ -36,6 +39,11 @@ namespace LetterApp.iOS.Views.Register
 			if (_submitButton != null) {
 				_submitButton.Dispose ();
 				_submitButton = null;
+			}
+
+			if (_tableView != null) {
+				_tableView.Dispose ();
+				_tableView = null;
 			}
 		}
 	}

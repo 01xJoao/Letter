@@ -12,15 +12,22 @@ namespace LetterApp.iOS.Sources
 {
     public class RegisterSource : UITableViewSource
     {
-        [Weak] private UIView _viewControllerView;
-        [Weak] private RegisterFormModel _registerForm;
-        [Weak] private Dictionary<string, string> _locationResources = new Dictionary<string, string>();
+        public bool IsAnimated;
+        private UIView _viewControllerView;
+        private RegisterFormModel _registerForm;
+        private Dictionary<string, string> _locationResources = new Dictionary<string, string>();
+        private EventHandler<int> ScrollsToRowEvent;
+        [Weak] private UITableView _tableView;
 
         public RegisterSource(UITableView tableView, Dictionary<string, string> locationResources, RegisterFormModel registerForm, UIView viewControllerView)
         {
+            _tableView = tableView;
             _viewControllerView = viewControllerView;
             _locationResources = locationResources;
             _registerForm = registerForm;
+
+            ScrollsToRowEvent -= ScrollsToRow;
+            ScrollsToRowEvent += ScrollsToRow;
 
             tableView.RegisterNibForCellReuse(HeaderCell.Nib, HeaderCell.Key);
             tableView.RegisterNibForCellReuse(FormCell.Nib, FormCell.Key);
@@ -41,7 +48,7 @@ namespace LetterApp.iOS.Sources
                 case (int)Sections.Form:
                     var formCell = tableView.DequeueReusableCell(FormCell.Key) as FormCell;
                     string dictionaryKey = _locationResources?.ElementAt(indexPath.Row).Key;
-                    formCell.Configure(_locationResources[dictionaryKey], _registerForm, _viewControllerView, indexPath.Row, (int)_locationResources.Count == indexPath.Row);
+                    formCell.Configure(_locationResources[dictionaryKey], _registerForm, _viewControllerView, indexPath.Row, ScrollsToRowEvent, _locationResources.Count == indexPath.Row);
                     cell = formCell;
                     break;
                 case (int)Sections.Agreement:
@@ -52,6 +59,22 @@ namespace LetterApp.iOS.Sources
             }
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             return cell;
+        }
+
+        private void ScrollsToRow(object sender, int row)
+        {
+            _tableView.ScrollToRow(NSIndexPath.FromItemSection(row, 1), UITableViewScrollPosition.Middle, true);
+
+            if((row == 4 || row == 5) && !IsAnimated)
+            {
+                UIViewAnimationExtensions.AnimateBackgroundView(_viewControllerView, LocalConstants.Register_ViewHeight, true);
+                IsAnimated = true;
+            }
+            else if (row != 4 && row != 5 && IsAnimated)
+            {
+                IsAnimated = false;
+                UIViewAnimationExtensions.AnimateBackgroundView(_viewControllerView, 0, false);
+            }
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
