@@ -9,7 +9,7 @@
   },
   {
     "key": "Code_E102",
-    "translated": "Account not yet activated, please activate your account."
+    "translated": "Account is not yet active, please activate your account."
   },
   {
     "key": "Code_E103",
@@ -93,7 +93,7 @@
   },
   {
     "key": "Code_S207",
-    "translated": "Account successfully created! We sent a email with a activation code."
+    "translated": "Account successfully created! \n We sent a email with a activation code."
   },
   {
     "key": "Dialogs_InternetException",
@@ -297,6 +297,6 @@
   },
   {
     "key": "ActivateAccountViewModel_ActivationCompleted",
-    "translated": "your account has been activated. \n Please Sign In."
+    "translated": "your account has been activated! \n Please Sign In."
   }
 ]

@@ -75,8 +75,10 @@ namespace LetterApp.Core.ViewModels
                 {
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(value.Item1);
                     await Task.Delay(TimeSpan.FromSeconds(0.5));
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Info);
                 }
+                else
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
             }
             catch (Exception ex)
             {

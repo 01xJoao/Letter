@@ -17,6 +17,14 @@ namespace LetterApp.Core.ViewModels
 
         private string _email;
 
+        private bool _isActivating;
+        public bool IsActivating
+        {
+            get => _isActivating;
+            set => SetProperty(ref _isActivating, value);
+        }
+
+
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
@@ -36,7 +44,7 @@ namespace LetterApp.Core.ViewModels
         private async Task ActivateAccount(string code)
         {
             IsBusy = true;
-
+            IsActivating = true;
             try
             {
                 var requestActivation = new ActivationCodeRequestModel(_email, code);
@@ -58,6 +66,7 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
+                IsActivating = false;
                 IsBusy = false;
             }
         }
@@ -68,7 +77,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var result = await _authService.SendActivationCode(_email, "false");
+                var result = await _authService.SendActivationCode(_email, "true");
 
                 if (result.StatusCode == 200)
                     _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 4f);

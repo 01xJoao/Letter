@@ -30,7 +30,7 @@ namespace LetterApp.iOS.Helpers
             {
                 if (keyboardButton != null)
                     AddViewToKeyboard(textField, keyboardButton);
-                    
+                
                 divider.BackgroundColor = Colors.MainBlue;
                 indicator.TextColor = Colors.MainBlue;
             };
@@ -55,7 +55,7 @@ namespace LetterApp.iOS.Helpers
             return nextResponder != null && textField.ReturnKeyType == UIReturnKeyType.Next ? nextResponder.BecomeFirstResponder() : textField.ResignFirstResponder();
         }
 
-        private static void AddViewToKeyboard(UITextField textField, UIButton button)
+        public static void AddViewToKeyboard(UITextField textField, UIButton button)
         {
             UIToolbar toolbar = new UIToolbar(new RectangleF(0f, 0f, 0f, 50f));
             toolbar.Translucent = false;
