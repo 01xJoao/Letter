@@ -35,7 +35,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CreateAccount()
         {
-            if (ReflectionHelper.WasEmptyValues(RegisterForm))
+            if (!ReflectionHelper.HasEmptyOrNullValues(RegisterForm))
             {
                 _dialogService.ShowAlert(EmptyForm, AlertType.Error);
                 return;
