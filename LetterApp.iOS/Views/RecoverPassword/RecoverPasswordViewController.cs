@@ -169,6 +169,8 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         public override void ViewDidDisappear(bool animated)
         {
+            _lottieAnimation?.Dispose();
+            _lottieAnimation = null;
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewWillDisappear(animated);
         }

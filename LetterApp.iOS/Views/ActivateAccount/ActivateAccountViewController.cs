@@ -97,6 +97,8 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         public override void ViewDidDisappear(bool animated)
         {
+            _lottieAnimation?.Dispose();
+            _lottieAnimation = null;
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
         }

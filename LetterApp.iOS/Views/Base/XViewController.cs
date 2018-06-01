@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.iOS.Interfaces;
@@ -27,9 +28,7 @@ namespace LetterApp.iOS.Views.Base
                 ViewModel.Prepare();
 
             ViewModel.InitializeViewModel();
-            DismissKeyboardOnBackgroundTap();
-
-
+           
             this.EdgesForExtendedLayout = UIRectEdge.None;
         }
 
@@ -41,6 +40,8 @@ namespace LetterApp.iOS.Views.Base
             if (HandlesKeyboardNotifications)
                 RegisterForKeyboardNotifications(true);
 
+            DismissKeyboardOnBackgroundTap();
+
             base.ViewWillAppear(animated);
         }
 
@@ -51,6 +52,8 @@ namespace LetterApp.iOS.Views.Base
 
             if (HandlesKeyboardNotifications)
                 RegisterForKeyboardNotifications(false);
+
+            ReleaseKeyboardTap();
             
             base.ViewWillDisappear(animated);
         }
@@ -60,6 +63,7 @@ namespace LetterApp.iOS.Views.Base
         public virtual bool HandlesKeyboardNotifications => false;
         private NSObject _keyboardWillShow;
         private NSObject _keyboardWillHide;
+        private UITapGestureRecognizer _keyboardTapGesture;
 
         protected void RegisterForKeyboardNotifications(bool shouldRegister)
         {
@@ -79,9 +83,15 @@ namespace LetterApp.iOS.Views.Base
 
         protected void DismissKeyboardOnBackgroundTap()
         {
-            var tap = new UITapGestureRecognizer { CancelsTouchesInView = false };
-            tap.AddTarget(() => View.EndEditing(true));
-            View.AddGestureRecognizer(tap);
+            _keyboardTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            _keyboardTapGesture.AddTarget(() => View.EndEditing(true));
+            View.AddGestureRecognizer(_keyboardTapGesture);
+        }
+
+        private void ReleaseKeyboardTap()
+        {
+            _keyboardTapGesture.Dispose();
+            _keyboardTapGesture = null;
         }
 
         #endregion

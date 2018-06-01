@@ -119,6 +119,8 @@ namespace LetterApp.iOS.Views.Register
 
         public override void ViewDidDisappear(bool animated)
         {
+            _lottieAnimation?.Dispose();
+            _lottieAnimation = null;
             MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);

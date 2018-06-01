@@ -134,6 +134,13 @@ namespace LetterApp.iOS.Views.Login
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
         }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            _lottieAnimation?.Dispose();
+            _lottieAnimation = null;
+            base.ViewDidDisappear(animated);
+        }
     }
 }
 
