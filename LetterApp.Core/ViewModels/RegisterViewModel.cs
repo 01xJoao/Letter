@@ -40,45 +40,9 @@ namespace LetterApp.Core.ViewModels
         {
             IsBusy = true;
 
-            if (!ReflectionHelper.HasEmptyOrNullValues(RegisterForm))
+            if(!CheckForm())
             {
-                _dialogService.ShowAlert(EmptyForm, AlertType.Error);
-                return;
-            }
-
-            if (!StringUtils.CheckForEmojis(RegisterForm.Password) || !StringUtils.CheckForEmojis(RegisterForm.FirstName) || !StringUtils.CheckForEmojis(RegisterForm.LastName))
-            {
-                _dialogService.ShowAlert(DamnEmojis, AlertType.Error, 6f);
-                return;
-            }
-
-            if (!StringUtils.IsLettersOnly(RegisterForm.FirstName) || !StringUtils.IsLettersOnly(RegisterForm.LastName))
-            {
-                _dialogService.ShowAlert(InvalidString, AlertType.Error, 6.5f);
-                return;
-            }
-
-            if(!EmailUtils.IsValidEmail(StringUtils.RemoveWhiteSpaces(RegisterForm.EmailAddress)))
-            {
-                _dialogService.ShowAlert(InvalidEmail, AlertType.Error);
-                return;
-            }
-
-            if (RegisterForm.Password.Length < 8)
-            {
-                _dialogService.ShowAlert(PasswordWeak, AlertType.Error, 6f);
-                return;
-            }
-
-            if (RegisterForm.Password != RegisterForm.VerifyPassword)
-            {
-                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
-                return;
-            }
-
-            if(!RegisterForm.UserAgreed)
-            {
-                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
+                IsBusy = false;
                 return;
             }
 
@@ -94,7 +58,7 @@ namespace LetterApp.Core.ViewModels
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
                     await NavigationService.Close(this);
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(RegisterForm.EmailAddress);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await Task.Delay(TimeSpan.FromSeconds(0.8));
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
                 }
                 else
@@ -110,6 +74,53 @@ namespace LetterApp.Core.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private bool CheckForm()
+        {
+            if (ReflectionHelper.HasEmptyOrNullValues(RegisterForm))
+            {
+                _dialogService.ShowAlert(EmptyForm, AlertType.Error);
+                return false;
+            }
+
+            if (!StringUtils.CheckForEmojis(RegisterForm.Password) || !StringUtils.CheckForEmojis(RegisterForm.FirstName) || !StringUtils.CheckForEmojis(RegisterForm.LastName))
+            {
+                _dialogService.ShowAlert(DamnEmojis, AlertType.Error, 6f);
+                return false;
+            }
+
+            if (!StringUtils.IsLettersOnly(RegisterForm.FirstName) || !StringUtils.IsLettersOnly(RegisterForm.LastName))
+            {
+                _dialogService.ShowAlert(InvalidString, AlertType.Error, 6.5f);
+                return false;
+            }
+
+            if (!EmailUtils.IsValidEmail(StringUtils.RemoveWhiteSpaces(RegisterForm.EmailAddress)))
+            {
+                _dialogService.ShowAlert(InvalidEmail, AlertType.Error);
+                return false;
+            }
+
+            if (RegisterForm.Password.Length < 8)
+            {
+                _dialogService.ShowAlert(PasswordWeak, AlertType.Error, 6f);
+                return false;
+            }
+
+            if (RegisterForm.Password != RegisterForm.VerifyPassword)
+            {
+                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
+                return false;
+            }
+
+            if (!RegisterForm.UserAgreed)
+            {
+                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
+                return false;
+            }
+
+            return true;
         }
 
         private async Task CloseView()

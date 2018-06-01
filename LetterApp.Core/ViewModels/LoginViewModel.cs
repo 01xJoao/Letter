@@ -74,7 +74,7 @@ namespace LetterApp.Core.ViewModels
                 else if (currentUser.StatusCode == 102)
                 {
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(value.Item1);
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Info);
                 }
                 else
@@ -111,7 +111,7 @@ namespace LetterApp.Core.ViewModels
                     if (result.StatusCode == 200)
                     {
                         await NavigationService.NavigateAsync<RecoverPasswordViewModel, string>(email);
-                        await Task.Delay(TimeSpan.FromSeconds(0.5));
+                        await Task.Delay(TimeSpan.FromSeconds(0.3));
                         _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
                     }
                     else

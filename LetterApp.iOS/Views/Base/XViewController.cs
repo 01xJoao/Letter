@@ -90,7 +90,7 @@ namespace LetterApp.iOS.Views.Base
 
         private void ReleaseKeyboardTap()
         {
-            _keyboardTapGesture.Dispose();
+            _keyboardTapGesture?.Dispose();
             _keyboardTapGesture = null;
         }
 

@@ -51,14 +51,17 @@ namespace LetterApp.Core.Helpers
         }
 
         public static bool HasEmptyOrNullValues(object myObject)
-        {
+        {   
             foreach (PropertyInfo pi in myObject.GetType().GetProperties())
             {
-                string value = (string)pi.GetValue(myObject);
-                if (String.IsNullOrEmpty(value))
-                    return false;
+                if (pi.PropertyType == typeof(string))
+                {
+                    string value = (string)pi.GetValue(myObject);
+                    if (string.IsNullOrEmpty(value))
+                        return true;
+                }
             }
-            return true;
+            return false;
         }
 
         public static bool IsNull(this object T)

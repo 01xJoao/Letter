@@ -79,7 +79,7 @@ namespace LetterApp.Core.ViewModels
                 if (result.StatusCode == 201)
                 {
                     await CloseView();
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(PasswordChanged, AlertType.Success, 5f);
                 }
                 else
