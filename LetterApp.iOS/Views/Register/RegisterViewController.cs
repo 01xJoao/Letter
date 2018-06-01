@@ -15,6 +15,7 @@ namespace LetterApp.iOS.Views.Register
         private LOTAnimationView _lottieAnimation;
         private bool keyboardViewState;
         private RegisterSource _source;
+        private bool _backTitleRemoved;
 
         public RegisterViewController() : base("RegisterViewController", null) {}
 
@@ -88,7 +89,13 @@ namespace LetterApp.iOS.Views.Register
             base.ViewWillAppear(animated);
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
-            this.NavigationController.NavigationBar.TopItem.Title = string.Empty;
+
+            if(!_backTitleRemoved)
+            {
+                this.NavigationController.NavigationBar.TopItem.Title = string.Empty;
+                _backTitleRemoved = true;
+            }
+            
             this.NavigationController.NavigationBar.TintColor = Colors.Black;
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
