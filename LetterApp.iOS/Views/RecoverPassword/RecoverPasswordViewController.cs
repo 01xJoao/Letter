@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Airbnb.Lottie;
+using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -128,12 +129,9 @@ namespace LetterApp.iOS.Views.RecoverPassword
             _emailIndicatorLabel.TextColor = Colors.GrayIndicator;
             _emailIndicatorLabel.Alpha = 1;
 
-            _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
             _codeTextField.AutocorrectionType = UITextAutocorrectionType.No;
-            _codeTextField.SmartDashesType = UITextSmartDashesType.No;
-            _codeTextField.SmartQuotesType = UITextSmartQuotesType.No;
-            _codeTextField.SpellCheckingType = UITextSpellCheckingType.No;
             _codeTextField.AutocapitalizationType = UITextAutocapitalizationType.AllCharacters;
+            _codeTextField.TextContentType = new NSString("");
         }
 
         private void InvalidPassword()
@@ -147,9 +145,9 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void ConfigureButton(UIButton button, NSLayoutConstraint constraint)
         {
-            constraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (button.Frame.Width + 7);
             button.SetNeedsLayout();
             button.LayoutIfNeeded();
+            constraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (button.Frame.Width + 7);
         }
 
         private void Loading()
