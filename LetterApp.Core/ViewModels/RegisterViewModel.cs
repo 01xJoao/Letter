@@ -24,6 +24,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _createAccountCommand;
         public XPCommand CreateAccountCommand => _createAccountCommand ?? (_createAccountCommand = new XPCommand(async () => await CreateAccount(), CanExecute));
 
+        private XPCommand _closeViewCommand;
+        public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+
         public RegisterViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusService)
         {
             _authService = authService;
@@ -35,6 +38,8 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CreateAccount()
         {
+            IsBusy = true;
+
             if (!ReflectionHelper.HasEmptyOrNullValues(RegisterForm))
             {
                 _dialogService.ShowAlert(EmptyForm, AlertType.Error);
@@ -77,8 +82,6 @@ namespace LetterApp.Core.ViewModels
                 return;
             }
 
-            IsBusy = true;
-
             var user = new UserRegistrationRequestModel(StringUtils.RemoveWhiteSpaces(RegisterForm.EmailAddress), RegisterForm.PhoneNumber, StringUtils.RemoveWhiteSpaces(RegisterForm.FirstName), 
                                                         StringUtils.RemoveWhiteSpaces(RegisterForm.LastName), RegisterForm.Password);
 
@@ -107,6 +110,11 @@ namespace LetterApp.Core.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private async Task CloseView()
+        {
+            await NavigationService.Close(this);
         }
 
         private bool CanExecute() => !IsBusy;

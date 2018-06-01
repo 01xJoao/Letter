@@ -208,14 +208,7 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full%402x.png" />
@@ -228,6 +221,29 @@
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -276,6 +292,11 @@
     <Folder Include="Views\CustomViews\Cells\" />
     <Folder Include="Views\ActivateAccount\" />
     <Folder Include="Resources\Assets.xcassets\letter_round_medium.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\back_black.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\back_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\settings.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\add_circle.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />

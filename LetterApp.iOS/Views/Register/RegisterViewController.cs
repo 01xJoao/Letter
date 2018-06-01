@@ -5,6 +5,7 @@ using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
+using ObjCRuntime;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Register
@@ -13,9 +14,8 @@ namespace LetterApp.iOS.Views.Register
     {
         public override bool HandlesKeyboardNotifications => true;
         private LOTAnimationView _lottieAnimation;
-        private bool keyboardViewState;
+        private bool _keyboardViewState;
         private RegisterSource _source;
-        private bool _backTitleRemoved;
 
         public RegisterViewController() : base("RegisterViewController", null) {}
 
@@ -24,6 +24,7 @@ namespace LetterApp.iOS.Views.Register
             base.ViewDidLoad();
           
             SetupView();
+            SetupTableView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -72,13 +73,13 @@ namespace LetterApp.iOS.Views.Register
 
         public override void OnKeyboardNotification(bool changeKeyboardState)
         {
-            if (keyboardViewState != changeKeyboardState && ViewIsVisible)
+            if (_keyboardViewState != changeKeyboardState && ViewIsVisible)
             {
-                keyboardViewState = changeKeyboardState;
+                _keyboardViewState = changeKeyboardState;
 
-                if(!keyboardViewState)
+                if(!_keyboardViewState)
                 {
-                    UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, 0, keyboardViewState);
+                    UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, 0, _keyboardViewState);
                     _source.IsAnimated = false;
                 }
             }
@@ -87,21 +88,27 @@ namespace LetterApp.iOS.Views.Register
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
+            //TODO: Maybe Change this to BaseViewController
+
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            if(!_backTitleRemoved)
-            {
-                this.NavigationController.NavigationBar.TopItem.Title = string.Empty;
-                _backTitleRemoved = true;
-            }
-            
-            this.NavigationController.NavigationBar.TintColor = Colors.Black;
+            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
+            this.NavigationItem.LeftBarButtonItem = backButton;
+            NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
+
+            //this.NavigationController.NavigationBar.TintColor = Colors.Black;
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
-            SetupTableView();
+        }
+
+        private void CloseView(object sender, EventArgs e)
+        {
+            if(ViewModel.CloseViewCommand.CanExecute())
+                ViewModel.CloseViewCommand.Execute();
         }
 
         public override void ViewWillDisappear(bool animated)
