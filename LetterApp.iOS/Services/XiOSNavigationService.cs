@@ -25,6 +25,8 @@ namespace LetterApp.iOS.Services
                 ShowView(viewController);
             });
 
+            Debug.WriteLine($"Task Completed: NavigatePlatformAsync");
+
             return Task.CompletedTask;
         }
 
@@ -48,6 +50,7 @@ namespace LetterApp.iOS.Services
         {
             if (viewController is IRootView)
             {
+                Debug.WriteLine($"ViewController is a Root Controller");
                 SetRootViewController(viewController);
             }
             else
@@ -56,12 +59,16 @@ namespace LetterApp.iOS.Services
                 bool showAsModal = (bool)presentViewProperty?.GetValue(viewController);
 
                 if(MasterNavigationController == null)
+                {
+                    Debug.WriteLine($"MasterNavigationController is null");
                     SetRootViewController(new MainViewController());
-
+                }
                 if (showAsModal)
                     MasterNavigationController.PresentViewController(viewController, true, null);
                 else
                     MasterNavigationController.PushViewController(viewController, true);
+
+                Debug.WriteLine($"{viewController} was Pushed/Presented");
             }
         }
 
@@ -82,13 +89,15 @@ namespace LetterApp.iOS.Services
         {
             if(RootViewController == null)
             {
+                Debug.WriteLine($"RootViewController is null");
+
                 using(var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                 {
                     RootViewController = appDelegate.RootController;
                     MasterNavigationController = RootViewController.NavigationController;
                 }
             }
-
+            Debug.WriteLine($"{viewController} added to RootViewController");
             RootViewController.AddViewToRoot(viewController);
         }
 

@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace LetterApp.iOS.Views.Register.Cells
+namespace LetterApp.iOS.Views.CustomViews.Cells
 {
 	[Register ("HeaderCell")]
 	partial class HeaderCell

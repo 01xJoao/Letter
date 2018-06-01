@@ -13,16 +13,16 @@ namespace LetterApp.iOS.Sources
     public class RegisterSource : UITableViewSource
     {
         public bool IsAnimated;
-        private UIView _viewControllerView;
+        private UIView _backgroundView;
         private RegisterFormModel _registerForm;
-        private Dictionary<string, string> _locationResources = new Dictionary<string, string>();
+        private Dictionary<string, string> _locationResources;
         private EventHandler<int> ScrollsToRowEvent;
-        [Weak] private UITableView _tableView;
+        private UITableView _tableView;
 
-        public RegisterSource(UITableView tableView, Dictionary<string, string> locationResources, RegisterFormModel registerForm, UIView viewControllerView)
+        public RegisterSource(UITableView tableView, Dictionary<string, string> locationResources, RegisterFormModel registerForm, UIView backgroundView)
         {
             _tableView = tableView;
-            _viewControllerView = viewControllerView;
+            _backgroundView = backgroundView;
             _locationResources = locationResources;
             _registerForm = registerForm;
 
@@ -48,7 +48,7 @@ namespace LetterApp.iOS.Sources
                 case (int)Sections.Form:
                     var formCell = tableView.DequeueReusableCell(FormCell.Key) as FormCell;
                     string dictionaryKey = _locationResources?.ElementAt(indexPath.Row).Key;
-                    formCell.Configure(_locationResources[dictionaryKey], _registerForm, _viewControllerView, indexPath.Row, ScrollsToRowEvent, _locationResources.Count == indexPath.Row);
+                    formCell.Configure(_locationResources[dictionaryKey], _registerForm, _backgroundView, indexPath.Row, ScrollsToRowEvent, _locationResources.Count == indexPath.Row);
                     cell = formCell;
                     break;
                 case (int)Sections.Agreement:
@@ -67,13 +67,13 @@ namespace LetterApp.iOS.Sources
 
             if((row == 4 || row == 5) && !IsAnimated)
             {
-                UIViewAnimationExtensions.AnimateBackgroundView(_viewControllerView, LocalConstants.Register_ViewHeight, true);
+                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, LocalConstants.Register_ViewHeight, true);
                 IsAnimated = true;
             }
             else if (row != 4 && row != 5 && IsAnimated)
             {
                 IsAnimated = false;
-                UIViewAnimationExtensions.AnimateBackgroundView(_viewControllerView, 0, false);
+                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, 0, false);
             }
         }
 

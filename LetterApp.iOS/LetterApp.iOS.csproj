@@ -312,11 +312,11 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
     <InterfaceDefinition Include="Views\RecoverPassword\RecoverPasswordViewController.xib" />
     <InterfaceDefinition Include="Views\Register\RegisterViewController.xib" />
-    <InterfaceDefinition Include="Views\Register\Cells\HeaderCell.xib" />
     <InterfaceDefinition Include="Views\Register\Cells\FormCell.xib" />
     <InterfaceDefinition Include="Views\Register\Cells\AgreementCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\MainButtonCell.xib" />
     <InterfaceDefinition Include="Views\ActivateAccount\ActivateAccountViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\HeaderCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -398,10 +398,6 @@
     </Compile>
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Sources\RegisterSource.cs" />
-    <Compile Include="Views\Register\Cells\HeaderCell.cs" />
-    <Compile Include="Views\Register\Cells\HeaderCell.designer.cs">
-      <DependentUpon>HeaderCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Register\Cells\FormCell.cs" />
     <Compile Include="Views\Register\Cells\FormCell.designer.cs">
       <DependentUpon>FormCell.cs</DependentUpon>
@@ -417,6 +413,11 @@
     <Compile Include="Views\ActivateAccount\ActivateAccountViewController.cs" />
     <Compile Include="Views\ActivateAccount\ActivateAccountViewController.designer.cs">
       <DependentUpon>ActivateAccountViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\RecoverPasswordSource.cs" />
+    <Compile Include="Views\CustomViews\Cells\HeaderCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\HeaderCell.designer.cs">
+      <DependentUpon>HeaderCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

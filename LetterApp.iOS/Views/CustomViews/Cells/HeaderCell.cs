@@ -3,7 +3,7 @@
 using Foundation;
 using UIKit;
 
-namespace LetterApp.iOS.Views.Register.Cells
+namespace LetterApp.iOS.Views.CustomViews.Cells
 {
     public partial class HeaderCell : UITableViewCell
     {
