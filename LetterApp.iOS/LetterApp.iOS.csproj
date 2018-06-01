@@ -224,6 +224,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -271,6 +275,7 @@
     <Folder Include="Resources\Assets.xcassets\checkbox_empty.imageset\" />
     <Folder Include="Views\CustomViews\Cells\" />
     <Folder Include="Views\ActivateAccount\" />
+    <Folder Include="Resources\Assets.xcassets\letter_round_medium.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
