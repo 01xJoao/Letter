@@ -74,17 +74,17 @@
                             </constraints>
                         </view>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Activation code" textAlignment="center" adjustsFontForContentSizeCategory="YES" minimumFontSize="22" translatesAutoresizingMaskIntoConstraints="NO" id="0YD-1g-gg7">
-                            <rect key="frame" x="20" y="88" width="335" height="32"/>
+                            <rect key="frame" x="20" y="50" width="335" height="32"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="26"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NYO-rt-EoU">
-                            <rect key="frame" x="164" y="195.5" width="46" height="30"/>
+                            <rect key="frame" x="164" y="157.5" width="46" height="30"/>
                             <state key="normal" title="Button"/>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lOu-h4-cin">
-                            <rect key="frame" x="40" y="155" width="295" height="20.5"/>
+                            <rect key="frame" x="20" y="117" width="335" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -93,14 +93,14 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="lOu-h4-cin" firstAttribute="top" secondItem="0YD-1g-gg7" secondAttribute="bottom" constant="35" id="2CY-Uc-0Iq"/>
-                        <constraint firstItem="lOu-h4-cin" firstAttribute="leading" secondItem="yLg-be-Fgq" secondAttribute="leading" constant="40" id="5Rv-KF-nBk"/>
+                        <constraint firstItem="lOu-h4-cin" firstAttribute="leading" secondItem="yLg-be-Fgq" secondAttribute="leading" constant="20" id="5Rv-KF-nBk"/>
                         <constraint firstItem="NYO-rt-EoU" firstAttribute="centerX" secondItem="yLg-be-Fgq" secondAttribute="centerX" id="IZz-mX-hLn"/>
                         <constraint firstItem="NYO-rt-EoU" firstAttribute="top" secondItem="lOu-h4-cin" secondAttribute="bottom" constant="20" id="VKl-rN-5lm"/>
-                        <constraint firstItem="0YD-1g-gg7" firstAttribute="top" secondItem="yLg-be-Fgq" secondAttribute="top" constant="88" id="clY-gP-Rc5"/>
+                        <constraint firstItem="0YD-1g-gg7" firstAttribute="top" secondItem="yLg-be-Fgq" secondAttribute="top" constant="50" id="clY-gP-Rc5"/>
                         <constraint firstAttribute="bottom" secondItem="KIW-sF-QKK" secondAttribute="bottom" id="fQM-bE-A9U"/>
                         <constraint firstItem="0YD-1g-gg7" firstAttribute="leading" secondItem="yLg-be-Fgq" secondAttribute="leading" constant="20" id="i99-Yd-Kbn"/>
                         <constraint firstAttribute="trailing" secondItem="KIW-sF-QKK" secondAttribute="trailing" id="iee-c8-m3O"/>
-                        <constraint firstAttribute="trailing" secondItem="lOu-h4-cin" secondAttribute="trailing" constant="40" id="kQB-jm-fXw"/>
+                        <constraint firstAttribute="trailing" secondItem="lOu-h4-cin" secondAttribute="trailing" constant="20" id="kQB-jm-fXw"/>
                         <constraint firstAttribute="trailing" secondItem="0YD-1g-gg7" secondAttribute="trailing" constant="20" id="lgn-uC-rPO"/>
                         <constraint firstItem="KIW-sF-QKK" firstAttribute="leading" secondItem="yLg-be-Fgq" secondAttribute="leading" id="wor-R4-YHQ"/>
                     </constraints>

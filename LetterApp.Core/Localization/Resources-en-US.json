@@ -85,7 +85,7 @@
   },
   {
     "key": "Code_S205",
-    "translated": "Your account was been deactivated."
+    "translated": "Your account has been deactivated."
   },
   {
     "key": "Code_S206",
@@ -289,7 +289,7 @@
   },
   {
     "key": "ActivateAccountViewModel_ResendCodeButton",
-    "translated": "Resend Code"
+    "translated": "Resend code"
   },
   {
     "key": "ActivateAccountViewModel_ActivateLabel",

@@ -7,11 +7,14 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace LetterApp.iOS.Views.Register.Cells
+namespace LetterApp.iOS.Views.CustomViews.Cells
 {
-	[Register ("FormCell")]
-	partial class FormCell
+	[Register ("TextFieldCell")]
+	partial class TextFieldCell
 	{
+		[Outlet]
+		UIKit.UIButton _button { get; set; }
+
 		[Outlet]
 		UIKit.UILabel _indicatorLabel { get; set; }
 
@@ -23,6 +26,9 @@ namespace LetterApp.iOS.Views.Register.Cells
 
 		[Outlet]
 		UIKit.NSLayoutConstraint _textFieldHeightConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _textfieldWidthConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -39,6 +45,16 @@ namespace LetterApp.iOS.Views.Register.Cells
 			if (_indicatorView != null) {
 				_indicatorView.Dispose ();
 				_indicatorView = null;
+			}
+
+			if (_button != null) {
+				_button.Dispose ();
+				_button = null;
+			}
+
+			if (_textfieldWidthConstraint != null) {
+				_textfieldWidthConstraint.Dispose ();
+				_textfieldWidthConstraint = null;
 			}
 
 			if (_textFieldHeightConstraint != null) {

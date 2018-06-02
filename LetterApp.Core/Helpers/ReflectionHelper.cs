@@ -50,23 +50,19 @@ namespace LetterApp.Core.Helpers
             return model;
         }
 
-        public static bool WasEmptyValues(object obj)
-        {
-            return obj.GetType().GetProperties()
-                      .Where(pi => pi.GetValue(obj) is string)
-                      .Select(pi => (string)pi.GetValue(obj))
-                      .Any(value => String.IsNullOrEmpty(value));
+        public static bool HasEmptyOrNullValues(object myObject)
+        {   
+            foreach (PropertyInfo pi in myObject.GetType().GetProperties())
+            {
+                if (pi.PropertyType == typeof(string))
+                {
+                    string value = (string)pi.GetValue(myObject);
+                    if (string.IsNullOrEmpty(value))
+                        return true;
+                }
+            }
+            return false;
         }
-
-        //public static bool WasSpecialCharacters(string[] value)
-        //{
-        //    var regexItem = new Regex("^[a-zA-Z ]*$");
-
-        //    return value.GetType().GetProperties()
-        //            .Where(pi => pi.GetValue(value) is string)
-        //            .Select(pi => (string)pi.GetValue(value))
-        //            .Any(str => regexItem.IsMatch(str));
-        //}
 
         public static bool IsNull(this object T)
         {

@@ -55,6 +55,7 @@ namespace LetterApp.iOS.Services
         {
             _lottieAnimation?.Pause();
             _lottieAnimation?.RemoveFromSuperview();
+            _lottieAnimation?.Dispose();
             _lottieAnimation = null;
         }
     }

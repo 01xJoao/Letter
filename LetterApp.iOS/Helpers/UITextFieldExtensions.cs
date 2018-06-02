@@ -38,10 +38,12 @@ namespace LetterApp.iOS.Helpers
             textField.EditingDidEnd += (sender, e) =>
             {
                 textField.InputAccessoryView = null;
+
                 if (string.IsNullOrEmpty(textField.Text))
                     divider.BackgroundColor = Colors.Red;
                 else
                     divider.BackgroundColor = Colors.GrayDivider;
+
                 indicator.TextColor = Colors.GrayIndicator;
             };
 

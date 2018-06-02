@@ -92,7 +92,7 @@ namespace LetterApp.Core.Services
             {
                 RavenService.Raven.Capture(new SentryEvent(new Exception($"EnsureSuccessRequestException: {content}")));
 
-                //TODO : Refresh token
+                //TODO: Refresh token
                 if (response.ToString().Contains("Invalid Token"))
                     throw new SessionTimeoutException(content);
 

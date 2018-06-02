@@ -7,6 +7,7 @@ using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
+using LetterApp.Core.Models.Cells;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.RequestModels;
@@ -19,68 +20,59 @@ namespace LetterApp.Core.ViewModels
         IDialogService _dialogService;
         IStatusCodeService _statusService;
 
-        public RegisterFormModel RegisterForm;
+        private bool _userAgreed;
+        public List<FormModel> FormModelList { get; set; }
 
         private XPCommand _createAccountCommand;
         public XPCommand CreateAccountCommand => _createAccountCommand ?? (_createAccountCommand = new XPCommand(async () => await CreateAccount(), CanExecute));
+
+        private XPCommand _closeViewCommand;
+        public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+
+        private XPCommand<bool> _openRegisterViewCommand;
+        public XPCommand<bool> AgreementToogleCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand<bool>((agreed) => AgreementToogle(agreed)));
 
         public RegisterViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusService)
         {
             _authService = authService;
             _dialogService = dialogService;
             _statusService = statusService;
-            SetL10NResources();
-            RegisterForm = new RegisterFormModel();
+        }
+
+        private void AgreementToogle(bool agreed) => _userAgreed = agreed;
+
+        public override async Task InitializeAsync()
+        {
+            FormModelList = new List<FormModel>();
+
+            var firstname = new FormModel(0, "", _firstname, FieldType.Null, ReturnKeyType.Next);
+            var lastname = new FormModel(1, "", _lastname, FieldType.Null, ReturnKeyType.Next);
+            var email = new FormModel(2, "", _email, FieldType.Email, ReturnKeyType.Next);
+            var password = new FormModel(3, "", _password, FieldType.Password, ReturnKeyType.Next, new string[] { _showButton, _hideButton });
+            var confirmpassword = new FormModel(4, "", _confirmpassword, FieldType.Password, ReturnKeyType.Next, new string[] { _showButton, _hideButton });
+            var number = new FormModel(5, "", _number, FieldType.Phone, ReturnKeyType.Default);
+
+            var form = new[] { firstname, lastname, email, password, confirmpassword, number };
+            FormModelList.AddRange(form);
         }
 
         private async Task CreateAccount()
         {
-            if (ReflectionHelper.WasEmptyValues(RegisterForm))
-            {
-                _dialogService.ShowAlert(EmptyForm, AlertType.Error);
-                return;
-            }
-
-            if (!StringUtils.CheckForEmojis(RegisterForm.Password) || !StringUtils.CheckForEmojis(RegisterForm.FirstName) || !StringUtils.CheckForEmojis(RegisterForm.LastName))
-            {
-                _dialogService.ShowAlert(DamnEmojis, AlertType.Error, 6f);
-                return;
-            }
-
-            if (!StringUtils.IsLettersOnly(RegisterForm.FirstName) || !StringUtils.IsLettersOnly(RegisterForm.LastName))
-            {
-                _dialogService.ShowAlert(InvalidString, AlertType.Error, 6.5f);
-                return;
-            }
-
-            if(!EmailUtils.IsValidEmail(StringUtils.RemoveWhiteSpaces(RegisterForm.EmailAddress)))
-            {
-                _dialogService.ShowAlert(InvalidEmail, AlertType.Error);
-                return;
-            }
-
-            if (RegisterForm.Password.Length < 8)
-            {
-                _dialogService.ShowAlert(PasswordWeak, AlertType.Error, 6f);
-                return;
-            }
-
-            if (RegisterForm.Password != RegisterForm.VerifyPassword)
-            {
-                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
-                return;
-            }
-
-            if(!RegisterForm.UserAgreed)
-            {
-                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
-                return;
-            }
-
             IsBusy = true;
 
-            var user = new UserRegistrationRequestModel(StringUtils.RemoveWhiteSpaces(RegisterForm.EmailAddress), RegisterForm.PhoneNumber, StringUtils.RemoveWhiteSpaces(RegisterForm.FirstName), 
-                                                        StringUtils.RemoveWhiteSpaces(RegisterForm.LastName), RegisterForm.Password);
+            var user = new UserRegistrationRequestModel(
+                StringUtils.RemoveWhiteSpaces(FormModelList[2].TextFieldValue),
+                FormModelList[5].TextFieldValue,
+                StringUtils.RemoveWhiteSpaces(FormModelList[0].TextFieldValue),
+                StringUtils.RemoveWhiteSpaces(FormModelList[1].TextFieldValue),
+                FormModelList[3].TextFieldValue
+            );
+
+            if(!CheckForm(user))
+            {
+                IsBusy = false;
+                return;
+            }
 
             try
             {
@@ -90,8 +82,8 @@ namespace LetterApp.Core.ViewModels
                 {
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
                     await NavigationService.Close(this);
-                    await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(RegisterForm.EmailAddress);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(user.Email);
+                    await Task.Delay(TimeSpan.FromSeconds(0.8));
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
                 }
                 else
@@ -109,6 +101,58 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private bool CheckForm(UserRegistrationRequestModel user)
+        {
+            if (ReflectionHelper.HasEmptyOrNullValues(user))
+            {
+                _dialogService.ShowAlert(EmptyForm, AlertType.Error);
+                return false;
+            }
+
+            if (!StringUtils.CheckForEmojis(user.Password) || !StringUtils.CheckForEmojis(user.FirstName) || !StringUtils.CheckForEmojis(user.LastName))
+            {
+                _dialogService.ShowAlert(DamnEmojis, AlertType.Error, 6f);
+                return false;
+            }
+
+            if (!StringUtils.IsLettersOnly(user.FirstName) || !StringUtils.IsLettersOnly(user.LastName))
+            {
+                _dialogService.ShowAlert(InvalidString, AlertType.Error, 6.5f);
+                return false;
+            }
+
+            if (!EmailUtils.IsValidEmail(StringUtils.RemoveWhiteSpaces(user.Email)))
+            {
+                _dialogService.ShowAlert(InvalidEmail, AlertType.Error);
+                return false;
+            }
+
+            if (user.Password.Length < 8)
+            {
+                _dialogService.ShowAlert(PasswordWeak, AlertType.Error, 6f);
+                return false;
+            }
+
+            if (user.Password != FormModelList[4].TextFieldValue)
+            {
+                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
+                return false;
+            }
+
+            if (!_userAgreed)
+            {
+                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task CloseView()
+        {
+            await NavigationService.Close(this);
+        }
+
         private bool CanExecute() => !IsBusy;
 
         #region resources
@@ -123,26 +167,15 @@ namespace LetterApp.Core.ViewModels
         private string UserAgreement    => L10N.Localize("RegisterViewModel_UserAgreement");
         private string DamnEmojis       => L10N.Localize("RegisterViewModel_DamnEmojis");
 
-        public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
-
+        public string AgreementLabel => L10N.Localize("RegisterViewModel_Agreement");
         private string _firstname => L10N.Localize("RegisterViewModel_FirstName");
         private string _lastname => L10N.Localize("RegisterViewModel_LastName");
         private string _email => L10N.Localize("LoginViewModel_EmailLabel");
         private string _number => L10N.Localize("RegisterViewModel_PhoneNumber");
         private string _password => L10N.Localize("LoginViewModel_PasswordLabel");
         private string _confirmpassword => L10N.Localize("RecoverPasswordViewModel_ConfirmPass");
-        private string _agreement => L10N.Localize("RegisterViewModel_Agreement");
-
-        private void SetL10NResources()
-        {
-            LocationResources.Add("firstname", _firstname);
-            LocationResources.Add("lastname", _lastname);
-            LocationResources.Add("email", _email);
-            LocationResources.Add("passsword", _password);
-            LocationResources.Add("confirmpassword", _confirmpassword);
-            LocationResources.Add("number", _number);
-            LocationResources.Add("agreement", _agreement);
-        }
+        private string _showButton => L10N.Localize("RecoverPasswordViewModel_ShowButton");
+        private string _hideButton => L10N.Localize("RecoverPasswordViewModel_HideButton");
 
         #endregion
     }

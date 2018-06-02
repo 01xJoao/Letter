@@ -5,6 +5,7 @@ using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
+using ObjCRuntime;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Register
@@ -12,8 +13,8 @@ namespace LetterApp.iOS.Views.Register
     public partial class RegisterViewController : XViewController<RegisterViewModel>
     {
         public override bool HandlesKeyboardNotifications => true;
+        private bool _keyboardViewState;
         private LOTAnimationView _lottieAnimation;
-        private bool keyboardViewState;
         private RegisterSource _source;
 
         public RegisterViewController() : base("RegisterViewController", null) {}
@@ -23,6 +24,7 @@ namespace LetterApp.iOS.Views.Register
             base.ViewDidLoad();
           
             SetupView();
+            SetupTableView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -57,11 +59,19 @@ namespace LetterApp.iOS.Views.Register
 
         private void SetupTableView()
         {
-            _source = new RegisterSource(_tableView, ViewModel.LocationResources, ViewModel.RegisterForm, _backgroundView);
+            _source = new RegisterSource(_tableView, _backgroundView, ViewModel.FormModelList, ViewModel.AgreementLabel);
             _tableView.BackgroundColor = Colors.MainBlue4;
             _tableView.Source = _source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
+
+            _source.AgreementToogleEvent -= OnSource_AgreementToogleEvent;
+            _source.AgreementToogleEvent += OnSource_AgreementToogleEvent;
+        }
+
+        private void OnSource_AgreementToogleEvent(object sender, bool userAgreed)
+        {
+            ViewModel.AgreementToogleCommand.Execute(userAgreed);
         }
 
         private void Loading()
@@ -71,13 +81,13 @@ namespace LetterApp.iOS.Views.Register
 
         public override void OnKeyboardNotification(bool changeKeyboardState)
         {
-            if (keyboardViewState != changeKeyboardState && ViewIsVisible)
+            if (_keyboardViewState != changeKeyboardState && ViewIsVisible)
             {
-                keyboardViewState = changeKeyboardState;
+                _keyboardViewState = changeKeyboardState;
 
-                if(!keyboardViewState)
+                if(!_keyboardViewState)
                 {
-                    UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, 0, keyboardViewState);
+                    UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, 0, _keyboardViewState);
                     _source.IsAnimated = false;
                 }
             }
@@ -86,15 +96,27 @@ namespace LetterApp.iOS.Views.Register
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
+            //TODO: Maybe Change this to BaseViewController
+
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
-            this.NavigationController.NavigationBar.TopItem.Title = string.Empty;
-            this.NavigationController.NavigationBar.TintColor = Colors.Black;
+
+            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
+            this.NavigationItem.LeftBarButtonItem = backButton;
+            NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
+
+            //this.NavigationController.NavigationBar.TintColor = Colors.Black;
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
-            SetupTableView();
+        }
+
+        private void CloseView(object sender, EventArgs e)
+        {
+            if(ViewModel.CloseViewCommand.CanExecute())
+                ViewModel.CloseViewCommand.Execute();
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -105,6 +127,10 @@ namespace LetterApp.iOS.Views.Register
 
         public override void ViewDidDisappear(bool animated)
         {
+            _lottieAnimation?.Dispose();
+            _lottieAnimation = null;
+            _source?.Dispose();
+            _source = null;
             MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);

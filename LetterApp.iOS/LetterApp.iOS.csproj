@@ -149,6 +149,9 @@
     <Reference Include="Lottie.iOS">
       <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="GetiOSModel">
+      <HintPath>..\packages\dannycabrera.GetiOSModel.1.4.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -208,14 +211,7 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\black%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full%402x.png" />
@@ -224,6 +220,33 @@
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -271,6 +294,12 @@
     <Folder Include="Resources\Assets.xcassets\checkbox_empty.imageset\" />
     <Folder Include="Views\CustomViews\Cells\" />
     <Folder Include="Views\ActivateAccount\" />
+    <Folder Include="Resources\Assets.xcassets\letter_round_medium.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\back_black.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\back_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\settings.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\add_circle.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -286,11 +315,11 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
     <InterfaceDefinition Include="Views\RecoverPassword\RecoverPasswordViewController.xib" />
     <InterfaceDefinition Include="Views\Register\RegisterViewController.xib" />
-    <InterfaceDefinition Include="Views\Register\Cells\HeaderCell.xib" />
-    <InterfaceDefinition Include="Views\Register\Cells\FormCell.xib" />
     <InterfaceDefinition Include="Views\Register\Cells\AgreementCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\MainButtonCell.xib" />
     <InterfaceDefinition Include="Views\ActivateAccount\ActivateAccountViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\HeaderCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\TextFieldCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -372,14 +401,6 @@
     </Compile>
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Sources\RegisterSource.cs" />
-    <Compile Include="Views\Register\Cells\HeaderCell.cs" />
-    <Compile Include="Views\Register\Cells\HeaderCell.designer.cs">
-      <DependentUpon>HeaderCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Register\Cells\FormCell.cs" />
-    <Compile Include="Views\Register\Cells\FormCell.designer.cs">
-      <DependentUpon>FormCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Register\Cells\AgreementCell.cs" />
     <Compile Include="Views\Register\Cells\AgreementCell.designer.cs">
       <DependentUpon>AgreementCell.cs</DependentUpon>
@@ -392,6 +413,16 @@
     <Compile Include="Views\ActivateAccount\ActivateAccountViewController.designer.cs">
       <DependentUpon>ActivateAccountViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sources\RecoverPasswordSource.cs" />
+    <Compile Include="Views\CustomViews\Cells\HeaderCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\HeaderCell.designer.cs">
+      <DependentUpon>HeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\TextFieldCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\TextFieldCell.designer.cs">
+      <DependentUpon>TextFieldCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\PhoneModelExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

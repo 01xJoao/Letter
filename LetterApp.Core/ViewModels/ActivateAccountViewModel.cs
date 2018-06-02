@@ -53,7 +53,7 @@ namespace LetterApp.Core.ViewModels
                 if(result.StatusCode == 200)
                 {
                     await NavigationService.Close(this);
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(ActivationCompleted, AlertType.Success, 4f);
                 }
                 else

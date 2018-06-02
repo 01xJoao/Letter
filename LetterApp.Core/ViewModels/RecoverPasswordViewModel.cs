@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Models.Cells;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.RequestModels;
@@ -15,14 +17,8 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authService;
         private IStatusCodeService _statusCodeService;
 
-        public string Email { get; set; }
-
-        private bool _isValidPassword = true;
-        public bool IsValidPassword
-        {
-            get => _isValidPassword;
-            set => SetProperty(ref _isValidPassword, value);
-        }
+        private string _email;
+        public List<FormModel> FormModelList { get; set; }
 
         private bool _isSubmiting;
         public bool IsSubmiting
@@ -37,9 +33,8 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _resendCodeCommand;
         public XPCommand ResendCodeCommand => _resendCodeCommand ?? (_resendCodeCommand = new XPCommand(async () => await ResendCode(), CanExecute));
 
-        private XPCommand<Tuple<string, string, string>> _submitFormCommand;
-        public XPCommand<Tuple<string, string, string>> SubmitFormCommand => _submitFormCommand ?? 
-            (_submitFormCommand = new XPCommand<Tuple<string, string, string>>(async (formValues) => await SubmitForm(formValues), CanExecute));
+        private XPCommand _submitFormCommand;
+        public XPCommand SubmitFormCommand => _submitFormCommand ?? (_submitFormCommand = new XPCommand(async () => await SubmitForm(), CanExecute));
 
         public RecoverPasswordViewModel(IDialogService dialogService, IAuthenticationService authService, IStatusCodeService statusCodeService) 
         {
@@ -48,23 +43,32 @@ namespace LetterApp.Core.ViewModels
             _statusCodeService = statusCodeService;
         }
 
-        protected override void Prepare(string email) => Email = email;
+        protected override void Prepare(string email) => _email = email;
 
-        private async Task SubmitForm(Tuple<string,string,string> formValues)
+        public override async Task InitializeAsync()
         {
-            _isValidPassword = false;
+            FormModelList = new List<FormModel>();
 
-            if(formValues.Item1.Length < 8)
+            var emailForm = new FormModel(0,_email, EmailAddressLabel, FieldType.Email, ReturnKeyType.Next);
+            var passwordForm = new FormModel(1,"", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] {ShowButton, HideButton});
+            var confirmPasswordForm = new FormModel(2,"", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] { ShowButton, HideButton });
+            var CodeForm = new FormModel(3,"", CodeLabel, FieldType.Code, ReturnKeyType.Default, keyboardButtonText: SubmitButton, submitKeyboardButton: async () => await SubmitForm());
+
+            var form = new[] { emailForm, passwordForm, confirmPasswordForm, CodeForm };
+            FormModelList.AddRange(form);
+        }
+
+        private async Task SubmitForm()
+        {
+            if(FormModelList[1].TextFieldValue.Length < 8)
             {
                 _dialogService.ShowAlert(PasswordWeak, AlertType.Error, 6f);
-                IsValidPassword = true;
                 return;
             }
 
-            if(formValues.Item1 != formValues.Item2)
+            if(FormModelList[1].TextFieldValue != FormModelList[2].TextFieldValue)
             {
                 _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
-                IsValidPassword = true;
                 return;
             }
 
@@ -73,13 +77,13 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var forgotPassModel = new PasswordChangeRequestModel(Email, formValues.Item1, formValues.Item3);
+                var forgotPassModel = new PasswordChangeRequestModel(FormModelList[0].TextFieldValue, FormModelList[1].TextFieldValue, FormModelList[3].TextFieldValue);
                 var result = await _authService.ChangePassword(forgotPassModel);
 
                 if (result.StatusCode == 201)
                 {
                     await CloseView();
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(PasswordChanged, AlertType.Success, 5f);
                 }
                 else
@@ -102,7 +106,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var result = await _authService.SendActivationCode(Email, "false");
+                var result = await _authService.SendActivationCode(FormModelList[0].TextFieldValue, "false");
 
                 if (result.StatusCode == 200)
                     _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
@@ -136,13 +140,14 @@ namespace LetterApp.Core.ViewModels
         #region Resources
 
         public string NewPassTitle          => L10N.Localize("RecoverPasswordViewModel_NewPassTitle");
-        public string EmailAddressLabel     => L10N.Localize("RecoverPasswordViewModel_EmailAddress");
-        public string ConfirmPassLabel      => L10N.Localize("RecoverPasswordViewModel_ConfirmPass");
-        public string CodeLabel             => L10N.Localize("RecoverPasswordViewModel_Code");
-        public string RequestAgainButton    => L10N.Localize("RecoverPasswordViewModel_RequestAgain");
-        public string SubmitButton          => L10N.Localize("RecoverPasswordViewModel_Submit");
-        public string ShowButton            => L10N.Localize("RecoverPasswordViewModel_ShowButton");
-        public string HideButton            => L10N.Localize("RecoverPasswordViewModel_HideButton");
+        public string SubmitButton => L10N.Localize("RecoverPasswordViewModel_Submit");
+
+        private string EmailAddressLabel     => L10N.Localize("RecoverPasswordViewModel_EmailAddress");
+        private string ConfirmPassLabel      => L10N.Localize("RecoverPasswordViewModel_ConfirmPass");
+        private string CodeLabel             => L10N.Localize("RecoverPasswordViewModel_Code");
+        private string RequestAgainButton    => L10N.Localize("RecoverPasswordViewModel_RequestAgain");
+        private string ShowButton            => L10N.Localize("RecoverPasswordViewModel_ShowButton");
+        private string HideButton            => L10N.Localize("RecoverPasswordViewModel_HideButton");
         private string EmailConfirmation     => L10N.Localize("RecoverPasswordViewModel_EmailConfirmation");
         private string PasswordMatch         => L10N.Localize("RecoverPasswordViewModel_PasswordMatch");
         private string PasswordWeak          => L10N.Localize("RecoverPasswordViewModel_PasswordWeak");
