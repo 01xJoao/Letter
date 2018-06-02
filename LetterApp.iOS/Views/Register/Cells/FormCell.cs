@@ -14,6 +14,7 @@ namespace LetterApp.iOS.Views.Register.Cells
         private EventHandler<int>  _scrollToEvent;
         private RegisterFormModel _registerForm;
         private UIView _view;
+
         public static readonly NSString Key = new NSString("FormCell");
         public static readonly UINib Nib = UINib.FromName("FormCell", NSBundle.MainBundle);
         protected FormCell(IntPtr handle) : base(handle) {}
@@ -31,8 +32,8 @@ namespace LetterApp.iOS.Views.Register.Cells
             if(!string.IsNullOrEmpty(value))
             {
                 _textField.Text = value;
-                _indicatorView.BackgroundColor = Colors.GrayDivider;
                 _indicatorLabel.TextColor = Colors.GrayIndicator;
+                _indicatorView.BackgroundColor = Colors.GrayDivider;
                 _indicatorLabel.Alpha = 1;
             }
 
@@ -72,7 +73,7 @@ namespace LetterApp.iOS.Views.Register.Cells
             if (_row == 5)
                 UITextFieldExtensions.AddDoneButtonToNumericKeyboard(_textField);
             
-            _scrollToEvent.Invoke(this, _row);
+            _scrollToEvent?.Invoke(this, _row);
         }
 
         private void OnTextField_EditingChanged(object sender, EventArgs e)

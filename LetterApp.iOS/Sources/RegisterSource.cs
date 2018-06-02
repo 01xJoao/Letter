@@ -82,7 +82,7 @@ namespace LetterApp.iOS.Sources
             switch (indexPath.Section)
             {
                 case (int)Sections.Header: return LocalConstants.Register_HeaderHeight;
-                case (int)Sections.Form: return LocalConstants.Register_From;
+                case (int)Sections.Form: return LocalConstants.Register_Form;
                 case (int)Sections.Agreement: return StringExtensions.StringHeight(_locationResources["agreement"], UIFont.SystemFontOfSize(15f), UIScreen.MainScreen.Bounds.Width - 120) + 50;
                 default: return 0;
             }

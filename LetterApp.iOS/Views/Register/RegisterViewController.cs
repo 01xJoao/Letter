@@ -13,8 +13,8 @@ namespace LetterApp.iOS.Views.Register
     public partial class RegisterViewController : XViewController<RegisterViewModel>
     {
         public override bool HandlesKeyboardNotifications => true;
-        private LOTAnimationView _lottieAnimation;
         private bool _keyboardViewState;
+        private LOTAnimationView _lottieAnimation;
         private RegisterSource _source;
 
         public RegisterViewController() : base("RegisterViewController", null) {}
@@ -121,6 +121,8 @@ namespace LetterApp.iOS.Views.Register
         {
             _lottieAnimation?.Dispose();
             _lottieAnimation = null;
+            _source?.Dispose();
+            _source = null;
             MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);

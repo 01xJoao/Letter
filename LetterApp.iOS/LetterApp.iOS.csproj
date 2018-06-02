@@ -317,6 +317,7 @@
     <InterfaceDefinition Include="Views\CustomViews\Cells\MainButtonCell.xib" />
     <InterfaceDefinition Include="Views\ActivateAccount\ActivateAccountViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\HeaderCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\TextFieldCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -418,6 +419,10 @@
     <Compile Include="Views\CustomViews\Cells\HeaderCell.cs" />
     <Compile Include="Views\CustomViews\Cells\HeaderCell.designer.cs">
       <DependentUpon>HeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\TextFieldCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\TextFieldCell.designer.cs">
+      <DependentUpon>TextFieldCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

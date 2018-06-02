@@ -26,6 +26,7 @@
     <Folder Include="Services\Interfaces\" />
     <Folder Include="ViewModels\Abstractions\" />
     <Folder Include="ViewModels\TabBarViewModels\" />
+    <Folder Include="Models\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="AppSettings.cs" />
