@@ -49,10 +49,10 @@ namespace LetterApp.Core.ViewModels
         {
             FormModelList = new List<FormModel>();
 
-            var emailForm = new FormModel(_email, EmailAddressLabel, FieldType.Email, ReturnKeyType.Next);
-            var passwordForm = new FormModel("", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] {ShowButton, HideButton});
-            var confirmPasswordForm = new FormModel("", NewPassTitle, FieldType.Password, ReturnKeyType.Default, new string[] { ShowButton, HideButton });
-            var CodeForm = new FormModel("", CodeLabel, FieldType.Code, ReturnKeyType.Default, keyboardButtonText: SubmitButton, submitKeyboardButton: async () => await SubmitForm());
+            var emailForm = new FormModel(0,_email, EmailAddressLabel, FieldType.Email, ReturnKeyType.Next);
+            var passwordForm = new FormModel(1,"", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] {ShowButton, HideButton});
+            var confirmPasswordForm = new FormModel(2,"", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] { ShowButton, HideButton });
+            var CodeForm = new FormModel(3,"", CodeLabel, FieldType.Code, ReturnKeyType.Default, keyboardButtonText: SubmitButton, submitKeyboardButton: async () => await SubmitForm());
 
             var form = new[] { emailForm, passwordForm, confirmPasswordForm, CodeForm };
             FormModelList.AddRange(form);

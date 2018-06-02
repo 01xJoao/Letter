@@ -69,7 +69,7 @@ namespace LetterApp.iOS.Views.Login
             if (ViewModel.SignInCommand.CanExecute(new Tuple<string, string>(_emailTextField.Text, _passwordTextField.Text)))
                 ViewModel.SignInCommand.Execute(new Tuple<string, string>(_emailTextField.Text, _passwordTextField.Text));
             
-            View.EndEditing(true);
+            this.View.EndEditing(true);
         }
 
         private void SetupView()

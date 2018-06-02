@@ -3,8 +3,9 @@ namespace LetterApp.Core.Models.Cells
 {
     public class FormModel
     {
-        public FormModel(string textFieldValue, string indicatorText, FieldType fieldType, ReturnKeyType returnKeyType, string[] buttonText = null, Action buttonAction = null, string keyboardButtonText = "", Action submitKeyboardButton = null)
+        public FormModel(int postion, string textFieldValue, string indicatorText, FieldType fieldType, ReturnKeyType returnKeyType, string[] buttonText = null, Action buttonAction = null, string keyboardButtonText = "", Action submitKeyboardButton = null)
         {
+            Position = postion;
             TextFieldValue = textFieldValue;
             IndicatorText = indicatorText;
             ButtonText = buttonText;
@@ -15,6 +16,7 @@ namespace LetterApp.Core.Models.Cells
             SubmitKeyboardButtonAction = submitKeyboardButton;
         }
 
+        public int Position { get; set; }
         public string TextFieldValue { get; set; }
         public string IndicatorText { get; set; }
 

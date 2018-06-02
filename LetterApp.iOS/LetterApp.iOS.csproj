@@ -149,6 +149,9 @@
     <Reference Include="Lottie.iOS">
       <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="GetiOSModel">
+      <HintPath>..\packages\dannycabrera.GetiOSModel.1.4.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -424,6 +427,7 @@
     <Compile Include="Views\CustomViews\Cells\TextFieldCell.designer.cs">
       <DependentUpon>TextFieldCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PhoneModelExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

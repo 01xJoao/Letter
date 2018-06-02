@@ -80,7 +80,7 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
             _textField.EditingDidEnd -= OnTextField_EditingDidEnd;
             _textField.EditingDidEnd += OnTextField_EditingDidEnd;
 
-            UITextFieldExtensions.SetupField(view, indexPath.Row, _formModel.IndicatorText, _textField, _indicatorView, _textFieldHeightConstraint, _indicatorLabel, 
+            UITextFieldExtensions.SetupField(view, _formModel.Position, _formModel.IndicatorText, _textField, _indicatorView, _textFieldHeightConstraint, _indicatorLabel, 
                                              _formModel.ReturnKeyType == ReturnKeyType.Default ? UIReturnKeyType.Default : UIReturnKeyType.Next, _keyboardButton);
             
             _textField.AutocorrectionType = UITextAutocorrectionType.No;

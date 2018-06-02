@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Foundation;
 using LetterApp.Core.Models.Cells;
 using LetterApp.iOS.Helpers;
@@ -12,6 +13,7 @@ namespace LetterApp.iOS.Sources
     public class RecoverPasswordSource : UITableViewSource
     {
         public bool IsAnimated;
+        private bool _bigAnimation;
         private UIView _backgroundView;
         private EventHandler<NSIndexPath> _scrollsToRowEvent;
         private List<FormModel> _formModels;
@@ -34,7 +36,7 @@ namespace LetterApp.iOS.Sources
         {
             if (section == (int)Sections.Code)
                 return new UIView();
-            
+
             return null;
         }
 
@@ -48,7 +50,7 @@ namespace LetterApp.iOS.Sources
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            UITableViewCell cell = null;
+            UITableViewCell cell = new UITableViewCell();
 
             switch (indexPath.Section)
             {
@@ -67,23 +69,39 @@ namespace LetterApp.iOS.Sources
                     cell = formCodeCell;
                     break;
             }
+
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             return cell;
         }
 
         private void ScrollsToRow(object sender, NSIndexPath index)
         {
-            _tableView.ScrollToRow(index, UITableViewScrollPosition.Middle, true);
+            //_tableView.ScrollToRow(NSIndexPath.FromRowSection(index.Row, index.Section), UITableViewScrollPosition.Top, true);
+            nfloat animationHeight = 0;
 
-            if ((index.Row == 0 && index.Section == 2) && !IsAnimated)
+            if(!IsAnimated)
+                animationHeight = LocalConstants.RecoverPass_Animation;
+
+            if((index.Row == 0 && index.Section == 2))
             {
+                if(PhoneModelExtensions.IsSmallIphone())
+                {
+                    animationHeight += LocalConstants.RecoverPass_CodeHeightAnimation;
+                    _bigAnimation = true;
+                }
+
+                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, animationHeight, true);
                 IsAnimated = true;
-                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, LocalConstants.RecoverPass_Height, true);
+            }
+            else if(_bigAnimation)
+            {
+                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, -LocalConstants.RecoverPass_CodeHeightAnimation, true);
+                _bigAnimation = false;
             }
             else
             {
-                IsAnimated = false;
-                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, 0, false);
+                UIViewAnimationExtensions.AnimateBackgroundView(_backgroundView, animationHeight, true);
+                IsAnimated = true;
             }
         }
 
