@@ -101,9 +101,8 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
             else
             {
                 _textField.SecureTextEntry = !_textField.SecureTextEntry;
-                _button.SetTitle(_textField.SecureTextEntry == false ? _formModel.ButtonText[0] : _formModel.ButtonText[1], UIControlState.Normal);
+                _button.SetTitle(_textField.SecureTextEntry ? _formModel.ButtonText[0] : _formModel.ButtonText[1], UIControlState.Normal);
             }
-                
         }
 
         private void TextFieldSize(bool hasPassword)

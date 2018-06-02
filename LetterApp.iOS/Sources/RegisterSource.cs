@@ -17,17 +17,16 @@ namespace LetterApp.iOS.Sources
         private UIView _backgroundView;
         private EventHandler<NSIndexPath> _scrollsToRowEvent;
         private UITableView _tableView;
-        List<FormModel> _formModels;
+        private List<FormModel> _formModels;
         private string _agreement;
-        private bool _userAgreed;
+        public EventHandler<bool> AgreementToogleEvent;
 
-        public RegisterSource(UITableView tableView, UIView backgroundView, List<FormModel> formModels, string agreement, bool userAgreed)
+        public RegisterSource(UITableView tableView, UIView backgroundView, List<FormModel> formModels, string agreement)
         {
             _tableView = tableView;
             _backgroundView = backgroundView;
             _formModels = formModels;
             _agreement = agreement;
-            _userAgreed = userAgreed;
 
             _scrollsToRowEvent -= ScrollsToRow;
             _scrollsToRowEvent += ScrollsToRow;
@@ -55,7 +54,7 @@ namespace LetterApp.iOS.Sources
                     break;
                 case (int)Sections.Agreement:
                     var agreementCell = tableView.DequeueReusableCell(AgreementCell.Key) as AgreementCell;
-                    agreementCell.Configure(_agreement, _userAgreed);
+                    agreementCell.Configure(_agreement, AgreementToogleEvent);
                     cell = agreementCell;
                     break;
             }

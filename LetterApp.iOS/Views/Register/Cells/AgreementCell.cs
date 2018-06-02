@@ -9,14 +9,15 @@ namespace LetterApp.iOS.Views.Register.Cells
 {
     public partial class AgreementCell : UITableViewCell
     {
-        bool _userAgreed;
+        private bool _userAgreed;
+        private EventHandler<bool> _userAgreedEvent;
         public static readonly NSString Key = new NSString("AgreementCell");
         public static readonly UINib Nib = UINib.FromName("AgreementCell", NSBundle.MainBundle);
         protected AgreementCell(IntPtr handle) : base(handle) {}
 
-        public void Configure(string agreement, bool userAgreed)
+        public void Configure(string agreement, EventHandler<bool> userAgreedEvent)
         {
-            _userAgreed = userAgreed;
+            _userAgreedEvent = userAgreedEvent;
             ButtonState();
             _label.AttributedText = StringExtensions.GetHTMLFormattedText(agreement, fontSize: 3);
 
@@ -27,6 +28,7 @@ namespace LetterApp.iOS.Views.Register.Cells
         private void OnButton_TouchUpInside(object sender, EventArgs e)
         {
             _userAgreed = !_userAgreed;
+            _userAgreedEvent?.Invoke(this, _userAgreed);
             ButtonState();
         }
 

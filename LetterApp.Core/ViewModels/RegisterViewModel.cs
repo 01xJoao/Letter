@@ -20,7 +20,7 @@ namespace LetterApp.Core.ViewModels
         IDialogService _dialogService;
         IStatusCodeService _statusService;
 
-        public bool UserAgreed;
+        private bool _userAgreed;
         public List<FormModel> FormModelList { get; set; }
 
         private XPCommand _createAccountCommand;
@@ -29,12 +29,17 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
+        private XPCommand<bool> _openRegisterViewCommand;
+        public XPCommand<bool> AgreementToogleCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand<bool>((agreed) => AgreementToogle(agreed)));
+
         public RegisterViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusService)
         {
             _authService = authService;
             _dialogService = dialogService;
             _statusService = statusService;
         }
+
+        private void AgreementToogle(bool agreed) => _userAgreed = agreed;
 
         public override async Task InitializeAsync()
         {
@@ -45,7 +50,7 @@ namespace LetterApp.Core.ViewModels
             var email = new FormModel(2, "", _email, FieldType.Email, ReturnKeyType.Next);
             var password = new FormModel(3, "", _password, FieldType.Password, ReturnKeyType.Next, new string[] { _showButton, _hideButton });
             var confirmpassword = new FormModel(4, "", _confirmpassword, FieldType.Password, ReturnKeyType.Next, new string[] { _showButton, _hideButton });
-            var number = new FormModel(5, "", _number, FieldType.Code, ReturnKeyType.Default, keyboardButtonText: SubmitButton, submitKeyboardButton: async () => await CreateAccount());
+            var number = new FormModel(5, "", _number, FieldType.Phone, ReturnKeyType.Default);
 
             var form = new[] { firstname, lastname, email, password, confirmpassword, number };
             FormModelList.AddRange(form);
@@ -134,7 +139,7 @@ namespace LetterApp.Core.ViewModels
                 return false;
             }
 
-            if (!UserAgreed)
+            if (!_userAgreed)
             {
                 _dialogService.ShowAlert(UserAgreement, AlertType.Error);
                 return false;

@@ -59,11 +59,19 @@ namespace LetterApp.iOS.Views.Register
 
         private void SetupTableView()
         {
-            _source = new RegisterSource(_tableView, _backgroundView, ViewModel.FormModelList, ViewModel.AgreementLabel, ViewModel.UserAgreed);
+            _source = new RegisterSource(_tableView, _backgroundView, ViewModel.FormModelList, ViewModel.AgreementLabel);
             _tableView.BackgroundColor = Colors.MainBlue4;
             _tableView.Source = _source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
+
+            _source.AgreementToogleEvent -= OnSource_AgreementToogleEvent;
+            _source.AgreementToogleEvent += OnSource_AgreementToogleEvent;
+        }
+
+        private void OnSource_AgreementToogleEvent(object sender, bool userAgreed)
+        {
+            ViewModel.AgreementToogleCommand.Execute(userAgreed);
         }
 
         private void Loading()

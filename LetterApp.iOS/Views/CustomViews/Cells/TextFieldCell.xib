@@ -44,9 +44,8 @@
                                     <constraint firstAttribute="height" constant="1" id="bz1-rU-Wf9"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqM-vw-Cdq">
-                                <rect key="frame" x="202" y="23" width="38" height="27"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqM-vw-Cdq">
+                                <rect key="frame" x="186" y="19.5" width="54" height="34"/>
                                 <state key="normal" title="Button"/>
                             </button>
                         </subviews>
