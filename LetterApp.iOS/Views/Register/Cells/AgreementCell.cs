@@ -9,16 +9,16 @@ namespace LetterApp.iOS.Views.Register.Cells
 {
     public partial class AgreementCell : UITableViewCell
     {
-        RegisterFormModel _registerForm;
+        bool _userAgreed;
         public static readonly NSString Key = new NSString("AgreementCell");
         public static readonly UINib Nib = UINib.FromName("AgreementCell", NSBundle.MainBundle);
         protected AgreementCell(IntPtr handle) : base(handle) {}
 
-        public void Configure(string text, RegisterFormModel registerForm)
+        public void Configure(string agreement, bool userAgreed)
         {
-            _registerForm = registerForm;
+            _userAgreed = userAgreed;
             ButtonState();
-            _label.AttributedText = StringExtensions.GetHTMLFormattedText(text, fontSize: 3);
+            _label.AttributedText = StringExtensions.GetHTMLFormattedText(agreement, fontSize: 3);
 
             _button.TouchUpInside -= OnButton_TouchUpInside;
             _button.TouchUpInside += OnButton_TouchUpInside;
@@ -26,13 +26,13 @@ namespace LetterApp.iOS.Views.Register.Cells
 
         private void OnButton_TouchUpInside(object sender, EventArgs e)
         {
-            _registerForm.UserAgreed = !_registerForm.UserAgreed;
+            _userAgreed = !_userAgreed;
             ButtonState();
         }
 
         private void ButtonState()
         {
-            _button.SetImage(_registerForm.UserAgreed ? UIImage.FromBundle("checkbox_full") : UIImage.FromBundle("checkbox_empty"), UIControlState.Normal);
+            _button.SetImage(_userAgreed ? UIImage.FromBundle("checkbox_full") : UIImage.FromBundle("checkbox_empty"), UIControlState.Normal);
         }
     }
 }

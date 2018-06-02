@@ -59,7 +59,7 @@ namespace LetterApp.iOS.Views.Register
 
         private void SetupTableView()
         {
-            _source = new RegisterSource(_tableView, ViewModel.LocationResources, ViewModel.RegisterForm, _backgroundView);
+            _source = new RegisterSource(_tableView, _backgroundView, ViewModel.FormModelList, ViewModel.AgreementLabel, ViewModel.UserAgreed);
             _tableView.BackgroundColor = Colors.MainBlue4;
             _tableView.Source = _source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;

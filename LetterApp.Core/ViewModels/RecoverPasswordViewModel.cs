@@ -140,13 +140,14 @@ namespace LetterApp.Core.ViewModels
         #region Resources
 
         public string NewPassTitle          => L10N.Localize("RecoverPasswordViewModel_NewPassTitle");
-        public string EmailAddressLabel     => L10N.Localize("RecoverPasswordViewModel_EmailAddress");
-        public string ConfirmPassLabel      => L10N.Localize("RecoverPasswordViewModel_ConfirmPass");
-        public string CodeLabel             => L10N.Localize("RecoverPasswordViewModel_Code");
-        public string RequestAgainButton    => L10N.Localize("RecoverPasswordViewModel_RequestAgain");
-        public string SubmitButton          => L10N.Localize("RecoverPasswordViewModel_Submit");
-        public string ShowButton            => L10N.Localize("RecoverPasswordViewModel_ShowButton");
-        public string HideButton            => L10N.Localize("RecoverPasswordViewModel_HideButton");
+        public string SubmitButton => L10N.Localize("RecoverPasswordViewModel_Submit");
+
+        private string EmailAddressLabel     => L10N.Localize("RecoverPasswordViewModel_EmailAddress");
+        private string ConfirmPassLabel      => L10N.Localize("RecoverPasswordViewModel_ConfirmPass");
+        private string CodeLabel             => L10N.Localize("RecoverPasswordViewModel_Code");
+        private string RequestAgainButton    => L10N.Localize("RecoverPasswordViewModel_RequestAgain");
+        private string ShowButton            => L10N.Localize("RecoverPasswordViewModel_ShowButton");
+        private string HideButton            => L10N.Localize("RecoverPasswordViewModel_HideButton");
         private string EmailConfirmation     => L10N.Localize("RecoverPasswordViewModel_EmailConfirmation");
         private string PasswordMatch         => L10N.Localize("RecoverPasswordViewModel_PasswordMatch");
         private string PasswordWeak          => L10N.Localize("RecoverPasswordViewModel_PasswordWeak");

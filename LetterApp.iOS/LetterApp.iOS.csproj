@@ -315,7 +315,6 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
     <InterfaceDefinition Include="Views\RecoverPassword\RecoverPasswordViewController.xib" />
     <InterfaceDefinition Include="Views\Register\RegisterViewController.xib" />
-    <InterfaceDefinition Include="Views\Register\Cells\FormCell.xib" />
     <InterfaceDefinition Include="Views\Register\Cells\AgreementCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\MainButtonCell.xib" />
     <InterfaceDefinition Include="Views\ActivateAccount\ActivateAccountViewController.xib" />
@@ -402,10 +401,6 @@
     </Compile>
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Sources\RegisterSource.cs" />
-    <Compile Include="Views\Register\Cells\FormCell.cs" />
-    <Compile Include="Views\Register\Cells\FormCell.designer.cs">
-      <DependentUpon>FormCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Register\Cells\AgreementCell.cs" />
     <Compile Include="Views\Register\Cells\AgreementCell.designer.cs">
       <DependentUpon>AgreementCell.cs</DependentUpon>
