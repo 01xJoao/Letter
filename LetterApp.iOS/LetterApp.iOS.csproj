@@ -300,6 +300,10 @@
     <Folder Include="Resources\Assets.xcassets\settings.imageset\" />
     <Folder Include="Resources\Assets.xcassets\add_circle.imageset\" />
     <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Views\SelectOrganization\" />
+    <Folder Include="Views\SelectDivision\" />
+    <Folder Include="Views\SelectPosition\" />
+    <Folder Include="Views\PendingApproval\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
