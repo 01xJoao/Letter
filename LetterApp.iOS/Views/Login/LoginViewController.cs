@@ -140,9 +140,10 @@ namespace LetterApp.iOS.Views.Login
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
         }
 
-        public override void ViewDidDisappear(bool animated)
+        public override void ViewWillDisappear(bool animated)
         {
-            base.ViewDidDisappear(animated);
+            base.ViewWillDisappear(animated);
+            _passwordTextField.Text = string.Empty;
         }
     }
 }

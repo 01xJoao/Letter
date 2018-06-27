@@ -124,8 +124,7 @@ namespace LetterApp.Core.Services
         {
             if (new DateTime(AppSettings.AuthTokenExpirationDate) < DateTime.UtcNow.AddDays(2))
                 await RefreshTokenAsync().ConfigureAwait(false);
-            
-            if (client.DefaultRequestHeaders.Authorization != null)
+            else if (client.DefaultRequestHeaders.Authorization != null)
                 return;
 
             if (!string.IsNullOrEmpty(AppSettings.AuthToken))
