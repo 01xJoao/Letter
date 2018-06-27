@@ -7,8 +7,10 @@ using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
+using LetterApp.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.RequestModels;
 using SharpRaven.Data;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -17,6 +19,12 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
+
+        public string UserEmail
+        {
+            get => AppSettings.UserEmail;
+            set => AppSettings.UserEmail = value;
+        }
 
         private bool _isValidEmail = true;
         public bool IsValidEmail
@@ -68,8 +76,13 @@ namespace LetterApp.Core.ViewModels
 
                 if(currentUser.StatusCode == 200)
                 {
+                    //TODO Should this be removed?
+                    AppSettings.Logout();
+
                     Realm.Write(() => Realm.Add(currentUser, true));
-                    await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                    UserEmail = value.Item1;
+                    await SecureStorage.SetAsync("password", value.Item2);
+                    await CheckUser();
                 }
                 else if (currentUser.StatusCode == 102)
                 {
@@ -92,7 +105,53 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-                private async Task OpenRegisterView()
+        private async Task CheckUser()
+        {
+            try
+            {
+                var userCheck = await _authService.CheckUser();
+
+                if (userCheck.StatusCode == 200)
+                {
+                    var user = Realm.Find<UserModel>(userCheck.UserID);
+
+                    Realm.Write(() =>
+                    {
+                        user.IsUserActive = userCheck.IsUserActive;
+                        user.Position = userCheck.Position;
+                        user.OrganizationID = userCheck.OrganizationID;
+                        user.Divisions = userCheck.Divisions;
+                    });
+
+                    if (user.OrganizationID == null)
+                    {
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
+                    }
+                    else if (user.Divisions == null)
+                    {
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, int>((int)user.OrganizationID);
+                    }
+                    else if (string.IsNullOrEmpty(user.Position))
+                    {
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)user.OrganizationID);
+                    }
+                    else
+                    {
+                        AppSettings.IsUserLogged = true;
+                        await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                    }
+                }
+                else
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(userCheck.StatusCode), AlertType.Error);
+            }
+            catch (Exception ex)
+            {
+                RavenService.Raven.Capture(new SentryEvent(ex));
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task OpenRegisterView()
         {
             await NavigationService.NavigateAsync<RegisterViewModel, object>(null);
         }

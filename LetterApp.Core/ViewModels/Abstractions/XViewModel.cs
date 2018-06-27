@@ -32,16 +32,21 @@ namespace LetterApp.Core.ViewModels.Abstractions
         public bool IsBusy
         {
             get => _isBusy;
-            set 
-            { 
-                _isBusy = value; 
-                RaisePropertyChanged(nameof(IsBusy)); 
+            set
+            {
+                _isBusy = value;
+                RaisePropertyChanged(nameof(IsBusy));
             }
         }
 
         public void InitializeViewModel()
-        {            
-            _realm = Realm.GetInstance(new RealmConfiguration { SchemaVersion = 3 });
+        {
+            #if DEBUG
+                _realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #else
+                _realm = Realm.GetInstance();
+            #endif
+
             InitializeAsync();
         }
 

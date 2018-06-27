@@ -13,7 +13,6 @@ namespace LetterApp.iOS.Views.ActivateAccount
     {
         public override bool HandlesKeyboardNotifications => true;
         public override bool ShowAsPresentView => true;
-        private LOTAnimationView _lottieAnimation;
 
         public ActivateAccountViewController() : base("ActivateAccountViewController", null) {}
 
@@ -49,7 +48,7 @@ namespace LetterApp.iOS.Views.ActivateAccount
             UIButtonExtensions.SetupButtonAppearance(keyboardButton, Colors.White, 16f, ViewModel.SubmitButton);
             keyboardButton.TouchUpInside -= OnSubmitButton_TouchUpInside;
             keyboardButton.TouchUpInside += OnSubmitButton_TouchUpInside;
-            UITextFieldExtensions.AddViewToKeyboard(_textField, keyboardButton);
+            UITextFieldExtensions.AddViewToKeyboard(_textField, keyboardButton, Colors.MainBlue);
 
             _textField.AutocorrectionType = UITextAutocorrectionType.No;
             _textField.TextContentType = new NSString("");
@@ -73,7 +72,7 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         private void Loading()
         {
-            _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _button, ViewModel.SubmitButton, ViewModel.IsActivating);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _button, ViewModel.SubmitButton, ViewModel.IsActivating);
         }
 
         private void OnRequestCodeButton_TouchUpInside(object sender, EventArgs e)
@@ -97,8 +96,6 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         public override void ViewDidDisappear(bool animated)
         {
-            _lottieAnimation?.Dispose();
-            _lottieAnimation = null;
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
         }

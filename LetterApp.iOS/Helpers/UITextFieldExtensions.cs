@@ -29,7 +29,7 @@ namespace LetterApp.iOS.Helpers
             textField.EditingDidBegin += (sender, e) =>
             {
                 if (keyboardButton != null)
-                    AddViewToKeyboard(textField, keyboardButton);
+                    AddViewToKeyboard(textField, keyboardButton, Colors.MainBlue);
                 
                 divider.BackgroundColor = Colors.MainBlue;
                 indicator.TextColor = Colors.MainBlue;
@@ -57,11 +57,11 @@ namespace LetterApp.iOS.Helpers
             return nextResponder != null && textField.ReturnKeyType == UIReturnKeyType.Next ? nextResponder.BecomeFirstResponder() : textField.ResignFirstResponder();
         }
 
-        public static void AddViewToKeyboard(UITextField textField, UIButton button)
+        public static void AddViewToKeyboard(UITextField textField, UIButton button, UIColor buttonColor)
         {
             UIToolbar toolbar = new UIToolbar(new RectangleF(0f, 0f, 0f, 50f));
             toolbar.Translucent = false;
-            toolbar.BarTintColor = Colors.MainBlue;
+            toolbar.BarTintColor = buttonColor;
             button.Frame = toolbar.Frame;
             toolbar.Items = new UIBarButtonItem[] { new UIBarButtonItem(button) };
             textField.InputAccessoryView = toolbar;
@@ -75,11 +75,14 @@ namespace LetterApp.iOS.Helpers
             textField.InputAccessoryView = toolbar;
         }
 
-        public static void SetupTextFieldAppearance(UITextField textField, UIColor color, nfloat textSize, UIFontWeight fontWeight = UIFontWeight.Regular)
+        public static void SetupTextFieldAppearance(UITextField textField, UIColor textColor, nfloat textSize, string hint, UIColor hintColor, UIColor cursorColor, UIColor backgroundColor,
+                                                    UIFontWeight fontWeight = UIFontWeight.Regular)
         {
-            textField.TextColor = color;
-            textField.TintColor = Colors.MainBlue;
+            textField.TextColor = textColor;
             textField.Font = UIFont.SystemFontOfSize(textSize, fontWeight);
+            textField.AttributedPlaceholder = new NSAttributedString(hint, new UIStringAttributes(){ ForegroundColor = hintColor } );
+            textField.TintColor = cursorColor;
+            textField.BackgroundColor = backgroundColor;
         }
     }
 }

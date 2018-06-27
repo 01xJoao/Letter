@@ -298,5 +298,17 @@
   {
     "key": "ActivateAccountViewModel_ActivationCompleted",
     "translated": "your account has been activated! \n Please Sign In."
+  },
+  {
+    "key": "SelectOrganization_AccessButton",
+    "translated": "Access"
+  },
+  {
+    "key": "SelectOrganization_TitleLabel",
+    "translated": "Enter organization name or email you want to join:"
+  },
+  {
+    "key": "SelectOrganization_TextHint",
+    "translated": "Type organization..."
   }
 ]

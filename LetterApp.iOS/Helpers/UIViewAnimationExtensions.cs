@@ -8,36 +8,35 @@ namespace LetterApp.iOS.Helpers
 {
     public static class UIViewAnimationExtensions
     {
-        public static LOTAnimationView CustomButtomLoadingAnimation(LOTAnimationView lottieAnimation, string animationName, UIButton button, string viewText, bool shouldAnimate)
+        private static LOTAnimationView _lottieAnimation;
+
+        public static void CustomButtomLoadingAnimation(string animationName, UIButton button, string viewText, bool shouldAnimate)
         {
             if (shouldAnimate)
             {
-                if (lottieAnimation == null)
-                {
-                    lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
-                    lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
-                    lottieAnimation.Frame = button.Frame;
-                    button.AddSubview(lottieAnimation);
-                    lottieAnimation.LoopAnimation = true;
-                }
+                _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
+                _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+                _lottieAnimation.Frame = button.Frame;
+                button.AddSubview(_lottieAnimation);
+                _lottieAnimation.LoopAnimation = true;
 
                 button.SetTitle("", UIControlState.Normal);
-                lottieAnimation.AnimationProgress = 0;
-                lottieAnimation.Hidden = false;
-                lottieAnimation.Play();
+                _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.Hidden = false;
+                _lottieAnimation.Play();
             }
             else
             {
-                if (lottieAnimation != null)
+                if (_lottieAnimation != null)
                 {
-                    lottieAnimation.Hidden = true;
-                    lottieAnimation.Pause();
+                    _lottieAnimation.Hidden = true;
+                    _lottieAnimation.Pause();
+                    _lottieAnimation?.Dispose();
+                    _lottieAnimation = null;
                 }
 
                 button.SetTitle(viewText, UIControlState.Normal);
             }
-
-            return lottieAnimation;
         }
 
         public static void AnimateBackgroundView(UIView view, nfloat animationHeight, bool shouldAnimate)

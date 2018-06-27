@@ -13,7 +13,6 @@ namespace LetterApp.iOS.Views.Login
     public partial class LoginViewController : XViewController<LoginViewModel>, IRootView
     {
         public override bool HandlesKeyboardNotifications => true;
-        private LOTAnimationView _lottieAnimation;
         private bool keyboardViewState;
 
         public LoginViewController() : base("LoginViewController", null) {}
@@ -97,11 +96,17 @@ namespace LetterApp.iOS.Views.Login
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
             _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
+
+            if(!string.IsNullOrEmpty(ViewModel.UserEmail))
+            {
+                _emailTextField.Text = ViewModel.UserEmail;
+                _emailLabel.Alpha = 1;
+            }
         }
 
         private void Loading()
         {
-            _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
+             UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
         }
 
         private void InvalidMail()
@@ -137,8 +142,6 @@ namespace LetterApp.iOS.Views.Login
 
         public override void ViewDidDisappear(bool animated)
         {
-            _lottieAnimation?.Dispose();
-            _lottieAnimation = null;
             base.ViewDidDisappear(animated);
         }
     }

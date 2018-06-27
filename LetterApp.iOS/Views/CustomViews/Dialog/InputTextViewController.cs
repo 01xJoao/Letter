@@ -67,7 +67,6 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             if(!string.IsNullOrEmpty(_inputContent))
             {
                 _textField.Text = _inputContent;
-                _indicatorLabel.TextColor = Colors.GrayIndicator;
                 _indicatorLabel.Alpha = 1;
             }
 
