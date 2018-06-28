@@ -310,5 +310,17 @@
   {
     "key": "SelectOrganization_TextHint",
     "translated": "Type organization..."
+  },
+  {
+    "key": "SelectOrganization_Organization",
+    "translated": "Organization"
+  },
+  {
+    "key": "SelectOrganization_AccessHint",
+    "translated": "Access Code"
+  },
+  {
+    "key": "SelectOrganization_EnterButton",
+    "translated": "Enter"
   }
 ]

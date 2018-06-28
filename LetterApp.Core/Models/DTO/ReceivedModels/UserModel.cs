@@ -8,6 +8,7 @@ namespace LetterApp.Models.DTO.ReceivedModels
     {
         [PrimaryKey]
         public int UserID { get; set; }
+        [Indexed]
         public string Email { get; set; }
         [Indexed]
         public string FirstName { get; set; }

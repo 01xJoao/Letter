@@ -4,6 +4,7 @@ using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Services;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 
@@ -13,6 +14,7 @@ namespace LetterApp.Core.ViewModels
     {
         private IOrganizationSerivce _organizationSerivce;
         private IDialogService _dialogService;
+        private IStatusCodeService _statusCodeService;
 
         private XPCommand<string> _accessOrgCommand;
         public XPCommand<string> AccessOrgCommand => _accessOrgCommand ?? (_accessOrgCommand = new XPCommand<string>(async (orgName) => await AccessOrganization(orgName), CanExecute));
@@ -22,10 +24,11 @@ namespace LetterApp.Core.ViewModels
 
         public string EmailDomain { get; private set; }
 
-        public SelectOrganizationViewModel(IOrganizationSerivce organizationSerivce, IDialogService dialogService)
+        public SelectOrganizationViewModel(IOrganizationSerivce organizationSerivce, IDialogService dialogService, IStatusCodeService statusCodeService)
         {
             _organizationSerivce = organizationSerivce;
             _dialogService = dialogService;
+            _statusCodeService = statusCodeService;
         }
 
         protected override void Prepare(string email)
@@ -39,7 +42,23 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                //service
+                var organization = await _organizationSerivce.VerifyOrganization(orgName);
+
+                if(organization.StatusCode == 200)
+                {
+                    if (!organization.RequiresAccessCode)
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, int>(organization.OrganizationID);
+                    else
+                    {
+                        IsBusy = false;
+                        await _dialogService.ShowTextInput(organizationLabel, organization.Name, string.Empty, EnterButton, AccessHint, InputType.Text);
+                    }
+                }
+                else
+                {
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(organization.StatusCode), AlertType.Error);
+                }
+
             }
             catch (Exception ex)
             {
@@ -62,9 +81,13 @@ namespace LetterApp.Core.ViewModels
 
         #region Resources
 
-        public string TitleLabel => L10N.Localize("SelectOrganization_TitleLabel");
-        public string AccessButton => L10N.Localize("SelectOrganization_AccessButton");
-        public string OrganizationHint => L10N.Localize("SelectOrganization_TextHint");
+        public string TitleLabel        => L10N.Localize("SelectOrganization_TitleLabel");
+        public string AccessButton      => L10N.Localize("SelectOrganization_AccessButton");
+        public string OrganizationHint  => L10N.Localize("SelectOrganization_TextHint");
+
+        private string organizationLabel => L10N.Localize("SelectOrganization_Organization");
+        private string AccessHint        => L10N.Localize("SelectOrganization_AccessHint");
+        private string EnterButton       => L10N.Localize("SelectOrganization_EnterButton");
 
         #endregion
     }

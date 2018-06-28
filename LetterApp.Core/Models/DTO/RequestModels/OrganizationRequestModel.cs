@@ -5,8 +5,8 @@ namespace LetterApp.Models.DTO.RequestModels
 {
     public class OrganizationRequestModel
     {
-        [JsonProperty("email")]
-        public string Email { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
         [JsonProperty("code")]
         public string AccessCode { get; set; }

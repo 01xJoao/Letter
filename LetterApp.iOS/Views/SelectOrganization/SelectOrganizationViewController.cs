@@ -83,6 +83,8 @@ namespace LetterApp.iOS.Views.SelectOrganization
 
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
         {
+            if (ViewModel.AccessOrgCommand.CanExecute(_textField.Text))
+                ViewModel.AccessOrgCommand.Execute(_textField.Text);
         }
 
         public override void ViewWillAppear(bool animated)

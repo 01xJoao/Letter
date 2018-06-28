@@ -143,6 +143,7 @@ namespace LetterApp.iOS.Views.Login
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+            _passwordLabel.Alpha = 0;
             _passwordTextField.Text = string.Empty;
         }
     }
