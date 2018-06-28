@@ -7,12 +7,13 @@ using LetterApp.Core.Localization;
 using LetterApp.Core.Services;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
+using LetterApp.Models.DTO.RequestModels;
 
 namespace LetterApp.Core.ViewModels
 {
     public class SelectOrganizationViewModel : XViewModel<string>
     {
-        private IOrganizationSerivce _organizationSerivce;
+        private IOrganizationService _organizationSerivce;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
 
@@ -24,7 +25,7 @@ namespace LetterApp.Core.ViewModels
 
         public string EmailDomain { get; private set; }
 
-        public SelectOrganizationViewModel(IOrganizationSerivce organizationSerivce, IDialogService dialogService, IStatusCodeService statusCodeService)
+        public SelectOrganizationViewModel(IOrganizationService organizationSerivce, IDialogService dialogService, IStatusCodeService statusCodeService)
         {
             _organizationSerivce = organizationSerivce;
             _dialogService = dialogService;
@@ -51,7 +52,18 @@ namespace LetterApp.Core.ViewModels
                     else
                     {
                         IsBusy = false;
-                        await _dialogService.ShowTextInput(organizationLabel, organization.Name, string.Empty, EnterButton, AccessHint, InputType.Text);
+                        var result = await _dialogService.ShowTextInput(organizationLabel, organization.Name, string.Empty, EnterButton, AccessHint, InputType.Text);
+
+                        if(!string.IsNullOrEmpty(result))
+                        {
+                            var orgCode = new OrganizationRequestModel(orgName, result);
+                            var res = await _organizationSerivce.AccessCodeOrganization(orgCode);
+
+                            if(res.StatusCode == 200)
+                                await NavigationService.NavigateAsync<SelectDivisionViewModel, int>(organization.OrganizationID);
+                            else
+                                _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Error);
+                        }
                     }
                 }
                 else

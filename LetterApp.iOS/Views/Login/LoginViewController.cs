@@ -86,13 +86,11 @@ namespace LetterApp.iOS.Views.Login
             keyboardButton.TouchUpInside += OnSignInButton_TouchUpInside;
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
-            UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel,
-                                             UIReturnKeyType.Next, keyboardButton);
+            UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel, UIReturnKeyType.Next, keyboardButton);
             
             _passwordTextField.SecureTextEntry = true;
             _passwordWithConstraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (_forgotPassButton.Frame.Width + 7);
-            UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, 
-                                             UIReturnKeyType.Default, keyboardButton);
+            UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, UIReturnKeyType.Default, keyboardButton);
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
             _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
