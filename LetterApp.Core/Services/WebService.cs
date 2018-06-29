@@ -100,7 +100,7 @@ namespace LetterApp.Core.Services
                     throw new WrongCredentialsException();
             }
 
-            if (content.Contains("error"))
+            if ((content.Contains("error") && content.Contains("SQLSTATE[")))
                 throw new ServerErrorException();
 
             if (!response.IsSuccessStatusCode)

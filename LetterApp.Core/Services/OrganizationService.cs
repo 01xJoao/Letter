@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Models.DTO.ReceivedModels;
@@ -23,6 +24,11 @@ namespace LetterApp.Core.Services
         public async Task<OrganizationAccessModel> AccessCodeOrganization(OrganizationRequestModel organizationCode)
         {
             return await _webService.PostAsync<OrganizationAccessModel>("organization/verifycode", organizationCode, needsHeaderCheck: true).ConfigureAwait(false);
+        }
+
+        public async Task<List<DivisionModel>> GetDivisions(int organizationId)
+        {
+            return await _webService.GetAsync<List<DivisionModel>>($"organization/getdivisions/{organizationId}", needsHeaderCheck: true).ConfigureAwait(false);
         }
     }
 }

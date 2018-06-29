@@ -13,7 +13,7 @@ namespace LetterApp.Core.ViewModels
 {
     public class SelectOrganizationViewModel : XViewModel<string>
     {
-        private IOrganizationService _organizationSerivce;
+        private IOrganizationService _organizationService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
 
@@ -25,9 +25,9 @@ namespace LetterApp.Core.ViewModels
 
         public string EmailDomain { get; private set; }
 
-        public SelectOrganizationViewModel(IOrganizationService organizationSerivce, IDialogService dialogService, IStatusCodeService statusCodeService)
+        public SelectOrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService)
         {
-            _organizationSerivce = organizationSerivce;
+            _organizationService = organizationService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
         }
@@ -43,9 +43,9 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var organization = await _organizationSerivce.VerifyOrganization(orgName);
+                var organization = await _organizationService.VerifyOrganization(orgName);
 
-                if(organization.StatusCode == 200)
+                if(organization?.StatusCode == 200)
                 {
                     if (!organization.RequiresAccessCode)
                         await NavigationService.NavigateAsync<SelectDivisionViewModel, int>(organization.OrganizationID);
@@ -57,7 +57,7 @@ namespace LetterApp.Core.ViewModels
                         if(!string.IsNullOrEmpty(result))
                         {
                             var orgCode = new OrganizationRequestModel(orgName, result);
-                            var res = await _organizationSerivce.AccessCodeOrganization(orgCode);
+                            var res = await _organizationService.AccessCodeOrganization(orgCode);
 
                             if(res.StatusCode == 200)
                                 await NavigationService.NavigateAsync<SelectDivisionViewModel, int>(organization.OrganizationID);
@@ -68,7 +68,7 @@ namespace LetterApp.Core.ViewModels
                 }
                 else
                 {
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(organization.StatusCode), AlertType.Error);
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(organization?.StatusCode), AlertType.Error);
                 }
 
             }

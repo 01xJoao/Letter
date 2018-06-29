@@ -39,6 +39,32 @@ namespace LetterApp.iOS.Helpers
             }
         }
 
+        public static void CustomViewLoadingAnimation(string animationName, UIView view, bool shouldAnimate)
+        {
+            if (shouldAnimate)
+            {
+                _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
+                _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+                _lottieAnimation.Frame = view.Frame;
+                view.AddSubview(_lottieAnimation);
+                _lottieAnimation.LoopAnimation = true;
+
+                _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.Hidden = false;
+                _lottieAnimation.Play();
+            }
+            else
+            {
+                if (_lottieAnimation != null)
+                {
+                    _lottieAnimation.Hidden = true;
+                    _lottieAnimation.Pause();
+                    _lottieAnimation?.Dispose();
+                    _lottieAnimation = null;
+                }
+            }
+        }
+
         public static void AnimateBackgroundView(UIView view, nfloat animationHeight, bool shouldAnimate)
         {
             if (shouldAnimate)

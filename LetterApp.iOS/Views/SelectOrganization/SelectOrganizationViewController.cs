@@ -84,13 +84,22 @@ namespace LetterApp.iOS.Views.SelectOrganization
         private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
         {
             if (ViewModel.AccessOrgCommand.CanExecute(_textField.Text))
+            {
                 ViewModel.AccessOrgCommand.Execute(_textField.Text);
+                _textField.ResignFirstResponder();
+            }
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            base.ViewDidDisappear(animated);
         }
     }
 }
