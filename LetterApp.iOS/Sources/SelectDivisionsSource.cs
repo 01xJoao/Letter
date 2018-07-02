@@ -73,26 +73,29 @@ namespace LetterApp.iOS.Sources
                     var divisionCell = tableView.DequeueReusableCell(DivisionCell.Key) as DivisionCell;
                     divisionCell.Configure(_divisions[indexPath.Row]);
                     cell = divisionCell;
+                    cell.SelectedBackgroundView = new UIView { BackgroundColor = Colors.MainBlue.ColorWithAlpha(0.5f) };
                     break;
 
                 case (int)Sections.Separator:
                     var separatorCell = tableView.DequeueReusableCell(LineSeparatorCell.Key) as LineSeparatorCell;
                     cell = separatorCell;
+                    cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     break;
 
                 case (int)Sections.InsertDivision:
                     var insertCell = tableView.DequeueReusableCell(InsertDivisionFieldCell.Key) as InsertDivisionFieldCell;
                     insertCell.Configure(_locationResources["Insert"], _locationResources["Submit"], OnSubmitButton, _scrollsToRowEvent);
                     cell = insertCell;
+                    cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     break;
 
                 case (int)Sections.LeaveOrganization:
                     var leaveCell = tableView.DequeueReusableCell(LeaveOrganizationCell.Key) as LeaveOrganizationCell;
                     leaveCell.Configure(_locationResources["Leave"]);
                     cell = leaveCell;
+                    cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     break;
             }
-            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             return cell;
         }
 
@@ -122,7 +125,11 @@ namespace LetterApp.iOS.Sources
             }
         }
 
-        public override void RowSelected(UITableView tableView, NSIndexPath indexPath) => OnDivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            OnDivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
+            tableView.DeselectRow(indexPath, true);
+        }
 
         private void ScrollsToRow(object sender, EventArgs e)
         {

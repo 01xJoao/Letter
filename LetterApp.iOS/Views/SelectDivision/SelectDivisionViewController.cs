@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Airbnb.Lottie;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -34,16 +35,21 @@ namespace LetterApp.iOS.Views.SelectDivision
                     SetupTableView();
                     break;
                 case nameof(ViewModel.IsLoading):
-                    Loading();
+                    Loading(ViewModel.IsLoading);
                     break;
                 default:
                     break;
             }
         }
 
-        private void Loading()
+        public override void ViewDidAppear(bool animated)
         {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading_white", _tableView, ViewModel.IsLoading);
+            Loading(ViewModel.IsLoading);
+        }
+
+        private void Loading(bool shouldAnimate)
+        {
+            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading_white", this.View, _loadingView, shouldAnimate);
         }
 
         private void SetupTableView()

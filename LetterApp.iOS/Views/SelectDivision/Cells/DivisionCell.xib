@@ -20,20 +20,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ar0-E9-PMx">
-                        <rect key="frame" x="35" y="13" width="60" height="60"/>
+                        <rect key="frame" x="40" y="13" width="60" height="60"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="Ar0-E9-PMx" secondAttribute="height" multiplier="1:1" id="Uyd-JI-ZU7"/>
                             <constraint firstAttribute="height" constant="60" id="jsh-fA-tIX"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qR8-r5-hiZ">
-                        <rect key="frame" x="116" y="26" width="252" height="19.5"/>
+                        <rect key="frame" x="121" y="23" width="247" height="19.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gi1-t0-TeR">
-                        <rect key="frame" x="116" y="46.5" width="252" height="14.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gi1-t0-TeR">
+                        <rect key="frame" x="121" y="43.5" width="247" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -41,11 +41,11 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="qR8-r5-hiZ" firstAttribute="top" secondItem="Ar0-E9-PMx" secondAttribute="top" constant="13" id="7T5-wG-Axh"/>
+                    <constraint firstItem="qR8-r5-hiZ" firstAttribute="top" secondItem="Ar0-E9-PMx" secondAttribute="top" constant="10" id="7T5-wG-Axh"/>
                     <constraint firstItem="Gi1-t0-TeR" firstAttribute="top" secondItem="qR8-r5-hiZ" secondAttribute="bottom" constant="1" id="CZE-ol-68f"/>
                     <constraint firstItem="qR8-r5-hiZ" firstAttribute="leading" secondItem="Ar0-E9-PMx" secondAttribute="trailing" constant="21" id="J0R-5O-GVC"/>
                     <constraint firstItem="Ar0-E9-PMx" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="PtS-ch-rTg"/>
-                    <constraint firstItem="Ar0-E9-PMx" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="35" id="Ttj-FU-Jt2"/>
+                    <constraint firstItem="Ar0-E9-PMx" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="40" id="Ttj-FU-Jt2"/>
                     <constraint firstAttribute="trailing" secondItem="qR8-r5-hiZ" secondAttribute="trailing" priority="750" constant="23" id="VhX-hx-2F3"/>
                     <constraint firstItem="Gi1-t0-TeR" firstAttribute="trailing" secondItem="qR8-r5-hiZ" secondAttribute="trailing" id="duZ-AL-izt"/>
                     <constraint firstItem="Gi1-t0-TeR" firstAttribute="leading" secondItem="qR8-r5-hiZ" secondAttribute="leading" id="ibR-yh-Ldk"/>

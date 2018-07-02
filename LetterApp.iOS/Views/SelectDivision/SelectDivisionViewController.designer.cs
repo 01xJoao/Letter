@@ -19,6 +19,9 @@ namespace LetterApp.iOS.Views.SelectDivision
 		UIKit.UIButton _closeButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView _loadingView { get; set; }
+
+		[Outlet]
 		UIKit.UITableView _tableView { get; set; }
 
 		[Outlet]
@@ -36,14 +39,19 @@ namespace LetterApp.iOS.Views.SelectDivision
 				_closeButton = null;
 			}
 
+			if (_tableView != null) {
+				_tableView.Dispose ();
+				_tableView = null;
+			}
+
 			if (_titleLabel != null) {
 				_titleLabel.Dispose ();
 				_titleLabel = null;
 			}
 
-			if (_tableView != null) {
-				_tableView.Dispose ();
-				_tableView = null;
+			if (_loadingView != null) {
+				_loadingView.Dispose ();
+				_loadingView = null;
 			}
 		}
 	}

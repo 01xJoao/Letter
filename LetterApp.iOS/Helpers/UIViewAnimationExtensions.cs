@@ -10,11 +10,11 @@ namespace LetterApp.iOS.Helpers
     {
         private static LOTAnimationView _lottieAnimation;
 
-        public static void CustomButtomLoadingAnimation(string animationName, UIButton button, string viewText, bool shouldAnimate)
+        public static void CustomButtomLoadingAnimation(string animation, UIButton button, string viewText, bool shouldAnimate)
         {
             if (shouldAnimate)
             {
-                _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
+                _lottieAnimation = LOTAnimationView.AnimationNamed(animation);
                 _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
                 _lottieAnimation.Frame = button.Frame;
                 button.AddSubview(_lottieAnimation);
@@ -39,18 +39,18 @@ namespace LetterApp.iOS.Helpers
             }
         }
 
-        public static void CustomViewLoadingAnimation(string animationName, UIView view, bool shouldAnimate)
+        public static void CustomViewLoadingAnimation(string animation, UIView mainView, UIView view, bool shouldAnimate)
         {
             if (shouldAnimate)
             {
-                _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
-                _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
+                _lottieAnimation = LOTAnimationView.AnimationNamed(animation);
+                _lottieAnimation.Center = view.Center;
                 _lottieAnimation.Frame = view.Frame;
-                view.AddSubview(_lottieAnimation);
+                mainView.AddSubview(_lottieAnimation);
                 _lottieAnimation.LoopAnimation = true;
-
-                _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
                 _lottieAnimation.Hidden = false;
+                _lottieAnimation.AnimationProgress = 0;
                 _lottieAnimation.Play();
             }
             else

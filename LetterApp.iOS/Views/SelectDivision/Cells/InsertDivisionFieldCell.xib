@@ -19,23 +19,23 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FX9-Dn-DTf">
-                        <rect key="frame" x="33" y="15" width="326" height="17"/>
+                        <rect key="frame" x="40" y="15" width="312" height="17"/>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uRr-Tl-UKO">
-                        <rect key="frame" x="33" y="37" width="326" height="2"/>
+                        <rect key="frame" x="40" y="40" width="312" height="2"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="2" id="gZa-9Z-Dey"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OkH-dK-cY2">
-                        <rect key="frame" x="33" y="76" width="326" height="50"/>
+                        <rect key="frame" x="40" y="79" width="312" height="50"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="458-p6-5id">
-                                <rect key="frame" x="0.0" y="0.0" width="326" height="50"/>
+                                <rect key="frame" x="0.0" y="0.0" width="312" height="50"/>
                                 <state key="normal" title="Button"/>
                             </button>
                         </subviews>
@@ -55,12 +55,12 @@
                     <constraint firstItem="OkH-dK-cY2" firstAttribute="leading" secondItem="FX9-Dn-DTf" secondAttribute="leading" id="3Ay-DF-qJk"/>
                     <constraint firstItem="OkH-dK-cY2" firstAttribute="top" secondItem="uRr-Tl-UKO" secondAttribute="bottom" constant="37" id="3Lk-3L-es4"/>
                     <constraint firstItem="FX9-Dn-DTf" firstAttribute="trailing" secondItem="uRr-Tl-UKO" secondAttribute="trailing" id="7I5-4O-CEj"/>
-                    <constraint firstAttribute="trailing" secondItem="uRr-Tl-UKO" secondAttribute="trailing" constant="33" id="NOq-1s-q7F"/>
+                    <constraint firstAttribute="trailing" secondItem="uRr-Tl-UKO" secondAttribute="trailing" constant="40" id="NOq-1s-q7F"/>
                     <constraint firstItem="OkH-dK-cY2" firstAttribute="trailing" secondItem="FX9-Dn-DTf" secondAttribute="trailing" id="O7l-CN-8DY"/>
                     <constraint firstItem="FX9-Dn-DTf" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="15" id="R3r-eT-t0e"/>
                     <constraint firstItem="FX9-Dn-DTf" firstAttribute="leading" secondItem="uRr-Tl-UKO" secondAttribute="leading" id="WjR-kc-NAT"/>
-                    <constraint firstItem="uRr-Tl-UKO" firstAttribute="top" secondItem="FX9-Dn-DTf" secondAttribute="bottom" constant="5" id="gy0-Xv-mGQ"/>
-                    <constraint firstItem="uRr-Tl-UKO" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="33" id="hp3-Mt-X5Q"/>
+                    <constraint firstItem="uRr-Tl-UKO" firstAttribute="top" secondItem="FX9-Dn-DTf" secondAttribute="bottom" constant="8" id="gy0-Xv-mGQ"/>
+                    <constraint firstItem="uRr-Tl-UKO" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="40" id="hp3-Mt-X5Q"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

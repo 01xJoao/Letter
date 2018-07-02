@@ -28,9 +28,9 @@ namespace LetterApp.iOS.Helpers
         {
             view.ClipsToBounds = false;
             view.Layer.ShadowColor = Colors.Black.CGColor;
-            view.Layer.ShadowOpacity = 3f;
+            view.Layer.ShadowOpacity = 6f;
             view.Layer.ShadowOffset = new CGSize(0, 1f);
-            view.Layer.ShadowRadius = 2f;
+            view.Layer.ShadowRadius = 3f;
         }
     }
 }

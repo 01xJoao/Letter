@@ -25,7 +25,7 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _divisions, value);
         }
 
-        private bool _isLoading;
+        private bool _isLoading = true;
         public bool IsLoading
         {
             get => _isLoading;
@@ -49,7 +49,6 @@ namespace LetterApp.Core.ViewModels
             SetL10NResources();
 
             IsBusy = true;
-            IsLoading = true;
 
             try
             {

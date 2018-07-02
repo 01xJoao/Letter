@@ -7,18 +7,11 @@ namespace LetterApp.iOS.Helpers
 {
     public static class ImageHelper
     {
-        public static string Image;
-
-        public static Task<Stream> GetStreamFromImageByte(CancellationToken ct)
+        public static Task<Stream> GetStreamFromImageByte(CancellationToken ct, string image)
         {
-            //Here you set your bytes[] (image)
-            byte[] imageInBytes = Convert.FromBase64String(Image);
-
-            //Since we need to return a Task<Stream> we will use a TaskCompletionSource>
+            byte[] imageInBytes = Convert.FromBase64String(image);
             TaskCompletionSource<Stream> tcs = new TaskCompletionSource<Stream>();
-
             tcs.TrySetResult(new MemoryStream(imageInBytes));
-
             return tcs.Task;
         }
     }
