@@ -33,6 +33,7 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
                 _imageView.Image = new UIImage();
                 _imageView.BackgroundColor = Colors.Black30;
             }
+
             CustomUIExtensions.ImageShadow(_imageView);
 
             UILabelExtensions.SetupLabelAppearance(_titleLabel, division.Name, Colors.White, 16f, UIFontWeight.Bold);

@@ -47,17 +47,17 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NTR-Xe-UqO">
-                            <rect key="frame" x="23" y="33" width="20" height="20"/>
+                            <rect key="frame" x="23" y="40" width="20" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="20" id="8Lm-0M-7nE"/>
                                 <constraint firstAttribute="height" constant="20" id="hix-bD-i6j"/>
                             </constraints>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MX1-uj-1d0">
-                            <rect key="frame" x="0.0" y="53" width="375" height="225.5"/>
+                            <rect key="frame" x="0.0" y="60" width="375" height="218.5"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6BI-wv-N2C">
-                                    <rect key="frame" x="40" y="102.5" width="295" height="20.5"/>
+                                    <rect key="frame" x="40" y="99" width="295" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -97,7 +97,7 @@
                         <constraint firstItem="6BI-wv-N2C" firstAttribute="trailing" secondItem="sFk-vX-9F8" secondAttribute="trailing" id="PvK-hS-E2k"/>
                         <constraint firstItem="x5D-ny-fu6" firstAttribute="trailing" secondItem="sFk-vX-9F8" secondAttribute="trailing" id="T0V-X8-nDY"/>
                         <constraint firstItem="sFk-vX-9F8" firstAttribute="centerX" secondItem="Jiw-0d-TG2" secondAttribute="centerX" id="VeQ-M2-Hnh"/>
-                        <constraint firstItem="NTR-Xe-UqO" firstAttribute="top" secondItem="Jiw-0d-TG2" secondAttribute="top" constant="33" id="WBm-lh-1Ia"/>
+                        <constraint firstItem="NTR-Xe-UqO" firstAttribute="top" secondItem="Jiw-0d-TG2" secondAttribute="top" constant="40" id="WBm-lh-1Ia"/>
                         <constraint firstItem="NTR-Xe-UqO" firstAttribute="leading" secondItem="Jiw-0d-TG2" secondAttribute="leading" constant="23" id="aSR-Jp-7R4"/>
                         <constraint firstItem="MX1-uj-1d0" firstAttribute="leading" secondItem="Jiw-0d-TG2" secondAttribute="leading" id="erm-dh-EXM"/>
                         <constraint firstAttribute="trailing" secondItem="MX1-uj-1d0" secondAttribute="trailing" id="hAb-y9-dm4"/>

@@ -14,10 +14,11 @@ namespace LetterApp.iOS.Sources
         private UITableView _tableView;
         private List<DivisionModel> _divisions;
         private Dictionary<string, string> _locationResources;
-        private EventHandler _scrollsToRowEvent;
+        private EventHandler<bool> _scrollsToRowEvent;
 
-        public event EventHandler<DivisionModel> OnDivisionSelectedEvent;
-        public event EventHandler<string> OnSubmitButton;
+        public event EventHandler<DivisionModel> DivisionSelectedEvent;
+        public event EventHandler<string> SubmitButtonEvent;
+        public event EventHandler LeaveOrganizationEvent;
 
         public SelectDivisionsSource(UITableView tableView, List<DivisionModel> divisions, Dictionary<string, string> locationResources)
         {
@@ -84,14 +85,14 @@ namespace LetterApp.iOS.Sources
 
                 case (int)Sections.InsertDivision:
                     var insertCell = tableView.DequeueReusableCell(InsertDivisionFieldCell.Key) as InsertDivisionFieldCell;
-                    insertCell.Configure(_locationResources["Insert"], _locationResources["Submit"], OnSubmitButton, _scrollsToRowEvent);
+                    insertCell.Configure(_locationResources["Insert"], _locationResources["Submit"], SubmitButtonEvent, _scrollsToRowEvent);
                     cell = insertCell;
                     cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     break;
 
                 case (int)Sections.LeaveOrganization:
                     var leaveCell = tableView.DequeueReusableCell(LeaveOrganizationCell.Key) as LeaveOrganizationCell;
-                    leaveCell.Configure(_locationResources["Leave"]);
+                    leaveCell.Configure(_locationResources["Leave"], LeaveOrganizationEvent);
                     cell = leaveCell;
                     cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     break;
@@ -127,14 +128,18 @@ namespace LetterApp.iOS.Sources
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            OnDivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
-            tableView.DeselectRow(indexPath, true);
+            if(indexPath.Section == (int)Sections.Divisions)
+            {
+                DivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
+                tableView.DeselectRow(indexPath, true);
+            }
         }
 
-        private void ScrollsToRow(object sender, EventArgs e)
+        private void ScrollsToRow(object sender, bool shouldAnimate)
         {
-            //Go to This
-            throw new NotImplementedException();
+            _tableView.ScrollToRow(NSIndexPath.FromItemSection(0, 2), UITableViewScrollPosition.Top, true);
+            UIViewAnimationExtensions.AnimateView(_tableView, LocalConstants.SelectDivision_ViewHeight, shouldAnimate);
+            _tableView.ScrollEnabled = !shouldAnimate;
         }
 
         private enum Sections

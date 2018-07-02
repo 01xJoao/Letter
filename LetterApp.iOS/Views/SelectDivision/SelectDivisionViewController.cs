@@ -5,6 +5,7 @@ using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
+using LetterApp.Models.DTO.ReceivedModels;
 using UIKit;
 
 namespace LetterApp.iOS.Views.SelectDivision
@@ -55,12 +56,34 @@ namespace LetterApp.iOS.Views.SelectDivision
         private void SetupTableView()
         {
             _tableView.Hidden = false;
-
             _source = new SelectDivisionsSource(_tableView, ViewModel.Divisions, ViewModel.LocationResources);
             _tableView.BackgroundColor = Colors.SelectBlue;
             _tableView.Source = _source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
+
+            _source.DivisionSelectedEvent -= OnSource_DivisionSelectedEvent;
+            _source.DivisionSelectedEvent += OnSource_DivisionSelectedEvent;
+
+            _source.SubmitButtonEvent -= OnSource_SubmitButtonEvent;
+            _source.SubmitButtonEvent += OnSource_SubmitButtonEvent;
+
+            _source.LeaveOrganizationEvent -= OnSource_LeaveOrganizationEvent;
+            _source.LeaveOrganizationEvent += OnSource_LeaveOrganizationEvent;
+        }
+
+        private void OnSource_SubmitButtonEvent(object sender, string code)
+        {
+            
+        }
+
+        private void OnSource_DivisionSelectedEvent(object sender, DivisionModel division)
+        {
+            
+        }
+
+        private void OnSource_LeaveOrganizationEvent(object sender, EventArgs e)
+        {
 
         }
 

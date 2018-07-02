@@ -72,5 +72,13 @@ namespace LetterApp.iOS.Helpers
             else
                 Animations.BackgroundToDefault(view, UIScreen.MainScreen.Bounds);
         }
+
+        public static void AnimateView(UIView view, nfloat animationHeight, bool shouldAnimate)
+        {
+            if (shouldAnimate)
+                Animations.AnimateBackground(view, animationHeight);
+            else
+                Animations.AnimateBackground(view, -animationHeight);
+        }
     }
 }

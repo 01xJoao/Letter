@@ -20,5 +20,6 @@ namespace LetterApp.iOS.Helpers
         public static nfloat SelectDivision_Division => 90;
         public static nfloat SelectDivision_Separator => 65;
         public static nfloat SelectDivision_InsertDivision => 170;
+        public static nfloat SelectDivision_ViewHeight => 105;
     }
 }
