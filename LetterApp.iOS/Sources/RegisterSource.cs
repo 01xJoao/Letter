@@ -52,6 +52,7 @@ namespace LetterApp.iOS.Sources
                     formCell.Configure(_formModels[indexPath.Row], indexPath, _scrollsToRowEvent, _backgroundView);
                     cell = formCell;
                     break;
+
                 case (int)Sections.Agreement:
                     var agreementCell = tableView.DequeueReusableCell(AgreementCell.Key) as AgreementCell;
                     agreementCell.Configure(_agreement, AgreementToogleEvent);

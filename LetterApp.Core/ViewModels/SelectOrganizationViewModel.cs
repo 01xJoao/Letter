@@ -93,13 +93,12 @@ namespace LetterApp.Core.ViewModels
 
         #region Resources
 
-        public string TitleLabel        => L10N.Localize("SelectOrganization_TitleLabel");
-        public string AccessButton      => L10N.Localize("SelectOrganization_AccessButton");
-        public string OrganizationHint  => L10N.Localize("SelectOrganization_TextHint");
-
-        private string organizationLabel => L10N.Localize("SelectOrganization_Organization");
-        private string AccessHint        => L10N.Localize("SelectOrganization_AccessHint");
-        private string EnterButton       => L10N.Localize("SelectOrganization_EnterButton");
+        public string TitleLabel            => L10N.Localize("SelectOrganization_TitleLabel");
+        public string AccessButton          => L10N.Localize("SelectOrganization_AccessButton");
+        public string OrganizationHint      => L10N.Localize("SelectOrganization_TextHint");
+        private string organizationLabel    => L10N.Localize("SelectOrganization_Organization");
+        private string AccessHint           => L10N.Localize("SelectOrganization_AccessHint");
+        private string EnterButton          => L10N.Localize("SelectOrganization_EnterButton");
 
         #endregion
     }

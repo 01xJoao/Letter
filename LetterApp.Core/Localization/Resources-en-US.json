@@ -322,5 +322,25 @@
   {
     "key": "SelectOrganization_EnterButton",
     "translated": "Enter"
+  },
+  {
+    "key": "SelectDivision_PrivateLabel",
+    "translated": "Private Divisions"
+  },
+  {
+    "key": "SelectOrganization_PublicLabel",
+    "translated": "Public Divisions"
+  },
+  {
+    "key": "SelectOrganization_InsertText",
+    "translated": "Access code"
+  },
+  {
+    "key": "SelectOrganization_SubmitButton",
+    "translated": "Join"
+  },
+  {
+    "key": "SelectOrganization_LeaveOrganization",
+    "translated": "Leave Organization"
   }
 ]

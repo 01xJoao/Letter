@@ -479,6 +479,7 @@
     <Compile Include="Views\SelectDivision\Cells\SubtitleCell.designer.cs">
       <DependentUpon>SubtitleCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ImageHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

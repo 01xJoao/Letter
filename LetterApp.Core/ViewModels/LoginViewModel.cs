@@ -95,7 +95,6 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                RavenService.Raven.Capture(new SentryEvent(ex));
                 Ui.Handle(ex as dynamic);
             }
             finally
@@ -146,7 +145,6 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                RavenService.Raven.Capture(new SentryEvent(ex));
                 Ui.Handle(ex as dynamic);
             }
         }

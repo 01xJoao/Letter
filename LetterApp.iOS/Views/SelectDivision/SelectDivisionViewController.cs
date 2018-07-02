@@ -50,7 +50,7 @@ namespace LetterApp.iOS.Views.SelectDivision
         {
             _tableView.Hidden = false;
 
-            _source = new SelectDivisionsSource(_tableView, _backgroundView, ViewModel.Divisions);
+            _source = new SelectDivisionsSource(_tableView, ViewModel.Divisions, ViewModel.LocationResources);
             _tableView.BackgroundColor = Colors.SelectBlue;
             _tableView.Source = _source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
@@ -63,6 +63,12 @@ namespace LetterApp.iOS.Views.SelectDivision
             _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
             _closeButton.TintColor = Colors.White;
             _backgroundView.BackgroundColor = Colors.SelectBlue;
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
 
         public override void ViewDidDisappear(bool animated)

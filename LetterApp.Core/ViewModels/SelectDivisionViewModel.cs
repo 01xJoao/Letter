@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
@@ -16,7 +17,6 @@ namespace LetterApp.Core.ViewModels
         private IOrganizationService _organizationService;
 
         private int _organizationId;
-
 
         private List<DivisionModel> _divisions;
         public List<DivisionModel> Divisions
@@ -46,6 +46,8 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task InitializeAsync()
         {
+            SetL10NResources();
+
             IsBusy = true;
             IsLoading = true;
 
@@ -55,7 +57,6 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                RavenService.Raven.Capture(new SentryEvent(ex));
                 Ui.Handle(ex as dynamic);
             }
             finally
@@ -64,5 +65,26 @@ namespace LetterApp.Core.ViewModels
                 IsLoading = false;
             }
         }
+
+        #region Resources
+
+        public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
+
+        private string privateDivisionLabel => L10N.Localize("SelectDivision_PrivateLabel");
+        private string publicDivisionLabel => L10N.Localize("SelectOrganization_PublicLabel");
+        private string insertDivisionText => L10N.Localize("SelectOrganization_InsertText");
+        private string submitButton => L10N.Localize("SelectOrganization_SubmitButton");
+        private string leaveOrganizationButton => L10N.Localize("SelectOrganization_LeaveOrganization");
+
+        private void SetL10NResources()
+        {
+            LocationResources.Add("Private", privateDivisionLabel);
+            LocationResources.Add("Public", publicDivisionLabel);
+            LocationResources.Add("Insert", insertDivisionText);
+            LocationResources.Add("Submit", submitButton);
+            LocationResources.Add("Leave", leaveOrganizationButton);
+        }
+
+        #endregion
     }
 }

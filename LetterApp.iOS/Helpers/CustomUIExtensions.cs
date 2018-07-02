@@ -23,5 +23,14 @@ namespace LetterApp.iOS.Helpers
             view.Layer.ShadowOffset = new CGSize(0.5f, 0.5f);
             view.Layer.ShadowRadius = 2f;
         }
+
+        public static void ImageShadow(UIImageView view)
+        {
+            view.ClipsToBounds = false;
+            view.Layer.ShadowColor = Colors.Black.CGColor;
+            view.Layer.ShadowOpacity = 3f;
+            view.Layer.ShadowOffset = new CGSize(0, 1f);
+            view.Layer.ShadowRadius = 2f;
+        }
     }
 }
