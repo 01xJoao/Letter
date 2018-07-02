@@ -340,9 +340,7 @@
     <InterfaceDefinition Include="Views\SelectDivision\Cells\DivisionCell.xib" />
     <InterfaceDefinition Include="Views\SelectDivision\Cells\LineSeparatorCell.xib" />
     <InterfaceDefinition Include="Views\SelectDivision\Cells\InsertDivisionFieldCell.xib" />
-    <InterfaceDefinition Include="Views\CustomViews\Cells\SelectButtonCell.xib" />
     <InterfaceDefinition Include="Views\SelectDivision\Cells\LeaveOrganizationCell.xib" />
-    <InterfaceDefinition Include="Views\SelectDivision\Cells\SubtitleCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -467,17 +465,9 @@
     <Compile Include="Views\SelectDivision\Cells\InsertDivisionFieldCell.designer.cs">
       <DependentUpon>InsertDivisionFieldCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomViews\Cells\SelectButtonCell.cs" />
-    <Compile Include="Views\CustomViews\Cells\SelectButtonCell.designer.cs">
-      <DependentUpon>SelectButtonCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\SelectDivision\Cells\LeaveOrganizationCell.cs" />
     <Compile Include="Views\SelectDivision\Cells\LeaveOrganizationCell.designer.cs">
       <DependentUpon>LeaveOrganizationCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SelectDivision\Cells\SubtitleCell.cs" />
-    <Compile Include="Views\SelectDivision\Cells\SubtitleCell.designer.cs">
-      <DependentUpon>SubtitleCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ImageHelper.cs" />
   </ItemGroup>
