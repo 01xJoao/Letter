@@ -11,8 +11,11 @@ namespace LetterApp.iOS.Sources
 {
     public class SelectDivisionsSource : UITableViewSource
     {
+        private UITableView _tableView;
         private List<DivisionModel> _divisions;
-        Dictionary<string, string> _locationResources;
+        private Dictionary<string, string> _locationResources;
+        private EventHandler _scrollsToRowEvent;
+
         public event EventHandler<DivisionModel> OnDivisionSelectedEvent;
         public event EventHandler<string> OnSubmitButton;
 
@@ -20,34 +23,44 @@ namespace LetterApp.iOS.Sources
         {
             _divisions = divisions;
             _locationResources = locationResources;
+            _tableView = tableView;
 
-            tableView.RegisterNibForCellReuse(SubtitleCell.Nib, DivisionCell.Key);
+            _scrollsToRowEvent -= ScrollsToRow;
+            _scrollsToRowEvent += ScrollsToRow;
+
+            tableView.RegisterNibForCellReuse(TitleHeader.Nib, TitleHeader.Key);
             tableView.RegisterNibForCellReuse(DivisionCell.Nib, DivisionCell.Key);
             tableView.RegisterNibForCellReuse(LineSeparatorCell.Nib, LineSeparatorCell.Key);
             tableView.RegisterNibForCellReuse(InsertDivisionFieldCell.Nib, InsertDivisionFieldCell.Key);
-            tableView.RegisterNibForCellReuse(SelectButtonCell.Nib, SelectButtonCell.Key);
             tableView.RegisterNibForCellReuse(LeaveOrganizationCell.Nib, LeaveOrganizationCell.Key);
+        }
+
+        public override nfloat GetHeightForHeader(UITableView tableView, nint section)
+        {
+            if (section == (int)Sections.Divisions || section == (int)Sections.InsertDivision)
+                return LocalConstants.SelectDivision_Header;
+                    
+            return 0;
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
-            //if(section == (int)Sections.Divisions)
-            //{
-            //    var header = tableView.DequeueReusableCell(SubtitleCell.Key) as SubtitleCell;
-            //    header.Configure(_locationResources["Public"]);
-            //    return header;
-            //}
-            //else if (section ==(int)Sections.InsertDivision)
-            //{
-            //    var header = tableView.DequeueReusableCell(SubtitleCell.Key) as SubtitleCell;
-            //    header.Configure(_locationResources["Private"]);
-            //    return header;
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-            return null;
+            if(section == (int)Sections.Divisions)
+            {
+                var header = tableView.DequeueReusableCell(TitleHeader.Key) as TitleHeader;
+                header.Configure(_locationResources["Public"]);
+                return header;
+            }
+            else if (section ==(int)Sections.InsertDivision)
+            {
+                var header = tableView.DequeueReusableCell(TitleHeader.Key) as TitleHeader;
+                header.Configure(_locationResources["Private"]);
+                return header;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -69,7 +82,7 @@ namespace LetterApp.iOS.Sources
 
                 case (int)Sections.InsertDivision:
                     var insertCell = tableView.DequeueReusableCell(InsertDivisionFieldCell.Key) as InsertDivisionFieldCell;
-                    insertCell.Configure(_locationResources["Insert"], _locationResources["Submit"], OnSubmitButton);
+                    insertCell.Configure(_locationResources["Insert"], _locationResources["Submit"], OnSubmitButton, _scrollsToRowEvent);
                     cell = insertCell;
                     break;
 
@@ -97,14 +110,12 @@ namespace LetterApp.iOS.Sources
             }
         }
 
-        public override nfloat GetHeightForHeader(UITableView tableView, nint section) => LocalConstants.SelectDivision_Header;
-
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
             switch (indexPath.Section)
             {
                 case (int)Sections.Divisions: return LocalConstants.SelectDivision_Division;
-                case (int)Sections.Separator: return LocalConstants.SelectDivision_Header;
+                case (int)Sections.Separator: return LocalConstants.SelectDivision_Separator;
                 case (int)Sections.InsertDivision: return LocalConstants.SelectDivision_InsertDivision;
                 case (int)Sections.LeaveOrganization: return LocalConstants.SelectDivision_Header;
                 default: return 0;
@@ -112,6 +123,12 @@ namespace LetterApp.iOS.Sources
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath) => OnDivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
+
+        private void ScrollsToRow(object sender, EventArgs e)
+        {
+            //Go to This
+            throw new NotImplementedException();
+        }
 
         private enum Sections
         {

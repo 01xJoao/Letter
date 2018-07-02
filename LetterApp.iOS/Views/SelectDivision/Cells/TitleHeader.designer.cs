@@ -9,17 +9,17 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.SelectDivision.Cells
 {
-	[Register ("LineSeparatorCell")]
-	partial class LineSeparatorCell
+	[Register ("TitleHeader")]
+	partial class TitleHeader
 	{
 		[Outlet]
-		UIKit.UIView _view { get; set; }
+		UIKit.UILabel _label { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (_view != null) {
-				_view.Dispose ();
-				_view = null;
+			if (_label != null) {
+				_label.Dispose ();
+				_label = null;
 			}
 		}
 	}

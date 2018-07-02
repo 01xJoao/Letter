@@ -8,14 +8,18 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
 {
     public partial class InsertDivisionFieldCell : UITableViewCell
     {
-        public EventHandler<string> OnSubmitButton;
+        private NSIndexPath _indexPath;
+        private EventHandler _scrollToRow;
+        private EventHandler<string> _onSubmitButton;
+
         public static readonly NSString Key = new NSString("InsertDivisionFieldCell");
         public static readonly UINib Nib = UINib.FromName("InsertDivisionFieldCell", NSBundle.MainBundle);
         protected InsertDivisionFieldCell(IntPtr handle) : base(handle) {}
 
-        public void Configure(string hint, string submit, EventHandler<string> eventHandler)
+        public void Configure(string hint, string submit, EventHandler<string> eventHandler, EventHandler scrollToRow)
         {
-            OnSubmitButton = eventHandler;
+            _onSubmitButton = eventHandler;
+            _scrollToRow = scrollToRow;
 
             UITextFieldExtensions.SetupTextFieldAppearance(_textField, Colors.White, 22f, hint, Colors.White70, Colors.White, Colors.SelectBlue);
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 18f, submit);
@@ -27,11 +31,19 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
 
             _submitButton.TouchUpInside -= OnSubmitButton_TouchUpInside;
             _submitButton.TouchUpInside += OnSubmitButton_TouchUpInside;
+
+            _textField.EditingDidBegin -= OnTextField_EditingDidBegin;
+            _textField.EditingDidBegin += OnTextField_EditingDidBegin;
+        }
+
+        private void OnTextField_EditingDidBegin(object sender, EventArgs e)
+        {
+            _scrollToRow?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
         {
-            OnSubmitButton?.Invoke(this, _textField.Text);
+            _onSubmitButton?.Invoke(this, _textField.Text);
         }
     }
 }

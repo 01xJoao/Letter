@@ -14,7 +14,7 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
 
         public void Configure(string text)
         {
-            UIButtonExtensions.SetupButtonAppearance(_leaveButton, Colors.White, 14f, text);
+            UIButtonExtensions.SetupButtonUnderlineAppearance(_leaveButton, Colors.White, 14f, text);
         }
     }
 }

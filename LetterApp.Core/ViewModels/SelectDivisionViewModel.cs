@@ -68,6 +68,8 @@ namespace LetterApp.Core.ViewModels
 
         #region Resources
 
+        public string TitleLabel => L10N.Localize("SelectDivision_TitleLabel");
+
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
 
         private string privateDivisionLabel => L10N.Localize("SelectDivision_PrivateLabel");

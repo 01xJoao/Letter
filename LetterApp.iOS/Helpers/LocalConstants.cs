@@ -16,9 +16,9 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Register_Form => 63;
         public static nfloat Register_ViewHeight => 80;
 
-        public static nfloat SelectDivision_Header => 30;
-        public static nfloat SelectDivision_Division => 80;
-        public static nfloat SelectDivision_InsertDivision => 60;
-        public static nfloat SelectDivision_Submit => 60;
+        public static nfloat SelectDivision_Header => 50;
+        public static nfloat SelectDivision_Division => 90;
+        public static nfloat SelectDivision_Separator => 65;
+        public static nfloat SelectDivision_InsertDivision => 170;
     }
 }
