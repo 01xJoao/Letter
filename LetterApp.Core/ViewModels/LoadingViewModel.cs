@@ -78,8 +78,7 @@ namespace LetterApp.Core.ViewModels
                     }
                     else if (!userIsActiveInDivision)
                     {
-                        var division = user.Divisions.FirstOrDefault(x => x.IsUserInDivisionActive == false && x.IsDivisonActive == true);
-                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(division);
+                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                     }
                     else
                     {

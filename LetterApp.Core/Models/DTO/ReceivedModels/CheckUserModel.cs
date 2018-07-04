@@ -6,10 +6,10 @@ namespace LetterApp.Models.DTO.ReceivedModels
 {
     public class CheckUserModel : BaseModel
     {
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         public bool IsUserActive { get; set; }
         public string Position { get; set; }
-        public int OrganizationID { get; set; }
+        public int? OrganizationID { get; set; }
         public List<DivisionModel> Divisions { get; set; }
     }
 

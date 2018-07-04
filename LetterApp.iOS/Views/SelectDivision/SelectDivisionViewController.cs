@@ -105,8 +105,6 @@ namespace LetterApp.iOS.Views.SelectDivision
             _backgroundView.BackgroundColor = Colors.SelectBlue;
             UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.TitleLabel, Colors.White, 24f);
             CustomUIExtensions.LabelShadow(_titleLabel);
-
-            //_titleLabel.AttributedText = new NSAttributedString(ViewModel.TitleLabel, attributes: CustomUIExtensions.TextShadow());
         }
 
         public override void ViewWillAppear(bool animated)

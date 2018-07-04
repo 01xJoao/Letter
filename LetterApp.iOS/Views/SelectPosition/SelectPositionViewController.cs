@@ -19,7 +19,7 @@ namespace LetterApp.iOS.Views.SelectPosition
             base.ViewDidLoad();
             SetupView();
 
-            _pickerView.Hidden = true;
+            _picker.Hidden = true;
 
             _submitButton.TouchUpInside -= OnSubmitButton_TouchUpInside;
             _submitButton.TouchUpInside += OnSubmitButton_TouchUpInside;
@@ -95,7 +95,8 @@ namespace LetterApp.iOS.Views.SelectPosition
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 18f, ViewModel.SelectButton);
             _pickerImage.Image = UIImage.FromBundle("dropdown_black");
 
-            CustomUIExtensions.RoundShadow(_pickerView);
+            CustomUIExtensions.RoundShadow(_buttonPickerView);
+            CustomUIExtensions.RoundShadow(_picker);
             CustomUIExtensions.RoundShadow(_pickerImage);
 
             _buttonView.Layer.CornerRadius = 2;

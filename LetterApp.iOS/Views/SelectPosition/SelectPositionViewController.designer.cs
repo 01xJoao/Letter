@@ -19,6 +19,9 @@ namespace LetterApp.iOS.Views.SelectPosition
 		UIKit.UIButton _buttonPicker { get; set; }
 
 		[Outlet]
+		UIKit.UIView _buttonPickerView { get; set; }
+
+		[Outlet]
 		UIKit.UIView _buttonView { get; set; }
 
 		[Outlet]
@@ -44,9 +47,19 @@ namespace LetterApp.iOS.Views.SelectPosition
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_buttonPickerView != null) {
+				_buttonPickerView.Dispose ();
+				_buttonPickerView = null;
+			}
+
 			if (_backgroundView != null) {
 				_backgroundView.Dispose ();
 				_backgroundView = null;
+			}
+
+			if (_buttonPicker != null) {
+				_buttonPicker.Dispose ();
+				_buttonPicker = null;
 			}
 
 			if (_buttonView != null) {
@@ -57,11 +70,6 @@ namespace LetterApp.iOS.Views.SelectPosition
 			if (_loadingView != null) {
 				_loadingView.Dispose ();
 				_loadingView = null;
-			}
-
-			if (_buttonPicker != null) {
-				_buttonPicker.Dispose ();
-				_buttonPicker = null;
 			}
 
 			if (_picker != null) {

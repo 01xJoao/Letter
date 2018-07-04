@@ -17,6 +17,7 @@ namespace LetterApp.Core.ViewModels
         private IOrganizationService _organizationService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
+        private IAuthenticationService _authenticationService;
 
         private int _organizationId;
         private int? _divisionId;
@@ -35,11 +36,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<int> _setPositionCommand;
         public XPCommand<int> SetPositionCommand => _setPositionCommand ?? (_setPositionCommand = new XPCommand<int>((position) => SetPosition(position)));
 
-        public SelectPositionViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService) 
+        public SelectPositionViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService, IAuthenticationService authenticationService) 
         {
             _organizationService = organizationService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
+            _authenticationService = authenticationService;
         }
 
         protected override void Prepare(Tuple<int, object> data)
@@ -90,12 +92,12 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var division = new DivisionRequestModel((int)_divisionId, (int)_positionId);
-                var result = await _organizationService.SetUserDivision(division);
+                var request = new DivisionRequestModel((int)_divisionId, (int)_positionId);
+                var result = await _organizationService.SetUserDivision(request);
 
                 if (result.StatusCode == 200)
                 {
-                    await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(_divisionId);
+                    await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                     await NavigationService.Close(this);
                 }
                 else

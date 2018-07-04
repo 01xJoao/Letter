@@ -14,12 +14,12 @@
             <connections>
                 <outlet property="_backgroundView" destination="5eo-1m-EL9" id="ed8-wc-pDc"/>
                 <outlet property="_buttonPicker" destination="PPw-3p-XB1" id="sAv-Pf-t36"/>
+                <outlet property="_buttonPickerView" destination="Jtm-VY-FtS" id="ffa-sl-bC3"/>
                 <outlet property="_buttonView" destination="boZ-CS-7ew" id="AVU-kN-a8c"/>
                 <outlet property="_loadingView" destination="htE-Hh-XIB" id="1Nc-it-MNl"/>
                 <outlet property="_picker" destination="vTe-ud-4RX" id="r4Y-Lj-9Y4"/>
                 <outlet property="_pickerImage" destination="KpR-TS-o8P" id="mtY-QS-eGj"/>
                 <outlet property="_pickerLabel" destination="WH2-UJ-GYJ" id="ZqO-y3-OUh"/>
-                <outlet property="_pickerView" destination="vTe-ud-4RX" id="lFK-ML-Wj9"/>
                 <outlet property="_submitButton" destination="fcS-PJ-c8s" id="vvy-9u-DXA"/>
                 <outlet property="_titleLabel" destination="pn0-4W-YTx" id="QNX-TG-0OD"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
@@ -46,14 +46,14 @@
                                     <rect key="frame" x="-0.5" y="0.0" width="275" height="48"/>
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KpR-TS-o8P">
-                                    <rect key="frame" x="241" y="16" width="16" height="16"/>
+                                    <rect key="frame" x="243" y="17" width="14" height="14"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="16" id="DpE-eA-i7p"/>
-                                        <constraint firstAttribute="width" constant="16" id="E87-Ix-GEl"/>
+                                        <constraint firstAttribute="height" constant="14" id="DpE-eA-i7p"/>
+                                        <constraint firstAttribute="width" constant="14" id="E87-Ix-GEl"/>
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WH2-UJ-GYJ">
-                                    <rect key="frame" x="20" y="13.5" width="211" height="21"/>
+                                    <rect key="frame" x="20" y="13.5" width="213" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
