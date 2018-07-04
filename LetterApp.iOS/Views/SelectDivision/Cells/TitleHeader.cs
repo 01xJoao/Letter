@@ -16,6 +16,7 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
         {
             this.BackgroundColor = Colors.SelectBlue;
             UILabelExtensions.SetupLabelAppearance(_label, text, Colors.White, 16f, UIFontWeight.Medium);
+            CustomUIExtensions.LabelShadow(_label);
         }
     }
 }

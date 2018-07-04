@@ -25,6 +25,7 @@ namespace LetterApp.iOS.Views.OnBoarding
 
             _imageView.Image = UIImage.FromBundle(_image);
             _titleLabel.Text = _title;
+            CustomUIExtensions.LabelShadow(_titleLabel);
             _descriptionLabel.Text = _description;
             _backgroundView.BackgroundColor = Colors.MainBlue;
         }

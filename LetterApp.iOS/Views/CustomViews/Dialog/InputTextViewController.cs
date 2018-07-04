@@ -73,7 +73,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             UILabelExtensions.SetupLabelAppearance(_subtitleLabel, _subtitle, Colors.SomeBlue, 30, UIFontWeight.Bold);
             UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.Black, 20);
             UITextFieldExtensions.SetupField(this.View, 0, _hint, _textField, _indicatorView, _textFieldHeightConstraint, _indicatorLabel);
-            UIButtonExtensions.SetupButtonAppearance(_confirmButton, Colors.White, 16f, _confirmButtonText);
+            UIButtonExtensions.SetupButtonAppearance(_confirmButton, Colors.White, 17f, _confirmButtonText);
 
             if(!string.IsNullOrEmpty(_inputContent))
             {

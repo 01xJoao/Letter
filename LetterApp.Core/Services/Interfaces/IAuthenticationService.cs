@@ -13,6 +13,6 @@ namespace LetterApp.Core.Services.Interfaces
         Task<BaseModel> ChangePassword(PasswordChangeRequestModel passwordChange);
         Task<BaseModel> CreateAccount(UserRegistrationRequestModel userAccount);
         Task<BaseModel> ActivateAccount(ActivationCodeRequestModel activationCode);
-        Task<UserModel> CheckUser();
+        Task<CheckUserModel> CheckUser();
     }
 }

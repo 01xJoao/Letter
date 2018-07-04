@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers;
@@ -76,8 +78,7 @@ namespace LetterApp.Core.ViewModels
 
                 if(currentUser.StatusCode == 200)
                 {
-                    //TODO Should this be removed?
-                    AppSettings.Logout();
+                    AppSettings.IsUserLogged = true;
 
                     Realm.Write(() => Realm.Add(currentUser, true));
                     UserEmail = value.Item1;
@@ -122,21 +123,34 @@ namespace LetterApp.Core.ViewModels
                         user.Divisions = userCheck.Divisions;
                     });
 
+                    bool userIsActiveInDivision = false;
+
+                    bool AnyDivisionActive = false;
+
+                    if (user.Divisions?.Count > 0)
+                    {
+                        user.Divisions.Any(x => x.IsDivisonActive == true);
+                        userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+                    }
+
                     if (user.OrganizationID == null)
                     {
                         await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
                     }
-                    else if (user.Divisions == null)
+                    else if (user.Divisions == null && !AnyDivisionActive)
                     {
                         await NavigationService.NavigateAsync<SelectDivisionViewModel, int>((int)user.OrganizationID);
                     }
                     else if (string.IsNullOrEmpty(user.Position))
                     {
-                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)user.OrganizationID);
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, Tuple<int, object>>(new Tuple<int, object>((int)user.OrganizationID, null));
+                    }
+                    else if (!userIsActiveInDivision)
+                    {
+                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                     }
                     else
                     {
-                        AppSettings.IsUserLogged = true;
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                     }
                 }

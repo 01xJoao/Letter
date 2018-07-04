@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using Airbnb.Lottie;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Interfaces;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using LetterApp.Models.DTO.ReceivedModels;
@@ -26,6 +26,9 @@ namespace LetterApp.iOS.Views.SelectDivision
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
+            _closeButton.TouchUpInside += OnCloseButton_TouchUpInside;
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -37,8 +40,6 @@ namespace LetterApp.iOS.Views.SelectDivision
                     break;
                 case nameof(ViewModel.IsLoading):
                     Loading(ViewModel.IsLoading);
-                    break;
-                default:
                     break;
             }
         }
@@ -74,18 +75,28 @@ namespace LetterApp.iOS.Views.SelectDivision
 
         private void OnSource_SubmitButtonEvent(object sender, string code)
         {
-            
+            if (ViewModel.VerifyDivisionCodeCommand.CanExecute(code))
+                ViewModel.VerifyDivisionCodeCommand.Execute(code);
         }
 
         private void OnSource_DivisionSelectedEvent(object sender, DivisionModel division)
         {
-            
+            if (ViewModel.ShowDivisionInformationCommand.CanExecute(division))
+                ViewModel.ShowDivisionInformationCommand.Execute(division);
         }
 
         private void OnSource_LeaveOrganizationEvent(object sender, EventArgs e)
         {
-
+            if (ViewModel.LeaveOrganizationCommand.CanExecute())
+                ViewModel.LeaveOrganizationCommand.Execute();
         }
+
+        private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
+        {
+            if (ViewModel.CloseViewCommand.CanExecute())
+                ViewModel.CloseViewCommand.Execute();
+        }
+
 
         private void SetupView()
         {
@@ -93,6 +104,9 @@ namespace LetterApp.iOS.Views.SelectDivision
             _closeButton.TintColor = Colors.White;
             _backgroundView.BackgroundColor = Colors.SelectBlue;
             UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.TitleLabel, Colors.White, 24f);
+            CustomUIExtensions.LabelShadow(_titleLabel);
+
+            //_titleLabel.AttributedText = new NSAttributedString(ViewModel.TitleLabel, attributes: CustomUIExtensions.TextShadow());
         }
 
         public override void ViewWillAppear(bool animated)

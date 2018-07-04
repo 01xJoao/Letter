@@ -1,14 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Interfaces;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 
 namespace LetterApp.iOS.Views.SelectOrganization
 {
-    public partial class SelectOrganizationViewController : XViewController<SelectOrganizationViewModel>
+    public partial class SelectOrganizationViewController : XViewController<SelectOrganizationViewModel>, IRootView
     {
         public SelectOrganizationViewController() : base("SelectOrganizationViewController", null) {}
 
@@ -71,7 +73,6 @@ namespace LetterApp.iOS.Views.SelectOrganization
 
             UILabelExtensions.SetupLabelAppearance(_label, ViewModel.TitleLabel, Colors.White, 24f, UIFontWeight.Thin);
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.SelectBlue, 16f, ViewModel.AccessButton);
-
             UITextFieldExtensions.SetupTextFieldAppearance(_textField, Colors.White, 26f, ViewModel.OrganizationHint, Colors.White70, Colors.White, Colors.SelectBlue, UIFontWeight.Medium);
             UITextFieldExtensions.AddViewToKeyboard(_textField, keyboardButton, Colors.White);
             _textField.AutocorrectionType = UITextAutocorrectionType.No;

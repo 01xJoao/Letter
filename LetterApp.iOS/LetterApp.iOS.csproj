@@ -257,6 +257,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -315,6 +319,8 @@
     <Folder Include="Views\SelectPosition\" />
     <Folder Include="Views\PendingApproval\" />
     <Folder Include="Views\SelectDivision\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\dropdown_black.imageset\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -342,6 +348,9 @@
     <InterfaceDefinition Include="Views\SelectDivision\Cells\InsertDivisionFieldCell.xib" />
     <InterfaceDefinition Include="Views\SelectDivision\Cells\LeaveOrganizationCell.xib" />
     <InterfaceDefinition Include="Views\SelectDivision\Cells\TitleHeader.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\InformationViewController.xib" />
+    <InterfaceDefinition Include="Views\SelectPosition\SelectPositionViewController.xib" />
+    <InterfaceDefinition Include="Views\PendingApproval\PendingApprovalViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -475,6 +484,19 @@
     <Compile Include="Views\SelectDivision\Cells\TitleHeader.designer.cs">
       <DependentUpon>TitleHeader.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomViews\Dialog\InformationViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\InformationViewController.designer.cs">
+      <DependentUpon>InformationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectPosition\SelectPositionViewController.cs" />
+    <Compile Include="Views\SelectPosition\SelectPositionViewController.designer.cs">
+      <DependentUpon>SelectPositionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PendingApproval\PendingApprovalViewController.cs" />
+    <Compile Include="Views\PendingApproval\PendingApprovalViewController.designer.cs">
+      <DependentUpon>PendingApprovalViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PositionsPickerModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

@@ -35,6 +35,16 @@ namespace LetterApp.iOS.Services
             throw new NotImplementedException();
         }
 
+        public Task<bool> ShowInformation(string title = "", string text1 = "", string text2 = "", string text3 = "", string confirmButtonText = "")
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var informationView = new InformationViewController(title, text1, text2, text3, confirmButtonText, val => tcs.TrySetResult(val));
+            informationView.Show();
+
+            return tcs.Task;
+        }
+
         public void StartLoading()
         {
             StopLoading();

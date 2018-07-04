@@ -15,6 +15,12 @@ namespace LetterApp.iOS.Helpers
             return textShadow;
         }
 
+        public static void LabelShadow(UILabel label)
+        {
+            label.ShadowColor = Colors.Black;
+            label.ShadowOffset = new CGSize(0.3f, 0.3f);
+        }
+
         public static void ViewShadow(UIView view)
         {
             view.ClipsToBounds = false;
@@ -31,6 +37,16 @@ namespace LetterApp.iOS.Helpers
             view.Layer.ShadowOpacity = 6f;
             view.Layer.ShadowOffset = new CGSize(0, 1f);
             view.Layer.ShadowRadius = 3f;
+        }
+
+        public static void RoundShadow(UIView view)
+        {
+            view.Layer.CornerRadius = 2;
+            view.Layer.MasksToBounds = true;
+            view.Layer.ShadowRadius = 5;
+            view.Layer.ShadowOpacity = 0.3f;
+            view.ClipsToBounds = false;
+            view.Layer.ShadowOffset = new CGSize(0.0f, 0.0f);
         }
     }
 }

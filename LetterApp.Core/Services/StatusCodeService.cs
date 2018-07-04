@@ -29,6 +29,7 @@ namespace LetterApp.Core.Services
             CodeDictionary.Add(114, Organization_NoDivisions);
             CodeDictionary.Add(115, Organization_WrongCode);
             CodeDictionary.Add(116, Organization_NoPosition);
+            CodeDictionary.Add(117, Organization_UserInDivision);
 
             CodeDictionary.Add(201, Password_Changed);
             CodeDictionary.Add(202, User_DivisionSet);
@@ -37,6 +38,7 @@ namespace LetterApp.Core.Services
             CodeDictionary.Add(205, User_Desactivate);
             CodeDictionary.Add(206, User_DivisionLeft);
             CodeDictionary.Add(207, User_Created);
+            CodeDictionary.Add(208, User_LeftOrganization);
         }
 
         public string GetStatusCodeDescription(int? code)
@@ -66,15 +68,17 @@ namespace LetterApp.Core.Services
         string Organization_NoDivisions     => L10N.Localize("Code_E114");
         string Organization_WrongCode       => L10N.Localize("Code_E115");
         string Organization_NoPosition      => L10N.Localize("Code_E116");
+        string Organization_UserInDivision  => L10N.Localize("Code_E117");
 
         //success
-        string Password_Changed     => L10N.Localize("Code_S201");
-        string User_DivisionSet     => L10N.Localize("Code_S202");
-        string User_UpdatePosition  => L10N.Localize("Code_S203");
-        string User_Update          => L10N.Localize("Code_S204");
-        string User_Desactivate     => L10N.Localize("Code_S205");
-        string User_DivisionLeft    => L10N.Localize("Code_S206");
-        string User_Created         => L10N.Localize("Code_S207");
+        string Password_Changed         => L10N.Localize("Code_S201");
+        string User_DivisionSet         => L10N.Localize("Code_S202");
+        string User_UpdatePosition      => L10N.Localize("Code_S203");
+        string User_Update              => L10N.Localize("Code_S204");
+        string User_Desactivate         => L10N.Localize("Code_S205");
+        string User_DivisionLeft        => L10N.Localize("Code_S206");
+        string User_Created             => L10N.Localize("Code_S207");
+        string User_LeftOrganization    => L10N.Localize("Code_S208");
 
         //Null Code
         string CodeNull => L10N.Localize("Code_Null");

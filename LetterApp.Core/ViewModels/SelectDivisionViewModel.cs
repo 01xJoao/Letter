@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
-using SharpRaven.Data;
 
 namespace LetterApp.Core.ViewModels
 {
     public class SelectDivisionViewModel : XViewModel<int>
     {
         private IDialogService _dialogService;
-        private IStatusCodeService _statusCode;
+        private IStatusCodeService _statusCodeService;
         private IOrganizationService _organizationService;
 
         private int _organizationId;
@@ -32,11 +32,23 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
-        public SelectDivisionViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCode)
+        private XPCommand<DivisionModel> _showDivisionInformationCommand;
+        public XPCommand<DivisionModel> ShowDivisionInformationCommand => _showDivisionInformationCommand ?? (_showDivisionInformationCommand = new XPCommand<DivisionModel>(async (division) => await ShowDivisionInfo(division), CanExecute));
+
+        private XPCommand<string> _verifyDivisionCodeCommand;
+        public XPCommand<string> VerifyDivisionCodeCommand => _verifyDivisionCodeCommand ?? (_verifyDivisionCodeCommand = new XPCommand<string>(async (code) => await VerifyDivisionCode(code), CanExecute));
+
+        private XPCommand _leaveOrganizationCommand;
+        public XPCommand LeaveOrganizationCommand => _leaveOrganizationCommand ?? (_leaveOrganizationCommand = new XPCommand(async () => await LeaveOrganization(), CanExecute));
+
+        private XPCommand _closeViewCommand;
+        public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+
+        public SelectDivisionViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService)
         {
             _organizationService = organizationService;
             _dialogService = dialogService;
-            _statusCode = statusCode;
+            _statusCodeService = statusCodeService;
         }
 
         protected override void Prepare(int organizationId)
@@ -65,17 +77,107 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task LeaveOrganization()
+        {
+            IsBusy = true;
+
+            try
+            {
+                var result = await _organizationService.LeaveOrganization(_organizationId);
+
+                if(result.StatusCode == 208)
+                {
+                    await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
+                    await NavigationService.Close(this);
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
+                }
+                else
+                {
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task VerifyDivisionCode(string code)
+        {
+            IsBusy = true;
+
+            try
+            {
+                var result = await _organizationService.VerifyDivisionCode(code);
+
+                if (result.StatusCode == 200)
+                    await ShowDivisionInfo(result);
+                else
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task ShowDivisionInfo(DivisionModel division)
+        {
+            IsBusy = true;
+
+            try
+            {
+                var result = await _dialogService.ShowInformation(division.Name, division.Email, $"{division.UserCount} {MembersLabel}", division.Description, submitButton);
+
+                if (result)
+                {
+
+                    var res = await _organizationService.CheckUserInDivision(division.DivisionID);
+
+                    if (res.StatusCode == 200)
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, Tuple<int, object>>(new Tuple<int, object>(_organizationId, division.DivisionID));
+                    else
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Info);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task CloseView()
+        {
+            AppSettings.Logout();
+            await NavigationService.NavigateAsync<LoginViewModel, object>(null);
+        }
+
+        private bool CanExecute() => !IsBusy;
+        private bool CanExecute(object obj) => !IsBusy;
+
         #region Resources
 
         public string TitleLabel => L10N.Localize("SelectDivision_TitleLabel");
 
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
-
         private string privateDivisionLabel => L10N.Localize("SelectDivision_PrivateLabel");
         private string publicDivisionLabel => L10N.Localize("SelectOrganization_PublicLabel");
         private string insertDivisionText => L10N.Localize("SelectOrganization_InsertText");
         private string submitButton => L10N.Localize("SelectOrganization_SubmitButton");
         private string leaveOrganizationButton => L10N.Localize("SelectOrganization_LeaveOrganization");
+        private string MembersLabel => L10N.Localize("SelectOrganization_MembersLabel");
 
         private void SetL10NResources()
         {
