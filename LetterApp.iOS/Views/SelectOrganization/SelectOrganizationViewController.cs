@@ -96,12 +96,6 @@ namespace LetterApp.iOS.Views.SelectOrganization
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            //MemoryUtility.ReleaseUIViewWithChildren(this.View);
-            base.ViewDidDisappear(animated);
-        }
     }
 }
 

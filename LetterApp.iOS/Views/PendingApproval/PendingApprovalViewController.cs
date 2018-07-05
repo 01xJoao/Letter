@@ -20,15 +20,6 @@ namespace LetterApp.iOS.Views.PendingApproval
             _imageView.Image = UIImage.FromBundle("letter_curved");
             _reloadImage.Image = UIImage.FromBundle("update");
 
-            _reloadImage.Hidden = true;
-            _reloadButton.Hidden = true;
-            _continueButton.Hidden = true;
-            _continueView.Hidden = true;
-            _helpLabel.Hidden = true;
-            _helpButton.Hidden = true;
-            _leaveDivisionButton.Hidden = true;
-            _logoutButton.Hidden = true;
-
             UILabelExtensions.SetupLabelAppearance(_navTitleLabel, ViewModel.Title, Colors.Black, 22f);
             UILabelExtensions.SetupLabelAppearance(_subtitleLabel, ViewModel.Subtitle, Colors.Black, 24f, UIFontWeight.Light);
             UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Description, Colors.Black, 16f, UIFontWeight.Light);
@@ -45,14 +36,14 @@ namespace LetterApp.iOS.Views.PendingApproval
                     SetupView(ViewModel.CanContinue);
                     break;
                 case nameof(ViewModel.IsLoading):
-                    Loading(ViewModel.IsLoading);
+                    Loading(false);
                     break;
             }
         }
 
         public override void ViewDidAppear(bool animated)
         {
-            Loading(ViewModel.IsLoading);
+            Loading(true);
         }
 
         private void Loading(bool shouldAnimate)
@@ -62,6 +53,9 @@ namespace LetterApp.iOS.Views.PendingApproval
 
         private void SetupView(bool canContinue)
         {
+
+            _descriptionLabel.Hidden = false;
+
             if(canContinue)
             {
                 UIButtonExtensions.SetupButtonAppearance(_continueButton, Colors.Black, 18f, ViewModel.SubmitButton, UIFontWeight.Light);
@@ -108,6 +102,19 @@ namespace LetterApp.iOS.Views.PendingApproval
             _logoutButton.Hidden = hide;
         }
 
+        private void HideAll()
+        {
+            _descriptionLabel.Hidden = true;
+            _reloadImage.Hidden = true;
+            _reloadButton.Hidden = true;
+            _continueButton.Hidden = true;
+            _continueView.Hidden = true;
+            _helpLabel.Hidden = true;
+            _helpButton.Hidden = true;
+            _leaveDivisionButton.Hidden = true;
+            _logoutButton.Hidden = true;
+        }
+
         private void OnReloadButton_TouchUpInside(object sender, EventArgs e)
         {
             _reloadImage.Alpha = 0.8f;
@@ -145,12 +152,7 @@ namespace LetterApp.iOS.Views.PendingApproval
         {
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
-        }
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            MemoryUtility.ReleaseUIViewWithChildren(this.View);
-            base.ViewDidDisappear(animated);
+            HideAll();
         }
     }
 }

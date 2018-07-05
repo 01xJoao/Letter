@@ -63,8 +63,6 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CheckUser(bool isUpdating = false)
         {
-            IsLoading |= isUpdating;
-            
             IsBusy = true;
 
             try
@@ -76,6 +74,16 @@ namespace LetterApp.Core.ViewModels
 
                 if (user?.Divisions?.Count > 0)
                 {
+                    var userInAllDivisionsIsActive = user.Divisions.Any(x => x.IsUserInDivisionActive == false);
+                    
+                    if(!userInAllDivisionsIsActive)
+                    {
+                        AppSettings.IsUserLogged = true;
+                        await Task.Delay(TimeSpan.FromSeconds(4f));
+                        await NavigateToMain();
+                        return;
+                    }
+                                                       
                     userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
                 }
                 else
@@ -95,10 +103,11 @@ namespace LetterApp.Core.ViewModels
                     Division = user.Divisions.First(x => x.IsUserInDivisionActive == false && x.IsDivisonActive == true);
                     AppSettings.UserIsPeddingApproval = true;
                     AppSettings.IsUserLogged = false;
-                    RaisePropertyChanged(nameof(CanContinue));
 
                     if (isUpdating)
                         _dialogService.ShowAlert(UpdateAlert, AlertType.Info);
+                    else
+                        RaisePropertyChanged(nameof(CanContinue));
                 }
             }
             catch (Exception ex)
@@ -107,7 +116,7 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                RaisePropertyChanged(nameof(IsLoading));
                 IsBusy = false;
             }
         }
