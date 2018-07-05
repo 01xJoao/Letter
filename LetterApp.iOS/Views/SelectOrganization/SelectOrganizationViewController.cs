@@ -99,7 +99,7 @@ namespace LetterApp.iOS.Views.SelectOrganization
 
         public override void ViewDidDisappear(bool animated)
         {
-            MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            //MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
         }
     }

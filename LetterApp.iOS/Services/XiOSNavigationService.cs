@@ -113,5 +113,11 @@ namespace LetterApp.iOS.Services
 
             return controllers;
         }
+
+        public override Task PopToRoot(bool animated)
+        {
+            MasterNavigationController.PopToRootViewController(animated);
+            return Task.CompletedTask;
+        }
     }
 }

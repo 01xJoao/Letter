@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Mail;
+using System.Threading.Tasks;
+using LetterApp.Core.Exceptions;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.Helpers
 {
@@ -44,6 +48,29 @@ namespace LetterApp.Core.Helpers
                     return string.Empty;
             }
             return domain;
+        }
+
+        public static async Task SendEmail(string email)
+        {
+            try
+            {
+                var message = new EmailMessage
+                {
+                    Subject = "",
+                    Body = "",
+                    To = new List<string> {email}
+                };
+
+                await Email.ComposeAsync(message);
+            }
+            catch (FeatureNotSupportedException fbsEx)
+            {
+                Ui.Handle(fbsEx as dynamic);
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
     }
 }

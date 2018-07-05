@@ -85,7 +85,7 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             AppSettings.Logout();
-            await NavigationService.Close(this);
+            await NavigationService.NavigateAsync<LoginViewModel, object>(null);
         }
 
         private bool CanExecute() => !IsBusy;

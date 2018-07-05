@@ -261,6 +261,14 @@
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle.png" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\logo_curved.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\logo_curved%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\logo_curved%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -321,6 +329,8 @@
     <Folder Include="Views\SelectDivision\Cells\" />
     <Folder Include="Resources\Assets.xcassets\dropdown_black.imageset\" />
     <Folder Include="Models\" />
+    <Folder Include="Resources\Assets.xcassets\letter_curved.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\update.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />

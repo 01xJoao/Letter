@@ -48,5 +48,13 @@ namespace LetterApp.iOS.Helpers
             view.ClipsToBounds = false;
             view.Layer.ShadowOffset = new CGSize(0.0f, 0.0f);
         }
+
+        public static void SelectButton(UIView button, UIColor color)
+        {
+            button.Layer.CornerRadius = 3;
+            button.ClipsToBounds = true;
+            button.Layer.BorderWidth = 1;
+            button.Layer.BorderColor = color.CGColor;
+        }
     }
 }

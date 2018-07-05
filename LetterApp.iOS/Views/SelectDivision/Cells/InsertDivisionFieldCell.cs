@@ -22,11 +22,7 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
 
             UITextFieldExtensions.SetupTextFieldAppearance(_textField, Colors.White, 22f, hint, Colors.White70, Colors.White, Colors.SelectBlue);
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 18f, submit);
-
-            _buttonView.Layer.CornerRadius = 2;
-            _buttonView.ClipsToBounds = true;
-            _buttonView.Layer.BorderWidth = 1;
-            _buttonView.Layer.BorderColor = Colors.White.CGColor;
+            CustomUIExtensions.SelectButton(_buttonView, Colors.White);
 
             _textField.AutocorrectionType = UITextAutocorrectionType.No;
             _textField.TextContentType = new NSString("");

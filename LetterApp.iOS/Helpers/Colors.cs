@@ -21,5 +21,6 @@ namespace LetterApp.iOS.Helpers
         public static UIColor Green => UIColor.FromRGB(54, 180, 114);                           //#36B472
         public static UIColor Orange => UIColor.FromRGB(255, 161, 2);                           //#FFA102
         public static UIColor SomeBlue => UIColor.FromRGB(64, 145, 200);                        //#4091C8
+        public static UIColor WhiteBlue => UIColor.FromRGB(246, 251, 253);                        //#F6FBFD
     }
 }

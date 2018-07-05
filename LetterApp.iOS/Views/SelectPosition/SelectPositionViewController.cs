@@ -98,11 +98,7 @@ namespace LetterApp.iOS.Views.SelectPosition
             CustomUIExtensions.RoundShadow(_buttonPickerView);
             CustomUIExtensions.RoundShadow(_picker);
             CustomUIExtensions.RoundShadow(_pickerImage);
-
-            _buttonView.Layer.CornerRadius = 2;
-            _buttonView.ClipsToBounds = true;
-            _buttonView.Layer.BorderWidth = 1;
-            _buttonView.Layer.BorderColor = Colors.White.CGColor;
+            CustomUIExtensions.SelectButton(_buttonView, Colors.White);
         }
 
         public override void ViewWillAppear(bool animated)

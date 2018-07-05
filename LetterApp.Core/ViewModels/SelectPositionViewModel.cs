@@ -98,7 +98,7 @@ namespace LetterApp.Core.ViewModels
                 if (result.StatusCode == 200)
                 {
                     await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
-                    await NavigationService.Close(this);
+                    await NavigationService.PopToRoot(false);
                 }
                 else
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
@@ -122,7 +122,10 @@ namespace LetterApp.Core.ViewModels
                 var result = await _organizationService.UpdatePosition((int)_positionId);
 
                 if (result.StatusCode == 200)
+                {
                     await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                    await NavigationService.Close(this);
+                }
                 else
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
             }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using SharpRaven.Data;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.Exceptions
 {
@@ -30,6 +31,11 @@ namespace LetterApp.Core.Exceptions
         public static void Handle(SessionTimeoutException e)
         {
             DialogService.ShowAlert(e.ToString(), AlertType.Error);
+        }
+
+        public static void Handle(FeatureNotSupportedException e)
+        {
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
         }
 
         public static void Handle(NoInternetException e)

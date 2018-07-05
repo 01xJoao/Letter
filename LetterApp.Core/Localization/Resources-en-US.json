@@ -370,5 +370,37 @@
   {
     "key": "SelectPosition_SelectPosition",
     "translated": "Role"
+  },
+  {
+    "key": "Pending_Title",
+    "translated": "Account"
+  },
+  {
+    "key": "Pending_Subtitle",
+    "translated": "Your account is \n pending for approval"
+  },
+  {
+    "key": "Pending_Description",
+    "translated": "Your will receive a confirmation email."
+  },
+  {
+    "key": "Pending_Help",
+    "translated": "Need help?"
+  },
+  {
+    "key": "Pending_LeaveButton",
+    "translated": "Leave division"
+  },
+  {
+    "key": "Pending_LogoutButton",
+    "translated": "Sign out"
+  },
+  {
+    "key": "Pending_ContinueButton",
+    "translated": "Continue"
+  },
+  {
+    "key": "Pending_Updated",
+    "translated": "Your account is under review."
   }
 ]

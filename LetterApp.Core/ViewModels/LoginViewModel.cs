@@ -121,10 +121,9 @@ namespace LetterApp.Core.ViewModels
                     });
 
                     bool userIsActiveInDivision = false;
-
                     bool AnyDivisionActive = false;
 
-                    if (user.Divisions?.Count > 0)
+                    if (user?.Divisions?.Count > 0)
                     {
                         AnyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
                         userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
@@ -134,7 +133,7 @@ namespace LetterApp.Core.ViewModels
                     {
                         await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
                     }
-                    else if (user.Divisions == null && !AnyDivisionActive)
+                    else if ((user.Divisions == null || user?.Divisions?.Count == 0) && !AnyDivisionActive)
                     {
                         await NavigationService.NavigateAsync<SelectDivisionViewModel, int>((int)user.OrganizationID);
                     }

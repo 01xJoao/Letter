@@ -61,5 +61,10 @@ namespace LetterApp.Core.Services
         {
             return await _webService.GetAsync<BaseModel>($"users/division/checkuser/{divisionId}", needsHeaderCheck: true).ConfigureAwait(false);
         }
+
+        public async Task<BaseModel> LeaveDivision(int divisionId)
+        {
+            return await _webService.GetAsync<BaseModel>($"users/division/leave/{divisionId}", needsHeaderCheck: true).ConfigureAwait(false);
+        }
     }
 }
