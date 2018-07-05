@@ -12,10 +12,14 @@ namespace LetterApp.Core.ViewModels
     public class LoadingViewModel : XViewModel
     {
         private IAuthenticationService _authService;
+        private IDialogService _dialogService;
+        private IStatusCodeService _statusCodeService;
 
-        public LoadingViewModel(IAuthenticationService authService) 
+        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService)
         {
-            _authService = authService;  
+            _authService = authService;
+            _dialogService = dialogService;
+            _statusCodeService = statusCodeService;
         }
 
         public override async Task InitializeAsync()
@@ -26,6 +30,8 @@ namespace LetterApp.Core.ViewModels
             {
                 if (AppSettings.IsUserLogged)
                     await CheckUser();
+                else if (AppSettings.UserIsPeddingApproval)
+                    await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                 else
                     await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
             }
@@ -34,7 +40,6 @@ namespace LetterApp.Core.ViewModels
                 Ui.Handle(ex as dynamic);
             }
         }
-
 
         private async Task CheckUser()
         {
@@ -55,7 +60,6 @@ namespace LetterApp.Core.ViewModels
                     });
 
                     bool userIsActiveInDivision = false;
-
                     bool AnyDivisionActive = false;
 
                     if (user.Divisions?.Count > 0)
@@ -68,7 +72,7 @@ namespace LetterApp.Core.ViewModels
                     {
                         await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
                     }
-                    else if (user.Divisions == null || !AnyDivisionActive)
+                    else if (user.Divisions == null && !AnyDivisionActive)
                     {
                         await NavigationService.NavigateAsync<SelectDivisionViewModel, int>((int)user.OrganizationID);
                     }
@@ -78,6 +82,7 @@ namespace LetterApp.Core.ViewModels
                     }
                     else if (!userIsActiveInDivision)
                     {
+                        AppSettings.UserIsPeddingApproval = true;
                         await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                     }
                     else
@@ -85,9 +90,14 @@ namespace LetterApp.Core.ViewModels
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                     }
                 }
+                else
+                {
+                    await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                }
             }
             catch (Exception ex)
             {
+                await NavigationService.NavigateAsync<MainViewModel, object>(null);
                 Ui.Handle(ex as dynamic);
             }
         }

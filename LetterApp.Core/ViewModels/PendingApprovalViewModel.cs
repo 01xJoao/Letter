@@ -8,6 +8,10 @@ namespace LetterApp.Core.ViewModels
 {
     public class PendingApprovalViewModel : XViewModel
     {
+
+        //IMPORTANT!!!! Check & Set: AppSettings.UserIsPeddingApproval = true;
+
+
         private IOrganizationService _organizationService;
         private IDialogService _dialogService;
 

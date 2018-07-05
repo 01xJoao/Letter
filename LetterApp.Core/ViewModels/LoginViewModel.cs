@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
@@ -11,7 +10,6 @@ using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.RequestModels;
-using SharpRaven.Data;
 using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
@@ -78,8 +76,7 @@ namespace LetterApp.Core.ViewModels
 
                 if(currentUser.StatusCode == 200)
                 {
-                    AppSettings.IsUserLogged = true;
-
+                    AppSettings.Logout();
                     Realm.Write(() => Realm.Add(currentUser, true));
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
@@ -129,7 +126,7 @@ namespace LetterApp.Core.ViewModels
 
                     if (user.Divisions?.Count > 0)
                     {
-                        user.Divisions.Any(x => x.IsDivisonActive == true);
+                        AnyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
                         userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
                     }
 
@@ -147,15 +144,21 @@ namespace LetterApp.Core.ViewModels
                     }
                     else if (!userIsActiveInDivision)
                     {
+                        AppSettings.IsUserLogged = false;
+                        AppSettings.UserIsPeddingApproval = true;
                         await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                     }
                     else
                     {
+                        AppSettings.UserIsPeddingApproval = false;
+                        AppSettings.IsUserLogged = true;
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                     }
                 }
                 else
+                {
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(userCheck.StatusCode), AlertType.Error);
+                }
             }
             catch (Exception ex)
             {
