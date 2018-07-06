@@ -38,6 +38,17 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             UILabelExtensions.SetupLabelAppearance(_label1, _text1, Colors.GrayLabel, 14f);
             UILabelExtensions.SetupLabelAppearance(_label2, _text2, Colors.GrayLabel, 14f);
             UILabelExtensions.SetupLabelAppearance(_label3, _text3, Colors.GrayLabel, 14f);
+
+            CustomUIExtensions.RoundView(_dotview1);
+            CustomUIExtensions.RoundView(_dotview2);
+            CustomUIExtensions.RoundView(_dotview3);
+
+            if (PhoneModelExtensions.IsSmallIphone())
+            {
+                _label3.Hidden = true;
+                _dotview3.Hidden = true;
+            }
+
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 17f, _confirmButtonText);
 
             _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);

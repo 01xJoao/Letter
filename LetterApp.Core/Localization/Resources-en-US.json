@@ -336,19 +336,19 @@
     "translated": "Private Divisions"
   },
   {
-    "key": "SelectOrganization_PublicLabel",
+    "key": "SelectDivision_PublicLabel",
     "translated": "Public Divisions"
   },
   {
-    "key": "SelectOrganization_InsertText",
+    "key": "SelectDivision_InsertText",
     "translated": "Access code"
   },
   {
-    "key": "SelectOrganization_SubmitButton",
+    "key": "SelectDivision_SubmitButton",
     "translated": "Join"
   },
   {
-    "key": "SelectOrganization_LeaveOrganization",
+    "key": "SelectDivision_LeaveOrganization",
     "translated": "Leave Organization"
   },
   {
@@ -356,8 +356,16 @@
     "translated": "Select Division"
   },
   {
-    "key": "SelectOrganization_MembersLabel",
-    "translated": "Members"
+    "key": "SelectDivision_EmailLabel",
+    "translated": "Email:"
+  },
+  {
+    "key": "SelectDivision_MembersLabel",
+    "translated": "Users"
+  },
+  {
+    "key": "SelectDivision_DescriptionLabel",
+    "translated": "Description:"
   },
   {
     "key": "SelectPosition_TitleLabel",

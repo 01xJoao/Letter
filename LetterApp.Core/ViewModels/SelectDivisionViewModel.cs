@@ -135,7 +135,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var result = await _dialogService.ShowInformation(division.Name, division.Email, $"{division.UserCount} {MembersLabel}", division.Description, submitButton);
+                var result = await _dialogService.ShowInformation(division.Name, division.Email, $"{division.UserCount} {MembersLabel}", division.Description, SubmitButton);
 
                 if (result)
                 {
@@ -173,20 +173,22 @@ namespace LetterApp.Core.ViewModels
         public string TitleLabel => L10N.Localize("SelectDivision_TitleLabel");
 
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
-        private string privateDivisionLabel => L10N.Localize("SelectDivision_PrivateLabel");
-        private string publicDivisionLabel => L10N.Localize("SelectOrganization_PublicLabel");
-        private string insertDivisionText => L10N.Localize("SelectOrganization_InsertText");
-        private string submitButton => L10N.Localize("SelectOrganization_SubmitButton");
-        private string leaveOrganizationButton => L10N.Localize("SelectOrganization_LeaveOrganization");
-        private string MembersLabel => L10N.Localize("SelectOrganization_MembersLabel");
+        private string PrivateDivisionLabel     => L10N.Localize("SelectDivision_PrivateLabel");
+        private string PublicDivisionLabel      => L10N.Localize("SelectDivision_PublicLabel");
+        private string InsertDivisionText       => L10N.Localize("SelectDivision_InsertText");
+        private string SubmitButton             => L10N.Localize("SelectDivision_SubmitButton");
+        private string LeaveOrganizationButton  => L10N.Localize("SelectDivision_LeaveOrganization");
+        private string MailLabel                => L10N.Localize("SelectDivision_EmailLabel");
+        private string MembersLabel             => L10N.Localize("SelectDivision_MembersLabel");
+        private string DescriptionLabel         => L10N.Localize("SelectDivision_DescriptionLabel");
 
         private void SetL10NResources()
         {
-            LocationResources.Add("Private", privateDivisionLabel);
-            LocationResources.Add("Public", publicDivisionLabel);
-            LocationResources.Add("Insert", insertDivisionText);
-            LocationResources.Add("Submit", submitButton);
-            LocationResources.Add("Leave", leaveOrganizationButton);
+            LocationResources.Add("Private", PrivateDivisionLabel);
+            LocationResources.Add("Public", PublicDivisionLabel);
+            LocationResources.Add("Insert", InsertDivisionText);
+            LocationResources.Add("Submit", SubmitButton);
+            LocationResources.Add("Leave", LeaveOrganizationButton);
         }
 
         #endregion

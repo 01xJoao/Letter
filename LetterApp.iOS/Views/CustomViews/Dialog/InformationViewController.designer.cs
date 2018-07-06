@@ -22,6 +22,15 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 		UIKit.UIButton _closeButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView _dotview1 { get; set; }
+
+		[Outlet]
+		UIKit.UIView _dotview2 { get; set; }
+
+		[Outlet]
+		UIKit.UIView _dotview3 { get; set; }
+
+		[Outlet]
 		UIKit.UILabel _label1 { get; set; }
 
 		[Outlet]
@@ -38,6 +47,16 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_backgroundView != null) {
+				_backgroundView.Dispose ();
+				_backgroundView = null;
+			}
+
+			if (_buttonView != null) {
+				_buttonView.Dispose ();
+				_buttonView = null;
+			}
+
 			if (_closeButton != null) {
 				_closeButton.Dispose ();
 				_closeButton = null;
@@ -68,14 +87,19 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 				_titleLabel = null;
 			}
 
-			if (_backgroundView != null) {
-				_backgroundView.Dispose ();
-				_backgroundView = null;
+			if (_dotview1 != null) {
+				_dotview1.Dispose ();
+				_dotview1 = null;
 			}
 
-			if (_buttonView != null) {
-				_buttonView.Dispose ();
-				_buttonView = null;
+			if (_dotview2 != null) {
+				_dotview2.Dispose ();
+				_dotview2 = null;
+			}
+
+			if (_dotview3 != null) {
+				_dotview3.Dispose ();
+				_dotview3 = null;
 			}
 		}
 	}

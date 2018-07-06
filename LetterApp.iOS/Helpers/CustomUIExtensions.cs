@@ -56,5 +56,11 @@ namespace LetterApp.iOS.Helpers
             button.Layer.BorderWidth = 1;
             button.Layer.BorderColor = color.CGColor;
         }
+
+        public static void RoundView(UIView view)
+        {
+            view.Layer.CornerRadius = view.Frame.Height/2;
+            view.Layer.MasksToBounds = true;
+        }
     }
 }
