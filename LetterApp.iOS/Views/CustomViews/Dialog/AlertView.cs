@@ -22,7 +22,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
             _duration = duration;
 
-            UILabelExtensions.SetupLabelAppearance(_titleLabel, title, Colors.White, 14f);
+            UILabelExtensions.SetupLabelAppearance(_titleLabel, title, Colors.White, 14f, UIFontWeight.Medium);
 
             switch (alertType)
             {
