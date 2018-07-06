@@ -97,7 +97,7 @@
   },
   {
     "key": "Code_S207",
-    "translated": "Account successfully created! \n We sent a email with a activation code."
+    "translated": "Account successfully created! \n We sent an email with an activation code."
   },
   {
     "key": "Code_S208",
@@ -229,7 +229,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_EmailConfirmation",
-    "translated": "We sent a email with a verification code. \n (Please check your SPAM folder)"
+    "translated": "We sent an email with a verification code. \n (Please check your SPAM folder)"
   },
   {
     "key": "RecoverPasswordViewModel_PasswordMatch",
@@ -389,7 +389,7 @@
   },
   {
     "key": "Pending_Description",
-    "translated": "Your will receive a confirmation email."
+    "translated": "Your will receive an confirmation email."
   },
   {
     "key": "Pending_Help",
