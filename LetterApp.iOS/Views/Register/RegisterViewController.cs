@@ -96,8 +96,6 @@ namespace LetterApp.iOS.Views.Register
         {
             base.ViewWillAppear(animated);
 
-            //TODO: Maybe Change this to BaseViewController
-
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
