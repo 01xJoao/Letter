@@ -32,7 +32,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ngw-vP-Y37">
-                    <rect key="frame" x="26" y="209" width="321.5" height="247.5"/>
+                    <rect key="frame" x="26" y="224.5" width="321.5" height="217"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ypF-S0-a8c">
                             <rect key="frame" x="286" y="15.5" width="20" height="20"/>
@@ -54,7 +54,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6hk-ze-Mz6">
-                            <rect key="frame" x="0.0" y="198" width="322" height="50"/>
+                            <rect key="frame" x="0.0" y="167.5" width="322" height="50"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gny-2B-cOk">
                                     <rect key="frame" x="0.0" y="0.5" width="322" height="5"/>
@@ -135,6 +135,7 @@
                         <constraint firstItem="VtJ-I5-whz" firstAttribute="top" secondItem="ypF-S0-a8c" secondAttribute="bottom" constant="5" id="Vi6-lV-OZo"/>
                         <constraint firstItem="pzo-hk-mq5" firstAttribute="leading" secondItem="Ztc-bT-SCA" secondAttribute="leading" id="bQE-jS-Y2C"/>
                         <constraint firstItem="6hk-ze-Mz6" firstAttribute="leading" secondItem="Ngw-vP-Y37" secondAttribute="leading" id="chZ-Vw-ssV"/>
+                        <constraint firstItem="Oef-E1-j9z" firstAttribute="top" secondItem="fQC-wJ-E1y" secondAttribute="bottom" constant="25" id="d9J-Fq-LJx"/>
                         <constraint firstItem="fQC-wJ-E1y" firstAttribute="trailing" secondItem="8Cz-MF-wuo" secondAttribute="trailing" id="eTk-4A-Za7"/>
                         <constraint firstAttribute="trailing" secondItem="ypF-S0-a8c" secondAttribute="trailing" constant="15" id="hUL-6c-BAA"/>
                         <constraint firstItem="8Cz-MF-wuo" firstAttribute="trailing" secondItem="ur5-u0-0NY" secondAttribute="trailing" id="j3I-ti-DgT"/>
@@ -150,7 +151,6 @@
                 <constraint firstItem="Ngw-vP-Y37" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="RJ6-MS-1Dk"/>
                 <constraint firstItem="Ngw-vP-Y37" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="oQe-0y-6Lj"/>
                 <constraint firstItem="Ngw-vP-Y37" firstAttribute="width" secondItem="2" secondAttribute="width" multiplier="6/7" id="sCr-Dq-8mB"/>
-                <constraint firstItem="Ngw-vP-Y37" firstAttribute="height" secondItem="2" secondAttribute="height" multiplier="1/2.7" id="t7a-LZ-yt1"/>
             </constraints>
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>

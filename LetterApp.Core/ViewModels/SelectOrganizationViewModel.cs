@@ -84,9 +84,13 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView()
         {
-            //TODO: Add dialog if user wants to log out.
-            AppSettings.Logout();
-            await NavigationService.NavigateAsync<LoginViewModel, object>(null);
+            var result = await _dialogService.ShowQuestion("Do you want to sign out?", "Sign Out", QuestionType.Bad);
+
+            if(result)
+            {
+                AppSettings.Logout();
+                await NavigationService.NavigateAsync<LoginViewModel, object>(null);
+            }
         }
 
         private bool CanExecute() => !IsBusy;

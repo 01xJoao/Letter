@@ -43,10 +43,16 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             CustomUIExtensions.RoundView(_dotview2);
             CustomUIExtensions.RoundView(_dotview3);
 
-            if (PhoneModelExtensions.IsSmallIphone())
+            if(string.IsNullOrEmpty(_text2))
             {
-                _label3.Hidden = true;
+                _dotview2.Hidden = true;
+                _label2.Hidden = true
+            }
+
+            if (string.IsNullOrEmpty(_text3))
+            {
                 _dotview3.Hidden = true;
+                _label3.Hidden = true
             }
 
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 17f, _confirmButtonText);

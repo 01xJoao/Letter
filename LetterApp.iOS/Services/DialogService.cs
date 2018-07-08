@@ -45,6 +45,16 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
+        public Task<bool> ShowQuestion(string title = "", string buttonText = "", QuestionType questionType = QuestionType.Normal)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var questionView = new QuestionViewController(title, buttonText, val => tcs.TrySetResult(val), questionType);
+            questionView.Show();
+
+            return tcs.Task;
+        }
+
         public void StartLoading()
         {
             StopLoading();
