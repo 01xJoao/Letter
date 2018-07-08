@@ -32,9 +32,9 @@ namespace LetterApp.Core.Services
             return await _webService.GetAsync<List<DivisionModel>>($"organization/getdivisions/{organizationId}", needsHeaderCheck: true).ConfigureAwait(false);
         }
 
-        public async Task<BaseModel> SetUserDivision(DivisionRequestModel division)
+        public async Task<BaseModel> JoinDivision(int divisionId)
         {
-            return await _webService.PostAsync<BaseModel>($"users/setuserdivision", division, needsHeaderCheck: true).ConfigureAwait(false);
+            return await _webService.GetAsync<BaseModel>($"users/joindivision/{divisionId}", needsHeaderCheck: true).ConfigureAwait(false);
         }
 
         public async Task<DivisionModel> VerifyDivisionCode(string code)

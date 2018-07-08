@@ -72,6 +72,10 @@
     "translated": "You are already in this division."
   },
   {
+    "key": "Code_E118",
+    "translated": "You are banned from this organization."
+  },
+  {
     "key": "Code_S201",
     "translated": "Password successfully changed."
   },

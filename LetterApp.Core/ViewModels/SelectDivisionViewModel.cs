@@ -10,13 +10,14 @@ using LetterApp.Models.DTO.ReceivedModels;
 
 namespace LetterApp.Core.ViewModels
 {
-    public class SelectDivisionViewModel : XViewModel<int>
+    public class SelectDivisionViewModel : XViewModel<Tuple<int,bool>>
     {
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private IOrganizationService _organizationService;
 
         private int _organizationId;
+        public bool NewUser { get; set; }
 
         private List<DivisionModel> _divisions;
         public List<DivisionModel> Divisions
@@ -51,9 +52,10 @@ namespace LetterApp.Core.ViewModels
             _statusCodeService = statusCodeService;
         }
 
-        protected override void Prepare(int organizationId)
+        protected override void Prepare(Tuple<int, bool> data)
         {
-            _organizationId = organizationId;
+            _organizationId = data.Item1;
+            NewUser = data.Item2;
         }
 
         public override async Task InitializeAsync()
@@ -74,35 +76,6 @@ namespace LetterApp.Core.ViewModels
             {
                 IsBusy = false;
                 IsLoading = false;
-            }
-        }
-
-        private async Task LeaveOrganization()
-        {
-            IsBusy = true;
-
-            try
-            {
-                var result = await _organizationService.LeaveOrganization(_organizationId);
-
-                if(result.StatusCode == 208)
-                {
-                    await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
-                    await NavigationService.Close(this);
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
-                }
-                else
-                {
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
 
@@ -139,11 +112,13 @@ namespace LetterApp.Core.ViewModels
 
                 if (result)
                 {
-
-                    var res = await _organizationService.CheckUserInDivision(division.DivisionID);
+                    var res = await _organizationService.JoinDivision(division.DivisionID);
 
                     if (res.StatusCode == 200)
-                        await NavigationService.NavigateAsync<SelectPositionViewModel, Tuple<int, object>>(new Tuple<int, object>(_organizationId, division.DivisionID));
+                    {
+                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
+                        await NavigationService.PopToRoot(false);
+                    }
                     else
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Info);
                 }
@@ -158,11 +133,48 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task LeaveOrganization()
+        {
+            IsBusy = true;
+
+            try
+            {
+                var result = await _organizationService.LeaveOrganization(_organizationId);
+
+                if (result.StatusCode == 208)
+                {
+                    await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
+                    await NavigationService.PopToRoot(true);
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
+                }
+                else
+                {
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         private async Task CloseView()
         {
-            AppSettings.Logout();
-            await NavigationService.NavigateAsync<LoginViewModel, object>(null);
-            await NavigationService.Close(this);
+            if(NewUser)
+            {
+                //TODO: Add dialog if user wants to log out.
+                AppSettings.Logout();
+                await NavigationService.NavigateAsync<LoginViewModel, object>(null);
+                await NavigationService.PopToRoot(true);
+            }
+            else
+            {
+                await NavigationService.Close(this);
+            }
         }
 
         private bool CanExecute() => !IsBusy;

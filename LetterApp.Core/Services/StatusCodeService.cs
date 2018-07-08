@@ -30,6 +30,7 @@ namespace LetterApp.Core.Services
             CodeDictionary.Add(115, Organization_WrongCode);
             CodeDictionary.Add(116, Organization_NoPosition);
             CodeDictionary.Add(117, Organization_UserInDivision);
+            CodeDictionary.Add(118, Organization_Banned);
 
             CodeDictionary.Add(201, Password_Changed);
             CodeDictionary.Add(202, User_DivisionSet);
@@ -69,6 +70,7 @@ namespace LetterApp.Core.Services
         string Organization_WrongCode       => L10N.Localize("Code_E115");
         string Organization_NoPosition      => L10N.Localize("Code_E116");
         string Organization_UserInDivision  => L10N.Localize("Code_E117");
+        string Organization_Banned          => L10N.Localize("Code_E118");
 
         //success
         string Password_Changed         => L10N.Localize("Code_S201");

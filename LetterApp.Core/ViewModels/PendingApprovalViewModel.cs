@@ -63,28 +63,23 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CheckUser(bool isUpdating = false)
         {
+            IsLoading = isUpdating;
             IsBusy = true;
 
             try
             {
                 var user = await _authenticationService.CheckUser();
-
                 _organizationId = (int)user.OrganizationID;
+
                 bool userIsActiveInDivision = false;
+                bool anyDivisionActive = false;
+                bool userIsUnderReview = false;
 
                 if (user?.Divisions?.Count > 0)
                 {
-                    var userInAllDivisionsIsActive = user.Divisions.Any(x => x.IsUserInDivisionActive == false);
-                    
-                    if(!userInAllDivisionsIsActive)
-                    {
-                        AppSettings.IsUserLogged = true;
-                        await Task.Delay(TimeSpan.FromSeconds(4f));
-                        await NavigateToMain();
-                        return;
-                    }
-                                                       
+                    anyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
                     userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+                    userIsUnderReview = user.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
                 }
                 else
                 {
@@ -92,22 +87,29 @@ namespace LetterApp.Core.ViewModels
                     return;
                 }
 
-                if (userIsActiveInDivision)
+                if (!userIsUnderReview && userIsActiveInDivision)
                 {
-                    AppSettings.UserIsPeddingApproval = false;
-                    AppSettings.IsUserLogged = true;
+                    await Task.Delay(TimeSpan.FromSeconds(4f));
+                    await NavigateToMain();
+                    return;
+                }
+                else if (userIsUnderReview && userIsActiveInDivision)
+                {
                     CanContinue = true;
                 }
-                else
+                else if(userIsUnderReview && !userIsActiveInDivision)
                 {
                     Division = user.Divisions.First(x => x.IsUserInDivisionActive == false && x.IsDivisonActive == true);
-                    AppSettings.UserIsPeddingApproval = true;
-                    AppSettings.IsUserLogged = false;
 
                     if (isUpdating)
                         _dialogService.ShowAlert(UpdateAlert, AlertType.Info);
                     else
                         RaisePropertyChanged(nameof(CanContinue));
+                }
+                else
+                {
+                    await Logout();
+                    return;
                 }
             }
             catch (Exception ex)
@@ -116,7 +118,11 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
-                RaisePropertyChanged(nameof(IsLoading));
+                if (isUpdating)
+                    IsLoading = false;
+                else
+                    RaisePropertyChanged(nameof(IsLoading));
+                
                 IsBusy = false;
             }
         }
@@ -128,13 +134,13 @@ namespace LetterApp.Core.ViewModels
 
         private async Task NavigateToMain()
         {
+            AppSettings.MainMenuAllowed = true;
             await NavigationService.NavigateAsync<MainViewModel, object>(null);
         }
 
         private async Task Logout()
         {
-            AppSettings.UserIsPeddingApproval = false;
-            AppSettings.IsUserLogged = false;
+            AppSettings.Logout();
             await NavigationService.NavigateAsync<LoginViewModel, object>(null);
         }
 
@@ -148,8 +154,7 @@ namespace LetterApp.Core.ViewModels
 
                 if(result.StatusCode == 206)
                 {
-                    AppSettings.UserIsPeddingApproval = false;
-                    await NavigationService.NavigateAsync<SelectDivisionViewModel, object>(_organizationId);
+                    await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>(_organizationId, true));
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
                 }
                 else

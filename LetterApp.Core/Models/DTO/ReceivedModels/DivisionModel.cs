@@ -14,6 +14,7 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string UserCount { get; set; }
         public bool IsDivisonActive { get; set; }
         public bool IsUserInDivisionActive { get; set; }
+        public bool IsUnderReview { get; set; }
         [Indexed]
         public bool IsUserAdmin { get; set; }
         public DateTimeOffset LastUpdate { get; set; }

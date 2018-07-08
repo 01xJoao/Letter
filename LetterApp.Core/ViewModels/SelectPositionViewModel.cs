@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
@@ -12,7 +13,7 @@ using LetterApp.Models.DTO.ReceivedModels;
 
 namespace LetterApp.Core.ViewModels
 {
-    public class SelectPositionViewModel : XViewModel<Tuple<int,object>>
+    public class SelectPositionViewModel : XViewModel<int>
     {
         private IOrganizationService _organizationService;
         private IDialogService _dialogService;
@@ -20,7 +21,6 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authenticationService;
 
         private int _organizationId;
-        private int? _divisionId;
         private int? _positionId;
 
         private List<PositionModel> _positions;
@@ -31,7 +31,7 @@ namespace LetterApp.Core.ViewModels
         }
 
         private XPCommand _setUserCommand;
-        public XPCommand SetUserCommand => _setUserCommand ?? (_setUserCommand = new XPCommand(async () => await SetUser(), CanExecute));
+        public XPCommand SetUserCommand => _setUserCommand ?? (_setUserCommand = new XPCommand(async () => await UpdatePosition(), CanExecute));
 
         private XPCommand<int> _setPositionCommand;
         public XPCommand<int> SetPositionCommand => _setPositionCommand ?? (_setPositionCommand = new XPCommand<int>((position) => SetPosition(position)));
@@ -44,12 +44,9 @@ namespace LetterApp.Core.ViewModels
             _authenticationService = authenticationService;
         }
 
-        protected override void Prepare(Tuple<int, object> data)
+        protected override void Prepare(int orgId)
         {
-            _organizationId = data.Item1;
-
-            if(data.Item2 != null)
-                _divisionId = (int)data.Item2;
+            _organizationId = orgId;
         }
 
         public override async Task InitializeAsync()
@@ -75,46 +72,10 @@ namespace LetterApp.Core.ViewModels
             _positionId = position;
         }
 
-        private async Task SetUser()
-        {
-            if(_positionId != null)
-            {
-                if (_divisionId != null)
-                    await SetUserDivison();
-                else
-                    await UpdatePosition();
-            }
-        }
-
-        private async Task SetUserDivison()
-        {
-            IsBusy = true;
-
-            try
-            {
-                var request = new DivisionRequestModel((int)_divisionId, (int)_positionId);
-                var result = await _organizationService.SetUserDivision(request);
-
-                if (result.StatusCode == 200)
-                {
-                    await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
-                    await NavigationService.PopToRoot(false);
-                }
-                else
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
         private async Task UpdatePosition()
         {
+            if (_positionId == null) return;
+
             IsBusy = true;
                 
             try
@@ -123,8 +84,19 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 200)
                 {
-                    await NavigationService.NavigateAsync<MainViewModel, object>(null);
-                    await NavigationService.Close(this);
+                    var res = await _authenticationService.CheckUser();
+
+                    var userIsActiveInDivision = res.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+
+                    if (userIsActiveInDivision)
+                    {
+                        await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                        await NavigationService.Close(this);
+                    }
+                    else
+                    {
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>(_organizationId, true));
+                    }
                 }
                 else
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);

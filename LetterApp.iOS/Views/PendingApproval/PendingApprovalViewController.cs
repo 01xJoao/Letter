@@ -36,7 +36,7 @@ namespace LetterApp.iOS.Views.PendingApproval
                     SetupView(ViewModel.CanContinue);
                     break;
                 case nameof(ViewModel.IsLoading):
-                    Loading(false);
+                    Loading(ViewModel.IsLoading);
                     break;
             }
         }

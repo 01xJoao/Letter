@@ -48,7 +48,7 @@ namespace LetterApp.Core.ViewModels
                 if(organization?.StatusCode == 200)
                 {
                     if (!organization.RequiresAccessCode)
-                        await NavigationService.NavigateAsync<SelectDivisionViewModel, int>(organization.OrganizationID);
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>(organization.OrganizationID);
                     else
                     {
                         IsBusy = false;
@@ -60,7 +60,7 @@ namespace LetterApp.Core.ViewModels
                             var res = await _organizationService.AccessCodeOrganization(orgCode);
 
                             if(res.StatusCode == 200)
-                                await NavigationService.NavigateAsync<SelectDivisionViewModel, int>(organization.OrganizationID);
+                                await NavigationService.NavigateAsync<SelectPositionViewModel, int>(organization.OrganizationID);
                             else
                                 _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Error);
                         }
@@ -84,6 +84,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView()
         {
+            //TODO: Add dialog if user wants to log out.
             AppSettings.Logout();
             await NavigationService.NavigateAsync<LoginViewModel, object>(null);
         }

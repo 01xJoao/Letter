@@ -15,16 +15,18 @@ namespace LetterApp.iOS.Sources
         private List<DivisionModel> _divisions;
         private Dictionary<string, string> _locationResources;
         private EventHandler<bool> _scrollsToRowEvent;
+        private bool _showLeaveOrganization;
 
         public event EventHandler<DivisionModel> DivisionSelectedEvent;
         public event EventHandler<string> SubmitButtonEvent;
         public event EventHandler LeaveOrganizationEvent;
 
-        public SelectDivisionsSource(UITableView tableView, List<DivisionModel> divisions, Dictionary<string, string> locationResources)
+        public SelectDivisionsSource(UITableView tableView, List<DivisionModel> divisions, Dictionary<string, string> locationResources, bool showLeaveOrganization)
         {
             _divisions = divisions;
             _locationResources = locationResources;
             _tableView = tableView;
+            _showLeaveOrganization = showLeaveOrganization;
 
             _scrollsToRowEvent -= ScrollsToRow;
             _scrollsToRowEvent += ScrollsToRow;
@@ -109,7 +111,7 @@ namespace LetterApp.iOS.Sources
                 case (int)Sections.Divisions: return _divisions.Count;
                 case (int)Sections.Separator: return 1;
                 case (int)Sections.InsertDivision: return 1;
-                case (int)Sections.LeaveOrganization: return 1;
+                case (int)Sections.LeaveOrganization: return _showLeaveOrganization ? 1 : 0;
                 default: return 0;
             }
         }

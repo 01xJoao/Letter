@@ -77,6 +77,7 @@ namespace LetterApp.Core.ViewModels
                 if(currentUser.StatusCode == 200)
                 {
                     AppSettings.Logout();
+                    AppSettings.IsUserLogged = true;
                     Realm.Write(() => Realm.Add(currentUser, true));
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
@@ -114,43 +115,40 @@ namespace LetterApp.Core.ViewModels
 
                     Realm.Write(() =>
                     {
-                        user.IsUserActive = userCheck.IsUserActive;
                         user.Position = userCheck.Position;
                         user.OrganizationID = userCheck.OrganizationID;
                         user.Divisions = userCheck.Divisions;
                     });
 
                     bool userIsActiveInDivision = false;
-                    bool AnyDivisionActive = false;
+                    bool anyDivisionActive = false;
+                    bool userIsUnderReview = false;
 
                     if (user?.Divisions?.Count > 0)
                     {
-                        AnyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
+                        anyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
                         userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+                        userIsUnderReview = user.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
                     }
 
                     if (user.OrganizationID == null)
                     {
                         await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
                     }
-                    else if ((user.Divisions == null || user?.Divisions?.Count == 0) && !AnyDivisionActive)
-                    {
-                        await NavigationService.NavigateAsync<SelectDivisionViewModel, int>((int)user.OrganizationID);
-                    }
                     else if (string.IsNullOrEmpty(user.Position))
                     {
-                        await NavigationService.NavigateAsync<SelectPositionViewModel, Tuple<int, object>>(new Tuple<int, object>((int)user.OrganizationID, null));
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)user.OrganizationID);
                     }
-                    else if (!userIsActiveInDivision)
+                    else if ((user.Divisions == null || user?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
                     {
-                        AppSettings.IsUserLogged = false;
-                        AppSettings.UserIsPeddingApproval = true;
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)user.OrganizationID, true));
+                    }
+                    else if (!userIsActiveInDivision && userIsUnderReview)
+                    {
                         await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
                     }
                     else
                     {
-                        AppSettings.UserIsPeddingApproval = false;
-                        AppSettings.IsUserLogged = true;
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                     }
                 }

@@ -57,7 +57,7 @@ namespace LetterApp.iOS.Views.SelectDivision
         private void SetupTableView()
         {
             _tableView.Hidden = false;
-            _source = new SelectDivisionsSource(_tableView, ViewModel.Divisions, ViewModel.LocationResources);
+            _source = new SelectDivisionsSource(_tableView, ViewModel.Divisions, ViewModel.LocationResources, ViewModel.NewUser);
             _tableView.BackgroundColor = Colors.SelectBlue;
             _tableView.Source = _source;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;

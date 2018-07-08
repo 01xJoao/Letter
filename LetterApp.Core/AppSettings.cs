@@ -40,10 +40,10 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(UserEmail), value);
         }
 
-        public static bool UserIsPeddingApproval
+        public static bool MainMenuAllowed
         {
-            get => Preferences.Get(nameof(UserIsPeddingApproval), false);
-            set => Preferences.Set(nameof(UserIsPeddingApproval), value);
+            get => Preferences.Get(nameof(MainMenuAllowed), false);
+            set => Preferences.Set(nameof(MainMenuAllowed), value);
         }
 
         public static void Logout()
@@ -53,7 +53,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(AuthTokenExpirationDate));
             Preferences.Remove(nameof(PubNubToken));
             Preferences.Remove(nameof(PubNubTokenExpirationDate));
-            Preferences.Remove(nameof(UserIsPeddingApproval));
+            Preferences.Remove(nameof(MainMenuAllowed));
         }
     }
 }

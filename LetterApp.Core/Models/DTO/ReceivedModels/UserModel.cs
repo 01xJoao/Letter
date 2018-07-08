@@ -25,7 +25,6 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public IList<DivisionModel> Divisions;
         public int? OrganizationID { get; set; }
         public bool? IsAdministrator { get; set; }
-        public bool IsUserActive { get; set; }
         public int? StatusCode { get; set; }
     }
 }

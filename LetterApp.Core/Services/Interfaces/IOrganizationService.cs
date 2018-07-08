@@ -14,6 +14,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<List<DivisionModel>> GetDivisions(int organizationId);
 
         Task<BaseModel> SetUserDivision(DivisionRequestModel division);
+        Task<BaseModel> JoinDivision(int divisionId);
         Task<DivisionModel> VerifyDivisionCode(string code);
         Task<BaseModel> LeaveOrganization(int organizationId);
         Task<BaseModel> LeaveDivision(int divisionId);
