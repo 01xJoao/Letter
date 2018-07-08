@@ -46,13 +46,13 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             if(string.IsNullOrEmpty(_text2))
             {
                 _dotview2.Hidden = true;
-                _label2.Hidden = true
+                _label2.Hidden = true;
             }
 
             if (string.IsNullOrEmpty(_text3))
             {
                 _dotview3.Hidden = true;
-                _label3.Hidden = true
+                _label3.Hidden = true;
             }
 
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 17f, _confirmButtonText);
