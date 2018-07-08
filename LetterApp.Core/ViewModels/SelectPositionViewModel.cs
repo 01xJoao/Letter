@@ -90,6 +90,7 @@ namespace LetterApp.Core.ViewModels
 
                     if (userIsActiveInDivision)
                     {
+                        AppSettings.MainMenuAllowed = true;
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                         await NavigationService.Close(this);
                     }
