@@ -40,5 +40,10 @@ namespace LetterApp.Core.Services
         {
             return await _webService.PostAsync<BaseModel>("registration/add", userAccount, needsHeaderCheck: false).ConfigureAwait(false);
         }
+
+        public async Task<CheckUserModel> CheckUser()
+        {
+            return await _webService.GetAsync<CheckUserModel>("usercheck/user", needsHeaderCheck: true).ConfigureAwait(false);
+        }
     }
 }

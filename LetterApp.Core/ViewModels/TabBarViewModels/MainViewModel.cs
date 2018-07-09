@@ -8,7 +8,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     {
         public MainViewModel() {}
 
-
         #region resources
 
         public string ChatTab => L10N.Localize("MainViewModel_ChatTab");

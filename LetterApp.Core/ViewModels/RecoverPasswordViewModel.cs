@@ -139,8 +139,8 @@ namespace LetterApp.Core.ViewModels
 
         #region Resources
 
-        public string NewPassTitle          => L10N.Localize("RecoverPasswordViewModel_NewPassTitle");
-        public string SubmitButton => L10N.Localize("RecoverPasswordViewModel_Submit");
+        public string NewPassTitle           => L10N.Localize("RecoverPasswordViewModel_NewPassTitle");
+        public string SubmitButton           => L10N.Localize("RecoverPasswordViewModel_Submit");
 
         private string EmailAddressLabel     => L10N.Localize("RecoverPasswordViewModel_EmailAddress");
         private string ConfirmPassLabel      => L10N.Localize("RecoverPasswordViewModel_ConfirmPass");

@@ -14,7 +14,6 @@ namespace LetterApp.iOS.Views.Register
     {
         public override bool HandlesKeyboardNotifications => true;
         private bool _keyboardViewState;
-        private LOTAnimationView _lottieAnimation;
         private RegisterSource _source;
 
         public RegisterViewController() : base("RegisterViewController", null) {}
@@ -76,7 +75,7 @@ namespace LetterApp.iOS.Views.Register
 
         private void Loading()
         {
-            _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsBusy);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsBusy);
         }
 
         public override void OnKeyboardNotification(bool changeKeyboardState)
@@ -96,8 +95,6 @@ namespace LetterApp.iOS.Views.Register
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-
-            //TODO: Maybe Change this to BaseViewController
 
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
@@ -127,8 +124,6 @@ namespace LetterApp.iOS.Views.Register
 
         public override void ViewDidDisappear(bool animated)
         {
-            _lottieAnimation?.Dispose();
-            _lottieAnimation = null;
             _source?.Dispose();
             _source = null;
             MemoryUtility.ReleaseUITableViewCell(_tableView);

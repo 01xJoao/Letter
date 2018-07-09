@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers;
 using LetterApp.Core.Serialization;
 using LetterApp.Core.Services.Interfaces;
+using LetterApp.Models.DTO.ReceivedModels;
+using LetterApp.Models.DTO.RequestModels;
 using Newtonsoft.Json;
 using SharpRaven.Data;
 using Xamarin.Essentials;
@@ -34,12 +37,9 @@ namespace LetterApp.Core.Services
 
                 var contentPost = CreateSerializedHttpContent(body);
 
-                Debug.WriteLine(contentPost);
-
-                //if (needsHeaderCheck)
-                //    await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
-
-
+                if (needsHeaderCheck)
+                    await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
+                
                 var response = await HttpClient.PostAsync(resource, contentPost, ct).ConfigureAwait(false);
                 Debug.WriteLine(response);
 
@@ -64,8 +64,8 @@ namespace LetterApp.Core.Services
                 if (!VerifyInternetConnection())
                     throw new NoInternetException();
 
-                //if (needsHeaderCheck)
-                //await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
+                if (needsHeaderCheck)
+                    await UpdateClientTokenHeaderAsync(HttpClient).ConfigureAwait(false);
 
                 var response = await HttpClient.GetAsync(requestUri, ct);
                 Debug.WriteLine(response);
@@ -92,15 +92,19 @@ namespace LetterApp.Core.Services
             {
                 RavenService.Raven.Capture(new SentryEvent(new Exception($"EnsureSuccessRequestException: {content}")));
 
-                //TODO: Refresh token
-                if (response.ToString().Contains("Invalid Token"))
-                    throw new SessionTimeoutException(content);
-
-                throw new WrongCredentialsException();
+                if (response.ToString().Contains("Invalid Token") || response.ToString().Contains("Expired token"))
+                    throw new SessionTimeoutException();
+                else if (response.ToString().Contains("error"))
+                    throw new ServerErrorException();
+                else
+                    throw new WrongCredentialsException();
             }
 
+            if (!content.Contains("success"))
+                throw new ServerErrorException();
+
             if (!response.IsSuccessStatusCode)
-                throw new ServerErrorException(content, response.StatusCode);
+                throw new ServerErrorException();
         }
 
         private HttpContent CreateSerializedHttpContent(object body)
@@ -116,29 +120,34 @@ namespace LetterApp.Core.Services
             return contentPost;
         }
 
-        //private async Task UpdateClientTokenHeaderAsync(HttpClient client)
-        //{
-        //    var token = await GetValidTokenAsync().ConfigureAwait(false);
+        private async Task UpdateClientTokenHeaderAsync(HttpClient client)
+        {
+            if (new DateTime(AppSettings.AuthTokenExpirationDate) < DateTime.UtcNow.AddDays(2))
+                await RefreshTokenAsync().ConfigureAwait(false);
+            else if (client.DefaultRequestHeaders.Authorization != null)
+                return;
 
-        //    if (client.DefaultRequestHeaders.Authorization != null)
-        //        return;
+            if (!string.IsNullOrEmpty(AppSettings.AuthToken))
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AppSettings.AuthToken);
+        }
 
-        //    if (token != null)
-        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-        //}
+        private async Task<TokensModel> RefreshTokenAsync()
+        {
+            var email = AppSettings.UserEmail;
+            var password = await SecureStorage.GetAsync("password");
+            var requestModel = new UserRequestModel(email, password);
 
-        //private async Task<Token> GetValidTokenAsync()
-        //{
-        //    if (!AppSettings.IsAccessTokenValid())
-        //        return null;
+            var token = await PostAsync<TokensModel>("usercheck/tokens", requestModel, needsHeaderCheck: false).ConfigureAwait(false);
 
-        //    if (AppSettings.TokenExpirationTime < DateTime.UtcNow)
-        //        await RefreshTokenAsync().ConfigureAwait(false);
-
-        //    var token = AppSettings.CurrentUser;
-
-        //    return token;
-        //}
+            if (token.StatusCode == 200)
+            {
+                AppSettings.AuthToken = token.AuthToken;
+                AppSettings.AuthTokenExpirationDate = token.AuthTokenExpirationDate.Ticks;
+                return token;
+            }
+            else
+                throw new ServerErrorException();
+        }
 
         private async Task<T> DeserializeAsync<T>(HttpResponseMessage httpResponseMessage)
         {

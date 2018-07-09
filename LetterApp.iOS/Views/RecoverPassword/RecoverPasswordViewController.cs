@@ -17,7 +17,6 @@ namespace LetterApp.iOS.Views.RecoverPassword
         public override bool ShowAsPresentView => true;
         public override bool HandlesKeyboardNotifications => true;
         private bool _keyboardViewState;
-        private LOTAnimationView _lottieAnimation;
         private RecoverPasswordSource _source;
 
         public RecoverPasswordViewController() : base("RecoverPasswordViewController", null) {}
@@ -83,7 +82,7 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void Loading()
         {
-            _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsSubmiting);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsSubmiting);
         }
 
         public override void OnKeyboardNotification(bool changeKeyboardState)
@@ -102,8 +101,6 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         public override void ViewDidDisappear(bool animated)
         {
-            _lottieAnimation?.Dispose();
-            _lottieAnimation = null;
             _source?.Dispose();
             _source = null;
             MemoryUtility.ReleaseUIViewWithChildren(this.View);

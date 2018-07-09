@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers;
@@ -7,8 +8,9 @@ using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
+using LetterApp.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.RequestModels;
-using SharpRaven.Data;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -17,6 +19,12 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
+
+        public string UserEmail
+        {
+            get => AppSettings.UserEmail;
+            set => AppSettings.UserEmail = value;
+        }
 
         private bool _isValidEmail = true;
         public bool IsValidEmail
@@ -68,8 +76,12 @@ namespace LetterApp.Core.ViewModels
 
                 if(currentUser.StatusCode == 200)
                 {
+                    AppSettings.Logout();
+                    AppSettings.IsUserLogged = true;
                     Realm.Write(() => Realm.Add(currentUser, true));
-                    await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                    UserEmail = value.Item1;
+                    await SecureStorage.SetAsync("password", value.Item2);
+                    await CheckUser();
                 }
                 else if (currentUser.StatusCode == 102)
                 {
@@ -82,7 +94,6 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                RavenService.Raven.Capture(new SentryEvent(ex));
                 Ui.Handle(ex as dynamic);
             }
             finally
@@ -92,7 +103,67 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-                private async Task OpenRegisterView()
+        private async Task CheckUser()
+        {
+            try
+            {
+                var userCheck = await _authService.CheckUser();
+
+                if (userCheck.StatusCode == 200)
+                {
+                    var user = Realm.Find<UserModel>(userCheck.UserID);
+
+                    Realm.Write(() =>
+                    {
+                        user.Position = userCheck.Position;
+                        user.OrganizationID = userCheck.OrganizationID;
+                        user.Divisions = userCheck.Divisions;
+                    });
+
+                    bool userIsActiveInDivision = false;
+                    bool anyDivisionActive = false;
+                    bool userIsUnderReview = false;
+
+                    if (user?.Divisions?.Count > 0)
+                    {
+                        anyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
+                        userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+                        userIsUnderReview = user.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
+                    }
+
+                    if (user.OrganizationID == null)
+                    {
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
+                    }
+                    else if (string.IsNullOrEmpty(user.Position))
+                    {
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)user.OrganizationID);
+                    }
+                    else if ((user.Divisions == null || user?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
+                    {
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)user.OrganizationID, true));
+                    }
+                    else if (!userIsActiveInDivision && userIsUnderReview)
+                    {
+                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
+                    }
+                    else
+                    {
+                        await NavigationService.NavigateAsync<MainViewModel, object>(null);
+                    }
+                }
+                else
+                {
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(userCheck.StatusCode), AlertType.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task OpenRegisterView()
         {
             await NavigationService.NavigateAsync<RegisterViewModel, object>(null);
         }
@@ -101,7 +172,7 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
-                var email = await _dialogService.ShowTextInput(EnterEmail, emailInput, ConfirmButton, EmailHint, InputType.Email);
+                var email = await _dialogService.ShowTextInput(EnterEmail, string.Empty, emailInput, ConfirmButton, EmailHint, InputType.Email);
 
                 if(!string.IsNullOrEmpty(email))
                 {
@@ -115,7 +186,7 @@ namespace LetterApp.Core.ViewModels
                         _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
                     }
                     else
-                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
                 }
             }
             catch (Exception ex)

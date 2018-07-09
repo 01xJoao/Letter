@@ -13,7 +13,6 @@ namespace LetterApp.iOS.Views.Login
     public partial class LoginViewController : XViewController<LoginViewModel>, IRootView
     {
         public override bool HandlesKeyboardNotifications => true;
-        private LOTAnimationView _lottieAnimation;
         private bool keyboardViewState;
 
         public LoginViewController() : base("LoginViewController", null) {}
@@ -87,21 +86,25 @@ namespace LetterApp.iOS.Views.Login
             keyboardButton.TouchUpInside += OnSignInButton_TouchUpInside;
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
-            UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel,
-                                             UIReturnKeyType.Next, keyboardButton);
+            UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel, UIReturnKeyType.Next, keyboardButton);
             
             _passwordTextField.SecureTextEntry = true;
             _passwordWithConstraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (_forgotPassButton.Frame.Width + 7);
-            UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, 
-                                             UIReturnKeyType.Default, keyboardButton);
+            UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, UIReturnKeyType.Default, keyboardButton);
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
             _emailTextField.AutocorrectionType = UITextAutocorrectionType.No;
+
+            if(!string.IsNullOrEmpty(ViewModel.UserEmail))
+            {
+                _emailTextField.Text = ViewModel.UserEmail;
+                _emailLabel.Alpha = 1;
+            }
         }
 
         private void Loading()
         {
-            _lottieAnimation = UIViewAnimationExtensions.CustomButtomLoadingAnimation(_lottieAnimation, "loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
+             UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
         }
 
         private void InvalidMail()
@@ -135,11 +138,11 @@ namespace LetterApp.iOS.Views.Login
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
         }
 
-        public override void ViewDidDisappear(bool animated)
+        public override void ViewWillDisappear(bool animated)
         {
-            _lottieAnimation?.Dispose();
-            _lottieAnimation = null;
-            base.ViewDidDisappear(animated);
+            base.ViewWillDisappear(animated);
+            _passwordLabel.Alpha = 0;
+            _passwordTextField.Text = string.Empty;
         }
     }
 }

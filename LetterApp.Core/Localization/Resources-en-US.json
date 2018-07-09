@@ -68,6 +68,14 @@
     "translated": "No positions found."
   },
   {
+    "key": "Code_E117",
+    "translated": "You are already in this division."
+  },
+  {
+    "key": "Code_E118",
+    "translated": "You are banned from this organization."
+  },
+  {
     "key": "Code_S201",
     "translated": "Password successfully changed."
   },
@@ -85,7 +93,7 @@
   },
   {
     "key": "Code_S205",
-    "translated": "Your account has been deactivated."
+    "translated": "Your account has been deleted."
   },
   {
     "key": "Code_S206",
@@ -93,11 +101,15 @@
   },
   {
     "key": "Code_S207",
-    "translated": "Account successfully created! \n We sent a email with a activation code."
+    "translated": "Account successfully created! \n We sent an email with an activation code."
+  },
+  {
+    "key": "Code_S208",
+    "translated": "You left the organization."
   },
   {
     "key": "Dialogs_InternetException",
-    "translated": "It seems you’re not connected to a network."
+    "translated": "No internet connection."
   },
   {
     "key": "OnBoardingViewModel_LetterHelloWorld",
@@ -221,7 +233,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_EmailConfirmation",
-    "translated": "We sent a email with a verification code. \n (Please check your SPAM folder)"
+    "translated": "We sent an email with a verification code. \n (Please check your SPAM folder)"
   },
   {
     "key": "RecoverPasswordViewModel_PasswordMatch",
@@ -298,5 +310,117 @@
   {
     "key": "ActivateAccountViewModel_ActivationCompleted",
     "translated": "your account has been activated! \n Please Sign In."
+  },
+  {
+    "key": "SelectOrganization_AccessButton",
+    "translated": "Access"
+  },
+  {
+    "key": "SelectOrganization_TitleLabel",
+    "translated": "Enter organization name or email you want to join:"
+  },
+  {
+    "key": "SelectOrganization_TextHint",
+    "translated": "Type organization..."
+  },
+  {
+    "key": "SelectOrganization_Organization",
+    "translated": "Organization"
+  },
+  {
+    "key": "SelectOrganization_AccessHint",
+    "translated": "Access Code"
+  },
+  {
+    "key": "SelectOrganization_EnterButton",
+    "translated": "Enter"
+  },
+  {
+    "key": "SelectDivision_PrivateLabel",
+    "translated": "Private Divisions"
+  },
+  {
+    "key": "SelectDivision_PublicLabel",
+    "translated": "Public Divisions"
+  },
+  {
+    "key": "SelectDivision_InsertText",
+    "translated": "Access code"
+  },
+  {
+    "key": "SelectDivision_SubmitButton",
+    "translated": "Join"
+  },
+  {
+    "key": "SelectDivision_LeaveOrganization",
+    "translated": "Leave Organization"
+  },
+  {
+    "key": "SelectDivision_TitleLabel",
+    "translated": "Select Division"
+  },
+  {
+    "key": "SelectDivision_EmailLabel",
+    "translated": "Email:"
+  },
+  {
+    "key": "SelectDivision_MembersLabel",
+    "translated": "Users"
+  },
+  {
+    "key": "SelectDivision_DescriptionLabel",
+    "translated": "Description:"
+  },
+  {
+    "key": "SelectPosition_TitleLabel",
+    "translated": "Select your role"
+  },
+  {
+    "key": "SelectPosition_Select",
+    "translated": "Select"
+  },
+  {
+    "key": "SelectPosition_SelectPosition",
+    "translated": "Role"
+  },
+  {
+    "key": "Pending_Title",
+    "translated": "Account"
+  },
+  {
+    "key": "Pending_Subtitle",
+    "translated": "Your account is \n pending for approval"
+  },
+  {
+    "key": "Pending_Description",
+    "translated": "Your will receive an confirmation email."
+  },
+  {
+    "key": "Pending_Help",
+    "translated": "Need help?"
+  },
+  {
+    "key": "Pending_LeaveButton",
+    "translated": "Leave division"
+  },
+  {
+    "key": "Pending_LogoutButton",
+    "translated": "Sign out"
+  },
+  {
+    "key": "Pending_ContinueButton",
+    "translated": "Continue"
+  },
+  {
+    "key": "Pending_Updated",
+    "translated": "Your account is under review."
+  },
+  {
+    "key": "DialogLogout_Question",
+    "translated": "Do you want to sign out?"
+  },
+  {
+    "key": "DialogLogout_Button",
+    "translated": "Sign Out"
   }
 ]

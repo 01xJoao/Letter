@@ -7,11 +7,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="SimpleInjector" Version="4.3.0" />
-    <PackageReference Include="Xamarin.Essentials" Version="0.6.0-preview" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Realm" Version="3.0.0" />
     <PackageReference Include="SharpRaven" Version="2.4.0" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.0.9" />
+    <PackageReference Include="Xamarin.Essentials" Version="0.8.0-preview" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
@@ -27,9 +27,6 @@
     <Folder Include="ViewModels\Abstractions\" />
     <Folder Include="ViewModels\TabBarViewModels\" />
     <Folder Include="Models\Cells\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="AppSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Localization\Resources-en-US.json" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using CoreGraphics;
+using Foundation;
 using UIKit;
 
 namespace LetterApp.iOS.Helpers
@@ -37,6 +38,18 @@ namespace LetterApp.iOS.Helpers
             button.SetTitle(title, UIControlState.Normal);
             button.SetTitleColor(color, UIControlState.Normal);
             button.TitleLabel.Font = UIFont.SystemFontOfSize(textSize, fontWeight);
+        }
+
+        public static void SetupButtonUnderlineAppearance(UIButton button, UIColor color, nfloat textSize, string title, UIFontWeight fontWeight = UIFontWeight.Regular)
+        {
+            var customString = new NSMutableAttributedString(title, new UIStringAttributes
+            {
+                Font = UIFont.SystemFontOfSize(textSize, fontWeight),
+                ForegroundColor = color,
+                UnderlineStyle = NSUnderlineStyle.Single,
+            });
+
+            button.SetAttributedTitle(customString, UIControlState.Normal);
         }
     }
 }

@@ -20,11 +20,11 @@ namespace LetterApp.iOS.Services
             alertVC.Configure(title, alertType, duration);
         }
 
-        public Task<string> ShowTextInput(string title = "", string inputContent = "", string confirmButtonText = "", string hint = "", InputType inputType = InputType.Text)
+        public Task<string> ShowTextInput(string title = "", string subtitle = "", string inputContent = "", string confirmButtonText = "", string hint = "", InputType inputType = InputType.Text)
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var inputTextView = new InputTextViewController(title, inputContent, confirmButtonText, hint, inputType, val => tcs.TrySetResult(val), () => tcs.TrySetResult(null));
+            var inputTextView = new InputTextViewController(title, subtitle, inputContent, confirmButtonText, hint, inputType, val => tcs.TrySetResult(val), () => tcs.TrySetResult(null));
             inputTextView.Show();
 
             return tcs.Task;
@@ -33,6 +33,26 @@ namespace LetterApp.iOS.Services
         public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<bool> ShowInformation(string title = "", string text1 = "", string text2 = "", string text3 = "", string confirmButtonText = "")
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var informationView = new InformationViewController(title, text1, text2, text3, confirmButtonText, val => tcs.TrySetResult(val));
+            informationView.Show();
+
+            return tcs.Task;
+        }
+
+        public Task<bool> ShowQuestion(string title = "", string buttonText = "", QuestionType questionType = QuestionType.Normal)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var questionView = new QuestionViewController(title, buttonText, val => tcs.TrySetResult(val), questionType);
+            questionView.Show();
+
+            return tcs.Task;
         }
 
         public void StartLoading()
