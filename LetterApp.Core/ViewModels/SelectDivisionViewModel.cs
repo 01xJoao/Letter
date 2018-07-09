@@ -166,10 +166,14 @@ namespace LetterApp.Core.ViewModels
         {
             if(NewUser)
             {
-                //TODO: Add dialog if user wants to log out.
-                AppSettings.Logout();
-                await NavigationService.NavigateAsync<LoginViewModel, object>(null);
-                await NavigationService.PopToRoot(true);
+                var result = await _dialogService.ShowQuestion(QuestionLabel, QuestionButton, QuestionType.Bad);
+
+                if (result)
+                {
+                    AppSettings.Logout();
+                    await NavigationService.NavigateAsync<LoginViewModel, object>(null);
+                    await NavigationService.PopToRoot(true);
+                }
             }
             else
             {
@@ -183,6 +187,11 @@ namespace LetterApp.Core.ViewModels
         #region Resources
 
         public string TitleLabel => L10N.Localize("SelectDivision_TitleLabel");
+        private string QuestionLabel => L10N.Localize("DialogLogout_Question");
+        private string QuestionButton => L10N.Localize("DialogLogout_Button");
+        private string MailLabel => L10N.Localize("SelectDivision_EmailLabel");
+        private string MembersLabel => L10N.Localize("SelectDivision_MembersLabel");
+        private string DescriptionLabel => L10N.Localize("SelectDivision_DescriptionLabel");
 
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string PrivateDivisionLabel     => L10N.Localize("SelectDivision_PrivateLabel");
@@ -190,9 +199,6 @@ namespace LetterApp.Core.ViewModels
         private string InsertDivisionText       => L10N.Localize("SelectDivision_InsertText");
         private string SubmitButton             => L10N.Localize("SelectDivision_SubmitButton");
         private string LeaveOrganizationButton  => L10N.Localize("SelectDivision_LeaveOrganization");
-        private string MailLabel                => L10N.Localize("SelectDivision_EmailLabel");
-        private string MembersLabel             => L10N.Localize("SelectDivision_MembersLabel");
-        private string DescriptionLabel         => L10N.Localize("SelectDivision_DescriptionLabel");
 
         private void SetL10NResources()
         {

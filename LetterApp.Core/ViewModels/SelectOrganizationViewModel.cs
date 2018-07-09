@@ -84,7 +84,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView()
         {
-            var result = await _dialogService.ShowQuestion("Do you want to sign out?", "Sign Out", QuestionType.Bad);
+            var result = await _dialogService.ShowQuestion(QuestionLabel, QuestionButton, QuestionType.Bad);
 
             if(result)
             {
@@ -104,6 +104,8 @@ namespace LetterApp.Core.ViewModels
         private string organizationLabel    => L10N.Localize("SelectOrganization_Organization");
         private string AccessHint           => L10N.Localize("SelectOrganization_AccessHint");
         private string EnterButton          => L10N.Localize("SelectOrganization_EnterButton");
+        private string QuestionLabel        => L10N.Localize("DialogLogout_Question");
+        private string QuestionButton       => L10N.Localize("DialogLogout_Button");
 
         #endregion
     }

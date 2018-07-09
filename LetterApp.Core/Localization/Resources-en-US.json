@@ -414,5 +414,13 @@
   {
     "key": "Pending_Updated",
     "translated": "Your account is under review."
+  },
+  {
+    "key": "DialogLogout_Question",
+    "translated": "Do you want to sign out?"
+  },
+  {
+    "key": "DialogLogout_Button",
+    "translated": "Sign Out"
   }
 ]
