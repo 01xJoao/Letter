@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CoreGraphics;
 using FFImageLoading;
 using FFImageLoading.Transformations;
+using FFImageLoading.Work;
 using Foundation;
 using LetterApp.iOS.Helpers;
 using LetterApp.Models.DTO.ReceivedModels;
@@ -22,20 +23,12 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
         {
             _imageView.Image?.Dispose();
 
-            if(!string.IsNullOrEmpty(division.Picture))
-            {
-                ImageService.Instance.LoadStream((token) => {
-                    return ImageHelper.GetStreamFromImageByte(token, division.Picture);
-                }).Transform(new CircleTransformation()).Into(_imageView);
-            }
-            else
-            {
-                _imageView.Image = new UIImage();
-                _imageView.BackgroundColor = Colors.Black30;
-            }
+            ImageService.Instance.LoadStream((token) => {
+                return ImageHelper.GetStreamFromImageByte(token, division.Picture);
+            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+            CustomUIExtensions.RoundShadow(_imageView);
 
             CustomUIExtensions.LabelShadow(_titleLabel);
-            CustomUIExtensions.RoundShadow(_imageView);
 
             UILabelExtensions.SetupLabelAppearance(_titleLabel, division.Name, Colors.White, 16f, UIFontWeight.Bold);
             UILabelExtensions.SetupLabelAppearance(_subtitleLabel, division.Description, Colors.White, 12f);

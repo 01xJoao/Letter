@@ -30,7 +30,7 @@ namespace LetterApp.iOS.Helpers
             view.Layer.ShadowRadius = 2f;
         }
 
-        public static void ImageShadow(UIImageView view)
+        public static void ImageShadow(UIView view)
         {
             view.ClipsToBounds = false;
             view.Layer.ShadowColor = Colors.Black.CGColor;

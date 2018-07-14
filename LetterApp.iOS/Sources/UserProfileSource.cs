@@ -21,7 +21,6 @@ namespace LetterApp.iOS.Sources
             _details = details;
             _division = division;
 
-            tableView.RegisterNibForCellReuse(ProfileHeaderCell.Nib, ProfileHeaderCell.Key);
             tableView.RegisterNibForCellReuse(DetailsCell.Nib, DetailsCell.Key);
             tableView.RegisterNibForCellReuse(DivisionsCell.Nib, DivisionsCell.Key);
         }

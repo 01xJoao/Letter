@@ -1,6 +1,7 @@
 using System;
 using FFImageLoading;
 using FFImageLoading.Transformations;
+using FFImageLoading.Work;
 using Foundation;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -27,17 +28,12 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
             _settingsImage.Image = UIImage.FromBundle("settings");
 
-            if (!string.IsNullOrEmpty(profile.Picture))
-            {
-                ImageService.Instance.LoadStream((token) => {
-                    return ImageHelper.GetStreamFromImageByte(token, profile.Picture);
-                }).Transform(new CircleTransformation()).Into(_profileImage);
-            }
-            else
-            {
-                _profileImage.Image = UIImage.FromBundle("add_photo");
-                CustomUIExtensions.RoundView(_profileImage);
-            }
+            ImageService.Instance.LoadStream((token) => {
+                return ImageHelper.GetStreamFromImageByte(token, profile.Picture);
+            }).LoadingPlaceholder("add_photo", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+
+            CustomUIExtensions.RoundShadow(_profileImage);
+            CustomUIExtensions.LabelShadow(_nameLabel);
 
             if (!string.IsNullOrEmpty(profile.Description))
                 _descriptionField.Text = profile.Description;

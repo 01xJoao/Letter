@@ -85,7 +85,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
-            ProfileHeader = new ProfileHeaderModel(_user.FirstName, _user.Description, _user.Picture, UpdateDescription, OpenSettings);
+            ProfileHeader = new ProfileHeaderModel($"{_user.FirstName} {_user.LastName}", _user.Description, _user.Picture, UpdateDescription, OpenSettings);
 
             var divisions = new List<ProfileDivision>();
 
@@ -94,11 +94,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 foreach(var division in _user.Divisions)
                 {
                     var div = new ProfileDivision();
-
                     div.Id = division.DivisionID;
                     div.Name = division.Name;
                     div.Picture = division.Picture;
-
                     divisions.Add(div);
                 }
             }

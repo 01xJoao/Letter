@@ -1,6 +1,7 @@
 using System;
 using FFImageLoading;
 using FFImageLoading.Transformations;
+using FFImageLoading.Work;
 using Foundation;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
@@ -33,22 +34,13 @@ namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
             {
                 _imageView.Image = UIImage.FromBundle("add_circle");
                 _label.Hidden = true;
-                CustomUIExtensions.RoundView(_imageView);
             }
             else
             {
-                if (!string.IsNullOrEmpty(_division.Picture))
-                {
-                    ImageService.Instance.LoadStream((token) => {
-                        return ImageHelper.GetStreamFromImageByte(token, _division.Picture);
-                    }).Transform(new CircleTransformation()).Into(_imageView);
-                }
-                else
-                {
-                    _imageView.Image = new UIImage();
-                    _imageView.BackgroundColor = Colors.ProfileGrayDivision;
-                    CustomUIExtensions.RoundView(_imageView);
-                }
+                ImageService.Instance.LoadStream((token) => {
+                    return ImageHelper.GetStreamFromImageByte(token, _division.Picture);
+                }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+
                 _label.Hidden = false;
                 UILabelExtensions.SetupLabelAppearance(_label, _division.Name, Colors.ProfileGray, 13f);
             }
