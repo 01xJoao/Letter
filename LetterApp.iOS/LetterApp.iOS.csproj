@@ -374,7 +374,6 @@
     <InterfaceDefinition Include="Views\SelectPosition\SelectPositionViewController.xib" />
     <InterfaceDefinition Include="Views\PendingApproval\PendingApprovalViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\QuestionViewController.xib" />
-    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderCell.xib" />
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.xib" />
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
@@ -528,10 +527,6 @@
     <Compile Include="Views\CustomViews\Dialog\QuestionViewController.cs" />
     <Compile Include="Views\CustomViews\Dialog\QuestionViewController.designer.cs">
       <DependentUpon>QuestionViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderCell.cs" />
-    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderCell.designer.cs">
-      <DependentUpon>ProfileHeaderCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.cs" />
     <Compile Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.designer.cs">
