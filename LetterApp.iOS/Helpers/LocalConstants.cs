@@ -21,5 +21,13 @@ namespace LetterApp.iOS.Helpers
         public static nfloat SelectDivision_Separator => 65;
         public static nfloat SelectDivision_InsertDivision => 170;
         public static nfloat SelectDivision_ViewHeight => 105;
+
+        public static nfloat Profile_TableHeaderHeight = 240;
+        public static nfloat Profile_DivisionHeight = 110;
+        public static nfloat Profile_DivisionWidth = 76;
+        public static nfloat Profile_Details = 65;
+
+        public static nfloat Profile_DetailsHeader = 10;
+        public static nfloat Profile_DivisionHeader = 25;
     }
 }

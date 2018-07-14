@@ -269,6 +269,14 @@
     <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_1x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_2x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\add_photo.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\add_photo%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\add_photo%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -331,6 +339,10 @@
     <Folder Include="Models\" />
     <Folder Include="Resources\Assets.xcassets\letter_curved.imageset\" />
     <Folder Include="Resources\Assets.xcassets\update.imageset\" />
+    <Folder Include="Views\TabBar\UserProfileViewController\Cells\" />
+    <Folder Include="Views\CustomViews\ProfileDivision\" />
+    <Folder Include="Resources\Assets.xcassets\add_picture.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\add_photo.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -362,6 +374,11 @@
     <InterfaceDefinition Include="Views\SelectPosition\SelectPositionViewController.xib" />
     <InterfaceDefinition Include="Views\PendingApproval\PendingApprovalViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\QuestionViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderCell.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -511,6 +528,27 @@
     <Compile Include="Views\CustomViews\Dialog\QuestionViewController.cs" />
     <Compile Include="Views\CustomViews\Dialog\QuestionViewController.designer.cs">
       <DependentUpon>QuestionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderCell.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderCell.designer.cs">
+      <DependentUpon>ProfileHeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.designer.cs">
+      <DependentUpon>DetailsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.designer.cs">
+      <DependentUpon>DivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.designer.cs">
+      <DependentUpon>DivisionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\UserProfileSource.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.designer.cs">
+      <DependentUpon>ProfileHeaderView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

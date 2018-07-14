@@ -21,7 +21,7 @@ namespace LetterApp.iOS
 
         private static void ConfigureView()
         {
-            UINavigationBar.Appearance.BarTintColor = Colors.MainBlue;
+            UINavigationBar.Appearance.BarTintColor = Colors.BlueSetup;
             UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes() { TextColor = Colors.White });
             UINavigationBar.Appearance.LargeTitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White, Shadow = CustomUIExtensions.TextShadow() };
         }

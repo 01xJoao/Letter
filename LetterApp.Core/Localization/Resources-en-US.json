@@ -422,5 +422,21 @@
   {
     "key": "DialogLogout_Button",
     "translated": "Sign Out"
+  },
+  {
+    "key": "UserProfile_DescriptionHint",
+    "translated": "Describe yourself in 80 characters."
+  },
+  {
+    "key": "UserProfile_Role",
+    "translated": "Role"
+  },
+  {
+    "key": "UserProfile_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "UserProfile_Mobile",
+    "translated": "Mobile"
   }
 ]

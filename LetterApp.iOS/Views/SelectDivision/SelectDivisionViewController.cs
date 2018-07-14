@@ -97,7 +97,6 @@ namespace LetterApp.iOS.Views.SelectDivision
                 ViewModel.CloseViewCommand.Execute();
         }
 
-
         private void SetupView()
         {
             _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);

@@ -29,7 +29,7 @@ namespace LetterApp.iOS.Views.Base
             };
 
             this.CustomizableViewControllers = null;
-            this.SelectedViewController = ViewControllers[0];
+            this.SelectedViewController = ViewControllers[3];
         }
 
         private UIViewController CreateTabBar(UIViewController vc, string title, string imageName, int position)

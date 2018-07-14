@@ -34,6 +34,12 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(PubNubTokenExpirationDate), value);
         }
 
+        public static int UserId
+        {
+            get => Preferences.Get(nameof(UserId), 0);
+            set => Preferences.Set(nameof(UserId), value);
+        }
+
         public static string UserEmail
         {
             get => Preferences.Get(nameof(UserEmail), string.Empty);
@@ -54,6 +60,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(PubNubToken));
             Preferences.Remove(nameof(PubNubTokenExpirationDate));
             Preferences.Remove(nameof(MainMenuAllowed));
+            Preferences.Remove(nameof(UserId));
         }
     }
 }

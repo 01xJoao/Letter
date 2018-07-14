@@ -7,6 +7,9 @@ namespace LetterApp.iOS.Helpers
     {
         public static void SetupLabelAppearance(UILabel label, string text, UIColor color, nfloat textSize, UIFontWeight fontWeight = UIFontWeight.Regular, bool italic = false)
         {
+            if (string.IsNullOrEmpty(text))
+                return;
+            
             label.Text = text;
             label.TextColor = color;
 

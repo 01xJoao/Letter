@@ -57,5 +57,9 @@
 		<string>voip</string>
 		<string>fetch</string>
 	</array>
+	<key>Custom Property</key>
+	<true/>
+	<key>Custom Property1</key>
+	<string></string>
 </dict>
 </plist>

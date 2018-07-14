@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
@@ -47,37 +48,48 @@ namespace LetterApp.Core.ViewModels
 
                 if (userCheck.StatusCode == 200)
                 {
-                    var user = Realm.Find<UserModel>(userCheck.UserID);
+                    var user = new UserModel();
 
-                    Realm.Write(() =>
-                    {
-                        user.Position = userCheck.Position;
-                        user.OrganizationID = userCheck.OrganizationID;
-                        user.Divisions = userCheck.Divisions;
-                    });
+                    user.UserID = userCheck.UserID;
+                    user.Email = userCheck.Email;
+                    user.FirstName = userCheck.FirstName;
+                    user.LastName = userCheck.LastName;
+                    user.Position = userCheck.Position;
+                    user.Picture = userCheck.Picture;
+                    user.Description = userCheck.Description;
+                    user.ContactNumber = userCheck.ContactNumber;
+                    user.ShowContactNumber = userCheck.ShowContactNumber;
+                    user.OrganizationID = userCheck.OrganizationID;
+                    foreach (var divion in userCheck.Divisions)
+                        user.Divisions.Add(divion);
+                    user.LastUpdateTime = userCheck.LastUpdateTime;
+
+                    Realm.Write(() => {
+                        Realm.Add(user, true);
+                    }); 
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;
                     bool userIsUnderReview = false;
 
-                    if (user?.Divisions?.Count > 0)
+                    if (userCheck?.Divisions?.Count > 0)
                     {
-                        anyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
-                        userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
-                        userIsUnderReview = user.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
+                        anyDivisionActive = userCheck.Divisions.Any(x => x.IsDivisonActive == true);
+                        userIsActiveInDivision = userCheck.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+                        userIsUnderReview = userCheck.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
                     }
 
-                    if (user.OrganizationID == null)
+                    if (userCheck.OrganizationID == null)
                     {
-                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(userCheck.Email);
                     }
-                    else if (string.IsNullOrEmpty(user.Position))
+                    else if (string.IsNullOrEmpty(userCheck.Position))
                     {
-                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)user.OrganizationID);
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)userCheck.OrganizationID);
                     }
-                    else if ((user.Divisions == null || user?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
+                    else if ((userCheck.Divisions == null || userCheck?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
                     {
-                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int,bool>>(new Tuple<int, bool> ((int)user.OrganizationID, true));
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int,bool>>(new Tuple<int, bool> ((int)userCheck.OrganizationID, true));
                     }
                     else if (!userIsActiveInDivision && userIsUnderReview)
                     {
