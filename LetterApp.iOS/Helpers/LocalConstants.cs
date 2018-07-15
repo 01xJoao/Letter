@@ -28,6 +28,6 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Profile_Details = 65;
 
         public static nfloat Profile_DetailsHeader = 10;
-        public static nfloat Profile_DivisionHeader = 37;
+        public static nfloat Profile_DivisionHeader = 40;
     }
 }
