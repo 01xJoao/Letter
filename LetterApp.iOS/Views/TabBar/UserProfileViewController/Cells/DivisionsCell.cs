@@ -8,7 +8,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 {
-    public partial class DivisionsCell : UITableViewCell, IUIScrollViewDelegate
+    public partial class DivisionsCell : UITableViewCell
     {
         public static readonly NSString Key = new NSString("DivisionsCell");
         public static readonly UINib Nib = UINib.FromName("DivisionsCell", NSBundle.MainBundle);
@@ -16,9 +16,6 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
         public void Configure(ProfileDivisionModel divisionModels)
         {
-
-            _scrollView.Delegate = this;
-
             int numberOfDivisions = 0;
             foreach(var division in divisionModels.Divisions)
             {
@@ -37,21 +34,15 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             divisionButtonView.Frame = new CGRect((LocalConstants.Profile_DivisionWidth * numberOfDivisions), 0, LocalConstants.Profile_DivisionWidth, LocalConstants.Profile_DivisionHeight);
             _scrollView.AddSubview(divisionButtonView);
 
-            var contentSize = LocalConstants.Profile_DivisionWidth * (divisionModels.Divisions.Count + 1);
+            var contentSize = LocalConstants.Profile_DivisionWidth * (numberOfDivisions + 1);
             this.ContentView.Frame = new CGRect(0, 0, contentSize, LocalConstants.Profile_DivisionHeight);
+            _scrollView.ContentInset = new UIEdgeInsets(0, 5, 0, 0);
+            _scrollView.ContentSize = new CGSize(contentSize, LocalConstants.Profile_DivisionHeight);
+            _scrollView.AutosizesSubviews = false;
+            _scrollView.LayoutIfNeeded();
+            _scrollView.LayoutSubviews();
+
         }
-
-
-        #region IUIScrollViewDelegate
-
-        [Export("scrollViewDidScroll:")]
-        public void Scrolled(UIScrollView scrollView)
-        {
-            //
-        }
-
-        #endregion
-
 
         public override void PrepareForReuse()
         {

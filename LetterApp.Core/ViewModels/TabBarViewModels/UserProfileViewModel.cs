@@ -101,7 +101,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
             }
 
-            ProfileDivision = new ProfileDivisionModel(divisions, OpenDivision, AddDivision);
+            ProfileDivision = new ProfileDivisionModel(divisions, DivisionsLabel, OpenDivision, AddDivision);
 
             var profileDetails = new List<ProfileDetail>();
 
@@ -145,9 +145,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         #region Resources
 
-        private string Role     => L10N.Localize("UserProfile_Role");
-        private string Email    => L10N.Localize("UserProfile_Email");
-        private string Mobile   => L10N.Localize("UserProfile_Mobile");
+        private string Role             => L10N.Localize("UserProfile_Role");
+        private string Email            => L10N.Localize("UserProfile_Email");
+        private string Mobile           => L10N.Localize("UserProfile_Mobile");
+        private string DivisionsLabel   => L10N.Localize("UserProfile_Divisions");
 
         #endregion
     }

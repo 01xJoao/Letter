@@ -5,13 +5,16 @@ namespace LetterApp.Core.Models
 {
     public class ProfileDivisionModel
     {
-        public ProfileDivisionModel(List<ProfileDivision> divisions, EventHandler<int> divisionPressedEvent, EventHandler<int> addDivisionEvent)
+        public ProfileDivisionModel(List<ProfileDivision> divisions,string description, EventHandler<int> divisionPressedEvent, EventHandler<int> addDivisionEvent)
         {
             Divisions = divisions;
+            DivisionDescriptionLabel = description;
             DivisionPressedEvent = divisionPressedEvent;
             AddDivisionEvent = addDivisionEvent;
+
         }
 
+        public string DivisionDescriptionLabel { get; set; }
         public List<ProfileDivision> Divisions { get; set; }
         public EventHandler<int> DivisionPressedEvent { get; set; }
         public EventHandler<int> AddDivisionEvent { get; set; }

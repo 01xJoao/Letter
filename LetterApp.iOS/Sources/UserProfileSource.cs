@@ -29,6 +29,15 @@ namespace LetterApp.iOS.Sources
         {
             var view = new UIView();
             view.BackgroundColor = Colors.White;
+
+            if(section == (int)Sections.Divisions)
+            {
+                var label = new UILabel();
+                label.Frame = new CGRect(20, 15, UIScreen.MainScreen.Bounds.Width, 15);
+                UILabelExtensions.SetupLabelAppearance(label, _division.DivisionDescriptionLabel, Colors.ProfileGray, 12f);
+                view.AddSubview(label);
+            }
+
             return view;
         }
 

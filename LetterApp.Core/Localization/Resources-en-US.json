@@ -438,5 +438,9 @@
   {
     "key": "UserProfile_Mobile",
     "translated": "Mobile"
+  },
+  {
+    "key": "UserProfile_Divisions",
+    "translated":  "Divisions"
   }
 ]
