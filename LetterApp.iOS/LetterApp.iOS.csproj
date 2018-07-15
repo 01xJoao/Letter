@@ -274,13 +274,13 @@
     <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\add_photo.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\add_photo%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\add_photo%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image.png" />
     <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
