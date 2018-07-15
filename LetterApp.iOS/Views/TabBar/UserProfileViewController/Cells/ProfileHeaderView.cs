@@ -26,6 +26,11 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             UILabelExtensions.SetupLabelAppearance(_nameLabel, profile.Name, Colors.White, 22f);
             UITextFieldExtensions.SetupTextFieldAppearance(_descriptionField, Colors.White, 14f, DescriptionField, Colors.White70, Colors.White, Colors.MainBlue);
 
+            _descriptionField.ReturnKeyType = UIReturnKeyType.Done;
+
+            _descriptionField.ShouldReturn -= (field) => TextFieldShouldReturn(field);
+            _descriptionField.ShouldReturn += (field) => TextFieldShouldReturn(field);
+
             _settingsImage.Image = UIImage.FromBundle("settings");
 
             ImageService.Instance.LoadStream((token) => {
@@ -50,6 +55,11 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
             _settingsButton.TouchUpInside -= OnConfigButton_TouchUpInside;
             _settingsButton.TouchUpInside += OnConfigButton_TouchUpInside;
+        }
+
+        private bool TextFieldShouldReturn(UITextField field)
+        {
+            return field.ResignFirstResponder();
         }
 
         private void OnDescriptionField_EditingDidBegin(object sender, EventArgs e)

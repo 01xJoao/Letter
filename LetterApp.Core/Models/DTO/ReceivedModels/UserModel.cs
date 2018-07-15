@@ -17,7 +17,7 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string Description { get; set; }
         public string Picture { get; set; }
         public DateTimeOffset TimeCreated { get; set; }
-        public DateTimeOffset LastUpdateTime { get; set; }
+        public long LastUpdateTime { get; set; }
         public IList<DivisionModel> Divisions { get; }
         public int? OrganizationID { get; set; }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
@@ -13,6 +14,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
     public class UserProfileViewModel : XViewModel
     {
+        private IUserService _userService;
         private IAuthenticationService _autheticationService;
 
         private UserModel _user;
@@ -28,12 +30,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public ProfileDetailsModel ProfileDetails { get; private set; }
         public ProfileDivisionModel ProfileDivision { get; private set; }
 
-        public UserProfileViewModel(IAuthenticationService autheticationService)
+        public UserProfileViewModel(IAuthenticationService autheticationService, IUserService userService)
         {
             _autheticationService = autheticationService;
+            _userService = userService;
         }
 
-        public override async Task InitializeAsync()
+        public override async Task Appearing()
         {
             SetupModels();
 
@@ -43,7 +46,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 if (userCheck.StatusCode == 200)
                 {
-                    if (userCheck.LastUpdateTime > _user.LastUpdateTime)
+                    if (userCheck.LastUpdateTime.Ticks > _user.LastUpdateTime)
                         _updateView = true;
 
                     var user = new UserModel();
@@ -60,7 +63,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     user.OrganizationID = userCheck.OrganizationID;
                     foreach (var divion in userCheck.Divisions)
                         user.Divisions.Add(divion);
-                    user.LastUpdateTime = userCheck.LastUpdateTime;
+                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
 
                     Realm.Write(() => {
                         Realm.Add(user, true);
@@ -76,7 +79,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 if(_updateView)
                 {
                     SetupModels();
-                    UpdateView = true;
+                    RaisePropertyChanged(nameof(UpdateView));
                 }
             }
         }
@@ -123,25 +126,48 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             ProfileDetails = new ProfileDetailsModel(profileDetails);
         }
 
-        private void OpenDivision(object sender, int e)
-        {
+        private void UpdateDescription(object sender, string description) => UpdateUserDescription(description);
+        private void OpenSettings(object sender, EventArgs e) => NavigateToSettings();
+        private void OpenDivision(object sender, int divisionId) => OpenDivision(divisionId);
+        private void AddDivision(object sender, int e) => NavigateToNewDivision();
 
+
+        private async Task UpdateUserDescription(string description)
+        {
+            try
+            {
+                var result = await _userService.UpdateUserDescription(description);
+
+                if(result.StatusCode == 200)
+                {
+                    Realm.Write(() =>
+                    {
+                        _user.Description = description;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
-        private void AddDivision(object sender, int e)
+        private async Task NavigateToSettings()
         {
-           
+            await NavigationService.NavigateAsync<UserSettingsViewModel, object>(null);
         }
 
-        private void OpenSettings(object sender, EventArgs e)
+        private async Task OpenDivision(int divisionId)
         {
-
+            await NavigationService.NavigateAsync<DivisionViewModel, int>(divisionId);
         }
 
-        private void UpdateDescription(object sender, string description)
+        private async Task NavigateToNewDivision()
         {
-
+            await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)_user.OrganizationID, false));
         }
+
+        private bool CanExecute() => !IsBusy;
 
         #region Resources
 

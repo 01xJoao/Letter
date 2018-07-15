@@ -127,7 +127,7 @@ namespace LetterApp.Core.ViewModels
                     user.OrganizationID = userCheck.OrganizationID;
                     foreach(var divion in userCheck.Divisions)
                         user.Divisions.Add(divion);
-                    user.LastUpdateTime = userCheck.LastUpdateTime;
+                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
 
                     Realm.Write(() => {
                         Realm.Add(user, true);

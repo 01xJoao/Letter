@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels.TabBarViewModels;
@@ -18,7 +19,24 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
             SetupTableView();
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.UpdateView):
+                    SetupTableView();
+                    break;
+            }
         }
 
         private void SetupTableView()

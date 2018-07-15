@@ -8,5 +8,6 @@ namespace LetterApp.Core.Services.Interfaces
     public interface IUserService
     {
         Task<UserProfileModel> GetUserProfile(UserProfileRequestModel userRequested);
+        Task<BaseModel> UpdateUserDescription(string description);
     }
 }
