@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.Models;
@@ -17,31 +16,29 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
         public void Configure(ProfileDivisionModel divisionModels)
         {
-            var frame = new CGRect(0, 0, LocalConstants.Profile_DivisionWidth, LocalConstants.Profile_DivisionHeight);
-            int i = 0;
+
+            _scrollView.Delegate = this;
+
+            int numberOfDivisions = 0;
             foreach(var division in divisionModels.Divisions)
             {
-                var divisionView = DivisionView.Create(division, divisionModels.DivisionPressedEvent);
-                divisionView.Frame = new CGRect(LocalConstants.Profile_DivisionWidth * i, 0, 0, LocalConstants.Profile_DivisionHeight);
+                var divisionView = DivisionView.Create;
+                divisionView.Configure(division, divisionModels.DivisionPressedEvent);
+                divisionView.Frame = new CGRect((LocalConstants.Profile_DivisionWidth * numberOfDivisions), 0, LocalConstants.Profile_DivisionWidth, LocalConstants.Profile_DivisionHeight);
                 _scrollView.AddSubview(divisionView);
-                i++;
+                numberOfDivisions++;
             }
 
             var addDivisionModel = new ProfileDivision();
             addDivisionModel.AddButtonImage = true;
             addDivisionModel.Id = 0;
-
-            var divisionButtonView = DivisionView.Create(addDivisionModel, divisionModels.AddDivisionEvent);
-            divisionButtonView.Frame = new CGRect(LocalConstants.Profile_DivisionWidth * i, 0, 0, LocalConstants.Profile_DivisionHeight);
+            var divisionButtonView = DivisionView.Create;
+            divisionButtonView.Configure(addDivisionModel, divisionModels.AddDivisionEvent);
+            divisionButtonView.Frame = new CGRect((LocalConstants.Profile_DivisionWidth * numberOfDivisions), 0, LocalConstants.Profile_DivisionWidth, LocalConstants.Profile_DivisionHeight);
             _scrollView.AddSubview(divisionButtonView);
 
-            this.ContentView.Frame = new CGRect(0,0,400, frame.Height);
-            _scrollView.ContentSize = new CGSize(LocalConstants.Profile_DivisionWidth * i + LocalConstants.Profile_DivisionWidth, frame.Height);
-
-            _scrollView.SetContentOffset(new CGPoint(_scrollView.ContentSize.Width * 0.5f - LocalConstants.Profile_DivisionWidth * 0.5f, 0), true);
-            _scrollView.ContentOffset = new CGPoint(400, 0);
-
-            _scrollView.Delegate = this;
+            var contentSize = LocalConstants.Profile_DivisionWidth * (divisionModels.Divisions.Count + 1);
+            this.ContentView.Frame = new CGRect(0, 0, contentSize, LocalConstants.Profile_DivisionHeight);
         }
 
 
@@ -50,9 +47,19 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
         [Export("scrollViewDidScroll:")]
         public void Scrolled(UIScrollView scrollView)
         {
-            _scrollView.ContentSize = new CGSize(_scrollView.ContentSize.Width, _scrollView.Frame.Size.Height);
+            //
         }
 
         #endregion
+
+
+        public override void PrepareForReuse()
+        {
+            foreach (var subview in _scrollView.Subviews)
+            {
+                subview?.RemoveFromSuperview();
+                subview?.Dispose();
+            }
+        }
     }
 }

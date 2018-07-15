@@ -30,20 +30,20 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xQF-aX-xyk">
-                    <rect key="frame" x="0.0" y="0.0" width="80" height="110"/>
+                    <rect key="frame" x="15.5" y="0.0" width="49" height="59"/>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="yut-iU-Jkb" secondAttribute="trailing" constant="5" id="5xD-e5-hvg"/>
                 <constraint firstItem="BvJ-XG-sRG" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="JlE-7a-Fj7"/>
-                <constraint firstItem="xQF-aX-xyk" firstAttribute="width" secondItem="1" secondAttribute="width" id="PgR-de-ijy"/>
                 <constraint firstItem="yut-iU-Jkb" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="5" id="SDa-sj-012"/>
-                <constraint firstItem="xQF-aX-xyk" firstAttribute="height" secondItem="1" secondAttribute="height" id="ZDx-AY-cgN"/>
-                <constraint firstItem="xQF-aX-xyk" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="Zbr-wC-onF"/>
+                <constraint firstItem="xQF-aX-xyk" firstAttribute="leading" secondItem="BvJ-XG-sRG" secondAttribute="leading" id="YHB-El-MeN"/>
+                <constraint firstItem="xQF-aX-xyk" firstAttribute="bottom" secondItem="yut-iU-Jkb" secondAttribute="bottom" id="efw-rP-lNd"/>
+                <constraint firstItem="xQF-aX-xyk" firstAttribute="top" secondItem="BvJ-XG-sRG" secondAttribute="top" id="mp5-CK-leV"/>
                 <constraint firstItem="yut-iU-Jkb" firstAttribute="top" secondItem="BvJ-XG-sRG" secondAttribute="bottom" constant="10" id="uWQ-ah-hT2"/>
+                <constraint firstItem="xQF-aX-xyk" firstAttribute="trailing" secondItem="BvJ-XG-sRG" secondAttribute="trailing" id="xuU-Cr-cwU"/>
                 <constraint firstItem="BvJ-XG-sRG" firstAttribute="top" secondItem="1" secondAttribute="top" id="y4y-w3-Cje"/>
-                <constraint firstItem="xQF-aX-xyk" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="zaA-3w-Khb"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

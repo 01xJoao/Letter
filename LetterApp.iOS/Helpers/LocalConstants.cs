@@ -24,7 +24,7 @@ namespace LetterApp.iOS.Helpers
 
         public static nfloat Profile_TableHeaderHeight = 240;
         public static nfloat Profile_DivisionHeight = 110;
-        public static nfloat Profile_DivisionWidth = 76;
+        public static nfloat Profile_DivisionWidth = 80;
         public static nfloat Profile_Details = 65;
 
         public static nfloat Profile_DetailsHeader = 10;

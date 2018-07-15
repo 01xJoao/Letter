@@ -62,5 +62,12 @@ namespace LetterApp.iOS.Helpers
             view.Layer.CornerRadius = view.Frame.Height/2;
             view.Layer.MasksToBounds = true;
         }
+
+        public static void BorderView(UIView view)
+        {
+            view.Layer.CornerRadius = view.Frame.Height / 2;
+            view.Layer.BorderColor = Colors.MainBlue.CGColor;
+            view.Layer.BorderWidth = 1f;
+        }
     }
 }

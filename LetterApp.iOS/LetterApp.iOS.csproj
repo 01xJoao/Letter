@@ -383,6 +383,7 @@
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\ProfileDivisionCollectionCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -549,6 +550,10 @@
     <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.cs" />
     <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.designer.cs">
       <DependentUpon>ProfileHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\ProfileDivisionCollectionCell.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\ProfileDivisionCollectionCell.designer.cs">
+      <DependentUpon>ProfileDivisionCollectionCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
