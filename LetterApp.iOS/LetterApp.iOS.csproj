@@ -349,6 +349,7 @@
     <Folder Include="Resources\Assets.xcassets\add_photo.imageset\" />
     <Folder Include="Resources\Assets.xcassets\warning_image.imageset\" />
     <Folder Include="Views\UserSettings\" />
+    <Folder Include="Views\Division\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -385,6 +386,7 @@
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
     <InterfaceDefinition Include="Views\UserSettings\UserSettingsViewController.xib" />
+    <InterfaceDefinition Include="Views\Division\DivisionViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -555,6 +557,10 @@
     <Compile Include="Views\UserSettings\UserSettingsViewController.cs" />
     <Compile Include="Views\UserSettings\UserSettingsViewController.designer.cs">
       <DependentUpon>UserSettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Division\DivisionViewController.cs" />
+    <Compile Include="Views\Division\DivisionViewController.designer.cs">
+      <DependentUpon>DivisionViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
