@@ -103,7 +103,6 @@ namespace LetterApp.iOS.Views.Register
             this.NavigationItem.LeftBarButtonItem = backButton;
             NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
 
-            //this.NavigationController.NavigationBar.TintColor = Colors.Black;
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);
@@ -126,7 +125,6 @@ namespace LetterApp.iOS.Views.Register
         {
             _source?.Dispose();
             _source = null;
-            MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
         }

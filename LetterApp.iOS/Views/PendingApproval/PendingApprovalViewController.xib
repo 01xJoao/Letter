@@ -55,14 +55,14 @@
                                     </constraints>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gHe-hd-Bej">
-                                    <rect key="frame" x="328" y="30.5" width="24" height="24"/>
+                                    <rect key="frame" x="324.5" y="27" width="31" height="31"/>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="gHe-hd-Bej" firstAttribute="width" secondItem="RJp-N3-lAQ" secondAttribute="width" id="1nJ-3V-xBe"/>
+                                <constraint firstItem="gHe-hd-Bej" firstAttribute="width" secondItem="RJp-N3-lAQ" secondAttribute="width" constant="7" id="1nJ-3V-xBe"/>
                                 <constraint firstItem="Bat-qQ-fGl" firstAttribute="centerX" secondItem="wMU-Y9-6L0" secondAttribute="centerX" id="EW5-Sd-sYE"/>
-                                <constraint firstItem="gHe-hd-Bej" firstAttribute="height" secondItem="RJp-N3-lAQ" secondAttribute="height" id="IS9-WD-Qez"/>
+                                <constraint firstItem="gHe-hd-Bej" firstAttribute="height" secondItem="RJp-N3-lAQ" secondAttribute="height" constant="7" id="IS9-WD-Qez"/>
                                 <constraint firstAttribute="trailing" secondItem="RJp-N3-lAQ" secondAttribute="trailing" constant="23" id="Tbe-0w-6ad"/>
                                 <constraint firstItem="Bat-qQ-fGl" firstAttribute="centerY" secondItem="wMU-Y9-6L0" secondAttribute="centerY" constant="10" id="Zfh-YT-Yut"/>
                                 <constraint firstItem="gHe-hd-Bej" firstAttribute="centerX" secondItem="RJp-N3-lAQ" secondAttribute="centerX" id="bmK-r1-uAC"/>

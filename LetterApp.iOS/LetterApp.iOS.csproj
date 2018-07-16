@@ -351,6 +351,7 @@
     <Folder Include="Views\UserSettings\" />
     <Folder Include="Views\Division\" />
     <Folder Include="Resources\en.Iproj\" />
+    <Folder Include="Views\UserSettings\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -388,6 +389,10 @@
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
     <InterfaceDefinition Include="Views\UserSettings\UserSettingsViewController.xib" />
     <InterfaceDefinition Include="Views\Division\DivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\Cells\PhoneNumberCell.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\Cells\AllowPhoneCallsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\SwitchCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\LabelWithArrowCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -564,6 +569,22 @@
       <DependentUpon>DivisionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\PicturePicker.cs" />
+    <Compile Include="Views\UserSettings\Cells\PhoneNumberCell.cs" />
+    <Compile Include="Views\UserSettings\Cells\PhoneNumberCell.designer.cs">
+      <DependentUpon>PhoneNumberCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserSettings\Cells\AllowPhoneCallsCell.cs" />
+    <Compile Include="Views\UserSettings\Cells\AllowPhoneCallsCell.designer.cs">
+      <DependentUpon>AllowPhoneCallsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\SwitchCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\SwitchCell.designer.cs">
+      <DependentUpon>SwitchCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.designer.cs">
+      <DependentUpon>LabelWithArrowCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

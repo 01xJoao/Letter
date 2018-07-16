@@ -45,7 +45,7 @@
                     <rect key="frame" x="124.5" y="32" width="125" height="125"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1LI-ik-FdB">
-                    <rect key="frame" x="335" y="32" width="23.5" height="24"/>
+                    <rect key="frame" x="331.5" y="28.5" width="30.5" height="31"/>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -65,8 +65,8 @@
                 <constraint firstItem="RiJ-gY-1MW" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="lEx-6a-vHK"/>
                 <constraint firstItem="7Sh-Kc-6dd" firstAttribute="centerY" secondItem="RiJ-gY-1MW" secondAttribute="centerY" id="rMB-U2-Y6n"/>
                 <constraint firstItem="1LI-ik-FdB" firstAttribute="centerY" secondItem="JSR-RY-8pa" secondAttribute="centerY" id="tv6-hZ-TmQ"/>
-                <constraint firstItem="1LI-ik-FdB" firstAttribute="height" secondItem="JSR-RY-8pa" secondAttribute="height" id="vCB-iV-fW8"/>
-                <constraint firstItem="1LI-ik-FdB" firstAttribute="width" secondItem="JSR-RY-8pa" secondAttribute="width" id="xbY-9E-kbg"/>
+                <constraint firstItem="1LI-ik-FdB" firstAttribute="height" secondItem="JSR-RY-8pa" secondAttribute="height" constant="7" id="vCB-iV-fW8"/>
+                <constraint firstItem="1LI-ik-FdB" firstAttribute="width" secondItem="JSR-RY-8pa" secondAttribute="width" constant="7" id="xbY-9E-kbg"/>
                 <constraint firstItem="Tgz-VJ-x0S" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="ymz-Ac-8Dd"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

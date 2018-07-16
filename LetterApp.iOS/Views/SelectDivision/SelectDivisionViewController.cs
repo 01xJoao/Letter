@@ -116,7 +116,6 @@ namespace LetterApp.iOS.Views.SelectDivision
         {
             _source?.Dispose();
             _source = null;
-            MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
         }

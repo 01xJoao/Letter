@@ -5,13 +5,13 @@ namespace LetterApp.Core.ViewModels
 {
     public class DivisionViewModel : XViewModel<int>
     {
-        public DivisionViewModel()
-        {
-        }
+        private int _divisionId;
+
+        public DivisionViewModel() {}
 
         protected override void Prepare(int divisionId)
         {
-            throw new NotImplementedException();
+            _divisionId = divisionId;
         }
     }
 }
