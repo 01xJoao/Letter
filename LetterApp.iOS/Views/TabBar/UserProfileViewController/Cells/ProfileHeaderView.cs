@@ -27,6 +27,9 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
             _descriptionField.ReturnKeyType = UIReturnKeyType.Done;
 
+            _descriptionField.AdjustsFontSizeToFitWidth = true;
+            _descriptionField.MinimumFontSize = 11f;
+
             _descriptionField.ShouldReturn -= (field) => TextFieldShouldReturn(field);
             _descriptionField.ShouldReturn += (field) => TextFieldShouldReturn(field);
 
@@ -106,7 +109,7 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
                 _descriptionField.Font = UIFont.SystemFontOfSize(14f);
             
             var newLength = textField.Text.Length + replacementString.Length - range.Length;
-            return newLength <= 80;
+            return newLength <= 40;
         }
 
         #region Resources 

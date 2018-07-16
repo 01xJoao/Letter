@@ -425,7 +425,7 @@
   },
   {
     "key": "UserProfile_DescriptionHint",
-    "translated": "Describe yourself in 80 characters."
+    "translated": "Describe yourself in 40 characters."
   },
   {
     "key": "UserProfile_Role",
