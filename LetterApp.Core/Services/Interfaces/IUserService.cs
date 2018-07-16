@@ -9,5 +9,6 @@ namespace LetterApp.Core.Services.Interfaces
     {
         Task<UserProfileModel> GetUserProfile(UserProfileRequestModel userRequested);
         Task<BaseModel> UpdateUserDescription(string description);
+        Task<BaseModel> UpdateUserPicture(string picture);
     }
 }

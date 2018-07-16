@@ -6,6 +6,11 @@
 	<string>Letter</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.LetterMessenger.Letter</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>pt</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>

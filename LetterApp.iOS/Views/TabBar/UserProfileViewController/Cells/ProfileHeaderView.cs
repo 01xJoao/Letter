@@ -14,7 +14,6 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
     public partial class ProfileHeaderView : UIView
     {
         private ProfileHeaderModel _profile;
-
         public static readonly UINib Nib = UINib.FromName("ProfileHeaderView", NSBundle.MainBundle);
         public static ProfileHeaderView Create() => Nib.Instantiate(null, null)[0] as ProfileHeaderView;
         public ProfileHeaderView(IntPtr handle) : base(handle) {}
@@ -32,6 +31,8 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             _descriptionField.ShouldReturn += (field) => TextFieldShouldReturn(field);
 
             _settingsImage.Image = UIImage.FromBundle("settings");
+
+            _profileImage.Image?.Dispose();
 
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, profile.Picture);
@@ -55,6 +56,15 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
             _settingsButton.TouchUpInside -= OnConfigButton_TouchUpInside;
             _settingsButton.TouchUpInside += OnConfigButton_TouchUpInside;
+
+
+            _profileButton.TouchUpInside -= OnProfileButton_TouchUpInside;
+            _profileButton.TouchUpInside += OnProfileButton_TouchUpInside;
+        }
+
+        private void OnProfileButton_TouchUpInside(object sender, EventArgs e)
+        {
+            _profile.OpenGalery?.Invoke(null, EventArgs.Empty);
         }
 
         private bool TextFieldShouldReturn(UITextField field)

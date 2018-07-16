@@ -350,6 +350,7 @@
     <Folder Include="Resources\Assets.xcassets\warning_image.imageset\" />
     <Folder Include="Views\UserSettings\" />
     <Folder Include="Views\Division\" />
+    <Folder Include="Resources\en.Iproj\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -562,6 +563,7 @@
     <Compile Include="Views\Division\DivisionViewController.designer.cs">
       <DependentUpon>DivisionViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\PicturePicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -572,6 +574,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\loading.json" />
     <BundleResource Include="Resources\loading_white.json" />
+    <BundleResource Include="Resources\en.Iproj\InfoPList.strings" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

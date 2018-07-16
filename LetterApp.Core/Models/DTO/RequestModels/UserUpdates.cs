@@ -13,4 +13,15 @@ namespace LetterApp.Core.Models.DTO.RequestModels
         [JsonProperty("description")]
         public string Description { get; set; }
     }
+
+    public class UserUpdatePicture
+    {
+        public UserUpdatePicture(string picture)
+        {
+            Picture = picture;
+        }
+
+        [JsonProperty("picture")]
+        public string Picture { get; set; }
+    }
 }

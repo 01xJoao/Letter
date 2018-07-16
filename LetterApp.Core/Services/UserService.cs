@@ -24,7 +24,13 @@ namespace LetterApp.Core.Services
         public async Task<BaseModel> UpdateUserDescription(string description)
         {
             var descriptionModel = new UserUpdateDescription(description);
-            return await _webService.PostAsync<BaseModel> ("users/update/description", descriptionModel, needsHeaderCheck: true).ConfigureAwait(false);
+            return await _webService.PostAsync<BaseModel>("users/update/description", descriptionModel, needsHeaderCheck: true).ConfigureAwait(false);
+        }
+
+        public async Task<BaseModel> UpdateUserPicture(string picture)
+        {
+            var pictureModel = new UserUpdatePicture(picture);
+            return await _webService.PostAsync<BaseModel>("users/update/picture", pictureModel, needsHeaderCheck: true).ConfigureAwait(false);
         }
     }
 }
