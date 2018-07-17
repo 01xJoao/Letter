@@ -446,5 +446,73 @@
   {
     "key": "UserSettings_SettingsTitle",
     "translated": "Settings"
+  },
+  {
+    "key": "UserSettings_AccountSection",
+    "translated": "Account"
+  },
+  {
+    "key": "UserSettings_NotificationsSection",
+    "translated": "Notifications"
+  },
+  {
+    "key": "UserSettings_DangerZoneSection",
+    "translated": "Danger Zone"
+  },
+  {
+    "key": "UserSettings_PhoneNumberLabel",
+    "translated": "Phone number"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsLabel",
+    "translated": "Allow phone calls"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsDescription",
+    "translated": "When on, people can see your phone number and call you outsite Letter."
+  },
+  {
+    "key": "UserSettings_PasswordLabel",
+    "translated": "Password"
+  },
+  {
+    "key": "UserSettings_MessageLabel",
+    "translated": "Message notifications"
+  },
+  {
+    "key": "UserSettings_CallLabel",
+    "translated": "Call notifications"
+  },
+  {
+    "key": "UserSettings_GroupLabel",
+    "translated": "Group notifications"
+  },
+  {
+    "key": "UserSettings_ContactUsLabel",
+    "translated": "Contact us"
+  },
+  {
+    "key": "UserSettings_TermsOfService",
+    "translated": "Terms of service"
+  },
+  {
+    "key": "UserSettings_CreateOrgLabel",
+    "translated": "Create your own organization"
+  },
+  {
+    "key": "UserSettings_SignOutLabel",
+    "translated": "Sign out"
+  },
+  {
+    "key": "UserSettings_LeaveDivisionLabel",
+    "translated": "Leave division"
+  },
+  {
+    "key": "UserSettings_LeaveOrgLabel",
+    "translated": "Leave organization"
+  },
+  {
+    "key": "UserSettings_DeleteAccountLabel",
+    "translated": "Delete account"
   }
 ]

@@ -27,6 +27,7 @@
     <Folder Include="ViewModels\Abstractions\" />
     <Folder Include="ViewModels\TabBarViewModels\" />
     <Folder Include="Models\Cells\" />
+    <Folder Include="Models\Generic\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Localization\Resources-en-US.json" />
