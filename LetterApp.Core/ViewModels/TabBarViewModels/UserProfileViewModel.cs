@@ -105,11 +105,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 foreach(var division in _user.Divisions)
                 {
-                    var div = new ProfileDivision();
-                    div.Id = division.DivisionID;
-                    div.Name = division.Name;
-                    div.Picture = division.Picture;
-                    divisions.Add(div);
+                    if(division.IsUserInDivisionActive)
+                    {
+                        var div = new ProfileDivision();
+                        div.Id = division.DivisionID;
+                        div.Name = division.Name;
+                        div.Picture = division.Picture;
+                        divisions.Add(div);
+                    }
                 }
             }
 
@@ -157,6 +160,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 if(result != null)
                 {
+                    _dialogService.ShowAlert(SettingImageAlert, AlertType.Info);
+
                     var res = await _userService.UpdateUserPicture(result);
 
                     if(res.StatusCode == 204)
@@ -220,10 +225,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         #region Resources
 
-        private string Role             => L10N.Localize("UserProfile_Role");
-        private string Email            => L10N.Localize("UserProfile_Email");
-        private string Mobile           => L10N.Localize("UserProfile_Mobile");
-        private string DivisionsLabel   => L10N.Localize("UserProfile_Divisions");
+        private string Role              => L10N.Localize("UserProfile_Role");
+        private string Email             => L10N.Localize("UserProfile_Email");
+        private string Mobile            => L10N.Localize("UserProfile_Mobile");
+        private string DivisionsLabel    => L10N.Localize("UserProfile_Divisions");
+        private string SettingImageAlert => L10N.Localize("UserProfile_SettingImage");
 
         #endregion
     }

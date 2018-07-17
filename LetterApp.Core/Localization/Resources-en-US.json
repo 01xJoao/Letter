@@ -76,6 +76,14 @@
     "translated": "You are banned from this organization."
   },
   {
+    "key": "Code_E119",
+    "translated": "Your access request is already under review."
+  },
+  {
+    "key": "Code_E120",
+    "translated": "You are banned from this division."
+  },
+  {
     "key": "Code_S201",
     "translated": "Password successfully changed."
   },
@@ -442,6 +450,10 @@
   {
     "key": "UserProfile_Divisions",
     "translated":  "Divisions"
+  },
+  {
+    "key": "UserProfile_SettingImage",
+    "translated":  "Setting up new image"
   },
   {
     "key": "UserSettings_SettingsTitle",
