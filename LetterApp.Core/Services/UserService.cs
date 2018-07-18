@@ -34,7 +34,8 @@ namespace LetterApp.Core.Services
 
         public async Task<BaseModel> ChangePhoneNumber(string phoneNumber)
         {
-            return await _webService.GetAsync<BaseModel>($"users/update/cellphone/{phoneNumber}", needsHeaderCheck: true).ConfigureAwait(false);
+            var updatedNumber = new UserUpdateNumber(phoneNumber);
+            return await _webService.PostAsync<BaseModel>($"users/update/cellphone", updatedNumber, needsHeaderCheck: true).ConfigureAwait(false);
         }
 
         public async Task<BaseModel> DeleteAccount()

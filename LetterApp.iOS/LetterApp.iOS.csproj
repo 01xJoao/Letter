@@ -357,6 +357,8 @@
     <Folder Include="Resources\en.Iproj\" />
     <Folder Include="Views\UserSettings\Cells\" />
     <Folder Include="Resources\Assets.xcassets\arrow_right.imageset\" />
+    <Folder Include="Views\ChangePassword\" />
+    <Folder Include="Views\LeaveDivision\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -398,6 +400,8 @@
     <InterfaceDefinition Include="Views\UserSettings\Cells\AllowPhoneCallsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\SwitchCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Cells\LabelWithArrowCell.xib" />
+    <InterfaceDefinition Include="Views\ChangePassword\ChangePasswordViewController.xib" />
+    <InterfaceDefinition Include="Views\LeaveDivision\LeaveDivisionViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -591,6 +595,14 @@
       <DependentUpon>LabelWithArrowCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\UserSettingsSource.cs" />
+    <Compile Include="Views\ChangePassword\ChangePasswordViewController.cs" />
+    <Compile Include="Views\ChangePassword\ChangePasswordViewController.designer.cs">
+      <DependentUpon>ChangePasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.cs" />
+    <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.designer.cs">
+      <DependentUpon>LeaveDivisionViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

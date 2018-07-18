@@ -248,12 +248,24 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
+                RaisePropertyChanged(nameof(UpdateView));
                 Ui.Handle(ex as dynamic);
             }
         }
 
         private async Task ChangePhoneNumber(string number)
         {
+            if (number == _user.ContactNumber)
+                return;
+
+            if(number.Length < 8)
+            {
+                PhoneModel.PhoneNumber = number;
+                RaisePropertyChanged(nameof(UpdateView));
+                _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error);
+                return;
+            }
+                
             IsBusy = true;
 
             try
@@ -272,6 +284,7 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
+                RaisePropertyChanged(nameof(UpdateView));
                 Ui.Handle(ex as dynamic);
             }
             finally
@@ -309,6 +322,7 @@ namespace LetterApp.Core.ViewModels
         private string MessageNotificationLabel => L10N.Localize("UserSettings_MessageLabel");
         private string CallNotificationLabel => L10N.Localize("UserSettings_CallLabel");
         private string GroupNotificationLabel => L10N.Localize("UserSettings_GroupLabel");
+        private string AlertPhoneNumber => L10N.Localize("UserSettings_CellNumber");
 
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string AccountSectionLabel => L10N.Localize("UserSettings_AccountSection");

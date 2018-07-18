@@ -46,5 +46,10 @@ namespace LetterApp.Core.Helpers
             var new_str = Regex.Replace(str, @"\p{Cs}", "");
             return str == new_str;
         }
+
+        public static string FirstCharToUpper(this string input)
+        {
+            return input.First().ToString().ToUpper() + input.Substring(1);
+        }
     }
 }

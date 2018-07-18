@@ -24,4 +24,15 @@ namespace LetterApp.Core.Models.DTO.RequestModels
         [JsonProperty("picture")]
         public string Picture { get; set; }
     }
+
+    public class UserUpdateNumber
+    {
+        public UserUpdateNumber(string number)
+        {
+            CellNumber = number;
+        }
+
+        [JsonProperty("phonenumber")]
+        public string CellNumber { get; set; }
+    }
 }

@@ -538,5 +538,9 @@
   {
     "key": "UserSettings_DeleteAccountLabel",
     "translated": "Delete account"
+  },
+  {
+    "key": "UserSettings_CellNumber",
+    "translated":  "Invalid phone number."
   }
 ]

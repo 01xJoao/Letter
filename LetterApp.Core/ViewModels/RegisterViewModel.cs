@@ -74,6 +74,9 @@ namespace LetterApp.Core.ViewModels
                 return;
             }
 
+            user.FirstName = StringUtils.FirstCharToUpper(user.FirstName);
+            user.LastName = StringUtils.FirstCharToUpper(user.LastName);
+
             try
             {
                 var result = await _authService.CreateAccount(user);
@@ -139,9 +142,15 @@ namespace LetterApp.Core.ViewModels
                 return false;
             }
 
+            if(user.Phone.Length < 8)
+            {
+                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
+                return false;
+            }
+
             if (!_userAgreed)
             {
-                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
+                _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error);
                 return false;
             }
 
@@ -166,6 +175,7 @@ namespace LetterApp.Core.ViewModels
         private string InvalidEmail     => L10N.Localize("LoginViewModel_InvalidEmail");
         private string UserAgreement    => L10N.Localize("RegisterViewModel_UserAgreement");
         private string DamnEmojis       => L10N.Localize("RegisterViewModel_DamnEmojis");
+        private string AlertPhoneNumber => L10N.Localize("UserSettings_CellNumber");
 
         public string AgreementLabel => L10N.Localize("RegisterViewModel_Agreement");
         private string _firstname => L10N.Localize("RegisterViewModel_FirstName");

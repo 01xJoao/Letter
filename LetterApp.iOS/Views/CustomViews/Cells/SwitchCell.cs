@@ -9,14 +9,14 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
 {
     public partial class SwitchCell : UITableViewCell
     {
-        private EventHandler<bool> _booleanEvent;
+        private DescriptionAndBoolEventModel _cell;
         public static readonly NSString Key = new NSString("SwitchCell");
         public static readonly UINib Nib = UINib.FromName("SwitchCell", NSBundle.MainBundle);
         protected SwitchCell(IntPtr handle) : base(handle) {}
 
         public void Configure(DescriptionAndBoolEventModel cell)
         {
-            _booleanEvent = cell.BooleanEvent;
+            _cell = cell;
             UILabelExtensions.SetupLabelAppearance(_label, cell.Description, Colors.Black, 15f);
             _switch.On = cell.IsActive;
 
@@ -26,7 +26,8 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
 
         private void OnSwitch_ValueChanged(object sender, EventArgs e)
         {
-            _booleanEvent?.Invoke(this, _switch.On);
+            _cell.BooleanEvent?.Invoke(this, _switch.On);
+            _cell.IsActive = _switch.On;
         }
     }
 }

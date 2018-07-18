@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -15,7 +16,22 @@ namespace LetterApp.iOS.Views.UserSettings
         {
             base.ViewDidLoad();
 
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
             SetupTableView();
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.UpdateView):
+                    SetupTableView();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void SetupTableView()
@@ -62,11 +78,10 @@ namespace LetterApp.iOS.Views.UserSettings
 
         public override void ViewDidDisappear(bool animated)
         {
+            base.ViewDidDisappear(animated);
+
             if(this.IsMovingFromParentViewController)
-            {
-                base.ViewDidDisappear(animated);
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
-            }
         }
     }
 }

@@ -10,14 +10,14 @@ namespace LetterApp.iOS.Views.UserSettings.Cells
 {
     public partial class AllowPhoneCallsCell : UITableViewCell
     {
-        private XPCommand<bool> _switchCommand;
+        private SettingsAllowCallsModel _settings;
         public static readonly NSString Key = new NSString("AllowPhoneCallsCell");
         public static readonly UINib Nib = UINib.FromName("AllowPhoneCallsCell", NSBundle.MainBundle);
         protected AllowPhoneCallsCell(IntPtr handle) : base(handle) {}
 
         public void Configure(SettingsAllowCallsModel settings)
         {
-            _switchCommand = settings.AllowCalls;
+            _settings = settings;
             UILabelExtensions.SetupLabelAppearance(_title, settings.AllowCallsTitle, Colors.Black, 15f);
             UILabelExtensions.SetupLabelAppearance(_description, settings.AllowCallsDescription, Colors.Black, 12f);
             _switch.On = settings.IsActive;
@@ -28,8 +28,11 @@ namespace LetterApp.iOS.Views.UserSettings.Cells
 
         private void OnSwitch_ValueChanged(object sender, EventArgs e)
         {
-            if (_switchCommand.CanExecute(_switch.On))
-                _switchCommand.Execute(_switch.On);
+            if (_settings.AllowCalls.CanExecute(_switch.On))
+            {
+                _settings.AllowCalls.Execute(_switch.On);
+                _settings.IsActive = _switch.On;
+            }
         }
     }
 }
