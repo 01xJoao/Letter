@@ -31,6 +31,7 @@ namespace LetterApp.Core.ViewModels
         public SettingsPhoneModel PhoneModel { get; set; }
         public SettingsAllowCallsModel AllowCallsModel { get; set; }
         public List<DescriptionTypeEventModel> TypeModel { get; set; }
+        public List<DescriptionAndBoolEventModel> SwitchModel { get; set; }
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
@@ -61,7 +62,19 @@ namespace LetterApp.Core.ViewModels
             var cellTypes = new[] {passwordType, contactUsType, termsOfServiceType, createOrganizationType, signOutType, leaveDivisionType, leaveOrganizationType, deleteAccountType};
             TypeModel = new List<DescriptionTypeEventModel>();
             TypeModel.AddRange(cellTypes);
+
+            var messageNotifications = new DescriptionAndBoolEventModel(MessageNotificationLabel, AppSettings.MessageNotifications, MessageNotificationEvent);
+            var callNotifications = new DescriptionAndBoolEventModel(CallNotificationLabel, AppSettings.CallNotifications, CallNotificationEvent);
+            var groupNotifications = new DescriptionAndBoolEventModel(GroupNotificationLabel, AppSettings.GroupNotifications, GroupNotificationEvent);
+
+            var notificationTypes = new[] { messageNotifications, callNotifications, groupNotifications };
+            SwitchModel = new List<DescriptionAndBoolEventModel>();
+            SwitchModel.AddRange(notificationTypes);
         }
+
+        private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
+        private void CallNotificationEvent(object sender, bool value) => AppSettings.CallNotifications = value;
+        private void MessageNotificationEvent(object sender, bool value) => AppSettings.MessageNotifications = value;
 
         private void AllowCalls(object sender, bool allow) => SetAllowCalls(allow);
         private void ChangeNumber(object sender, int number) => ChangePhoneNumber(number);
@@ -250,6 +263,9 @@ namespace LetterApp.Core.ViewModels
         private string SignOutQuestion => L10N.Localize("DialogLogout_Question");
         private string LeaveOrganizationQuestion => L10N.Localize("DialogOrganization_Question");
         private string DeleteAccountQuestion => L10N.Localize("DialogDelete_Question");
+        private string MessageNotificationLabel => L10N.Localize("UserSettings_MessageLabel");
+        private string CallNotificationLabel => L10N.Localize("UserSettings_CallLabel");
+        private string GroupNotificationLabel => L10N.Localize("UserSettings_GroupLabel");
         #endregion
     }
 }

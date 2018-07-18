@@ -52,6 +52,24 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(MainMenuAllowed), value);
         }
 
+        public static bool MessageNotifications
+        {
+            get => Preferences.Get(nameof(MessageNotifications), false);
+            set => Preferences.Set(nameof(MessageNotifications), value);
+        }
+
+        public static bool CallNotifications
+        {
+            get => Preferences.Get(nameof(CallNotifications), false);
+            set => Preferences.Set(nameof(CallNotifications), value);
+        }
+
+        public static bool GroupNotifications
+        {
+            get => Preferences.Get(nameof(GroupNotifications), false);
+            set => Preferences.Set(nameof(GroupNotifications), value);
+        }
+
         public static void Logout()
         {
             Preferences.Remove(nameof(IsUserLogged));
@@ -61,6 +79,9 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(PubNubTokenExpirationDate));
             Preferences.Remove(nameof(MainMenuAllowed));
             Preferences.Remove(nameof(UserId));
+            Preferences.Remove(nameof(MessageNotifications));
+            Preferences.Remove(nameof(CallNotifications));
+            Preferences.Remove(nameof(GroupNotifications));
         }
     }
 }
