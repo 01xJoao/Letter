@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
+using LetterApp.Core.Models.Generic;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
@@ -26,6 +29,8 @@ namespace LetterApp.Core.ViewModels
         }
 
         public SettingsPhoneModel PhoneModel { get; set; }
+        public SettingsAllowCallsModel AllowCallsModel { get; set; }
+        public List<DescriptionTypeEventModel> TypeModel { get; set; }
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
@@ -42,10 +47,156 @@ namespace LetterApp.Core.ViewModels
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
             PhoneModel = new SettingsPhoneModel(PhoneLabel, _user.ContactNumber, ChangeNumber);
+            AllowCallsModel = new SettingsAllowCallsModel(AllowCallsTitle, AllowCallsDescription, AllowCalls);
 
+            var passwordType = new DescriptionTypeEventModel(PasswordLabel, true, GenericMethodType, CellType.Password);
+            var contactUsType = new DescriptionTypeEventModel(ContactUsLabel, false, GenericMethodType, CellType.ContactUs);
+            var termsOfServiceType = new DescriptionTypeEventModel(TermsLabel, false, GenericMethodType, CellType.TermsOfService);
+            var createOrganizationType = new DescriptionTypeEventModel(CreateOrgLabel, false, GenericMethodType, CellType.CreateOrganization);
+            var signOutType = new DescriptionTypeEventModel(SignOutLabel, false, GenericMethodType, CellType.SignOut);
+            var leaveDivisionType = new DescriptionTypeEventModel(LeaveDivisionLabel, true, GenericMethodType, CellType.LeaveDivision);
+            var leaveOrganizationType = new DescriptionTypeEventModel(LeaveOrganizationLabel, false, GenericMethodType, CellType.LeaveOrganization);
+            var deleteAccountType = new DescriptionTypeEventModel(DeleteAccountLabel, false, GenericMethodType, CellType.DeleteAccount);
+
+            var cellTypes = new[] {passwordType, contactUsType, termsOfServiceType, createOrganizationType, signOutType, leaveDivisionType, leaveOrganizationType, deleteAccountType};
+            TypeModel = new List<DescriptionTypeEventModel>();
+            TypeModel.AddRange(cellTypes);
         }
 
+        private void AllowCalls(object sender, bool allow) => SetAllowCalls(allow);
         private void ChangeNumber(object sender, int number) => ChangePhoneNumber(number);
+        private void GenericMethodType(object sender, CellType type)
+        {
+            try
+            {
+                switch (type)
+                {
+                    case CellType.Password:
+                        NavigationService.NavigateAsync<ChangePasswordViewModel, object>(null);
+                        break;
+
+                    case CellType.ContactUs:
+                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/contactus");
+                        break;
+
+                    case CellType.TermsOfService:
+                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/termsofservice");
+                        break;
+
+                    case CellType.CreateOrganization:
+                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/organizations");
+                        break;
+
+                    case CellType.SignOut:
+                        SignOut();
+                        break;
+                    case CellType.LeaveDivision:
+                        NavigationService.NavigateAsync<LeaveDivisionViewModel, object>(null);
+                        break;
+
+                    case CellType.LeaveOrganization:
+                        LeaveOrganization();
+                        break;
+
+                    case CellType.DeleteAccount:
+                        DeleteAccount();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task DeleteAccount()
+        {
+            try
+            {
+                var result = await _dialogService.ShowQuestion(DeleteAccountQuestion, DeleteAccountLabel, QuestionType.Bad);
+
+                if(result)
+                {
+                    var res = await _userService.DeleteAccount();
+
+                    if(res.StatusCode == 205)
+                    {
+                        await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
+                    }
+                    else
+                    {
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task LeaveOrganization()
+        {
+            try
+            {
+                var result = await _dialogService.ShowQuestion(LeaveOrganizationQuestion, LeaveOrganizationLabel, QuestionType.Bad);
+
+                if (result)
+                {
+                    var res = await _userService.LeaveOrganization((int)_user.OrganizationID);
+
+                    if(res.StatusCode == 208)
+                    {
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
+                        await NavigationService.Close(this);
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
+                    }
+                    else
+                    {
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task SignOut()
+        {
+            try
+            {
+                var result = await _dialogService.ShowQuestion(SignOutQuestion, SignOutLabel, QuestionType.Bad);
+
+                if(result)
+                {
+                    await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
+                    AppSettings.Logout();
+                    await NavigationService.Close(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task SetAllowCalls(bool allow)
+        {
+            try
+            {
+                await _userService.AllowPhoneCalls(allow);   
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
 
         private async Task ChangePhoneNumber(int number)
         {
@@ -86,7 +237,19 @@ namespace LetterApp.Core.ViewModels
 
         public string SettingsTitle => L10N.Localize("UserSettings_SettingsTitle");
         private string PhoneLabel => L10N.Localize("UserSettings_PhoneNumberLabel");
-
+        private string AllowCallsTitle => L10N.Localize("UserSettings_AllowPhoneCallsLabel");
+        private string AllowCallsDescription => L10N.Localize("UserSettings_AllowPhoneCallsDescription");
+        private string PasswordLabel => L10N.Localize("UserSettings_PasswordLabel");
+        private string ContactUsLabel => L10N.Localize("UserSettings_ContactUsLabel");
+        private string TermsLabel => L10N.Localize("UserSettings_TermsOfService");
+        private string CreateOrgLabel => L10N.Localize("UserSettings_CreateOrgLabel");
+        private string SignOutLabel => L10N.Localize("UserSettings_SignOutLabel");
+        private string LeaveDivisionLabel => L10N.Localize("UserSettings_LeaveDivisionLabel");
+        private string LeaveOrganizationLabel => L10N.Localize("UserSettings_LeaveOrgLabel");
+        private string DeleteAccountLabel => L10N.Localize("UserSettings_DeleteAccountLabel");
+        private string SignOutQuestion => L10N.Localize("DialogLogout_Question");
+        private string LeaveOrganizationQuestion => L10N.Localize("DialogOrganization_Question");
+        private string DeleteAccountQuestion => L10N.Localize("DialogDelete_Question");
         #endregion
     }
 }

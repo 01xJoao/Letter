@@ -432,6 +432,14 @@
     "translated": "Sign Out"
   },
   {
+    "key": "DialogOrganization_Question",
+    "translated": "Do you want to leave the organization?"
+  },
+  {
+    "key": "DialogDelete_Question",
+    "translated": "Do you want to delete your account?"
+  },
+  {
     "key": "UserProfile_DescriptionHint",
     "translated": "Describe yourself in 40 characters."
   },
