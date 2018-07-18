@@ -36,6 +36,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
+        private XPCommand<bool> _allowCallsCommand;
+        public XPCommand<bool> AllowCallsCommand => _allowCallsCommand ?? (_allowCallsCommand = new XPCommand<bool>(async (value) => await SetAllowCalls(value), CanExecute));
+
+        private XPCommand<int> _changeNumberCommand;
+        public XPCommand<int> ChangeNumberCommand => _changeNumberCommand ?? (_changeNumberCommand = new XPCommand<int>(async (value) => await ChangePhoneNumber(value), CanExecute));
+
         public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService)
         {
             _dialogService = dialogService;
@@ -47,8 +53,8 @@ namespace LetterApp.Core.ViewModels
         {
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
-            PhoneModel = new SettingsPhoneModel(PhoneLabel, _user.ContactNumber, ChangeNumber);
-            AllowCallsModel = new SettingsAllowCallsModel(AllowCallsTitle, AllowCallsDescription, AllowCalls);
+            PhoneModel = new SettingsPhoneModel(PhoneLabel, _user.ContactNumber, ChangeNumberCommand);
+            AllowCallsModel = new SettingsAllowCallsModel(AllowCallsTitle, AllowCallsDescription, AllowCallsCommand);
 
             var passwordType = new DescriptionTypeEventModel(PasswordLabel, true, GenericMethodType, CellType.Password);
             var contactUsType = new DescriptionTypeEventModel(ContactUsLabel, false, GenericMethodType, CellType.ContactUs);
@@ -76,10 +82,11 @@ namespace LetterApp.Core.ViewModels
         private void CallNotificationEvent(object sender, bool value) => AppSettings.CallNotifications = value;
         private void MessageNotificationEvent(object sender, bool value) => AppSettings.MessageNotifications = value;
 
-        private void AllowCalls(object sender, bool allow) => SetAllowCalls(allow);
-        private void ChangeNumber(object sender, int number) => ChangePhoneNumber(number);
         private void GenericMethodType(object sender, CellType type)
         {
+            if (IsBusy)
+                return;
+
             try
             {
                 switch (type)
@@ -127,6 +134,8 @@ namespace LetterApp.Core.ViewModels
 
         private async Task DeleteAccount()
         {
+            IsBusy = true;
+
             try
             {
                 var result = await _dialogService.ShowQuestion(DeleteAccountQuestion, DeleteAccountLabel, QuestionType.Bad);
@@ -150,10 +159,16 @@ namespace LetterApp.Core.ViewModels
             {
                 Ui.Handle(ex as dynamic);
             }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task LeaveOrganization()
         {
+            IsBusy = true;
+
             try
             {
                 var result = await _dialogService.ShowQuestion(LeaveOrganizationQuestion, LeaveOrganizationLabel, QuestionType.Bad);
@@ -178,10 +193,16 @@ namespace LetterApp.Core.ViewModels
             {
                 Ui.Handle(ex as dynamic);
             }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task SignOut()
         {
+            IsBusy = true;
+
             try
             {
                 var result = await _dialogService.ShowQuestion(SignOutQuestion, SignOutLabel, QuestionType.Bad);
@@ -196,6 +217,10 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -245,6 +270,8 @@ namespace LetterApp.Core.ViewModels
         }
 
         private bool CanExecute() => !IsBusy;
+        private bool CanExecute(bool obj) => !IsBusy;
+        private bool CanExecute(int arg) => !IsBusy;
 
         #region Resources
 
