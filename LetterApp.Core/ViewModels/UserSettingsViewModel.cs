@@ -260,7 +260,6 @@ namespace LetterApp.Core.ViewModels
 
             if(number.Length < 8)
             {
-                PhoneModel.PhoneNumber = number;
                 RaisePropertyChanged(nameof(UpdateView));
                 _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error);
                 return;
@@ -274,21 +273,21 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 204)
                 {
+                    PhoneModel.PhoneNumber = number;
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
                 }
                 else
                 {
-                    RaisePropertyChanged(nameof(UpdateView));
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
                 }
             }
             catch (Exception ex)
             {
-                RaisePropertyChanged(nameof(UpdateView));
                 Ui.Handle(ex as dynamic);
             }
             finally
             {
+                RaisePropertyChanged(nameof(UpdateView));
                 IsBusy = false;
             }
         }
