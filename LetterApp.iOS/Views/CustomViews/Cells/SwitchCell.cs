@@ -1,23 +1,32 @@
 ﻿using System;
 
 using Foundation;
+using LetterApp.Core.Models.Generic;
+using LetterApp.iOS.Helpers;
 using UIKit;
 
 namespace LetterApp.iOS.Views.CustomViews.Cells
 {
     public partial class SwitchCell : UITableViewCell
     {
+        private EventHandler<bool> _booleanEvent;
         public static readonly NSString Key = new NSString("SwitchCell");
-        public static readonly UINib Nib;
+        public static readonly UINib Nib = UINib.FromName("SwitchCell", NSBundle.MainBundle);
+        protected SwitchCell(IntPtr handle) : base(handle) {}
 
-        static SwitchCell()
+        public void Configure(DescriptionAndBoolEventModel cell)
         {
-            Nib = UINib.FromName("SwitchCell", NSBundle.MainBundle);
+            _booleanEvent = cell.BooleanEvent;
+            UILabelExtensions.SetupLabelAppearance(_label, cell.Description, Colors.Black, 15f);
+            _switch.On = cell.IsActive;
+
+            _switch.ValueChanged -= OnSwitch_ValueChanged;
+            _switch.ValueChanged += OnSwitch_ValueChanged;
         }
 
-        protected SwitchCell(IntPtr handle) : base(handle)
+        private void OnSwitch_ValueChanged(object sender, EventArgs e)
         {
-            // Note: this .ctor should not contain any initialization logic.
+            _booleanEvent?.Invoke(this, _switch.On);
         }
     }
 }

@@ -30,7 +30,12 @@ namespace LetterApp.Core.ViewModels
 
         public SettingsPhoneModel PhoneModel { get; set; }
         public SettingsAllowCallsModel AllowCallsModel { get; set; }
-        public List<DescriptionTypeEventModel> TypeModel { get; set; }
+
+        public DescriptionTypeEventModel TypeModelPassword { get; set; }
+        public List<DescriptionTypeEventModel> TypeModelInformation { get; set; }
+        public List<DescriptionTypeEventModel> TypeModelDanger { get; set; }
+
+
         public List<DescriptionAndBoolEventModel> SwitchModel { get; set; }
 
         private XPCommand _closeViewCommand;
@@ -39,8 +44,8 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<bool> _allowCallsCommand;
         public XPCommand<bool> AllowCallsCommand => _allowCallsCommand ?? (_allowCallsCommand = new XPCommand<bool>(async (value) => await SetAllowCalls(value), CanExecute));
 
-        private XPCommand<int> _changeNumberCommand;
-        public XPCommand<int> ChangeNumberCommand => _changeNumberCommand ?? (_changeNumberCommand = new XPCommand<int>(async (value) => await ChangePhoneNumber(value), CanExecute));
+        private XPCommand<string> _changeNumberCommand;
+        public XPCommand<string> ChangeNumberCommand => _changeNumberCommand ?? (_changeNumberCommand = new XPCommand<string>(async (value) => await ChangePhoneNumber(value), CanExecute));
 
         public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService)
         {
@@ -54,20 +59,29 @@ namespace LetterApp.Core.ViewModels
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
             PhoneModel = new SettingsPhoneModel(PhoneLabel, _user.ContactNumber, ChangeNumberCommand);
-            AllowCallsModel = new SettingsAllowCallsModel(AllowCallsTitle, AllowCallsDescription, AllowCallsCommand);
+            AllowCallsModel = new SettingsAllowCallsModel(AllowCallsTitle, AllowCallsDescription, AllowCallsCommand, _user.ShowContactNumber);
 
             var passwordType = new DescriptionTypeEventModel(PasswordLabel, true, GenericMethodType, CellType.Password);
+
             var contactUsType = new DescriptionTypeEventModel(ContactUsLabel, false, GenericMethodType, CellType.ContactUs);
             var termsOfServiceType = new DescriptionTypeEventModel(TermsLabel, false, GenericMethodType, CellType.TermsOfService);
             var createOrganizationType = new DescriptionTypeEventModel(CreateOrgLabel, false, GenericMethodType, CellType.CreateOrganization);
+
             var signOutType = new DescriptionTypeEventModel(SignOutLabel, false, GenericMethodType, CellType.SignOut);
             var leaveDivisionType = new DescriptionTypeEventModel(LeaveDivisionLabel, true, GenericMethodType, CellType.LeaveDivision);
             var leaveOrganizationType = new DescriptionTypeEventModel(LeaveOrganizationLabel, false, GenericMethodType, CellType.LeaveOrganization);
             var deleteAccountType = new DescriptionTypeEventModel(DeleteAccountLabel, false, GenericMethodType, CellType.DeleteAccount);
 
-            var cellTypes = new[] {passwordType, contactUsType, termsOfServiceType, createOrganizationType, signOutType, leaveDivisionType, leaveOrganizationType, deleteAccountType};
-            TypeModel = new List<DescriptionTypeEventModel>();
-            TypeModel.AddRange(cellTypes);
+            var informationCell = new[] { contactUsType, termsOfServiceType, createOrganizationType };
+            var dangerCell = new [] { signOutType, leaveDivisionType, leaveOrganizationType, deleteAccountType};
+
+            TypeModelPassword = passwordType;
+
+            TypeModelInformation = new List<DescriptionTypeEventModel>();
+            TypeModelDanger = new List<DescriptionTypeEventModel>();
+
+            TypeModelInformation.AddRange(informationCell);
+            TypeModelDanger.AddRange(dangerCell);
 
             var messageNotifications = new DescriptionAndBoolEventModel(MessageNotificationLabel, AppSettings.MessageNotifications, MessageNotificationEvent);
             var callNotifications = new DescriptionAndBoolEventModel(CallNotificationLabel, AppSettings.CallNotifications, CallNotificationEvent);
@@ -238,7 +252,7 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private async Task ChangePhoneNumber(int number)
+        private async Task ChangePhoneNumber(string number)
         {
             IsBusy = true;
 
@@ -273,7 +287,7 @@ namespace LetterApp.Core.ViewModels
 
         private bool CanExecute() => !IsBusy;
         private bool CanExecute(bool obj) => !IsBusy;
-        private bool CanExecute(int arg) => !IsBusy;
+        private bool CanExecute(string arg) => !IsBusy;
 
         #region Resources
 
@@ -299,12 +313,14 @@ namespace LetterApp.Core.ViewModels
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string AccountSectionLabel => L10N.Localize("UserSettings_AccountSection");
         private string NotificationsSectionLabel => L10N.Localize("UserSettings_NotificationsSection");
+        private string InformationSectionLabel => L10N.Localize("UserSettings_InformationSection");
         private string DangerSectionLabel => L10N.Localize("UserSettings_DangerZoneSection");
 
         private void SetL10NResources()
         {
             LocationResources.Add("account", AccountSectionLabel);
             LocationResources.Add("notifications", NotificationsSectionLabel);
+            LocationResources.Add("information", InformationSectionLabel);
             LocationResources.Add("dangerzone", DangerSectionLabel);
         }
         #endregion

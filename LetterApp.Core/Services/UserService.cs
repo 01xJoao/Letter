@@ -32,7 +32,7 @@ namespace LetterApp.Core.Services
             return await _webService.PostAsync<BaseModel>($"users/update/password", passwordModel, needsHeaderCheck: true).ConfigureAwait(false);
         }
 
-        public async Task<BaseModel> ChangePhoneNumber(int phoneNumber)
+        public async Task<BaseModel> ChangePhoneNumber(string phoneNumber)
         {
             return await _webService.GetAsync<BaseModel>($"users/update/cellphone/{phoneNumber}", needsHeaderCheck: true).ConfigureAwait(false);
         }

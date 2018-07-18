@@ -476,6 +476,10 @@
     "translated": "Notifications"
   },
   {
+    "key": "UserSettings_InformationSection",
+    "translated": "Information"
+  },
+  {
     "key": "UserSettings_DangerZoneSection",
     "translated": "Danger Zone"
   },
@@ -489,7 +493,7 @@
   },
   {
     "key": "UserSettings_AllowPhoneCallsDescription",
-    "translated": "When on, people can see your phone number and call you outsite Letter."
+    "translated": "When on, people can see your phone number and call you."
   },
   {
     "key": "UserSettings_PasswordLabel",

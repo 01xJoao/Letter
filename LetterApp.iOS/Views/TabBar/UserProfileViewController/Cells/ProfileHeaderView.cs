@@ -60,7 +60,6 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             _settingsButton.TouchUpInside -= OnConfigButton_TouchUpInside;
             _settingsButton.TouchUpInside += OnConfigButton_TouchUpInside;
 
-
             _profileButton.TouchUpInside -= OnProfileButton_TouchUpInside;
             _profileButton.TouchUpInside += OnProfileButton_TouchUpInside;
         }

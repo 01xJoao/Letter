@@ -281,6 +281,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -352,6 +356,7 @@
     <Folder Include="Views\Division\" />
     <Folder Include="Resources\en.Iproj\" />
     <Folder Include="Views\UserSettings\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\arrow_right.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -585,6 +590,7 @@
     <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.designer.cs">
       <DependentUpon>LabelWithArrowCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sources\UserSettingsSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

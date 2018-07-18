@@ -1,6 +1,7 @@
 ﻿using System;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 
@@ -19,7 +20,10 @@ namespace LetterApp.iOS.Views.UserSettings
 
         private void SetupTableView()
         {
-            
+            _tableView.BackgroundColor = Colors.MainBlue4;
+            _tableView.Source = new UserSettingsSource(_tableView, ViewModel.PhoneModel, ViewModel.AllowCallsModel, ViewModel.TypeModelPassword, ViewModel.SwitchModel, ViewModel.TypeModelInformation,
+                                                       ViewModel.TypeModelDanger, ViewModel.LocationResources);
+            _tableView.ReloadData();
         }
 
         public override void ViewWillAppear(bool animated)

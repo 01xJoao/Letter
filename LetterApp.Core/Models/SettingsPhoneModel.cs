@@ -5,7 +5,7 @@ namespace LetterApp.Core.Models
 {
     public class SettingsPhoneModel
     {
-        public SettingsPhoneModel(string phoneDescription, string phoneNumber, XPCommand<int> changeNumber)
+        public SettingsPhoneModel(string phoneDescription, string phoneNumber, XPCommand<string> changeNumber)
         {
             PhoneDescription = phoneDescription;
             PhoneNumber = phoneNumber;
@@ -14,6 +14,6 @@ namespace LetterApp.Core.Models
 
         public string PhoneDescription { get; set; }
         public string PhoneNumber { get; set; }
-        public XPCommand<int> ChangeNumber { get; set; }
+        public XPCommand<string> ChangeNumber { get; set; }
     }
 }

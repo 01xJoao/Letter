@@ -30,5 +30,9 @@ namespace LetterApp.iOS.Helpers
 
         public static nfloat Profile_DetailsHeader = 10;
         public static nfloat Profile_DivisionHeader = 40;
+
+        public static nfloat Settings_Sections = 45;
+        public static nfloat Settings_GenericCells = 50;
+        public static nfloat Settings_AllowCalls = 80;
     }
 }
