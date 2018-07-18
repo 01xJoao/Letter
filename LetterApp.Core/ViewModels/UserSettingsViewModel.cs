@@ -76,6 +76,8 @@ namespace LetterApp.Core.ViewModels
             var notificationTypes = new[] { messageNotifications, callNotifications, groupNotifications };
             SwitchModel = new List<DescriptionAndBoolEventModel>();
             SwitchModel.AddRange(notificationTypes);
+
+            SetL10NResources();
         }
 
         private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
@@ -293,6 +295,18 @@ namespace LetterApp.Core.ViewModels
         private string MessageNotificationLabel => L10N.Localize("UserSettings_MessageLabel");
         private string CallNotificationLabel => L10N.Localize("UserSettings_CallLabel");
         private string GroupNotificationLabel => L10N.Localize("UserSettings_GroupLabel");
+
+        public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
+        private string AccountSectionLabel => L10N.Localize("UserSettings_AccountSection");
+        private string NotificationsSectionLabel => L10N.Localize("UserSettings_NotificationsSection");
+        private string DangerSectionLabel => L10N.Localize("UserSettings_DangerZoneSection");
+
+        private void SetL10NResources()
+        {
+            LocationResources.Add("account", AccountSectionLabel);
+            LocationResources.Add("notifications", NotificationsSectionLabel);
+            LocationResources.Add("dangerzone", DangerSectionLabel);
+        }
         #endregion
     }
 }
