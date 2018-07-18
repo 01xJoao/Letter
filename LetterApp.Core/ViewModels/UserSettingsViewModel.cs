@@ -244,7 +244,10 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
-                await _userService.AllowPhoneCalls(allow);   
+                var result = await _userService.AllowPhoneCalls(allow); 
+
+                if(result.StatusCode == 200)
+                    Realm.Write(() => _user.ShowContactNumber = allow);
             }
             catch (Exception ex)
             {
@@ -273,8 +276,9 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 204)
                 {
+                    Realm.Write(() => _user.ContactNumber = number);
                     PhoneModel.PhoneNumber = number;
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
+                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 2f);
                 }
                 else
                 {
