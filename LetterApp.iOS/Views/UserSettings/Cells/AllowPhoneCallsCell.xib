@@ -19,16 +19,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i2X-cZ-FOG">
-                        <rect key="frame" x="20" y="17" width="42" height="21"/>
+                        <rect key="frame" x="20" y="16" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="exO-6K-1tL">
-                        <rect key="frame" x="253" y="12" width="51" height="31"/>
+                        <rect key="frame" x="253" y="11" width="51" height="31"/>
                     </switch>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.59999999999999998" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v90-wO-gph">
-                        <rect key="frame" x="20" y="54" width="282" height="14.5"/>
+                        <rect key="frame" x="20" y="53" width="282" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -39,9 +39,10 @@
                     <constraint firstItem="i2X-cZ-FOG" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="20" id="4h3-aC-Fy7"/>
                     <constraint firstItem="v90-wO-gph" firstAttribute="trailing" secondItem="exO-6K-1tL" secondAttribute="trailing" id="EaB-hb-u8M"/>
                     <constraint firstItem="i2X-cZ-FOG" firstAttribute="centerY" secondItem="exO-6K-1tL" secondAttribute="centerY" id="M8B-TM-30D"/>
+                    <constraint firstAttribute="bottom" secondItem="v90-wO-gph" secondAttribute="bottom" constant="6" id="OTJ-MV-SRf"/>
                     <constraint firstItem="v90-wO-gph" firstAttribute="leading" secondItem="i2X-cZ-FOG" secondAttribute="leading" id="WkW-IJ-IXN"/>
-                    <constraint firstItem="exO-6K-1tL" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="12" id="cQ7-Nr-hTn"/>
-                    <constraint firstItem="v90-wO-gph" firstAttribute="top" secondItem="exO-6K-1tL" secondAttribute="bottom" constant="11" id="dnB-7I-Q99"/>
+                    <constraint firstItem="exO-6K-1tL" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="11" id="cQ7-Nr-hTn"/>
+                    <constraint firstItem="v90-wO-gph" firstAttribute="top" secondItem="exO-6K-1tL" secondAttribute="bottom" priority="500" constant="11" id="dnB-7I-Q99"/>
                     <constraint firstAttribute="trailing" secondItem="exO-6K-1tL" secondAttribute="trailing" constant="18" id="jUv-LY-SS3"/>
                 </constraints>
             </tableViewCellContentView>

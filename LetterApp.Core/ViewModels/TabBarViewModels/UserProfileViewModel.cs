@@ -168,7 +168,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     {
                         IsBusy = false;
                         await Appearing();
-                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
+                        _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success, 2f);
                     }
                     else
                     {
