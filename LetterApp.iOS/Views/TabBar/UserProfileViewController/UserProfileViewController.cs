@@ -41,7 +41,7 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
 
         private void SetupTableView()
         {
-            _tableView.SetContentOffset(new CGPoint(0, 0), true);
+            _tableView.SetContentOffset(new CGPoint(0, 0), false);
             _statusView.BackgroundColor = Colors.MainBlue;
             this.NavigationController.NavigationBarHidden = true;
             _tableView.BackgroundColor = Colors.White;
