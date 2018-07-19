@@ -17,10 +17,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JSR-RY-8pa">
-                    <rect key="frame" x="335" y="32" width="23.5" height="24"/>
+                    <rect key="frame" x="332" y="32" width="26.5" height="27"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="JSR-RY-8pa" secondAttribute="height" id="5AM-Tk-KqP"/>
-                        <constraint firstAttribute="height" constant="24" id="8s0-vN-TWp"/>
+                        <constraint firstAttribute="height" constant="27" id="8s0-vN-TWp"/>
                     </constraints>
                 </imageView>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" adjustsFontForContentSizeCategory="YES" minimumFontSize="11" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tgz-VJ-x0S">
@@ -45,7 +45,7 @@
                     <rect key="frame" x="124.5" y="32" width="125" height="125"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1LI-ik-FdB">
-                    <rect key="frame" x="331.5" y="28.5" width="30.5" height="31"/>
+                    <rect key="frame" x="328.5" y="28.5" width="33.5" height="34"/>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
