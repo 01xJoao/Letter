@@ -199,7 +199,10 @@ namespace LetterApp.Core.ViewModels
                         _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
                     }
                     else
+                    {
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
+                        await ForgotPassword(string.Empty);
+                    }
                 }
             }
             catch (Exception ex)

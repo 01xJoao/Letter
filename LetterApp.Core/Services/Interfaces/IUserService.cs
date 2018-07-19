@@ -15,6 +15,6 @@ namespace LetterApp.Core.Services.Interfaces
         Task<BaseModel> ChangePassword(string oldPassword, string newPassword);
         Task<BaseModel> LeaveDivision(int divisionId);
         Task<BaseModel> LeaveOrganization(int organizationId);
-        Task<BaseModel> DeleteAccount();
+        Task<BaseModel> DeleteAccount(string password);
     }
 }

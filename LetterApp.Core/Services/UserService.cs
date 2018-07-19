@@ -38,9 +38,10 @@ namespace LetterApp.Core.Services
             return await _webService.PostAsync<BaseModel>($"users/update/cellphone", updatedNumber, needsHeaderCheck: true).ConfigureAwait(false);
         }
 
-        public async Task<BaseModel> DeleteAccount()
+        public async Task<BaseModel> DeleteAccount(string pass)
         {
-            return await _webService.GetAsync<BaseModel>("users/deleteaccount", needsHeaderCheck: true).ConfigureAwait(false);
+            var password = new UserDeleteAccount(pass);
+            return await _webService.PostAsync<BaseModel>("users/deleteaccount", password, needsHeaderCheck: true).ConfigureAwait(false);
         }
 
         public async Task<BaseModel> LeaveDivision(int divisionId)

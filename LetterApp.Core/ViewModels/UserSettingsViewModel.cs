@@ -154,20 +154,23 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var result = await _dialogService.ShowQuestion(DeleteAccountQuestion, DeleteAccountLabel, QuestionType.Bad);
+                var result = await _dialogService.ShowTextInput(ConfirmPasswordLabel, DeleteAccountLabel, confirmButtonText: DeleteAccountLabel, hint: PasswordLabel, inputType: InputType.Password, questionType: QuestionType.Bad);
 
-                if(result)
+                if(!string.IsNullOrEmpty(result))
                 {
-                    var res = await _userService.DeleteAccount();
+                    var res = await _userService.DeleteAccount(result);
 
                     if(res.StatusCode == 205)
                     {
                         await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
+                        AppSettings.Logout();
+                        await NavigationService.Close(this);
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
                     }
                     else
                     {
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Error);
+                        await DeleteAccount();
                     }
                 }
             }
@@ -326,6 +329,7 @@ namespace LetterApp.Core.ViewModels
         private string CallNotificationLabel => L10N.Localize("UserSettings_CallLabel");
         private string GroupNotificationLabel => L10N.Localize("UserSettings_GroupLabel");
         private string AlertPhoneNumber => L10N.Localize("UserSettings_CellNumber");
+        private string ConfirmPasswordLabel => L10N.Localize("UserSettings_Confirm");
 
         public Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string AccountSectionLabel => L10N.Localize("UserSettings_AccountSection");

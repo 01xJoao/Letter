@@ -33,4 +33,15 @@ namespace LetterApp.Models.DTO.RequestModels
         [JsonProperty("new_password")]
         public string NewPassword { get; set; }
     }
+
+    public class UserDeleteAccount
+    {
+        public UserDeleteAccount(string password)
+        {
+            Password = password;
+        }
+
+        [JsonProperty("password")]
+        public string Password { get; set; }
+    }
 }

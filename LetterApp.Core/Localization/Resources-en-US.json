@@ -84,6 +84,10 @@
     "translated": "You are banned from this division."
   },
   {
+    "key": "Code_E121",
+    "translated": "Wrong Password."
+  },
+  {
     "key": "Code_S201",
     "translated": "Password successfully changed."
   },
@@ -563,4 +567,8 @@
     "key": "ChangePassword_Changed",
     "translated": "Password changed."
   },
+  {
+    "key": "UserSettings_Confirm",
+    "translated": "Enter password to confirm."
+  }
 ]
