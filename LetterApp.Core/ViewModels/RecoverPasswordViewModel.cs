@@ -51,7 +51,7 @@ namespace LetterApp.Core.ViewModels
 
             var emailForm = new FormModel(0,_email, EmailAddressLabel, FieldType.Email, ReturnKeyType.Next);
             var passwordForm = new FormModel(1,"", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] {ShowButton, HideButton});
-            var confirmPasswordForm = new FormModel(2,"", NewPassTitle, FieldType.Password, ReturnKeyType.Next, new string[] { ShowButton, HideButton });
+            var confirmPasswordForm = new FormModel(2,"", NewPassAgainTitle, FieldType.Password, ReturnKeyType.Next, new string[] { ShowButton, HideButton });
             var CodeForm = new FormModel(3,"", CodeLabel, FieldType.Code, ReturnKeyType.Default, keyboardButtonText: SubmitButton, submitKeyboardButton: async () => await SubmitForm());
 
             var form = new[] { emailForm, passwordForm, confirmPasswordForm, CodeForm };
@@ -140,6 +140,7 @@ namespace LetterApp.Core.ViewModels
         #region Resources
 
         public string NewPassTitle           => L10N.Localize("RecoverPasswordViewModel_NewPassTitle");
+        public string NewPassAgainTitle      => L10N.Localize("RecoverPasswordViewModel_NewPassAgainTitle");
         public string SubmitButton           => L10N.Localize("RecoverPasswordViewModel_Submit");
 
         private string EmailAddressLabel     => L10N.Localize("RecoverPasswordViewModel_EmailAddress");

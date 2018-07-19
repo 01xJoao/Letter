@@ -209,7 +209,11 @@
   },
   {
     "key": "RecoverPasswordViewModel_NewPassTitle",
-    "translated": "New Password"
+    "translated": "New password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassAgainTitle",
+    "translated": "New password again"
   },
   {
     "key": "RecoverPasswordViewModel_EmailAddress",
@@ -253,7 +257,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_PasswordChanged",
-    "translated": "Password changed suceffuly! \n Please Sign In."
+    "translated": "Password changed successfully! \n Please Sign In."
   },
   {
     "key": "RegisterViewModel_FirstName",
@@ -542,5 +546,21 @@
   {
     "key": "UserSettings_CellNumber",
     "translated":  "Invalid phone number."
-  }
+  },
+  {
+    "key": "ChangePassword_Title",
+    "translated": "Password"
+  },
+  {
+    "key": "ChangePassword_CurrentPass",
+    "translated": "Current password"
+  },
+  {
+    "key": "ChangePassword_Change",
+    "translated": "Change password"
+  },
+  {
+    "key": "ChangePassword_Changed",
+    "translated": "Password changed."
+  },
 ]
