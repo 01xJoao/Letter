@@ -285,6 +285,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray.png" />
     <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -360,6 +364,8 @@
     <Folder Include="Views\ChangePassword\" />
     <Folder Include="Views\LeaveDivision\" />
     <Folder Include="Views\LeaveDivision\Cells\" />
+    <Folder Include="Views\Division\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\members.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -391,8 +397,6 @@
     <InterfaceDefinition Include="Views\SelectPosition\SelectPositionViewController.xib" />
     <InterfaceDefinition Include="Views\PendingApproval\PendingApprovalViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\QuestionViewController.xib" />
-    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.xib" />
-    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
     <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
     <InterfaceDefinition Include="Views\UserSettings\UserSettingsViewController.xib" />
@@ -404,6 +408,9 @@
     <InterfaceDefinition Include="Views\ChangePassword\ChangePasswordViewController.xib" />
     <InterfaceDefinition Include="Views\LeaveDivision\LeaveDivisionViewController.xib" />
     <InterfaceDefinition Include="Views\LeaveDivision\Cells\LeaveDivisionCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\DetailsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\DivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\Division\Cells\DivisionHeaderCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -554,14 +561,6 @@
     <Compile Include="Views\CustomViews\Dialog\QuestionViewController.designer.cs">
       <DependentUpon>QuestionViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.cs" />
-    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DetailsCell.designer.cs">
-      <DependentUpon>DetailsCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.cs" />
-    <Compile Include="Views\TabBar\UserProfileViewController\Cells\DivisionsCell.designer.cs">
-      <DependentUpon>DivisionsCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.cs" />
     <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.designer.cs">
       <DependentUpon>DivisionView.cs</DependentUpon>
@@ -610,6 +609,18 @@
       <DependentUpon>LeaveDivisionCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\LeaveDivisionSource.cs" />
+    <Compile Include="Views\CustomViews\Cells\DetailsCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\DetailsCell.designer.cs">
+      <DependentUpon>DetailsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\DivisionsCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\DivisionsCell.designer.cs">
+      <DependentUpon>DivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Division\Cells\DivisionHeaderCell.cs" />
+    <Compile Include="Views\Division\Cells\DivisionHeaderCell.designer.cs">
+      <DependentUpon>DivisionHeaderCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

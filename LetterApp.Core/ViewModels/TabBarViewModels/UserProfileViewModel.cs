@@ -99,15 +99,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             ProfileHeader = new ProfileHeaderModel($"{_user.FirstName} {_user.LastName}", _user.Description, _user.Picture, OpenGalery, UpdateDescription, OpenSettings);
 
-            var divisions = new List<ProfileDivision>();
+            var divisions = new List<ProfileDivisionDetails>();
 
             if(_user.Divisions != null)
             {
                 foreach(var division in _user.Divisions)
                 {
-                    if(division.IsUserInDivisionActive)
+                    if(division.IsUserInDivisionActive && division.IsDivisonActive)
                     {
-                        var div = new ProfileDivision();
+                        var div = new ProfileDivisionDetails();
                         div.Id = division.DivisionID;
                         div.Name = division.Name;
                         div.Picture = division.Picture;

@@ -1,21 +1,58 @@
-﻿// WARNING
+// WARNING
 //
-// This file has been generated automatically by Xamarin Studio from the outlets and
-// actions declared in your storyboard file.
-// Manual changes to this file will not be maintained.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
+// Manual changes to this file may not be handled correctly.
 //
 using Foundation;
-using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
 namespace LetterApp.iOS.Views.Division
 {
-    [Register("DivisionViewController")]
-    partial class DivisionViewController
-    {
-        void ReleaseDesignerOutlets()
-        {
-        }
-    }
+	[Register ("DivisionViewController")]
+	partial class DivisionViewController
+	{
+		[Outlet]
+		UIKit.UIButton _button1 { get; set; }
+
+		[Outlet]
+		UIKit.UIButton _button2 { get; set; }
+
+		[Outlet]
+		UIKit.UIView _buttonView1 { get; set; }
+
+		[Outlet]
+		UIKit.UIView _buttonView2 { get; set; }
+
+		[Outlet]
+		UIKit.UITableView _tableView { get; set; }
+		
+		void ReleaseDesignerOutlets ()
+		{
+			if (_button1 != null) {
+				_button1.Dispose ();
+				_button1 = null;
+			}
+
+			if (_button2 != null) {
+				_button2.Dispose ();
+				_button2 = null;
+			}
+
+			if (_buttonView1 != null) {
+				_buttonView1.Dispose ();
+				_buttonView1 = null;
+			}
+
+			if (_buttonView2 != null) {
+				_buttonView2.Dispose ();
+				_buttonView2 = null;
+			}
+
+			if (_tableView != null) {
+				_tableView.Dispose ();
+				_tableView = null;
+			}
+		}
+	}
 }

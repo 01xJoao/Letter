@@ -582,5 +582,37 @@
   {
     "key": "LeaveDivison_LeaveQuestion",
     "translated": "Leave division: "
+  },
+  {
+    "key": "Division_Title",
+    "translated": "Division"
+  },
+  {
+    "key": "Division_Members",
+    "translated": "Members"
+  },
+  {
+    "key": "Division_Organization",
+    "translated": "Organization"
+  },
+  {
+    "key": "Division_Address",
+    "translated": "Address"
+  },
+  {
+    "key": "Division_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Division_Mobile",
+    "translated": "Mobile"
+  },
+  {
+    "key": "Division_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Division_SendEmail",
+    "translated": "Send email"
   }
 ]

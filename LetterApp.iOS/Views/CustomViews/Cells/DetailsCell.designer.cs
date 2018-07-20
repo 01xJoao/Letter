@@ -8,7 +8,7 @@ using Foundation;
 using System;
 using System.CodeDom.Compiler;
 
-namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
+namespace LetterApp.iOS.Views.CustomViews.Cells
 {
     [Register ("DetailsCell")]
     partial class DetailsCell

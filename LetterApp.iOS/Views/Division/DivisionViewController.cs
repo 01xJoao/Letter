@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.Base;
@@ -13,13 +14,35 @@ namespace LetterApp.iOS.Views.Division
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            SetupView();
+
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.Division):
+                    SetupView();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void SetupView()
+        {
+            
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
 
-            this.Title = "Division";
+            this.Title = ViewModel.Title;
             NavigationController.NavigationBar.TintColor = Colors.White;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 

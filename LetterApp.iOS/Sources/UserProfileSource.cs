@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Views.CustomViews.Cells;
 using LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells;
 using UIKit;
 
