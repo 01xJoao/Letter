@@ -24,6 +24,8 @@ namespace LetterApp.iOS.Views.SelectDivision
             SetupView();
             _tableView.Hidden = true;
 
+            NavigationController.SetNavigationBarHidden(true, false);
+
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 

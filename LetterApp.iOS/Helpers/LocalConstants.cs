@@ -34,5 +34,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Settings_Sections = 45;
         public static nfloat Settings_GenericCells = 50;
         public static nfloat Settings_AllowCalls = 80;
+
+        public static nfloat LeaveDivision_CellHeight = 50;
     }
 }

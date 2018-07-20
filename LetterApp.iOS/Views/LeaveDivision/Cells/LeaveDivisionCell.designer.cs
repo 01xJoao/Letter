@@ -7,19 +7,27 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace LetterApp.iOS.Views.LeaveDivision
+namespace LetterApp.iOS.Views.LeaveDivision.Cells
 {
-	[Register ("LeaveDivisionViewController")]
-	partial class LeaveDivisionViewController
+	[Register ("LeaveDivisionCell")]
+	partial class LeaveDivisionCell
 	{
 		[Outlet]
-		UIKit.UITableView _tableView { get; set; }
+		UIKit.UIButton _button { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _label { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (_tableView != null) {
-				_tableView.Dispose ();
-				_tableView = null;
+			if (_label != null) {
+				_label.Dispose ();
+				_label = null;
+			}
+
+			if (_button != null) {
+				_button.Dispose ();
+				_button = null;
 			}
 		}
 	}

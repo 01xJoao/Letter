@@ -359,6 +359,7 @@
     <Folder Include="Resources\Assets.xcassets\arrow_right.imageset\" />
     <Folder Include="Views\ChangePassword\" />
     <Folder Include="Views\LeaveDivision\" />
+    <Folder Include="Views\LeaveDivision\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -402,6 +403,7 @@
     <InterfaceDefinition Include="Views\CustomViews\Cells\LabelWithArrowCell.xib" />
     <InterfaceDefinition Include="Views\ChangePassword\ChangePasswordViewController.xib" />
     <InterfaceDefinition Include="Views\LeaveDivision\LeaveDivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\LeaveDivision\Cells\LeaveDivisionCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -603,6 +605,11 @@
     <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.designer.cs">
       <DependentUpon>LeaveDivisionViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\LeaveDivision\Cells\LeaveDivisionCell.cs" />
+    <Compile Include="Views\LeaveDivision\Cells\LeaveDivisionCell.designer.cs">
+      <DependentUpon>LeaveDivisionCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\LeaveDivisionSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

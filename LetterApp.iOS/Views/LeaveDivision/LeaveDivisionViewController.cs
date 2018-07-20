@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
+using LetterApp.Models.DTO.ReceivedModels;
 using UIKit;
 
 namespace LetterApp.iOS.Views.LeaveDivision
@@ -13,13 +16,46 @@ namespace LetterApp.iOS.Views.LeaveDivision
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            SetupTableView();
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.UpdateView):
+                    SetupTableView();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetupTableView()
+        {
+            var source = new LeaveDivisionSource(_tableView, ViewModel.Divisions, ViewModel.LeaveButton);
+            _tableView.Source = source;
+            _tableView.ReloadData();
+
+            source.LeaveDivisionEvent -= OnSource_LeaveDivisionEvent;
+            source.LeaveDivisionEvent += OnSource_LeaveDivisionEvent;
+        }
+
+        private void OnSource_LeaveDivisionEvent(object sender, DivisionModel division)
+        {
+            if (ViewModel.LeaveDivisionCommand.CanExecute(division))
+                ViewModel.LeaveDivisionCommand.Execute(division);
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
 
-            this.Title = "Leave Division";
+            this.Title = ViewModel.Title;
             NavigationController.NavigationBar.TintColor = Colors.White;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 

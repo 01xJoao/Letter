@@ -217,7 +217,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_NewPassAgainTitle",
-    "translated": "New password again"
+    "translated": "Repeat new password"
   },
   {
     "key": "RecoverPasswordViewModel_EmailAddress",
@@ -570,5 +570,17 @@
   {
     "key": "UserSettings_Confirm",
     "translated": "Enter password to confirm."
+  },
+  {
+    "key": "LeaveDivision_Title",
+    "translated":  "Divisions"
+  },
+  {
+    "key": "LeaveDivison_Leave",
+    "translated":  "Leave"
+  },
+  {
+    "key": "LeaveDivison_LeaveQuestion",
+    "translated": "Leave division: "
   }
 ]
