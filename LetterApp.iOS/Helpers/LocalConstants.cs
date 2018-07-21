@@ -37,5 +37,6 @@ namespace LetterApp.iOS.Helpers
 
         public static nfloat LeaveDivision_CellHeight = 50;
         public static nfloat Division_HeaderHeight = 140;
+        public static nfloat Division_OrgHeight = 155;
     }
 }

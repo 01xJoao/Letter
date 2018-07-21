@@ -49,7 +49,7 @@ namespace LetterApp.iOS.Sources
             switch (indexPath.Section)
             {
                 case (int)Sections.Details: return LocalConstants.Profile_Details;
-                case (int)Sections.Organization: return LocalConstants.Profile_DivisionHeight;
+                case (int)Sections.Organization: return LocalConstants.Division_OrgHeight;
                 default: return 0;
             }
         }
