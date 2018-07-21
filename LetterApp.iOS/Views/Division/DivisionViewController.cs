@@ -19,6 +19,8 @@ namespace LetterApp.iOS.Views.Division
         {
             base.ViewDidLoad();
 
+            Loading(true);
+
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
@@ -36,8 +38,14 @@ namespace LetterApp.iOS.Views.Division
             }
         }
 
+        private void Loading(bool showLoading)
+        {
+            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading", _profileHeaderView, _profileImage, showLoading);
+        }
+
         private void SetupView()
         {
+            Loading(false);
             this.Title = ViewModel.Division.Name;
 
             _profileHeaderView.BackgroundColor = Colors.MainBlue;

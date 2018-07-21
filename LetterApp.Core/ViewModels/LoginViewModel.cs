@@ -162,6 +162,7 @@ namespace LetterApp.Core.ViewModels
                     }
                     else
                     {
+                        AppSettings.MainMenuAllowed = true;
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                     }
                 }

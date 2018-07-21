@@ -111,7 +111,7 @@ namespace LetterApp.Core.ViewModels
 
                     AppSettings.MainMenuAllowed = false;
                 }
-                else
+                else if(userCheck.StatusCode == 0)
                 {
                     await Logout();
                 }
