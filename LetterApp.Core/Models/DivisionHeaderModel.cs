@@ -5,7 +5,7 @@ namespace LetterApp.Core.Models
 {
     public class DivisionHeaderModel
     {
-        public DivisionHeaderModel(string name, int membersCount, string description, string picture, EventHandler backEvent)
+        public DivisionHeaderModel(string name, string membersCount, string description, string picture, EventHandler backEvent)
         {
             Name = name;
             MembersCount = membersCount;
@@ -15,7 +15,7 @@ namespace LetterApp.Core.Models
         }
 
         public string Name { get; set; }
-        public int MembersCount { get; set; }
+        public string MembersCount { get; set; }
         public string Description { get; set; }
         public string Picture { get; set; }
         public EventHandler BackEvent { get; set; }
@@ -23,13 +23,15 @@ namespace LetterApp.Core.Models
 
     public class OrganizationInfoModel
     {
-        public OrganizationInfoModel(string name, string picture, XPCommand openOrganizationCommand)
+        public OrganizationInfoModel(string name, string picture, string section, XPCommand openOrganizationCommand)
         {
+            Section = section;
             Name = name;
             Picture = picture;
             OpenOrganizationCommand = openOrganizationCommand;
         }
 
+        public string Section { get; set; }
         public string Name { get; set; }
         public string Picture { get; set; }
         public XPCommand OpenOrganizationCommand { get; set; }

@@ -120,20 +120,29 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             var profileDetails = new List<ProfileDetail>();
 
-            var profileDetail1 = new ProfileDetail();
-            profileDetail1.Description = Role;
-            profileDetail1.Value = _user.Position;
+            if(!string.IsNullOrEmpty(_user.Position))
+            {
+                var profileDetail1 = new ProfileDetail();
+                profileDetail1.Description = Role;
+                profileDetail1.Value = _user.Position;
+                profileDetails.Add(profileDetail1);
+            }
 
-            var profileDetail2 = new ProfileDetail();
-            profileDetail2.Description = Email;
-            profileDetail2.Value = _user.Email;
+            if (!string.IsNullOrEmpty(_user.Email))
+            {
+                var profileDetail2 = new ProfileDetail();
+                profileDetail2.Description = Email;
+                profileDetail2.Value = _user.Email;
+                profileDetails.Add(profileDetail2);
+            }
 
-            var profileDetail3 = new ProfileDetail();
-            profileDetail3.Description = Mobile;
-            profileDetail3.Value = _user.ContactNumber;
-
-            var details = new[] { profileDetail1, profileDetail2, profileDetail3 };
-            profileDetails.AddRange(details);
+            if (!string.IsNullOrEmpty(_user.ContactNumber))
+            {
+                var profileDetail3 = new ProfileDetail();
+                profileDetail3.Description = Mobile;
+                profileDetail3.Value = _user.ContactNumber;
+                profileDetails.Add(profileDetail3);
+            }
 
             ProfileDetails = new ProfileDetailsModel(profileDetails);
         }

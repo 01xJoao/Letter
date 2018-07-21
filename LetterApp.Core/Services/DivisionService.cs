@@ -13,9 +13,9 @@ namespace LetterApp.Core.Services
             _webService = webService;
         }
 
-        public async Task<DivisionModel> GetDivisionProfile(int divisionId)
+        public async Task<DivisionModelProfile> GetDivisionProfile(int divisionId)
         {
-            return await _webService.GetAsync<DivisionModel>($"profiles/division/{divisionId}", needsHeaderCheck: true).ConfigureAwait(false);
+            return await _webService.GetAsync<DivisionModelProfile>($"profiles/division/{divisionId}", needsHeaderCheck: true).ConfigureAwait(false);
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using FFImageLoading;
+using FFImageLoading.Transformations;
+using FFImageLoading.Work;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 
@@ -14,7 +18,6 @@ namespace LetterApp.iOS.Views.Division
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            SetupView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -35,25 +38,47 @@ namespace LetterApp.iOS.Views.Division
 
         private void SetupView()
         {
-            
+            this.Title = ViewModel.Division.Name;
+
+            _profileHeaderView.BackgroundColor = Colors.MainBlue;
+            _profileImage.Image?.Dispose();
+
+            UILabelExtensions.SetupLabelAppearance(_membersLabel, $"{ViewModel.Division.UserCount} {ViewModel.MembersLabel}", Colors.White, 13f);
+            UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Division.Description, Colors.White, 13f);
+
+            _memberImage.Image = UIImage.FromBundle("members");
+
+            _profileImage.Image?.Dispose();
+            ImageService.Instance.LoadStream((token) => {
+                return ImageHelper.GetStreamFromImageByte(token, ViewModel.Division.Picture);
+            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            CustomUIExtensions.RoundShadow(_profileImage);
+
+            _buttonView1.BackgroundColor = Colors.ConnectViewButton1;
+            _buttonView2.BackgroundColor = Colors.ConnectViewButton2;
+
+            UIButtonExtensions.SetupButtonAppearance(_button1, Colors.MainBlue, 15f, ViewModel.SendEmailLabel);
+            UIButtonExtensions.SetupButtonAppearance(_button2, Colors.MainBlue, 15f, ViewModel.CallLabel);
+
+            _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            _tableView.ReloadData();
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
 
-            this.Title = ViewModel.Title;
-            NavigationController.NavigationBar.TintColor = Colors.White;
-            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
-
-            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
+            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.White };
+            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
             this.NavigationItem.LeftBarButtonItem = backButton;
-            NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
-
-            this.NavigationController.NavigationBar.BarTintColor = Colors.White;
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
+            this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);
-            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
+            this.NavigationController.NavigationBar.ShadowImage = new UIImage();
+
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
 
         private void CloseView(object sender, EventArgs e)

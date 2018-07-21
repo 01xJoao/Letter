@@ -6,6 +6,6 @@ namespace LetterApp.Core.Services.Interfaces
 {
     public interface IDivisionService
     {
-        Task<DivisionModel> GetDivisionProfile(int divisionId);
+        Task<DivisionModelProfile> GetDivisionProfile(int divisionId);
     }
 }

@@ -19,8 +19,8 @@ namespace LetterApp.Core.ViewModels
 
         private int _divisionId;
 
-        private DivisionModel _division;
-        public DivisionModel Division
+        private DivisionModelProfile _division;
+        public DivisionModelProfile Division
         {
             get => _division;
             set => SetProperty(ref _division, value);
@@ -28,7 +28,6 @@ namespace LetterApp.Core.ViewModels
 
         public OrganizationInfoModel OrganizationInfo { get; set; }
         public ProfileDetailsModel ProfileDetails { get; private set; }
-        public DivisionHeaderModel DivisionHeader { get; private set; }
 
         private XPCommand _sendEmailCommand;
         public XPCommand SendEmailCommand => _sendEmailCommand ?? (_sendEmailCommand = new XPCommand(async () => await SendEmail()));
@@ -54,9 +53,10 @@ namespace LetterApp.Core.ViewModels
             _divisionId = divisionId;
         }
 
-        public override async Task InitializeAsync()
+        public override async Task Appearing()
         {
-            SetupModels(Realm.Find<DivisionModel>(_divisionId));
+            _division = Realm.Find<DivisionModelProfile>(_divisionId);
+            SetupModels(_division);
 
             try
             {
@@ -64,14 +64,18 @@ namespace LetterApp.Core.ViewModels
 
                 if(result.StatusCode == 200)
                 {
-                    result.IsUnderReview = Division.IsUnderReview;
-                    result.IsUserInDivisionActive = Division.IsUserInDivisionActive;
+                    var shouldUpdateView = false;
 
-                    Realm.Write(() => {
-                        Realm.Add(result, true);
-                    });
+                    if (result.LastUpdateTicks > _division?.LastUpdateTicks || _division == null)
+                        shouldUpdateView = true;
 
-                    SetupModels(result);
+                    _division = result;
+                     Realm.Write(() => 
+                    {
+                        Realm.Add(_division, true);                     });
+
+                    if(shouldUpdateView)
+                        SetupModels(_division);
                 }
             }
             catch (Exception ex)
@@ -85,33 +89,42 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private void SetupModels(DivisionModel division)
+        private void SetupModels(DivisionModelProfile division)
         {
             if (division == null)
                 return;
 
             var profileDetails = new List<ProfileDetail>();
 
-            var profileDetail1 = new ProfileDetail();
-            profileDetail1.Description = AddressLabel;
-            profileDetail1.Value = division.Address;
+            if(!string.IsNullOrEmpty(division.Address))
+            {
+                var profileDetail1 = new ProfileDetail();
+                profileDetail1.Description = AddressLabel;
+                profileDetail1.Value = division.Address;
 
-            var profileDetail2 = new ProfileDetail();
-            profileDetail2.Description = EmailLabel;
-            profileDetail2.Value = division.Email;
+                profileDetails.Add(profileDetail1);
+            }
 
-            var profileDetail3 = new ProfileDetail();
-            profileDetail3.Description = MobileLabel;
-            profileDetail3.Value = division.ContactNumber;
+            if (!string.IsNullOrEmpty(division.Email))
+            {
+                var profileDetail2 = new ProfileDetail();
+                profileDetail2.Description = EmailLabel;
+                profileDetail2.Value = division.Email;
+                profileDetails.Add(profileDetail2);
+            }
 
-            var details = new[] { profileDetail1, profileDetail2, profileDetail3 };
-            profileDetails.AddRange(details);
+            if (!string.IsNullOrEmpty(division.ContactNumber))
+            {
+                var profileDetail3 = new ProfileDetail();
+                profileDetail3.Description = MobileLabel;
+                profileDetail3.Value = division.ContactNumber;
+                profileDetails.Add(profileDetail3);
+            }
 
             ProfileDetails = new ProfileDetailsModel(profileDetails);
-            DivisionHeader = new DivisionHeaderModel(division.Name, division.UserCount, division.Description, division.Picture, CloseEvent);
-            OrganizationInfo = new OrganizationInfoModel(division.OrgName, division.OrgPic, OpenOrganizationCommand);
+            OrganizationInfo = new OrganizationInfoModel(division.OrgName, division.OrgPic, OrganizationLabel, OpenOrganizationCommand);
 
-            Division = division;
+            RaisePropertyChanged(nameof(Division));
         }
 
         private void CloseEvent(object sender, EventArgs e) => CloseView();
@@ -144,8 +157,8 @@ namespace LetterApp.Core.ViewModels
         public string SendEmailLabel => L10N.Localize("Division_SendEmail");
         public string CallLabel => L10N.Localize("Division_Call");
         public string MembersLabel => L10N.Localize("Division_Members");
-        public string OrganizationLabel => L10N.Localize("Division_Organization");
 
+        private string OrganizationLabel => L10N.Localize("Division_Organization");
         private string AddressLabel => L10N.Localize("Division_Address");
         private string EmailLabel => L10N.Localize("Division_Email");
         private string MobileLabel => L10N.Localize("Division_Mobile");

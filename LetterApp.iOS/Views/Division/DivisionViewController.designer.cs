@@ -25,6 +25,21 @@ namespace LetterApp.iOS.Views.Division
 		UIKit.UIView _buttonView2 { get; set; }
 
 		[Outlet]
+		UIKit.UILabel _descriptionLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView _memberImage { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _membersLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView _profileHeaderView { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView _profileImage { get; set; }
+
+		[Outlet]
 		UIKit.UITableView _tableView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -52,6 +67,31 @@ namespace LetterApp.iOS.Views.Division
 			if (_tableView != null) {
 				_tableView.Dispose ();
 				_tableView = null;
+			}
+
+			if (_profileImage != null) {
+				_profileImage.Dispose ();
+				_profileImage = null;
+			}
+
+			if (_memberImage != null) {
+				_memberImage.Dispose ();
+				_memberImage = null;
+			}
+
+			if (_membersLabel != null) {
+				_membersLabel.Dispose ();
+				_membersLabel = null;
+			}
+
+			if (_descriptionLabel != null) {
+				_descriptionLabel.Dispose ();
+				_descriptionLabel = null;
+			}
+
+			if (_profileHeaderView != null) {
+				_profileHeaderView.Dispose ();
+				_profileHeaderView = null;
 			}
 		}
 	}

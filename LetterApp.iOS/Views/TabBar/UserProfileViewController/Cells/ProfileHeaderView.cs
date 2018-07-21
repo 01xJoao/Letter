@@ -36,12 +36,11 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             _settingsImage.Image = UIImage.FromBundle("settings");
 
             _profileImage.Image?.Dispose();
-
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, profile.Picture);
             }).LoadingPlaceholder("add_photo", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
-
             CustomUIExtensions.RoundShadow(_profileImage);
+
             CustomUIExtensions.LabelShadow(_nameLabel);
 
             if (!string.IsNullOrEmpty(profile.Description))
