@@ -48,7 +48,6 @@ namespace LetterApp.Core.ViewModels
 
                 if (userCheck.StatusCode == 200)
                 {
-
                     if(AppSettings.UserId != userCheck.UserID)
                     {
                         await Logout();
