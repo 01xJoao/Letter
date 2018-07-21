@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -129,19 +130,19 @@ namespace LetterApp.Core.ViewModels
 
         private void CloseEvent(object sender, EventArgs e) => CloseView();
 
-        private Task OpenOrganization()
+        private async Task OpenOrganization()
         {
-            throw new NotImplementedException();
+            await NavigationService.NavigateAsync<OrganizationViewModel, object>(null);
         }
 
         private async Task SendEmail()
         {
-            throw new NotImplementedException();
+            await EmailUtils.SendEmail(_division.Email);
         }
 
         private async Task Call()
         {
-            throw new NotImplementedException();
+            CallUtils.Call(_division.ContactNumber);
         }
 
         private async Task CloseView()
@@ -157,6 +158,7 @@ namespace LetterApp.Core.ViewModels
         public string SendEmailLabel => L10N.Localize("Division_SendEmail");
         public string CallLabel => L10N.Localize("Division_Call");
         public string MembersLabel => L10N.Localize("Division_Members");
+        public string DivisionNoDescription => L10N.Localize("Division_NoDescription");
 
         private string OrganizationLabel => L10N.Localize("Division_Organization");
         private string AddressLabel => L10N.Localize("Division_Address");

@@ -614,5 +614,9 @@
   {
     "key": "Division_SendEmail",
     "translated": "Send email"
+  },
+  {
+    "key": "Division_NoDescription",
+    "translated":  "The division doesn't have any description."
   }
 ]

@@ -44,7 +44,11 @@ namespace LetterApp.iOS.Views.Division
             _profileImage.Image?.Dispose();
 
             UILabelExtensions.SetupLabelAppearance(_membersLabel, $"{ViewModel.Division.UserCount} {ViewModel.MembersLabel}", Colors.White, 13f);
-            UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Division.Description, Colors.White, 13f);
+
+            if (!string.IsNullOrEmpty(ViewModel.Division.Description))
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Division.Description, Colors.White, 13f);
+            else
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.DivisionNoDescription, Colors.GrayIndicator, 13f, italic: true);
 
             _memberImage.Image = UIImage.FromBundle("members");
 
@@ -63,6 +67,22 @@ namespace LetterApp.iOS.Views.Division
             _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
+
+            _button1.TouchUpInside -= OnButton1_TouchUpInside;
+            _button1.TouchUpInside += OnButton1_TouchUpInside;
+
+            _button2.TouchUpInside -= OnButton2_TouchUpInside;
+            _button2.TouchUpInside += OnButton2_TouchUpInside;   
+        }
+
+        private void OnButton1_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.SendEmailCommand.Execute();
+        }
+
+        private void OnButton2_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.CallCommand.Execute();
         }
 
         public override void ViewWillAppear(bool animated)
