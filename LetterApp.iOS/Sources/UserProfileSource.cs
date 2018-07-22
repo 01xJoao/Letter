@@ -45,7 +45,7 @@ namespace LetterApp.iOS.Sources
         {
             switch (section)
             {
-                case (int)Sections.Details: return LocalConstants.Profile_DetailsHeader;
+                case (int)Sections.Details: return 0;
                 case (int)Sections.Divisions: return LocalConstants.Profile_DivisionHeader;
                 default: return 0;
             }

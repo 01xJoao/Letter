@@ -1,4 +1,5 @@
 ﻿using System;
+using CoreGraphics;
 using Foundation;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
@@ -20,6 +21,32 @@ namespace LetterApp.iOS.Sources
 
             tableView.RegisterNibForCellReuse(DetailsCell.Nib, DetailsCell.Key);
             tableView.RegisterNibForCellReuse(OrganizationDivisionsCell.Nib, OrganizationDivisionsCell.Key);
+        }
+
+        public override UIView GetViewForHeader(UITableView tableView, nint section)
+        {
+            var view = new UIView();
+            view.BackgroundColor = Colors.White.ColorWithAlpha(0);
+
+            if (section == (int)Sections.Divisions)
+            {
+                var label = new UILabel();
+                label.Frame = new CGRect(20, 15, UIScreen.MainScreen.Bounds.Width, 15);
+                UILabelExtensions.SetupLabelAppearance(label, _divisions.DivisionDescriptionLabel, Colors.ProfileGray, 12f);
+                view.AddSubview(label);
+            }
+
+            return view;
+        }
+
+        public override nfloat GetHeightForHeader(UITableView tableView, nint section)
+        {
+            switch (section)
+            {
+                case (int)Sections.Details: return 0;
+                case (int)Sections.Divisions: return LocalConstants.Profile_DivisionHeader;
+                default: return 0;
+            }
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

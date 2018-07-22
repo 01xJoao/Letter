@@ -41,11 +41,12 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
 
         private void SetupTableView()
         {
-            _tableView.SetContentOffset(new CGPoint(0, 0), false);
-            _statusView.BackgroundColor = Colors.MainBlue;
             this.NavigationController.NavigationBarHidden = true;
-            _tableView.BackgroundColor = Colors.White;
             this.View.BackgroundColor = Colors.MainBlue;
+            _statusView.BackgroundColor = Colors.MainBlue;
+
+            _tableView.SetContentOffset(new CGPoint(0, 0), false);
+            _tableView.BackgroundColor = Colors.White;
 
             _tableView.Source = new UserProfileSource(_tableView, ViewModel.ProfileDetails, ViewModel.ProfileDivision);
             _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, LocalConstants.Profile_TableHeaderHeight));

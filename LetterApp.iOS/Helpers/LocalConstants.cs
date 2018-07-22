@@ -28,6 +28,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Profile_DivisionWidth = 80;
         public static nfloat Profile_Details = 65;
 
+        public static nfloat Profile_UserDetailsHeader = 5;
         public static nfloat Profile_DetailsHeader = 10;
         public static nfloat Profile_DivisionHeader = 40;
 
@@ -39,7 +40,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Division_HeaderHeight = 140;
         public static nfloat Division_OrgHeight = 155;
 
-        public static nfloat Organization_DivisionsHeight = 180;
+        public static nfloat Organization_DivisionsHeight = 165;
         public static nfloat Organization_DivisionsWidth = 100;
     }
 }
