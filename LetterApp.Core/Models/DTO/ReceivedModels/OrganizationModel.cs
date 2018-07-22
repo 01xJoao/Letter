@@ -14,7 +14,7 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string ContactNumber { get; set; }
         public DateTimeOffset LastUpdatetime { get; set; }
         public int LastUpdateTicks { get; set; }
-        public IList<DivisionModel> Divisions;
+        public IList<DivisionModel> Divisions { get; }
         public string Picture { get; set; }
         public string Address { get; set; }
         public int StatusCode { get; set; }

@@ -52,11 +52,6 @@ namespace LetterApp.Core.Exceptions
         public static void Handle(Exception e)
         {
             RavenService.Raven.Capture(new SentryEvent(e));
-            //if (!Plugin.Connectivity.CrossConnectivity.Current.IsConnected)
-            //{
-            //    Dialogs.ShowAlert(UiMessages.NoInternetErrorMessage, UiMessages.NoInternetErrorTitle);
-            //    return;
-            //}
 
             #if DEBUG
             DialogService.ShowAlert(e.ToString(), AlertType.Error);

@@ -132,7 +132,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task OpenOrganization()
         {
-            await NavigationService.NavigateAsync<OrganizationViewModel, object>(null);
+            await NavigationService.NavigateAsync<OrganizationViewModel, int>(Division.OrgID);
         }
 
         private async Task SendEmail()
@@ -154,7 +154,6 @@ namespace LetterApp.Core.ViewModels
 
         #region Resources
 
-        public string Title => L10N.Localize("Division_Title");
         public string SendEmailLabel => L10N.Localize("Division_SendEmail");
         public string CallLabel => L10N.Localize("Division_Call");
         public string MembersLabel => L10N.Localize("Division_Members");

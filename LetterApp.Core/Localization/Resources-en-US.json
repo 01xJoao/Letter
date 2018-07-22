@@ -605,7 +605,7 @@
   },
   {
     "key": "Division_Mobile",
-    "translated": "Mobile"
+    "translated": "Phone number"
   },
   {
     "key": "Division_Call",
@@ -618,5 +618,37 @@
   {
     "key": "Division_NoDescription",
     "translated":  "The division doesn't have any description."
+  },
+  {
+    "key": "Organization_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Organization_SendEmail",
+    "translated": "Send email"
+  },
+  {
+    "key": "Organization_NoDescription",
+    "translated": "The organization doesn't have any description."
+  },
+  {
+    "key": "Organization_Members",
+    "translated": "Members"
+  },
+  {
+    "key": "Organization_Divisions",
+    "translated": "Divisions"
+  },
+  {
+    "key": "Organization_Address",
+    "translated": "Address"
+  },
+  {
+    "key": "Organization_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Organization_Mobile",
+    "translated": "Phone number"
   }
 ]

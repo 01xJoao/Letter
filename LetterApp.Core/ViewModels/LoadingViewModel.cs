@@ -66,7 +66,7 @@ namespace LetterApp.Core.ViewModels
                     user.ContactNumber = userCheck.ContactNumber;
                     user.ShowContactNumber = userCheck.ShowContactNumber;
                     user.OrganizationID = userCheck.OrganizationID;
-                    foreach (var divion in userCheck.Divisions)
+                    foreach (var divion in userCheck?.Divisions)
                         user.Divisions.Add(divion);
                     user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
 

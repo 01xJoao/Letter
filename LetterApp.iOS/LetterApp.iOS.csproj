@@ -367,6 +367,7 @@
     <Folder Include="Views\Division\Cells\" />
     <Folder Include="Resources\Assets.xcassets\members.imageset\" />
     <Folder Include="Views\Organization\" />
+    <Folder Include="Views\Organization\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -414,6 +415,7 @@
     <InterfaceDefinition Include="Views\Division\Cells\DivisionHeaderCell.xib" />
     <InterfaceDefinition Include="Views\Division\Cells\OrganizationDetailCell.xib" />
     <InterfaceDefinition Include="Views\Organization\OrganizationViewController.xib" />
+    <InterfaceDefinition Include="Views\Organization\Cells\OrganizationDivisionsCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -632,6 +634,11 @@
     <Compile Include="Views\Organization\OrganizationViewController.cs" />
     <Compile Include="Views\Organization\OrganizationViewController.designer.cs">
       <DependentUpon>OrganizationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\OrganizationSource.cs" />
+    <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.cs" />
+    <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.designer.cs">
+      <DependentUpon>OrganizationDivisionsCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

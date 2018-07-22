@@ -22,6 +22,6 @@ namespace LetterApp.Core.Services.Interfaces
         Task<BaseModel> UpdatePosition(int position);
         Task<BaseModel> CheckUserInDivision(int divisionId);
 
-        Task<OrganizationReceivedModel> GetOrganizationProfile(int orgnizationId);
+        Task<OrganizationReceivedModel> GetOrganizationProfile(int organizationId);
     }
 }

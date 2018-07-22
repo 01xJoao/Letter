@@ -46,10 +46,9 @@ namespace LetterApp.iOS.Views.Division
         private void SetupView()
         {
             Loading(false);
-            this.Title = ViewModel.Division.Name;
 
+            this.Title = ViewModel.Division.Name;
             _profileHeaderView.BackgroundColor = Colors.MainBlue;
-            _profileImage.Image?.Dispose();
 
             UILabelExtensions.SetupLabelAppearance(_membersLabel, $"{ViewModel.Division.UserCount} {ViewModel.MembersLabel}", Colors.White, 13f);
 
