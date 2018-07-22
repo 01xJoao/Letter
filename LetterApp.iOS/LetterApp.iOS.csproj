@@ -416,6 +416,7 @@
     <InterfaceDefinition Include="Views\Division\Cells\OrganizationDetailCell.xib" />
     <InterfaceDefinition Include="Views\Organization\OrganizationViewController.xib" />
     <InterfaceDefinition Include="Views\Organization\Cells\OrganizationDivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -639,6 +640,10 @@
     <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.cs" />
     <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.designer.cs">
       <DependentUpon>OrganizationDivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.designer.cs">
+      <DependentUpon>OrganizationDivisionsView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -39,6 +39,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Division_HeaderHeight = 140;
         public static nfloat Division_OrgHeight = 155;
 
-        public static nfloat Organization_DivisionsHeight = 155;
+        public static nfloat Organization_DivisionsHeight = 180;
+        public static nfloat Organization_DivisionsWidth = 100;
     }
 }

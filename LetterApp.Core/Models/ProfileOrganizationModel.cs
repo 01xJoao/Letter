@@ -5,14 +5,14 @@ namespace LetterApp.Core.Models
 {
     public class ProfileOrganizationModel
     {
-        public ProfileOrganizationModel(string divisionDescriptionLabel, List<ProfileOrganizationDetails> organizations)
+        public ProfileOrganizationModel(string divisionDescriptionLabel, List<ProfileOrganizationDetails> organizationDivisions)
         {
             DivisionDescriptionLabel = divisionDescriptionLabel;
-            Organizations = organizations;
+            OrganizationDivisions = organizationDivisions;
         }
 
         public string DivisionDescriptionLabel { get; set; }
-        public List<ProfileOrganizationDetails> Organizations { get; set; }
+        public List<ProfileOrganizationDetails> OrganizationDivisions { get; set; }
     }
 
     public class ProfileOrganizationDetails

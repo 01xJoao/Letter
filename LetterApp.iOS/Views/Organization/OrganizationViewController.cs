@@ -45,7 +45,7 @@ namespace LetterApp.iOS.Views.Organization
         {
             Loading(false);
 
-            this.View.BackgroundColor = Colors.MainBlue4;
+            this.View.BackgroundColor = Colors.OrganizationBlue;
             _tableView.BackgroundColor = Colors.MainBlue4;
 
             this.Title = ViewModel.Organization.Name;
@@ -79,12 +79,12 @@ namespace LetterApp.iOS.Views.Organization
 
         private void OnButton1_TouchUpInside(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ViewModel.SendEmailCommand.Execute();
         }
 
         private void OnButton2_TouchUpInside(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ViewModel.CallCommand.Execute();
         }
 
         public override void ViewWillAppear(bool animated)

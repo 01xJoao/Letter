@@ -59,7 +59,7 @@ namespace LetterApp.Core.ViewModels
                 {
                     Realm.Write(() => _user.Divisions.Remove(division));
 
-                    var userDivisions = _user.Divisions.Any(x => x.IsDivisonActive == true && x.IsUserInDivisionActive == true);
+                    var userDivisions = _user.Divisions.Any(x => x.IsDivisonActive == true && (x.IsUserInDivisionActive == true || x.IsUnderReview == true));
 
                     if(!userDivisions)
                         await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)_user.OrganizationID, true));

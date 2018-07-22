@@ -8,6 +8,7 @@ namespace LetterApp.iOS.Helpers
         public static UIColor MainBlue => UIColor.FromRGB(38, 95, 135);                        
         public static UIColor BlueSetup => UIColor.FromRGB(24, 91, 138);                        //#207CC5
         public static UIColor MainBlue4 => UIColor.FromRGB(246, 248, 250);                      //#207CC5
+        public static UIColor OrganizationBlue => UIColor.FromRGB(236, 243, 248);               //#207CC5
         public static UIColor SelectBlue => UIColor.FromRGB(20, 119, 196);                      //#308ACE
         public static UIColor TabBarNotSelected => UIColor.FromRGB(181, 181, 181);              
         public static UIColor White => UIColor.FromRGB(255, 255, 255);                          //#FFFFFF

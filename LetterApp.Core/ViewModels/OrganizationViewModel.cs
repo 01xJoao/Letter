@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -29,6 +30,12 @@ namespace LetterApp.Core.ViewModels
             get => _organization;
             set => SetProperty(ref _organization, value);
         }
+
+        private XPCommand _sendEmailCommand;
+        public XPCommand SendEmailCommand => _sendEmailCommand ?? (_sendEmailCommand = new XPCommand(async () => await SendEmail()));
+
+        private XPCommand _callCommand;
+        public XPCommand CallCommand => _callCommand ?? (_callCommand = new XPCommand(async () => await Call()));
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
@@ -82,6 +89,7 @@ namespace LetterApp.Core.ViewModels
                         if(userInDivision != null)
                         {
                             divion.IsUserInDivisionActive = userInDivision.IsUserInDivisionActive;
+                            divion.IsUnderReview = userInDivision.IsUnderReview;
                         }
 
                         org.Divisions.Add(divion);
@@ -164,6 +172,16 @@ namespace LetterApp.Core.ViewModels
             ProfileDetails = new ProfileDetailsModel(profileDetails);
 
             RaisePropertyChanged(nameof(Organization));
+        }
+
+        private async Task SendEmail()
+        {
+            await EmailUtils.SendEmail(_organization.Email);
+        }
+
+        private async Task Call()
+        {
+            CallUtils.Call(_organization.ContactNumber);
         }
 
         private async Task CloseView()

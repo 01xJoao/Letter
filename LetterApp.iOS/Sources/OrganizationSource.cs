@@ -27,7 +27,7 @@ namespace LetterApp.iOS.Sources
             switch (indexPath.Section)
             {
                 case (int)Sections.Details: return LocalConstants.Profile_Details;
-                case (int)Sections.Divisions: return LocalConstants.Profile_DivisionHeight;
+                case (int)Sections.Divisions: return LocalConstants.Organization_DivisionsHeight;
                 default: return 0;
             }
         }
@@ -44,18 +44,18 @@ namespace LetterApp.iOS.Sources
                     cell = detailsCell;
                     break;
 
-                //case (int)Sections.Divisions:
-                    //var divisionsCell = tableView.DequeueReusableCell(OrganizationDivisionsCell.Key) as OrganizationDivisionsCell;
-                    //divisionsCell.Configure(_divisions);
-                    //cell = divisionsCell;
-                    //break;
+                case (int)Sections.Divisions:
+                    var divisionsCell = tableView.DequeueReusableCell(OrganizationDivisionsCell.Key) as OrganizationDivisionsCell;
+                    divisionsCell.Configure(_divisions);
+                    cell = divisionsCell;
+                    break;
             }
 
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             return cell;
         }
 
-        public override nint NumberOfSections(UITableView tableView) => 1;
+        public override nint NumberOfSections(UITableView tableView) => (int)Sections.Count;
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
