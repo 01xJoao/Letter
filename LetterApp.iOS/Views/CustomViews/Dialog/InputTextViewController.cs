@@ -15,11 +15,13 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         private string _confirmButtonText;
         private string _hint;
         private InputType _inputType;
+        private QuestionType _questionType;
         private Action<string> _positiveButton;
         private Action _negativeButton;
 
-        public InputTextViewController(string title, string subtitle, string inputContent, string confirmButtonText, string hint, InputType inputType, Action<string> positiveButton, Action negativeButton) : base("InputTextViewController", null)
+        public InputTextViewController(string title, string subtitle, string inputContent, string confirmButtonText, string hint, InputType inputType, QuestionType questionType, Action<string> positiveButton, Action negativeButton) : base("InputTextViewController", null)
         {
+            _questionType = questionType;
             _title = title;
             _subtitle = subtitle;
             _inputContent = inputContent;
@@ -38,6 +40,19 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
             this.View.Alpha = 0.3f;
 
+            if(_questionType == QuestionType.Bad)
+            {
+                _buttonView1.BackgroundColor = Colors.Red;
+                _buttonView2.BackgroundColor = Colors.Red;
+                UILabelExtensions.SetupLabelAppearance(_subtitleLabel, _subtitle, Colors.Red, 30, UIFontWeight.Bold);
+            }
+            else
+            {
+                _buttonView1.BackgroundColor = Colors.MainBlue;
+                _buttonView2.BackgroundColor = Colors.MainBlue;
+                UILabelExtensions.SetupLabelAppearance(_subtitleLabel, _subtitle, Colors.SomeBlue, 30, UIFontWeight.Bold);
+            }
+
             switch (_inputType)
             {
                 case InputType.Email:
@@ -48,6 +63,9 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
                     break;
                 case InputType.Phone:
                     _textField.KeyboardType = UIKeyboardType.PhonePad;
+                    break;
+                case InputType.Password:
+                    _textField.SecureTextEntry = true;
                     break;
                 default:
                     _textField.KeyboardType = UIKeyboardType.Default;
@@ -70,8 +88,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             _buttonView.Layer.CornerRadius = 2f;
             CustomUIExtensions.ViewShadow(_backgroundView);
 
-            UILabelExtensions.SetupLabelAppearance(_subtitleLabel, _subtitle, Colors.SomeBlue, 30, UIFontWeight.Bold);
-            UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.Black, 20);
+            UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.Black, 18);
             UITextFieldExtensions.SetupField(this.View, 0, _hint, _textField, _indicatorView, _textFieldHeightConstraint, _indicatorLabel);
             UIButtonExtensions.SetupButtonAppearance(_confirmButton, Colors.White, 17f, _confirmButtonText);
 
@@ -107,8 +124,13 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             }
             else
             {
-                _positiveButton.Invoke(_textField.Text);
-                Dismiss();
+                if(!string.IsNullOrEmpty(_textField.Text))
+                {
+                    _positiveButton.Invoke(_textField.Text);
+                    Dismiss();
+                }
+                else
+                    _indicatorView.BackgroundColor = Colors.Red;
             }
         }
 

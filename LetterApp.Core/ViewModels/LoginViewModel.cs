@@ -10,6 +10,7 @@ using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.RequestModels;
+using Realms;
 using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
@@ -78,7 +79,6 @@ namespace LetterApp.Core.ViewModels
                 {
                     AppSettings.Logout();
                     AppSettings.IsUserLogged = true;
-                    Realm.Write(() => Realm.Add(currentUser, true));
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
                     await CheckUser();
@@ -111,37 +111,50 @@ namespace LetterApp.Core.ViewModels
 
                 if (userCheck.StatusCode == 200)
                 {
-                    var user = Realm.Find<UserModel>(userCheck.UserID);
+                    AppSettings.UserId = userCheck.UserID;
 
-                    Realm.Write(() =>
-                    {
-                        user.Position = userCheck.Position;
-                        user.OrganizationID = userCheck.OrganizationID;
-                        user.Divisions = userCheck.Divisions;
-                    });
+                    var user = new UserModel();
+
+                    user.UserID = userCheck.UserID;
+                    user.Email = userCheck.Email;
+                    user.FirstName = userCheck.FirstName;
+                    user.LastName = userCheck.LastName;
+                    user.Position = userCheck.Position;
+                    user.Picture = userCheck.Picture;
+                    user.Description = userCheck.Description;
+                    user.ContactNumber = userCheck.ContactNumber;
+                    user.ShowContactNumber = userCheck.ShowContactNumber;
+                    user.OrganizationID = userCheck.OrganizationID;
+                    foreach(var divion in userCheck?.Divisions)
+                        user.Divisions.Add(divion);
+                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
+
+                    Realm.Write(() => {
+                        Realm.Add(user, true);
+                    }); 
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;
                     bool userIsUnderReview = false;
 
-                    if (user?.Divisions?.Count > 0)
+                    if (userCheck?.Divisions?.Count > 0)
                     {
-                        anyDivisionActive = user.Divisions.Any(x => x.IsDivisonActive == true);
-                        userIsActiveInDivision = user.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
-                        userIsUnderReview = user.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
+                        anyDivisionActive = userCheck.Divisions.Any(x => x.IsDivisonActive == true);
+                        userIsActiveInDivision = userCheck.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
+                        userIsUnderReview = userCheck.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
                     }
 
-                    if (user.OrganizationID == null)
+                    if (userCheck.OrganizationID == null)
                     {
-                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(user.Email);
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(userCheck.Email);
                     }
-                    else if (string.IsNullOrEmpty(user.Position))
+                    else if (string.IsNullOrEmpty(userCheck.Position))
                     {
-                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)user.OrganizationID);
+                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)userCheck.OrganizationID);
                     }
-                    else if ((user.Divisions == null || user?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
+                    else if ((userCheck.Divisions == null || userCheck?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
                     {
-                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)user.OrganizationID, true));
+                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)userCheck.OrganizationID, true));
                     }
                     else if (!userIsActiveInDivision && userIsUnderReview)
                     {
@@ -149,6 +162,7 @@ namespace LetterApp.Core.ViewModels
                     }
                     else
                     {
+                        AppSettings.MainMenuAllowed = true;
                         await NavigationService.NavigateAsync<MainViewModel, object>(null);
                     }
                 }
@@ -186,7 +200,10 @@ namespace LetterApp.Core.ViewModels
                         _dialogService.ShowAlert(EmailConfirmation, AlertType.Success, 6f);
                     }
                     else
+                    {
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Error);
+                        await ForgotPassword(string.Empty);
+                    }
                 }
             }
             catch (Exception ex)

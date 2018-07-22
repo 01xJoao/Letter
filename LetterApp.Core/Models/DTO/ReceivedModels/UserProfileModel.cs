@@ -1,10 +1,13 @@
 ﻿using System;
+using Realms;
 
 namespace LetterApp.Models.DTO.ReceivedModels
 {
-    public class UserProfileModel : BaseModel
+    public class UserProfileModel : RealmObject
     {
+        [PrimaryKey]
         public int UserID { get; set; }
+        [Indexed]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Position { get; set; }
@@ -14,7 +17,8 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string Divisions { get; set; }
         public string Picture { get; set; }
         public string UserLastSeen { get; set; }
-        public string TimeCreated { get; set; }
-        public string LastUpdateTime { get; set; }
+        public DateTimeOffset TimeCreated { get; set; }
+        public DateTimeOffset LastUpdateTime { get; set; }
+        public int StatusCode { get; set; }
     }
 }

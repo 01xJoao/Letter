@@ -66,5 +66,10 @@ namespace LetterApp.Core.Services
         {
             return await _webService.GetAsync<BaseModel>($"users/division/leave/{divisionId}", needsHeaderCheck: true).ConfigureAwait(false);
         }
+
+        public async Task<OrganizationReceivedModel> GetOrganizationProfile(int orgnizationId)
+        {
+            return await _webService.GetAsync<OrganizationReceivedModel>($"profiles/organization/{orgnizationId}", needsHeaderCheck: true).ConfigureAwait(false);
+        }
     }
 }

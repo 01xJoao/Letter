@@ -76,13 +76,21 @@ namespace LetterApp.iOS.Helpers
         }
 
         public static void SetupTextFieldAppearance(UITextField textField, UIColor textColor, nfloat textSize, string hint, UIColor hintColor, UIColor cursorColor, UIColor backgroundColor,
-                                                    UIFontWeight fontWeight = UIFontWeight.Regular)
+                                                    UIFontWeight fontWeight = UIFontWeight.Regular, UIReturnKeyType returnKeyType = UIReturnKeyType.Default, UIView view = null, int tag = 0)
         {
             textField.TextColor = textColor;
             textField.Font = UIFont.SystemFontOfSize(textSize, fontWeight);
             textField.AttributedPlaceholder = new NSAttributedString(hint, new UIStringAttributes(){ ForegroundColor = hintColor } );
             textField.TintColor = cursorColor;
             textField.BackgroundColor = backgroundColor;
+            textField.ReturnKeyType = returnKeyType;
+
+            if(view != null)
+            {
+                textField.Tag = tag;
+                textField.ShouldReturn -= (field) => TextFieldShouldReturn(field, view);
+                textField.ShouldReturn += (field) => TextFieldShouldReturn(field, view);
+            }
         }
     }
 }

@@ -24,6 +24,8 @@ namespace LetterApp.iOS.Views.SelectDivision
             SetupView();
             _tableView.Hidden = true;
 
+            NavigationController.SetNavigationBarHidden(true, true);
+
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
@@ -97,7 +99,6 @@ namespace LetterApp.iOS.Views.SelectDivision
                 ViewModel.CloseViewCommand.Execute();
         }
 
-
         private void SetupView()
         {
             _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
@@ -117,7 +118,6 @@ namespace LetterApp.iOS.Views.SelectDivision
         {
             _source?.Dispose();
             _source = null;
-            MemoryUtility.ReleaseUITableViewCell(_tableView);
             MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
         }

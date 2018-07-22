@@ -76,6 +76,18 @@
     "translated": "You are banned from this organization."
   },
   {
+    "key": "Code_E119",
+    "translated": "Your access request is already under review."
+  },
+  {
+    "key": "Code_E120",
+    "translated": "You are banned from this division."
+  },
+  {
+    "key": "Code_E121",
+    "translated": "Wrong Password."
+  },
+  {
     "key": "Code_S201",
     "translated": "Password successfully changed."
   },
@@ -201,7 +213,11 @@
   },
   {
     "key": "RecoverPasswordViewModel_NewPassTitle",
-    "translated": "New Password"
+    "translated": "New password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassAgainTitle",
+    "translated": "Repeat new password"
   },
   {
     "key": "RecoverPasswordViewModel_EmailAddress",
@@ -245,7 +261,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_PasswordChanged",
-    "translated": "Password changed suceffuly! \n Please Sign In."
+    "translated": "Password changed successfully! \n Please Sign In."
   },
   {
     "key": "RegisterViewModel_FirstName",
@@ -422,5 +438,217 @@
   {
     "key": "DialogLogout_Button",
     "translated": "Sign Out"
+  },
+  {
+    "key": "DialogOrganization_Question",
+    "translated": "Do you want to leave the organization?"
+  },
+  {
+    "key": "DialogDelete_Question",
+    "translated": "Do you want to delete your account?"
+  },
+  {
+    "key": "UserProfile_DescriptionHint",
+    "translated": "Describe yourself in 40 characters."
+  },
+  {
+    "key": "UserProfile_Role",
+    "translated": "Role"
+  },
+  {
+    "key": "UserProfile_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "UserProfile_Mobile",
+    "translated": "Mobile"
+  },
+  {
+    "key": "UserProfile_Divisions",
+    "translated":  "Divisions"
+  },
+  {
+    "key": "UserProfile_SettingImage",
+    "translated":  "Setting up new image"
+  },
+  {
+    "key": "UserSettings_SettingsTitle",
+    "translated": "Settings"
+  },
+  {
+    "key": "UserSettings_AccountSection",
+    "translated": "Account"
+  },
+  {
+    "key": "UserSettings_NotificationsSection",
+    "translated": "Notifications"
+  },
+  {
+    "key": "UserSettings_InformationSection",
+    "translated": "Information"
+  },
+  {
+    "key": "UserSettings_DangerZoneSection",
+    "translated": "Danger Zone"
+  },
+  {
+    "key": "UserSettings_PhoneNumberLabel",
+    "translated": "Phone number"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsLabel",
+    "translated": "Allow phone calls"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsDescription",
+    "translated": "When on, people can see your phone number and call you."
+  },
+  {
+    "key": "UserSettings_PasswordLabel",
+    "translated": "Password"
+  },
+  {
+    "key": "UserSettings_MessageLabel",
+    "translated": "Message notifications"
+  },
+  {
+    "key": "UserSettings_CallLabel",
+    "translated": "Call notifications"
+  },
+  {
+    "key": "UserSettings_GroupLabel",
+    "translated": "Group notifications"
+  },
+  {
+    "key": "UserSettings_ContactUsLabel",
+    "translated": "Contact us"
+  },
+  {
+    "key": "UserSettings_TermsOfService",
+    "translated": "Terms of service"
+  },
+  {
+    "key": "UserSettings_CreateOrgLabel",
+    "translated": "Create your own organization"
+  },
+  {
+    "key": "UserSettings_SignOutLabel",
+    "translated": "Sign out"
+  },
+  {
+    "key": "UserSettings_LeaveDivisionLabel",
+    "translated": "Leave divisions"
+  },
+  {
+    "key": "UserSettings_LeaveOrgLabel",
+    "translated": "Leave organization"
+  },
+  {
+    "key": "UserSettings_DeleteAccountLabel",
+    "translated": "Delete account"
+  },
+  {
+    "key": "UserSettings_CellNumber",
+    "translated":  "Invalid phone number."
+  },
+  {
+    "key": "ChangePassword_Title",
+    "translated": "Password"
+  },
+  {
+    "key": "ChangePassword_CurrentPass",
+    "translated": "Current password"
+  },
+  {
+    "key": "ChangePassword_Change",
+    "translated": "Change password"
+  },
+  {
+    "key": "ChangePassword_Changed",
+    "translated": "Password changed."
+  },
+  {
+    "key": "UserSettings_Confirm",
+    "translated": "Enter password to confirm."
+  },
+  {
+    "key": "LeaveDivision_Title",
+    "translated":  "Divisions"
+  },
+  {
+    "key": "LeaveDivison_Leave",
+    "translated":  "Leave"
+  },
+  {
+    "key": "LeaveDivison_LeaveQuestion",
+    "translated": "Leave division: "
+  },
+  {
+    "key": "Division_Title",
+    "translated": "Division"
+  },
+  {
+    "key": "Division_Members",
+    "translated": "Members"
+  },
+  {
+    "key": "Division_Organization",
+    "translated": "Organization"
+  },
+  {
+    "key": "Division_Address",
+    "translated": "Address"
+  },
+  {
+    "key": "Division_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Division_Mobile",
+    "translated": "Phone number"
+  },
+  {
+    "key": "Division_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Division_SendEmail",
+    "translated": "Send email"
+  },
+  {
+    "key": "Division_NoDescription",
+    "translated":  "The division doesn't have any description."
+  },
+  {
+    "key": "Organization_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Organization_SendEmail",
+    "translated": "Send email"
+  },
+  {
+    "key": "Organization_NoDescription",
+    "translated": "The organization doesn't have any description."
+  },
+  {
+    "key": "Organization_Members",
+    "translated": "Members"
+  },
+  {
+    "key": "Organization_Divisions",
+    "translated": "Divisions"
+  },
+  {
+    "key": "Organization_Address",
+    "translated": "Address"
+  },
+  {
+    "key": "Organization_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Organization_Mobile",
+    "translated": "Phone number"
   }
 ]

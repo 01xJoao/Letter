@@ -19,6 +19,12 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 		UIKit.UIView _buttonView { get; set; }
 
 		[Outlet]
+		UIKit.UIView _buttonView1 { get; set; }
+
+		[Outlet]
+		UIKit.UIView _buttonView2 { get; set; }
+
+		[Outlet]
 		UIKit.UIButton _closeButton { get; set; }
 
 		[Outlet]
@@ -77,6 +83,16 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 				_indicatorView = null;
 			}
 
+			if (_subtitleHeightConstraint != null) {
+				_subtitleHeightConstraint.Dispose ();
+				_subtitleHeightConstraint = null;
+			}
+
+			if (_subtitleLabel != null) {
+				_subtitleLabel.Dispose ();
+				_subtitleLabel = null;
+			}
+
 			if (_textField != null) {
 				_textField.Dispose ();
 				_textField = null;
@@ -92,14 +108,14 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 				_titleLabel = null;
 			}
 
-			if (_subtitleLabel != null) {
-				_subtitleLabel.Dispose ();
-				_subtitleLabel = null;
+			if (_buttonView1 != null) {
+				_buttonView1.Dispose ();
+				_buttonView1 = null;
 			}
 
-			if (_subtitleHeightConstraint != null) {
-				_subtitleHeightConstraint.Dispose ();
-				_subtitleHeightConstraint = null;
+			if (_buttonView2 != null) {
+				_buttonView2.Dispose ();
+				_buttonView2 = null;
 			}
 		}
 	}

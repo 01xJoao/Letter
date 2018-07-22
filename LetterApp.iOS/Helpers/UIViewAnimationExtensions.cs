@@ -39,18 +39,19 @@ namespace LetterApp.iOS.Helpers
             }
         }
 
-        public static void CustomViewLoadingAnimation(string animation, UIView mainView, UIView view, bool shouldAnimate)
+        public static void CustomViewLoadingAnimation(string animation, UIView mainView, UIView view, bool shouldAnimate = false)
         {
             if (shouldAnimate)
             {
+                var center = UIScreen.MainScreen.Bounds.Width / 2;
                 _lottieAnimation = LOTAnimationView.AnimationNamed(animation);
-                _lottieAnimation.Center = view.Center;
                 _lottieAnimation.Frame = view.Frame;
                 mainView.AddSubview(_lottieAnimation);
                 _lottieAnimation.LoopAnimation = true;
                 _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
                 _lottieAnimation.Hidden = false;
                 _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.Center = new CGPoint(center, mainView.Center.Y);
                 _lottieAnimation.Play();
             }
             else

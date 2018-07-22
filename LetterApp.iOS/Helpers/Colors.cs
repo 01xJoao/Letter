@@ -5,8 +5,10 @@ namespace LetterApp.iOS.Helpers
 {
     public static class Colors
     {
-        public static UIColor MainBlue => UIColor.FromRGB(38, 95, 135);                         //#207CC5
+        public static UIColor MainBlue => UIColor.FromRGB(38, 95, 135);                        
+        public static UIColor BlueSetup => UIColor.FromRGB(24, 91, 138);                        //#207CC5
         public static UIColor MainBlue4 => UIColor.FromRGB(246, 248, 250);                      //#207CC5
+        public static UIColor OrganizationBlue => UIColor.FromRGB(236, 243, 248);               //#207CC5
         public static UIColor SelectBlue => UIColor.FromRGB(20, 119, 196);                      //#308ACE
         public static UIColor TabBarNotSelected => UIColor.FromRGB(181, 181, 181);              
         public static UIColor White => UIColor.FromRGB(255, 255, 255);                          //#FFFFFF
@@ -21,6 +23,12 @@ namespace LetterApp.iOS.Helpers
         public static UIColor Green => UIColor.FromRGB(54, 180, 114);                           //#36B472
         public static UIColor Orange => UIColor.FromRGB(255, 161, 2);                           //#FFA102
         public static UIColor SomeBlue => UIColor.FromRGB(64, 145, 200);                        //#4091C8
-        public static UIColor WhiteBlue => UIColor.FromRGB(246, 251, 253);                        //#F6FBFD
+        public static UIColor WhiteBlue => UIColor.FromRGB(246, 251, 253);                      //#F6FBFD
+        public static UIColor ProfileGray => UIColor.FromRGB(117, 117, 117);                    //#757575
+        public static UIColor ProfileGrayDarker => UIColor.FromRGB(97, 97, 97);                 //#616161
+        public static UIColor ProfileGrayWhiter => UIColor.FromRGB(224, 224, 224);              //#E0E0E0
+        public static UIColor ProfileGrayDivision => UIColor.FromRGB(216, 216, 216);             //#D8D8D8
+        public static UIColor ConnectViewButton2 => UIColor.FromRGB(245, 245, 245);            
+        public static UIColor ConnectViewButton1 => UIColor.FromRGB(250, 250, 250);             
     }
 }

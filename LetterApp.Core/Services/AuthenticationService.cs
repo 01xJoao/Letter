@@ -16,9 +16,9 @@ namespace LetterApp.Core.Services
             _webService = webService;
         }
 
-        public async Task<UserModel> LoginAsync(UserRequestModel userLoginRequest)
+        public async Task<BaseModel> LoginAsync(UserRequestModel userLoginRequest)
         {
-            return await _webService.PostAsync<UserModel>("users/login", userLoginRequest, needsHeaderCheck: false).ConfigureAwait(false);
+            return await _webService.PostAsync<BaseModel>("users/login", userLoginRequest, needsHeaderCheck: false).ConfigureAwait(false);
         }
 
         public async Task<BaseModel> SendActivationCode(string email, string isActivation)

@@ -269,6 +269,26 @@
     <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_1x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_2x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -331,6 +351,23 @@
     <Folder Include="Models\" />
     <Folder Include="Resources\Assets.xcassets\letter_curved.imageset\" />
     <Folder Include="Resources\Assets.xcassets\update.imageset\" />
+    <Folder Include="Views\TabBar\UserProfileViewController\Cells\" />
+    <Folder Include="Views\CustomViews\ProfileDivision\" />
+    <Folder Include="Resources\Assets.xcassets\add_picture.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\add_photo.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\warning_image.imageset\" />
+    <Folder Include="Views\UserSettings\" />
+    <Folder Include="Views\Division\" />
+    <Folder Include="Resources\en.Iproj\" />
+    <Folder Include="Views\UserSettings\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\arrow_right.imageset\" />
+    <Folder Include="Views\ChangePassword\" />
+    <Folder Include="Views\LeaveDivision\" />
+    <Folder Include="Views\LeaveDivision\Cells\" />
+    <Folder Include="Views\Division\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\members.imageset\" />
+    <Folder Include="Views\Organization\" />
+    <Folder Include="Views\Organization\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -362,6 +399,24 @@
     <InterfaceDefinition Include="Views\SelectPosition\SelectPositionViewController.xib" />
     <InterfaceDefinition Include="Views\PendingApproval\PendingApprovalViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\QuestionViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\UserSettingsViewController.xib" />
+    <InterfaceDefinition Include="Views\Division\DivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\Cells\PhoneNumberCell.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\Cells\AllowPhoneCallsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\SwitchCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\LabelWithArrowCell.xib" />
+    <InterfaceDefinition Include="Views\ChangePassword\ChangePasswordViewController.xib" />
+    <InterfaceDefinition Include="Views\LeaveDivision\LeaveDivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\LeaveDivision\Cells\LeaveDivisionCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\DetailsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\DivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\Division\Cells\DivisionHeaderCell.xib" />
+    <InterfaceDefinition Include="Views\Division\Cells\OrganizationDetailCell.xib" />
+    <InterfaceDefinition Include="Views\Organization\OrganizationViewController.xib" />
+    <InterfaceDefinition Include="Views\Organization\Cells\OrganizationDivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -512,6 +567,84 @@
     <Compile Include="Views\CustomViews\Dialog\QuestionViewController.designer.cs">
       <DependentUpon>QuestionViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.designer.cs">
+      <DependentUpon>DivisionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\UserProfileSource.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.designer.cs">
+      <DependentUpon>ProfileHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserSettings\UserSettingsViewController.cs" />
+    <Compile Include="Views\UserSettings\UserSettingsViewController.designer.cs">
+      <DependentUpon>UserSettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Division\DivisionViewController.cs" />
+    <Compile Include="Views\Division\DivisionViewController.designer.cs">
+      <DependentUpon>DivisionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PicturePicker.cs" />
+    <Compile Include="Views\UserSettings\Cells\PhoneNumberCell.cs" />
+    <Compile Include="Views\UserSettings\Cells\PhoneNumberCell.designer.cs">
+      <DependentUpon>PhoneNumberCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserSettings\Cells\AllowPhoneCallsCell.cs" />
+    <Compile Include="Views\UserSettings\Cells\AllowPhoneCallsCell.designer.cs">
+      <DependentUpon>AllowPhoneCallsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\SwitchCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\SwitchCell.designer.cs">
+      <DependentUpon>SwitchCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.designer.cs">
+      <DependentUpon>LabelWithArrowCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\UserSettingsSource.cs" />
+    <Compile Include="Views\ChangePassword\ChangePasswordViewController.cs" />
+    <Compile Include="Views\ChangePassword\ChangePasswordViewController.designer.cs">
+      <DependentUpon>ChangePasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.cs" />
+    <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.designer.cs">
+      <DependentUpon>LeaveDivisionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeaveDivision\Cells\LeaveDivisionCell.cs" />
+    <Compile Include="Views\LeaveDivision\Cells\LeaveDivisionCell.designer.cs">
+      <DependentUpon>LeaveDivisionCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\LeaveDivisionSource.cs" />
+    <Compile Include="Views\CustomViews\Cells\DetailsCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\DetailsCell.designer.cs">
+      <DependentUpon>DetailsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\DivisionsCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\DivisionsCell.designer.cs">
+      <DependentUpon>DivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Division\Cells\DivisionHeaderCell.cs" />
+    <Compile Include="Views\Division\Cells\DivisionHeaderCell.designer.cs">
+      <DependentUpon>DivisionHeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\DivisionSource.cs" />
+    <Compile Include="Views\Division\Cells\OrganizationDetailCell.cs" />
+    <Compile Include="Views\Division\Cells\OrganizationDetailCell.designer.cs">
+      <DependentUpon>OrganizationDetailCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Organization\OrganizationViewController.cs" />
+    <Compile Include="Views\Organization\OrganizationViewController.designer.cs">
+      <DependentUpon>OrganizationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\OrganizationSource.cs" />
+    <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.cs" />
+    <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.designer.cs">
+      <DependentUpon>OrganizationDivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.designer.cs">
+      <DependentUpon>OrganizationDivisionsView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -522,6 +655,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\loading.json" />
     <BundleResource Include="Resources\loading_white.json" />
+    <BundleResource Include="Resources\en.Iproj\InfoPList.strings" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
