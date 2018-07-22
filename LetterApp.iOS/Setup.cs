@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Helpers;
 using SimpleInjector;
 using UIKit;
+using Xamarin.Essentials;
 
 namespace LetterApp.iOS
 {
@@ -17,6 +19,32 @@ namespace LetterApp.iOS
             RegisterPlatformServices();
             InitializePlatformServices();
             App.Start();
+
+            StatusBarColor(Connectivity.NetworkAccess == NetworkAccess.Internet);
+
+            Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        }
+
+        private static void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
+        {
+            StatusBarColor(e.NetworkAccess == NetworkAccess.Internet);
+        }
+
+        private static void StatusBarColor(bool hasInternet)
+        {
+            var statusBar = UIApplication.SharedApplication?.ValueForKey((NSString)"statusBarWindow")?.ValueForKey((NSString)"statusBar") as UIView;
+
+            if(statusBar != null)
+            {
+                if (!hasInternet)
+                    statusBar.BackgroundColor = Colors.Red;
+                else
+                {
+                    statusBar.BackgroundColor = UIColor.Clear;
+                    AppSettings.UserNoInternetNotified = false;
+                }
+            }
         }
 
         private static void ConfigureView()

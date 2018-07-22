@@ -40,7 +40,11 @@ namespace LetterApp.Core.Exceptions
 
         public static void Handle(NoInternetException e)
         {
-            DialogService.ShowAlert(L10N.Localize("Dialogs_InternetException"), AlertType.Error);
+            if(!AppSettings.UserNoInternetNotified)
+            {
+                DialogService.ShowAlert(L10N.Localize("Dialogs_InternetException"), AlertType.Error);
+                AppSettings.UserNoInternetNotified = true;
+            }
         }
 
         public static void Handle(ServerErrorException e)

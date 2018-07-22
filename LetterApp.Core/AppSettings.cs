@@ -70,6 +70,12 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(GroupNotifications), value);
         }
 
+        public static bool UserNoInternetNotified
+        {
+            get => Preferences.Get(nameof(UserNoInternetNotified), false);
+            set => Preferences.Set(nameof(UserNoInternetNotified), value);
+        }
+
         public static void Logout()
         {
             Preferences.Remove(nameof(IsUserLogged));
@@ -82,6 +88,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(MessageNotifications));
             Preferences.Remove(nameof(CallNotifications));
             Preferences.Remove(nameof(GroupNotifications));
+            Preferences.Remove(nameof(UserNoInternetNotified));
         }
     }
 }
