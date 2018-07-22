@@ -15,8 +15,6 @@ namespace LetterApp.Core.ViewModels
     public class DivisionViewModel : XViewModel<int>
     {
         private IDivisionService _divisionService;
-        private IDialogService _dialogService;
-        private IStatusCodeService _statusCodeService;
 
         private int _divisionId;
 
@@ -42,11 +40,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
-        public DivisionViewModel(IDivisionService divisionService, IDialogService dialogService, IStatusCodeService statusCodeService) 
+        public DivisionViewModel(IDivisionService divisionService) 
         {
             _divisionService = divisionService;
-            _dialogService = dialogService;
-            _statusCodeService = statusCodeService;
         }
 
         protected override void Prepare(int divisionId)
@@ -82,11 +78,6 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                if(Division == null)
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(0), AlertType.Error);
             }
         }
 

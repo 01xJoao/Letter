@@ -16,8 +16,6 @@ namespace LetterApp.Core.ViewModels
     public class OrganizationViewModel : XViewModel<int>
     {
         private IOrganizationService _organizationService;
-        private IDialogService _dialogService;
-        private IStatusCodeService _statusCodeService;
 
         private int _organizationId;
 
@@ -41,11 +39,9 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
 
-        public OrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService) 
+        public OrganizationViewModel(IOrganizationService organizationService) 
         {
             _organizationService = organizationService;
-            _dialogService = dialogService;
-            _statusCodeService = statusCodeService;
         }
 
         protected override void Prepare(int organizationId)
@@ -108,11 +104,6 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                if (Organization == null)
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(0), AlertType.Error);
             }
         }
 
