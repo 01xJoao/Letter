@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
@@ -53,26 +54,8 @@ namespace LetterApp.Core.ViewModels
                         await Logout();
                         return;
                     }
-                        
-                    var user = new UserModel();
 
-                    user.UserID = userCheck.UserID;
-                    user.Email = userCheck.Email;
-                    user.FirstName = userCheck.FirstName;
-                    user.LastName = userCheck.LastName;
-                    user.Position = userCheck.Position;
-                    user.Picture = userCheck.Picture;
-                    user.Description = userCheck.Description;
-                    user.ContactNumber = userCheck.ContactNumber;
-                    user.ShowContactNumber = userCheck.ShowContactNumber;
-                    user.OrganizationID = userCheck.OrganizationID;
-                    foreach (var divion in userCheck?.Divisions)
-                        user.Divisions.Add(divion);
-                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
-
-                    Realm.Write(() => {
-                        Realm.Add(user, true);
-                    }); 
+                    var user = RealmUtils.UpdateUser(Realm, userCheck);
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;

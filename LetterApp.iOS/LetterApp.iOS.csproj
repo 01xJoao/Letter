@@ -368,6 +368,8 @@
     <Folder Include="Resources\Assets.xcassets\members.imageset\" />
     <Folder Include="Views\Organization\" />
     <Folder Include="Views\Organization\Cells\" />
+    <Folder Include="Views\CustomViews\TabBarView\" />
+    <Folder Include="Views\TabBar\ContactListViewController\PageViewController\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -417,6 +419,8 @@
     <InterfaceDefinition Include="Views\Organization\OrganizationViewController.xib" />
     <InterfaceDefinition Include="Views\Organization\Cells\OrganizationDivisionsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\TabBarView\TabBarView.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -644,6 +648,14 @@
     <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.cs" />
     <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.designer.cs">
       <DependentUpon>OrganizationDivisionsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\TabBarView\TabBarView.cs" />
+    <Compile Include="Views\CustomViews\TabBarView\TabBarView.designer.cs">
+      <DependentUpon>TabBarView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.designer.cs">
+      <DependentUpon>ContactPageViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

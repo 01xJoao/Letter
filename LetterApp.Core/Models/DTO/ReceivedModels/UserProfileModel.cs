@@ -7,7 +7,6 @@ namespace LetterApp.Models.DTO.ReceivedModels
     {
         [PrimaryKey]
         public int UserID { get; set; }
-        [Indexed]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Position { get; set; }

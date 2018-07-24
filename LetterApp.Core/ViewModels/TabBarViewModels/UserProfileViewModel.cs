@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -58,25 +59,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     if (userCheck.LastUpdateTime.Ticks > _user.LastUpdateTime)
                         _updateView = true;
 
-                    var user = new UserModel();
+                    var user = RealmUtils.UpdateUser(Realm, userCheck);
 
-                    user.UserID = userCheck.UserID;
-                    user.Email = userCheck.Email;
-                    user.FirstName = userCheck.FirstName;
-                    user.LastName = userCheck.LastName;
-                    user.Position = userCheck.Position;
-                    user.Picture = userCheck.Picture;
-                    user.Description = userCheck.Description;
-                    user.ContactNumber = userCheck.ContactNumber;
-                    user.ShowContactNumber = userCheck.ShowContactNumber;
-                    user.OrganizationID = userCheck.OrganizationID;
-                    foreach (var divion in userCheck.Divisions)
-                        user.Divisions.Add(divion);
-                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
-
-                    Realm.Write(() => {
-                        Realm.Add(user, true);
-                    }); 
                 }
             }
             catch (Exception ex)

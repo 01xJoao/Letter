@@ -23,12 +23,6 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);
-            SetupTableView();
-        }
-
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -58,6 +52,13 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
             _tableView.TableHeaderView.AddSubview(tableHeader);
 
             _tableView.ReloadData();
+        }
+
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            SetupTableView();
         }
 
         public override void ViewWillDisappear(bool animated)

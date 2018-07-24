@@ -29,6 +29,7 @@ namespace LetterApp.iOS.Helpers
         public static UIColor ProfileGrayWhiter => UIColor.FromRGB(224, 224, 224);              //#E0E0E0
         public static UIColor ProfileGrayDivision => UIColor.FromRGB(216, 216, 216);             //#D8D8D8
         public static UIColor ConnectViewButton2 => UIColor.FromRGB(245, 245, 245);            
-        public static UIColor ConnectViewButton1 => UIColor.FromRGB(250, 250, 250);             
+        public static UIColor ConnectViewButton1 => UIColor.FromRGB(250, 250, 250); 
+        public static UIColor GrayDividerContacts => UIColor.FromRGB(225, 225, 225);    
     }
 }
