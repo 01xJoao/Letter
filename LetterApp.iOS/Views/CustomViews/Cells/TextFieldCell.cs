@@ -109,17 +109,15 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
         {
             if (hasPassword)
             {
-                _button.SetNeedsLayout();
-                _button.LayoutIfNeeded();
                 _textfieldWidthConstraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (_button.Frame.Width + 7);
             }
             else
             {
                 _button.SetTitle("", UIControlState.Normal);
-                _button.SetNeedsLayout();
-                _button.LayoutIfNeeded();
                 _textfieldWidthConstraint.Constant = UIScreen.MainScreen.Bounds.Width - 80;
             }
+
+            _button.LayoutIfNeeded();
         }
 
         private void OnTextField_EditingDidBegin(object sender, EventArgs e)

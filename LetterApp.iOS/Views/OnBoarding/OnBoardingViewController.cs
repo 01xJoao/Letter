@@ -37,7 +37,7 @@ namespace LetterApp.iOS.Views.OnBoarding
                 new BoardPageViewController(2, ViewModel.CallTitle, ViewModel.CallSubtitle, "board_chat")
             };
 
-            var onBoardPageSource = new OnBoardPageSource(viewControllers);
+            var onBoardPageSource = new PageSource(viewControllers);
             _pageViewController.DataSource = onBoardPageSource;
             _pageViewController.SetViewControllers(new UIViewController[] { viewControllers.FirstOrDefault() }, UIPageViewControllerNavigationDirection.Forward, false, null);
 

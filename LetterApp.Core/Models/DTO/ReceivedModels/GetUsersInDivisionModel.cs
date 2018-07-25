@@ -12,6 +12,7 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string LastName { get; set; }
         public string Position { get; set; }
         public string Picture { get; set; }
+        public string ContactNumber { get; set; }
         public int DivisionId { get; set; }
     }
 }

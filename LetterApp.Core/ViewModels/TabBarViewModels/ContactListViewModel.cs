@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers;
@@ -28,14 +29,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private List<GetUsersInDivisionModel> _usersInDivision;
 
-        private XPCommand<int> _openChatCommand;
-        public XPCommand<int> OpenChatCommand => _openChatCommand ?? (_openChatCommand = new XPCommand<int>(async (userId) => await OpenChat(userId), CanExecute));
-
-        private XPCommand<string> _callCommand;
-        public XPCommand<string> CallCommand => _callCommand ?? (_callCommand = new XPCommand<string>(async (number) => await CallNumber(number), CanExecute));
-
-        private XPCommand<int> _openProfileCommand;
-        public XPCommand<int> OpenProfileCommand => _openProfileCommand ?? (_openProfileCommand = new XPCommand<int>(async (userId) => await OpenProfile(userId), CanExecute));
+        private XPCommand<Tuple<ContactEventType, int>> _contactCommand;
+        public XPCommand<Tuple<ContactEventType, int>> ContactCommand => _contactCommand ?? (_contactCommand = new XPCommand<Tuple<ContactEventType, int>>(async (user) => await ContactEvent(user), CanExecute));
 
         public ContactListViewModel(IContactsService contactsService, IAuthenticationService authenticationService) 
         {
@@ -55,7 +50,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             //Separate the members in diferent lits(divisions)
             ContactLists = new ContactListsModel{
-                Contacts = ReflectionHelper.SeparateInLists(_usersInDivision, nameof(GetUsersInDivisionModel.DivisionId))
+                Contacts = SeparateInLists(_usersInDivision)
             };
         }
 
@@ -73,15 +68,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 var shouldUpdateView = false;
 
-                if(ContactLists?.Contacts?.Count == 0 || ContactLists.Contacts == null)
-                {
-                    ContactLists = new ContactListsModel
-                    {
-                        Contacts = ReflectionHelper.SeparateInLists(result, nameof(GetUsersInDivisionModel.DivisionId))
-                    };
-
+                if (ContactLists.Contacts == null || ContactLists?.Contacts?.Count == 0)
                     shouldUpdateView = true;
-                }
+
+                ContactLists = new ContactListsModel
+                {
+                    Contacts = SeparateInLists(result)
+                };
 
                 if (ContactTab == null || ContactTab?.Count != ContactLists?.Contacts?.Count || shouldUpdateView)
                 {
@@ -144,20 +137,35 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             RaisePropertyChanged(nameof(UpdateView));
         }
 
-        private async Task CallNumber(string number)
+
+        private async Task ContactEvent(Tuple<ContactEventType, int> user)
         {
+            switch (user.Item1)
+            {
+                case ContactEventType.OpenProfile:
+                    await NavigationService.NavigateAsync<MembersProfileViewModel, int>(user.Item2);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        private async Task OpenChat(int userId)
+        public List<List<GetUsersInDivisionModel>> SeparateInLists(List<GetUsersInDivisionModel> source)
         {
+            return source
+                .GroupBy(s => s.DivisionId)
+                .OrderBy(g => g.Key)
+                .Select(g => g.ToList())
+                .ToList();
         }
 
-        private async Task OpenProfile(int userId)
-        {
-            await NavigationService.NavigateAsync<MembersProfileViewModel, int>(userId);
-        }
+        private bool CanExecute(object value) => !IsBusy;
 
-        private bool CanExecute(int value) => !IsBusy;
-        private bool CanExecute(string value) => !IsBusy;
+        public enum ContactEventType
+        {
+            Call,
+            Chat,
+            OpenProfile
+        }
     }
 }

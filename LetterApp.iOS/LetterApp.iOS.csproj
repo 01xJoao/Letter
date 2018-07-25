@@ -289,6 +289,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users.png" />
     <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -370,6 +374,8 @@
     <Folder Include="Views\Organization\Cells\" />
     <Folder Include="Views\CustomViews\TabBarView\" />
     <Folder Include="Views\TabBar\ContactListViewController\PageViewController\" />
+    <Folder Include="Views\TabBar\ContactListViewController\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\user_chat.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -421,6 +427,7 @@
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.xib" />
     <InterfaceDefinition Include="Views\CustomViews\TabBarView\TabBarView.xib" />
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -472,7 +479,7 @@
     <Compile Include="Views\OnBoarding\OnBoardingViewController.designer.cs">
       <DependentUpon>OnBoardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sources\OnBoardPageSource.cs" />
+    <Compile Include="Sources\PageSource.cs" />
     <Compile Include="Helpers\Animations.cs" />
     <Compile Include="Helpers\UIButtonExtensions.cs" />
     <Compile Include="Helpers\UITextFieldExtensions.cs" />
@@ -657,6 +664,11 @@
     <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.designer.cs">
       <DependentUpon>ContactPageViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.designer.cs">
+      <DependentUpon>ContactsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ContactsSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
