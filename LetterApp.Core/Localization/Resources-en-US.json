@@ -253,7 +253,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_PasswordMatch",
-    "translated": "Passwords don't match, try again."
+    "translated": "Passwords don't match."
   },
   {
     "key": "RecoverPasswordViewModel_PasswordWeak",

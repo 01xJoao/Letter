@@ -83,8 +83,6 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 207)
                 {
-                    await NavigationService.NavigateAsync<LoginViewModel, object>(null);
-                    await NavigationService.Close(this);
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(user.Email);
                     await Task.Delay(TimeSpan.FromSeconds(0.8));
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
@@ -144,13 +142,13 @@ namespace LetterApp.Core.ViewModels
 
             if(user.Phone.Length < 8)
             {
-                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
+                _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error, 3.5f);
                 return false;
             }
 
             if (!_userAgreed)
             {
-                _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error);
+                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
                 return false;
             }
 
