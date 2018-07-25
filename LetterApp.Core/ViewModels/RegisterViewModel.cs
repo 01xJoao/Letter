@@ -140,7 +140,7 @@ namespace LetterApp.Core.ViewModels
                 return false;
             }
 
-            if(user.Phone.Length < 8)
+            if(user.Phone.Length > 16 || user.Phone.Length < 8)
             {
                 _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error, 3.5f);
                 return false;
