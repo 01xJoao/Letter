@@ -13,6 +13,7 @@ namespace LetterApp.iOS.Services
     public class DialogService : IDialogService
     {
         LOTAnimationView _lottieAnimation;
+        UIView _view;
 
         public void ShowAlert(string title, AlertType alertType, float duration)
         {
@@ -62,11 +63,13 @@ namespace LetterApp.iOS.Services
             _lottieAnimation = LOTAnimationView.AnimationNamed("loading");
             _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
 
-            var view = ((AppDelegate)UIApplication.SharedApplication.Delegate).Window;
-            _lottieAnimation.Frame = new CGRect(0, 0, view.Bounds.Size.Width * 0.5,  view.Bounds.Size.Height * 0.5);
-            _lottieAnimation.Center = view.Center;
+            if(_view == null)
+                _view = ((AppDelegate)UIApplication.SharedApplication.Delegate).Window;
 
-            view.AddSubview(_lottieAnimation);
+            _lottieAnimation.Frame = new CGRect(0, 0, _view.Bounds.Size.Width * 0.5,  _view.Bounds.Size.Height * 0.5);
+            _lottieAnimation.Center = _view.Center;
+
+            _view.AddSubview(_lottieAnimation);
             _lottieAnimation.LoopAnimation = true;
             _lottieAnimation.Play();
         }
