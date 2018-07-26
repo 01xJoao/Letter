@@ -55,7 +55,7 @@ namespace LetterApp.iOS.Views.Division
             if (!string.IsNullOrEmpty(ViewModel.Division.Description))
                 UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Division.Description, Colors.White, 13f);
             else
-                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.DivisionNoDescription, Colors.GrayIndicator, 13f, italic: true);
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.DivisionNoDescription, Colors.ProfileGrayWhiter, 13f, italic: true);
 
             _memberImage.Image = UIImage.FromBundle("members");
 

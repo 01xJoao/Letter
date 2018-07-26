@@ -45,15 +45,15 @@ namespace LetterApp.iOS.Views.Organization
         {
             Loading(false);
 
-            this.View.BackgroundColor = Colors.OrganizationBlue;
+            this.View.BackgroundColor = Colors.MainBlue;
             _tableView.BackgroundColor = Colors.MainBlue4;
 
             this.Title = ViewModel.Organization.Name;
 
             if (!string.IsNullOrEmpty(ViewModel.Organization.Description))
-                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Organization.Description, Colors.Black, 14f);
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Organization.Description, Colors.White, 14f);
             else
-                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.OrganizationNoDescription, Colors.GrayDivider, 14f, italic: true);
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.OrganizationNoDescription, Colors.ProfileGrayWhiter, 14f, italic: true);
 
             _imageView.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
