@@ -95,7 +95,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             var pageSource = new PageSource(_viewControllers);
             _pageViewController.DataSource = pageSource;
-
             _pageViewController.DidFinishAnimating -= OnPageViewController_DidFinishAnimating;
             _pageViewController.DidFinishAnimating += OnPageViewController_DidFinishAnimating;
 
@@ -105,6 +104,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 {
                     var scrollView = view as UIScrollView;
                     scrollView.Delegate = this;
+                    break;
                 }
             }
 
