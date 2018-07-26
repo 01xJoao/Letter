@@ -38,6 +38,26 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_callButton != null) {
+				_callButton.Dispose ();
+				_callButton = null;
+			}
+
+			if (_callImage != null) {
+				_callImage.Dispose ();
+				_callImage = null;
+			}
+
+			if (_chatButton != null) {
+				_chatButton.Dispose ();
+				_chatButton = null;
+			}
+
+			if (_chatImage != null) {
+				_chatImage.Dispose ();
+				_chatImage = null;
+			}
+
 			if (_imageView != null) {
 				_imageView.Dispose ();
 				_imageView = null;
@@ -48,34 +68,14 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 				_nameLabel = null;
 			}
 
-			if (_roleLabel != null) {
-				_roleLabel.Dispose ();
-				_roleLabel = null;
-			}
-
 			if (_profileButton != null) {
 				_profileButton.Dispose ();
 				_profileButton = null;
 			}
 
-			if (_chatImage != null) {
-				_chatImage.Dispose ();
-				_chatImage = null;
-			}
-
-			if (_chatButton != null) {
-				_chatButton.Dispose ();
-				_chatButton = null;
-			}
-
-			if (_callImage != null) {
-				_callImage.Dispose ();
-				_callImage = null;
-			}
-
-			if (_callButton != null) {
-				_callButton.Dispose ();
-				_callButton = null;
+			if (_roleLabel != null) {
+				_roleLabel.Dispose ();
+				_roleLabel = null;
 			}
 		}
 	}

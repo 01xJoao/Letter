@@ -16,17 +16,25 @@ namespace LetterApp.iOS.Views.CustomViews.TabBarView
 
 		[Outlet]
 		UIKit.UIButton _tabButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView _underLineView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_label != null) {
+				_label.Dispose ();
+				_label = null;
+			}
+
 			if (_tabButton != null) {
 				_tabButton.Dispose ();
 				_tabButton = null;
 			}
 
-			if (_label != null) {
-				_label.Dispose ();
-				_label = null;
+			if (_underLineView != null) {
+				_underLineView.Dispose ();
+				_underLineView = null;
 			}
 		}
 	}

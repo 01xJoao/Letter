@@ -9,23 +9,29 @@ namespace LetterApp.iOS.Views.CustomViews.TabBarView
     [Register("TabBarView")]
     public partial class TabBarView : UIView
     {
-        private ContactTabModel _division;
+        public ContactTabModel Division;
         public static readonly UINib Nib = UINib.FromName("TabBarView", NSBundle.MainBundle);
         public TabBarView(IntPtr handle) : base(handle) { }
         public static TabBarView Create => Nib.Instantiate(null, null)[0] as TabBarView;
 
-        public void Configure(ContactTabModel division)
+        public void Configure(ContactTabModel division, bool enableUnderLine = false)
         {
-            _division = division;
+            Division = division;
 
             UILabelExtensions.SetupLabelAppearance(_label, division.DivisionName, division.IsSelected ? Colors.MainBlue : Colors.Black, 13f, UIFontWeight.Semibold);
             _tabButton.TouchUpInside -= OnTabButton_TouchUpInside;
             _tabButton.TouchUpInside += OnTabButton_TouchUpInside;
+
+            _underLineView.BackgroundColor = Colors.MainBlue;
+            _underLineView.Hidden = true;
+
+            if (enableUnderLine && division.IsSelected)
+                _underLineView.Hidden = false;
         }
 
         private void OnTabButton_TouchUpInside(object sender, EventArgs e)
         {
-            _division?.DivisionEvent(true, _division.DivisionIndex);
+            Division?.DivisionEvent(true, Division.DivisionIndex);
         }
     }
 }

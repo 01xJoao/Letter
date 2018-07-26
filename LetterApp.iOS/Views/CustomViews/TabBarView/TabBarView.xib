@@ -24,6 +24,13 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4nG-Vf-eFe">
+                    <rect key="frame" x="0.0" y="43" width="203" height="2"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="pV6-g4-xvn"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -31,14 +38,18 @@
                 <constraint firstItem="l3j-T1-1ic" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="P6F-Xa-h9N"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="QOj-TQ-IpC"/>
                 <constraint firstItem="l3j-T1-1ic" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="Zez-uV-k9Q"/>
+                <constraint firstItem="4nG-Vf-eFe" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bxB-Rd-PnZ"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="width" secondItem="1" secondAttribute="width" id="ey8-J8-mj2"/>
+                <constraint firstAttribute="bottom" secondItem="4nG-Vf-eFe" secondAttribute="bottom" constant="2" id="klX-F5-XXd"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="lPw-Tw-vgA"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="height" secondItem="1" secondAttribute="height" id="xFT-1d-1Wz"/>
+                <constraint firstAttribute="trailing" secondItem="4nG-Vf-eFe" secondAttribute="trailing" id="yrS-Vo-VMh"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="_label" destination="l3j-T1-1ic" id="pTA-WR-IBj"/>
                 <outlet property="_tabButton" destination="tzj-RO-6eR" id="p7w-T1-M9o"/>
+                <outlet property="_underLineView" destination="4nG-Vf-eFe" id="OrA-Ki-j4S"/>
             </connections>
             <point key="canvasLocation" x="-61.5" y="-258.5"/>
         </view>

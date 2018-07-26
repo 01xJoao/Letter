@@ -17,13 +17,13 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 {
     public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate
     {
-        private int _currentPageViewIndex;
-        private UIPageViewController _pageViewController;
         private UIView _barView;
+        private UIPageViewController _pageViewController;
+        private List<XBoardPageViewController> _viewControllers;
 
+        private int _currentPageViewIndex;
         private bool _disableUnderline;
         private bool _selectedFromTab;
-        private bool _barViewFrameIsSet;
         private float _tabCenter;
         private float _viewSize;
         private int _totalTabs;
@@ -37,7 +37,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _viewSize = (float)UIScreen.MainScreen.Bounds.Width;
             _barView = new UIView();
             _barView.BackgroundColor = Colors.MainBlue;
-
             _separatorView.BackgroundColor = Colors.GrayDividerContacts;
 
             this.Title = ViewModel.Title;
@@ -51,6 +50,8 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             this.View.AddSubview(_barView);
             this.View.BringSubviewToFront(_barView);
+
+            ConfigureView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -78,95 +79,123 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void ConfigureView()
         {
-            
-        }
-
-        private void UpdatePageView()
-        {
+            //Page
             if (ViewModel.ContactLists.Contacts.Count == 0)
                 return;
-            
-            var viewControllers = new List<XBoardPageViewController>();
+
+            _viewControllers = new List<XBoardPageViewController>();
 
             int divisionView = 0;
-            foreach(var divisionList in ViewModel.ContactLists.Contacts)
+            foreach (var divisionList in ViewModel.ContactLists.Contacts)
             {
                 var division = new ContactPageViewController(divisionView, divisionList, ContactEvent);
-                viewControllers.Add(division);
+                _viewControllers.Add(division);
                 divisionView++;
             }
 
-            var tabSelected = ViewModel.ContactTab.Find(x => x.IsSelected);
-            var viewControllerVisible = viewControllers[tabSelected.DivisionIndex];
-
-            var pageSource = new PageSource(viewControllers);
+            var pageSource = new PageSource(_viewControllers);
             _pageViewController.DataSource = pageSource;
-            _pageViewController.SetViewControllers(new UIViewController[]
-            {
-                viewControllerVisible != null ? viewControllerVisible : viewControllers.FirstOrDefault()
-            }, tabSelected.DivisionIndex > _currentPageViewIndex ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse, 
-                                                   tabSelected.DivisionIndex != _currentPageViewIndex, null);
 
-            _currentPageViewIndex = tabSelected.DivisionIndex;
 
             _pageViewController.DidFinishAnimating -= OnPageViewController_DidFinishAnimating;
             _pageViewController.DidFinishAnimating += OnPageViewController_DidFinishAnimating;
 
-            foreach(var view in _pageViewController.View.Subviews)
+            foreach (var view in _pageViewController.View.Subviews)
             {
-                if(view is UIScrollView)
+                if (view is UIScrollView)
                 {
                     var scrollView = view as UIScrollView;
                     scrollView.Delegate = this;
                 }
             }
-        }
 
-        private void UpdateTabBar()
-        {
+            UpdatePageView();
+
+            //Tab
+
             _totalTabs = ViewModel.ContactTab.Count;
             float screenWidth = (float)UIScreen.MainScreen.Bounds.Width;
             var sizeForTab = screenWidth / _totalTabs;
-
             sizeForTab = sizeForTab < LocalConstants.Contacts_TabMinWidth ? LocalConstants.Contacts_TabMinWidth : sizeForTab;
 
             if ((int)sizeForTab == (int)LocalConstants.Contacts_TabMinWidth)
                 _disableUnderline = true;
-            
-            int numberTab = 0;
-            foreach (var tab in ViewModel.ContactTab)
-            {
-                var divisionTab = TabBarView.Create;
-                divisionTab.Configure(tab);
-                divisionTab.Frame = new CGRect((sizeForTab * numberTab), 0, sizeForTab, LocalConstants.Contacts_TabHeight);
-                _tabScrollView.AddSubview(divisionTab);
 
-                if (tab.IsSelected)
-                {
-                    if (_selectedFromTab)
-                    {
-                        UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut, () =>
-                        {
-                            _barView.Frame = new CGRect(divisionTab.Frame.X, _barView.Frame.Y, sizeForTab, _barView.Frame.Height);
-                        }, null);
-                    }
-                    _tabCenter = (float)divisionTab.Center.X;
-                }
-                
-                numberTab++;
-            }
 
             _tabScrollView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
             _tabScrollView.ContentSize = new CGSize(sizeForTab * _totalTabs, LocalConstants.Contacts_TabHeight);
             _tabScrollView.AutosizesSubviews = false;
             _tabScrollView.LayoutIfNeeded();
 
-            if(!_barViewFrameIsSet)
-            {
-                _barView.Frame = new CGRect(0, _tabScrollView.Frame.Height - 2, sizeForTab, 2);
-                _barViewFrameIsSet = true;
-            }
+            _barView.Frame = new CGRect(0, _tabScrollView.Frame.Height - 2, sizeForTab, 2);
             _barView.Hidden = _disableUnderline;
+
+            int numberTab = 0;
+
+            foreach (var tab in ViewModel.ContactTab)
+            {
+                var divisionTab = TabBarView.Create;
+                divisionTab.Configure(tab,_disableUnderline);
+                divisionTab.Frame = new CGRect((sizeForTab * numberTab), 0, sizeForTab, LocalConstants.Contacts_TabHeight);
+                _tabScrollView.AddSubview(divisionTab);
+
+                if (tab.IsSelected)
+                {
+                    _barView.Frame = new CGRect(divisionTab.Frame.X, _barView.Frame.Y, _barView.Frame.Width, _barView.Frame.Height);
+                    _tabCenter = (float)divisionTab.Center.X;
+                }
+
+                numberTab++;
+            }
+        }
+
+        private void UpdatePageView()
+        {
+            var tabSelected = ViewModel.ContactTab.Find(x => x.IsSelected);
+            var viewControllerVisible = _viewControllers[tabSelected.DivisionIndex];
+
+            _pageViewController.SetViewControllers(new UIViewController[]
+            {
+                viewControllerVisible != null ? viewControllerVisible : _viewControllers.FirstOrDefault()
+            }, tabSelected.DivisionIndex > _currentPageViewIndex ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse, 
+                                                   tabSelected.DivisionIndex != _currentPageViewIndex, DidFinishAnimating);
+
+            _currentPageViewIndex = tabSelected.DivisionIndex;
+        }
+
+        private void UpdateTabBar()
+        {
+            var tabIndexSelected = ViewModel.ContactTab.Find(x => x.IsSelected).DivisionIndex;
+
+            foreach(var subview in _tabScrollView.Subviews)
+            {
+                var tabView = subview as TabBarView;
+
+                if (tabView != null)
+                {
+                    if (tabView.Division.IsSelected == true)
+                        tabView.Division.IsSelected = false;
+
+                    if (tabView.Division.DivisionIndex == tabIndexSelected)
+                    {
+                        tabView.Division.IsSelected = true;
+
+                        if (_selectedFromTab)
+                        {
+                            UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut, () =>
+                            {
+                                _barView.Frame = new CGRect(tabView.Frame.X, _barView.Frame.Y, _barView.Frame.Width, _barView.Frame.Height);
+                            }, null);
+                        }
+                        _tabCenter = (float)tabView.Center.X;
+
+                        if (_disableUnderline)
+                            _tabScrollView.SetContentOffset(new CGPoint(tabView.Center.X - _viewSize/2, 0), true);
+                    }
+                    
+                    tabView.Configure(tabView.Division, _disableUnderline);
+                }
+            }
         }
 
         private void DidFinishAnimating(bool finished)
