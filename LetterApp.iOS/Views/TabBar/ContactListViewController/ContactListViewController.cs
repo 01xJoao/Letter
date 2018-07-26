@@ -135,7 +135,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             {
                 var divisionTab = TabBarView.Create;
                 divisionTab.Configure(tab,_disableUnderline);
-                divisionTab.Frame = new CGRect((sizeForTab * numberTab), 0, sizeForTab, LocalConstants.Contacts_TabHeight);
+                divisionTab.Frame = new CGRect((sizeForTab * numberTab), 0, sizeForTab, _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight);
                 _tabScrollView.AddSubview(divisionTab);
 
                 if (tab.IsSelected)
@@ -148,7 +148,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             }
 
             _barView.Hidden = _totalTabs <= 1;
-            _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? 0 : LocalConstants.Contacts_TabHeight;
+            _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight;
         }
 
         private void UpdatePageView()
