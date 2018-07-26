@@ -99,7 +99,8 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             await NavigationService.Close(this);
-            await NavigationService.PopToRoot(true);
+            //await NavigationService.PopToRoot(true);
+            //await NavigationService.NavigateAsync<LoginViewModel, object> (null);
         }
         private bool CanExecute() => !IsBusy;
         private bool CanExecute(string code) => !IsBusy && !string.IsNullOrEmpty(code);

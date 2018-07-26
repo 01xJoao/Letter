@@ -22,6 +22,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 		UIKit.UIView _tabBarView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _tabBarViewHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIScrollView _tabScrollView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -29,6 +32,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 			if (_pageView != null) {
 				_pageView.Dispose ();
 				_pageView = null;
+			}
+
+			if (_separatorView != null) {
+				_separatorView.Dispose ();
+				_separatorView = null;
 			}
 
 			if (_tabBarView != null) {
@@ -41,9 +49,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 				_tabScrollView = null;
 			}
 
-			if (_separatorView != null) {
-				_separatorView.Dispose ();
-				_separatorView = null;
+			if (_tabBarViewHeightConstraint != null) {
+				_tabBarViewHeightConstraint.Dispose ();
+				_tabBarViewHeightConstraint = null;
 			}
 		}
 	}

@@ -96,7 +96,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             var pageSource = new PageSource(_viewControllers);
             _pageViewController.DataSource = pageSource;
 
-
             _pageViewController.DidFinishAnimating -= OnPageViewController_DidFinishAnimating;
             _pageViewController.DidFinishAnimating += OnPageViewController_DidFinishAnimating;
 
@@ -147,6 +146,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
                 numberTab++;
             }
+
+            _barView.Hidden = _totalTabs <= 1;
+            _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? 0 : LocalConstants.Contacts_TabHeight;
         }
 
         private void UpdatePageView()

@@ -14,6 +14,7 @@
                 <outlet property="_pageView" destination="Gza-RA-A1b" id="5b6-cx-S5J"/>
                 <outlet property="_separatorView" destination="TT6-kG-etB" id="hrt-JX-u0n"/>
                 <outlet property="_tabBarView" destination="NKE-P0-USa" id="El4-bj-04C"/>
+                <outlet property="_tabBarViewHeightConstraint" destination="bbE-js-PdX" id="TaX-1E-IxI"/>
                 <outlet property="_tabScrollView" destination="cK9-mk-Ffb" id="eRE-PQ-XIS"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>

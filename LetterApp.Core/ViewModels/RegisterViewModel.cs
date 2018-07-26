@@ -83,8 +83,10 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 207)
                 {
+                    AppSettings.UserEmail = user.Email;
+                    await CloseView();
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(user.Email);
-                    await Task.Delay(TimeSpan.FromSeconds(0.8));
+                    await Task.Delay(TimeSpan.FromSeconds(0.8f));
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
                 }
                 else
