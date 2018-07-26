@@ -43,7 +43,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Organization_DivisionsHeight = 165;
         public static nfloat Organization_DivisionsWidth = 100;
 
-        public static float Contacts_TabMinWidth = 80;
+        public static float Contacts_TabMinWidth = 100;
         public static nfloat Contacts_TabHeight = 45;
         public static nfloat Contacts_CellHeight = 75;
     }

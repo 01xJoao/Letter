@@ -12,6 +12,9 @@ namespace LetterApp.iOS.Views.CustomViews.TabBarView
 	partial class TabBarView
 	{
 		[Outlet]
+		UIKit.UILabel _label { get; set; }
+
+		[Outlet]
 		UIKit.UIButton _tabButton { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -19,6 +22,11 @@ namespace LetterApp.iOS.Views.CustomViews.TabBarView
 			if (_tabButton != null) {
 				_tabButton.Dispose ();
 				_tabButton = null;
+			}
+
+			if (_label != null) {
+				_label.Dispose ();
+				_label = null;
 			}
 		}
 	}

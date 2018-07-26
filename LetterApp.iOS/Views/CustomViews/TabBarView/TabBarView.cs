@@ -17,15 +17,15 @@ namespace LetterApp.iOS.Views.CustomViews.TabBarView
         public void Configure(ContactTabModel division)
         {
             _division = division;
-            UIButtonExtensions.SetupButtonAppearance(_tabButton, division.IsSelected ? Colors.MainBlue : Colors.Black, 13f, division.DivisionName, UIFontWeight.Semibold);
 
+            UILabelExtensions.SetupLabelAppearance(_label, division.DivisionName, division.IsSelected ? Colors.MainBlue : Colors.Black, 13f, UIFontWeight.Semibold);
             _tabButton.TouchUpInside -= OnTabButton_TouchUpInside;
             _tabButton.TouchUpInside += OnTabButton_TouchUpInside;
         }
 
         private void OnTabButton_TouchUpInside(object sender, EventArgs e)
         {
-            _division?.DivisionEvent(this, _division.DivisionIndex);
+            _division?.DivisionEvent(true, _division.DivisionIndex);
         }
     }
 }

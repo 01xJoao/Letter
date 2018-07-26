@@ -17,18 +17,27 @@
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzj-RO-6eR">
                     <rect key="frame" x="-0.5" y="-0.5" width="203" height="47"/>
-                    <state key="normal" title="Button"/>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l3j-T1-1ic">
+                    <rect key="frame" x="10" y="13" width="183" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="l3j-T1-1ic" secondAttribute="trailing" constant="10" id="BwL-QV-wxJ"/>
+                <constraint firstItem="l3j-T1-1ic" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="P6F-Xa-h9N"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="QOj-TQ-IpC"/>
+                <constraint firstItem="l3j-T1-1ic" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="Zez-uV-k9Q"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="width" secondItem="1" secondAttribute="width" id="ey8-J8-mj2"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="lPw-Tw-vgA"/>
                 <constraint firstItem="tzj-RO-6eR" firstAttribute="height" secondItem="1" secondAttribute="height" id="xFT-1d-1Wz"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="_label" destination="l3j-T1-1ic" id="pTA-WR-IBj"/>
                 <outlet property="_tabButton" destination="tzj-RO-6eR" id="p7w-T1-M9o"/>
             </connections>
             <point key="canvasLocation" x="-61.5" y="-258.5"/>

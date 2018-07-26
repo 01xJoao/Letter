@@ -23,6 +23,10 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gza-RA-A1b">
+                    <rect key="frame" x="0.0" y="45" width="375" height="622"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKE-P0-USa">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
                     <subviews>
@@ -49,10 +53,6 @@
                         <constraint firstAttribute="trailing" secondItem="TT6-kG-etB" secondAttribute="trailing" id="rta-9y-z7w"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gza-RA-A1b">
-                    <rect key="frame" x="0.0" y="45" width="375" height="622"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -60,7 +60,7 @@
                 <constraint firstItem="Gza-RA-A1b" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="DcB-Cm-Ze5"/>
                 <constraint firstAttribute="trailing" secondItem="Gza-RA-A1b" secondAttribute="trailing" id="FhP-35-tjO"/>
                 <constraint firstItem="NKE-P0-USa" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="cLw-DI-mWW"/>
-                <constraint firstItem="Gza-RA-A1b" firstAttribute="top" secondItem="cK9-mk-Ffb" secondAttribute="bottom" id="rlN-Tj-RKn"/>
+                <constraint firstItem="Gza-RA-A1b" firstAttribute="top" secondItem="cK9-mk-Ffb" secondAttribute="bottom" id="jp1-E4-tdu"/>
                 <constraint firstItem="NKE-P0-USa" firstAttribute="top" secondItem="2" secondAttribute="top" id="tMf-LY-QDc"/>
                 <constraint firstAttribute="trailing" secondItem="NKE-P0-USa" secondAttribute="trailing" id="vzu-3u-7FO"/>
             </constraints>
