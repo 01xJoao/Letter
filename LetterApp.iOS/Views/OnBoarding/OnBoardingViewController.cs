@@ -52,7 +52,7 @@ namespace LetterApp.iOS.Views.OnBoarding
 
         private void DidTransition(object sender, UIPageViewFinishedAnimationEventArgs e)
         {
-            if(e.Finished)
+            if(e.Completed)
             {
                 var viewController = _pageViewController.ViewControllers[0] as XBoardPageViewController;
                 _pageControl.CurrentPage = viewController.Index;

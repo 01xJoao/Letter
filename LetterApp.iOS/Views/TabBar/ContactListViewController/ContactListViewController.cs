@@ -208,7 +208,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void OnPageViewController_DidFinishAnimating(object sender, UIPageViewFinishedAnimationEventArgs e)
         {
-            if (e.Finished)
+            if (e.Completed)
             {
                 var viewController = _pageViewController.ViewControllers[0] as XBoardPageViewController;
                 _currentPageViewIndex = viewController.Index;
@@ -223,7 +223,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             {
                 var scrollOffSet = scrollView.ContentOffset.X - _viewSize;
                 var move = 1.0f / _totalTabs * scrollOffSet;
-                _barView.Center = new CGPoint((_tabCenter) + move, _barView.Center.Y);
+                _barView.Center = new CGPoint(_tabCenter + move, _barView.Center.Y);
             }
         }
 
