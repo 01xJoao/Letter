@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using CoreGraphics;
 using Foundation;
@@ -15,11 +14,14 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 {
-    public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate
+    public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating
     {
         private UIView _barView;
         private UIPageViewController _pageViewController;
         private List<XBoardPageViewController> _viewControllers;
+
+        private UISearchController _serach;
+        private bool _isSearchActive;
 
         private int _currentPageViewIndex;
         private bool _disableUnderline;
@@ -52,6 +54,35 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             this.View.BringSubviewToFront(_barView);
 
             ConfigureView();
+
+            _serach = new UISearchController(searchResultsController: null) 
+            {
+                DimsBackgroundDuringPresentation = false,    
+            };
+
+            _serach.SearchBar.TintColor = Colors.White;
+            _serach.SearchBar.BarStyle = UIBarStyle.Black;
+
+            var textFieldInsideSearchBar = _serach.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
+            textFieldInsideSearchBar.AttributedPlaceholder = new NSAttributedString("Search", foregroundColor: UIColor.White);
+            var backgroundField = textFieldInsideSearchBar.Subviews[0];
+            backgroundField.Alpha = 0f;
+
+            _serach.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
+            _serach.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("clear"), UISearchBarIcon.Clear, UIControlState.Normal);
+
+            _serach.SearchBar.OnEditingStarted -= OnSearchBar_OnEditingStarted;
+            _serach.SearchBar.OnEditingStarted += OnSearchBar_OnEditingStarted;
+
+            _serach.SearchBar.OnEditingStopped -= OnSearchBar_OnEditingStopped;
+            _serach.SearchBar.OnEditingStopped += OnSearchBar_OnEditingStopped;
+
+            _serach.SearchBar.CancelButtonClicked -= OnSearchBar_CancelButtonClicked;
+            _serach.SearchBar.CancelButtonClicked += OnSearchBar_CancelButtonClicked;
+
+            _serach.SearchResultsUpdater = this;
+            this.DefinesPresentationContext = true;
+            this.NavigationItem.SearchController = _serach;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -219,12 +250,58 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         [Export("scrollViewDidScroll:")]
         public virtual void Scrolled(UIScrollView scrollView)
         {
-            if (!_selectedFromTab && !_disableUnderline)
+            if (!_selectedFromTab && !_disableUnderline) 
             {
                 var scrollOffSet = scrollView.ContentOffset.X - _viewSize;
                 var move = 1.0f / _totalTabs * scrollOffSet;
                 _barView.Center = new CGPoint(_tabCenter + move, _barView.Center.Y);
             }
+
+            if(_isSearchActive)
+            {
+                _serach.SearchBar.ResignFirstResponder();
+            }
+        }
+
+        private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
+        {
+            if(!_isSearchActive)
+            {
+                _tabScrollTopConstraint.Constant = 20;
+                UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
+                   () => {
+                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y + 20, _barView.Frame.Width, _barView.Frame.Height);
+                        this.View.LayoutIfNeeded();
+                   }, null
+               );
+            }
+            
+            _isSearchActive = true;
+        }
+
+        private void OnSearchBar_OnEditingStopped(object sender, EventArgs e)
+        {
+        }
+
+        private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
+        {
+            if (_isSearchActive)
+            {
+                _tabScrollTopConstraint.Constant = 0;
+                UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
+                   () =>
+                   {
+                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - 20, _barView.Frame.Width, _barView.Frame.Height);
+                       this.View.LayoutIfNeeded();
+                   }, null
+               );
+            }
+
+            _isSearchActive = false;
+        }
+
+        public void UpdateSearchResultsForSearchController(UISearchController searchController)
+        {
         }
 
         private void ContactEvent(object sender, Tuple<ContactListViewModel.ContactEventType, int> contact)
@@ -239,10 +316,18 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _pageViewController.View.Frame = _pageView.Bounds;
         }
 
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            NavigationItem.HidesSearchBarWhenScrolling = false;
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
+            this.NavigationItem.HidesSearchBarWhenScrolling = true;
+            this.NavigationItem.SearchController.SearchBar.EndEditing(true);
         }
     }
 }

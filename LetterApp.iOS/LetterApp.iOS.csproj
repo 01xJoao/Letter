@@ -293,6 +293,14 @@
     <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat.png" />
     <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -376,6 +384,8 @@
     <Folder Include="Views\TabBar\ContactListViewController\PageViewController\" />
     <Folder Include="Views\TabBar\ContactListViewController\Cells\" />
     <Folder Include="Resources\Assets.xcassets\user_chat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\search.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
