@@ -16,13 +16,15 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 {
     public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating
     {
+        private UITableView _tableView;
         private UIView _barView;
         private UIPageViewController _pageViewController;
         private List<XBoardPageViewController> _viewControllers;
-
+        private UIPanGestureRecognizer gesture = new UIPanGestureRecognizer();
         private UISearchController _serach;
-        private bool _isSearchActive;
+        private UIViewController _visibleViewController;
 
+        private bool _isSearchActive;
         private int _currentPageViewIndex;
         private bool _disableUnderline;
         private bool _selectedFromTab;
@@ -50,13 +52,14 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             this.AddChildViewController(_pageViewController);
             _pageView.AddSubview(_pageViewController.View);
 
+            gesture.AddTarget(() => HandleDrag(gesture));
+                     
             this.View.AddSubview(_barView);
             this.View.BringSubviewToFront(_barView);
 
             ConfigureView();
 
-            _serach = new UISearchController(searchResultsController: null) 
-            {
+            _serach = new UISearchController(searchResultsController: null) {
                 DimsBackgroundDuringPresentation = false,    
             };
 
@@ -65,6 +68,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             var textFieldInsideSearchBar = _serach.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
             textFieldInsideSearchBar.AttributedPlaceholder = new NSAttributedString("Search", foregroundColor: UIColor.White);
+            textFieldInsideSearchBar.ReturnKeyType = UIReturnKeyType.Done;
             var backgroundField = textFieldInsideSearchBar.Subviews[0];
             backgroundField.Alpha = 0f;
 
@@ -103,17 +107,32 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 case nameof(ViewModel.UpdateTabBar):
                     UpdateTabBar();
                     break;
+                case nameof(ViewModel.IsSearching):
+                    SearchContacts();
+                    break;
                 default:
                     break;
             }
         }
 
+        private void SearchContacts()
+        {
+            int page = 0;
+            foreach(var pageController in _viewControllers)
+            {
+                var controller = pageController as UIViewController;    
+                var viewController = controller as ContactPageViewController;
+                viewController.SetupTableView(ViewModel.ContactLists.Contacts[page]);
+                page++;
+            }
+        }
+
         private void ConfigureView()
         {
-            //Page
             if (ViewModel.ContactLists.Contacts.Count == 0)
                 return;
 
+            //Page
             _viewControllers = new List<XBoardPageViewController>();
 
             int divisionView = 0;
@@ -135,8 +154,12 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 {
                     var scrollView = view as UIScrollView;
                     scrollView.Delegate = this;
-                    break;
                 }
+            }
+
+            foreach(var viewController in _viewControllers)
+            {
+                _pageViewController.SetViewControllers(new UIViewController[]{ viewController as UIViewController}, UIPageViewControllerNavigationDirection.Forward, false, null);    
             }
 
             UpdatePageView();
@@ -161,7 +184,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _barView.Hidden = _disableUnderline;
 
             int numberTab = 0;
-
             foreach (var tab in ViewModel.ContactTab)
             {
                 var divisionTab = TabBarView.Create;
@@ -192,8 +214,24 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 viewControllerVisible != null ? viewControllerVisible : _viewControllers.FirstOrDefault()
             }, tabSelected.DivisionIndex > _currentPageViewIndex ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse, 
                                                    tabSelected.DivisionIndex != _currentPageViewIndex, DidFinishAnimating);
-
+            
             _currentPageViewIndex = tabSelected.DivisionIndex;
+
+            foreach(var view in _pageViewController.ViewControllers[0])
+            {
+                if (view is UITableView)
+                {
+                    _tableView?.RemoveGestureRecognizer(gesture);
+                    _tableView = view as UITableView;
+
+                    //if (_isSearchActive)
+                        //_tableView.AddGestureRecognizer(gesture);
+
+                    break;
+                }
+            }
+
+            _visibleViewController = _pageViewController.ViewControllers[0];
         }
 
         private void UpdateTabBar()
@@ -244,6 +282,27 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 var viewController = _pageViewController.ViewControllers[0] as XBoardPageViewController;
                 _currentPageViewIndex = viewController.Index;
                 ViewModel.SwitchDivisionCommand.Execute(viewController.Index);
+
+                foreach(var view in viewController.View.Subviews)
+                {
+                    if(view is UITableView)
+                    {
+                        _tableView?.RemoveGestureRecognizer(gesture);
+
+                        _tableView = view as UITableView;
+                        //_tableView.AddGestureRecognizer(gesture);
+                        break;
+                    }
+                }
+
+                _visibleViewController = viewController;
+            }
+        }
+
+        private void HandleDrag(UIPanGestureRecognizer gesture)
+        {
+            if (_isSearchActive) {
+                _serach.SearchBar.ResignFirstResponder();
             }
         }
 
@@ -256,42 +315,44 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 var move = 1.0f / _totalTabs * scrollOffSet;
                 _barView.Center = new CGPoint(_tabCenter + move, _barView.Center.Y);
             }
-
-            if(_isSearchActive)
-            {
-                _serach.SearchBar.ResignFirstResponder();
-            }
         }
 
         private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
         {
+            var height = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
+
             if(!_isSearchActive)
             {
-                _tabScrollTopConstraint.Constant = 20;
+                _tabScrollTopConstraint.Constant = height;
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
                    () => {
-                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y + 20, _barView.Frame.Width, _barView.Frame.Height);
+                    _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y + height, _barView.Frame.Width, _barView.Frame.Height);
                         this.View.LayoutIfNeeded();
                    }, null
                );
             }
+           
+            _tableView.AddGestureRecognizer(gesture);
             
             _isSearchActive = true;
         }
 
         private void OnSearchBar_OnEditingStopped(object sender, EventArgs e)
         {
+            _tableView.RemoveGestureRecognizer(gesture);
         }
 
         private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
         {
+            var height = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
+
             if (_isSearchActive)
             {
                 _tabScrollTopConstraint.Constant = 0;
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
                    () =>
                    {
-                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - 20, _barView.Frame.Width, _barView.Frame.Height);
+                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - height, _barView.Frame.Width, _barView.Frame.Height);
                        this.View.LayoutIfNeeded();
                    }, null
                );
@@ -302,6 +363,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
+            ViewModel.SearchCommand.Execute(searchController.SearchBar.Text);
         }
 
         private void ContactEvent(object sender, Tuple<ContactListViewModel.ContactEventType, int> contact)

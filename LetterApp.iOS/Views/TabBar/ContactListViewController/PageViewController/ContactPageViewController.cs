@@ -29,9 +29,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
             SetupTableView();
         }
 
-        private void SetupTableView()
+        public void SetupTableView(List<GetUsersInDivisionModel> contactPage = null)
         {
-            var source = new ContactsSource(_tableView, _contactPage);
+            var contact = contactPage == null ? _contactPage : contactPage;
+
+            var source = new ContactsSource(_tableView, contact);
 
             source.ContactEvent -= OnSource_ContactEvent;
             source.ContactEvent += OnSource_ContactEvent;

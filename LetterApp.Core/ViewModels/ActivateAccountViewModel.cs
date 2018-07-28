@@ -52,6 +52,7 @@ namespace LetterApp.Core.ViewModels
 
                 if(result.StatusCode == 200)
                 {
+                    AppSettings.UserEmail = _email;
                     await NavigationService.Close(this);
                     await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(ActivationCompleted, AlertType.Success, 4f);
@@ -99,8 +100,6 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             await NavigationService.Close(this);
-            //await NavigationService.PopToRoot(true);
-            //await NavigationService.NavigateAsync<LoginViewModel, object> (null);
         }
         private bool CanExecute() => !IsBusy;
         private bool CanExecute(string code) => !IsBusy && !string.IsNullOrEmpty(code);

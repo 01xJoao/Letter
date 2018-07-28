@@ -13,5 +13,15 @@ namespace LetterApp.iOS.Helpers
 
             return false;
         }
+
+        public static bool IsIphoneX()
+        {
+            var model = Xamarin.iOS.DeviceHardware.Model.ToLower();
+
+            if (model.Contains("x"))
+                return true;
+
+            return false;
+        }
     }
 }

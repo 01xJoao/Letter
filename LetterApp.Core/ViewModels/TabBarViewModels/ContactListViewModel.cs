@@ -32,6 +32,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             set => SetProperty(ref _updateView, value);
         }
 
+        private bool _isSearching;
+        public bool IsSearching
+        {
+            get => _isSearching;
+            set => SetProperty(ref _isSearching, value);
+        }
+
         private bool _configureView;
         public bool ConfigureView
         {
@@ -45,6 +52,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public List<ContactTabModel> ContactTab { get; set; }
 
         private List<GetUsersInDivisionModel> _usersInDivision;
+
+        private XPCommand<string> _searchCommand;
+        public XPCommand<string> SearchCommand => _searchCommand ?? (_searchCommand = new XPCommand<string>((search) => Search(search)));
 
         private XPCommand<int> _switchDivisionCommand;
         public XPCommand<int> SwitchDivisionCommand => _switchDivisionCommand ?? (_switchDivisionCommand = new XPCommand<int>((viewIndex) => SettingSwitchDivision(viewIndex)));
@@ -100,6 +110,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 foreach (var res in result)
                 {
                     res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                    var contacNumber = res.ShowNumber ? res.ContactNumber : string.Empty;
+                    res.SearchContainer = $"{res.FirstName.ToLower()} {res.LastName.ToLower()} {contacNumber} {res.Email.ToLower()} {res.Position.ToLower()}";
                     Realm.Write(() => Realm.Add(res, true));
                 }
 
@@ -183,6 +195,29 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 RaisePropertyChanged(nameof(UpdateView));
             else
                 RaisePropertyChanged(nameof(UpdateTabBar));
+        }
+
+        private void Search(string search)
+        {
+            var users = new List<GetUsersInDivisionModel>();
+
+            if (string.IsNullOrEmpty(search))
+                users = _usersInDivision;
+            else
+                users = _usersInDivision.FindAll(x => x.SearchContainer.Contains(search.ToLower()));
+
+            ContactLists = new ContactListsModel
+            {
+                Contacts = SeparateInLists(users)
+            };
+
+            for (int i; ContactTab.Count > ContactLists.Contacts.Count;)
+            {
+                ContactLists.Contacts.Add(new List<GetUsersInDivisionModel>());
+            }
+                
+
+            RaisePropertyChanged(nameof(IsSearching));
         }
 
 
