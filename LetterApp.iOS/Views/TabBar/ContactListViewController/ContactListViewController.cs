@@ -180,9 +180,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _tabScrollView.AutosizesSubviews = false;
             _tabScrollView.LayoutIfNeeded();
 
-            _barView.Frame = new CGRect(0, _tabScrollView.Frame.Height - 2, sizeForTab, 2);
-            _barView.Hidden = _disableUnderline;
-
             int numberTab = 0;
             foreach (var tab in ViewModel.ContactTab)
             {
@@ -200,8 +197,10 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 numberTab++;
             }
 
-            _barView.Hidden = _totalTabs <= 1;
             _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight;
+
+            _barView.Frame = new CGRect(0, _tabScrollView.Frame.Height - 2, sizeForTab, 2);
+            _barView.Hidden = _disableUnderline || _totalTabs <= 1;
         }
 
         private void UpdatePageView()

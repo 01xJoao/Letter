@@ -116,7 +116,7 @@ namespace LetterApp.Core.ViewModels
 
                     if (res.StatusCode == 200)
                     {
-                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
+                        await NavigationService.NavigateAsync<PendingApprovalViewModel, int>(NewUser ? 2 : 3);
                         await NavigationService.PopToRoot(false);
                     }
                     else

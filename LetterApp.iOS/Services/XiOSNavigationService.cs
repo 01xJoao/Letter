@@ -14,7 +14,7 @@ namespace LetterApp.iOS.Services
 {
     public class XiOSNavigationService : XNavigationService
     {
-        private RootViewController RootViewController;
+        public RootViewController RootViewController;
         private UINavigationController MasterNavigationController;
 
         public override Task NavigatePlatformAsync<TViewModel, TObject>(TObject data)
