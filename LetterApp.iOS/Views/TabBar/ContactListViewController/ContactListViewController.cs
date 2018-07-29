@@ -171,8 +171,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 }
             }
 
-            foreach(var viewController in _viewControllers)
-            {
+            foreach(var viewController in _viewControllers) {
                 _pageViewController.SetViewControllers(new UIViewController[]{ viewController as UIViewController}, UIPageViewControllerNavigationDirection.Forward, false, null);    
             }
 
