@@ -1,4 +1,5 @@
 ﻿using System;
+using Realms;
 using Xamarin.Essentials;
 namespace LetterApp.Core
 {
@@ -96,6 +97,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
             Preferences.Remove(nameof(TabIndex));
+            //TODO Delete DB
         }
     }
 }

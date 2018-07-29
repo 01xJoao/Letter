@@ -49,12 +49,13 @@ namespace LetterApp.Core.ViewModels
 
                 if (userCheck.StatusCode == 200)
                 {
-                    if(AppSettings.UserId != userCheck.UserID)
+                    if(AppSettings.UserEmail != userCheck.Email)
                     {
                         await Logout();
                         return;
                     }
 
+                    AppSettings.UserId = userCheck.UserID;
                     var user = RealmUtils.UpdateUser(Realm, userCheck);
 
                     bool userIsActiveInDivision = false;

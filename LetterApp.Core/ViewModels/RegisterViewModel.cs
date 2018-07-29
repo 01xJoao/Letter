@@ -11,6 +11,7 @@ using LetterApp.Core.Models.Cells;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.RequestModels;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -83,7 +84,10 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 207)
                 {
+                    AppSettings.Logout();
                     AppSettings.UserEmail = user.Email;
+                    await SecureStorage.SetAsync("password", user.Password); 
+
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
                     await CloseView();
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(user.Email);
