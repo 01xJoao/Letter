@@ -125,6 +125,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     Contacts = SeparateInLists(result)
                 };
 
+                if (_usersInDivision.Count != result.Count)
+                    shouldUpdateView = true;
+                
                 _usersInDivision = result;
 
                 if (ContactTab == null || ContactTab?.Count != ContactLists?.Contacts?.Count || shouldUpdateView)

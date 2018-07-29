@@ -205,19 +205,19 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void UpdatePageView()
         {
-            if (ViewModel.ContactTab.Count > _viewControllers.Count)
-                ConfigureView();
+            var tabSelectedIndex = ViewModel.ContactTab.Find(x => x.IsSelected).DivisionIndex;
 
-            var tabSelected = ViewModel.ContactTab.Find(x => x.IsSelected);
-            var viewControllerVisible = _viewControllers[tabSelected.DivisionIndex];
+            int visibleTab = _viewControllers.Count < tabSelectedIndex + 1 ? 0 : tabSelectedIndex;
+
+            var viewControllerVisible = _viewControllers[visibleTab];
 
             _pageViewController.SetViewControllers(new UIViewController[]
             {
                 viewControllerVisible != null ? viewControllerVisible : _viewControllers.FirstOrDefault()
-            }, tabSelected.DivisionIndex > _currentPageViewIndex ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse, 
-                                                   tabSelected.DivisionIndex != _currentPageViewIndex, DidFinishAnimating);
+            }, visibleTab > _currentPageViewIndex ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse, 
+                                                   visibleTab != _currentPageViewIndex, DidFinishAnimating);
             
-            _currentPageViewIndex = tabSelected.DivisionIndex;
+            _currentPageViewIndex = visibleTab;
 
             foreach(var view in _pageViewController.ViewControllers[0])
             {
@@ -226,8 +226,8 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                     _tableView?.RemoveGestureRecognizer(gesture);
                     _tableView = view as UITableView;
 
-                    //if (_isSearchActive)
-                        //_tableView.AddGestureRecognizer(gesture);
+                    if (_isSearchActive)
+                        _tableView?.AddGestureRecognizer(gesture);
 
                     break;
                 }
@@ -290,7 +290,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                     if(view is UITableView)
                     {
                         _tableView?.RemoveGestureRecognizer(gesture);
-
                         _tableView = view as UITableView;
                         //_tableView.AddGestureRecognizer(gesture);
                         break;
@@ -340,9 +339,18 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                );
             }
 
+            var alreadyHasGesture = false;
+            foreach(var ges in _tableView.GestureRecognizers)
+            {
+                if (ges == gesture)
+                {
+                    alreadyHasGesture = true;
+                    break;
+                }
+            }
            
-           
-            _tableView.AddGestureRecognizer(gesture);
+            if(!alreadyHasGesture)
+                _tableView.AddGestureRecognizer(gesture);
             
             _isSearchActive = true;
         }
