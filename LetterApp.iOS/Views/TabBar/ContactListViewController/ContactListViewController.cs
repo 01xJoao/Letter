@@ -205,6 +205,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void UpdatePageView()
         {
+            if (ViewModel.ContactTab.Count > _viewControllers.Count)
+                ConfigureView();
+
             var tabSelected = ViewModel.ContactTab.Find(x => x.IsSelected);
             var viewControllerVisible = _viewControllers[tabSelected.DivisionIndex];
 
@@ -320,16 +323,24 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         {
             var height = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
 
+            var heghtForSubview = PhoneModelExtensions.IsIphoneX() ? 17.5f : 30;
+
             if(!_isSearchActive)
             {
                 _tabScrollTopConstraint.Constant = height;
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
                    () => {
+
+                    if(_totalTabs == 1)
+                        _tabScrollView.Subviews[0].Frame = new CGRect(_tabScrollView.Frame.X, _tabScrollView.Frame.Y - heghtForSubview, _tabScrollView.Frame.Width, _tabScrollTopConstraint.Constant);
+                  
                     _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y + height, _barView.Frame.Width, _barView.Frame.Height);
                         this.View.LayoutIfNeeded();
                    }, null
                );
             }
+
+           
            
             _tableView.AddGestureRecognizer(gesture);
             
@@ -351,6 +362,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
                    () =>
                    {
+                    if(_totalTabs == 1)
+                        _tabScrollView.Subviews[0].Frame = _tabScrollView.Frame;
+                  
                        _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - height, _barView.Frame.Width, _barView.Frame.Height);
                        this.View.LayoutIfNeeded();
                    }, null
