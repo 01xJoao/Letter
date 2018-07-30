@@ -505,7 +505,7 @@
   },
   {
     "key": "UserSettings_AllowPhoneCallsDescription",
-    "translated": "When on, people can see your phone number and call you."
+    "translated": "When on, users can see your phone number and call you."
   },
   {
     "key": "UserSettings_PasswordLabel",
@@ -669,7 +669,7 @@
   },
   {
     "key": "Contacts_DialogDescription",
-    "translated": "When on, members will only appear in their main division, and not in all divisions they are in."
+    "translated": "When on, users will only appear in their main division, and not in all divisions they are members of."
   },
   {
     "key": "Contacts_DialogButton",

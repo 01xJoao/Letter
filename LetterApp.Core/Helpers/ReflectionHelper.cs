@@ -83,5 +83,15 @@ namespace LetterApp.Core.Helpers
                 .Select(g => g.ToList())
                 .ToList();
         }
+
+        //public List<List<GetUsersInDivisionModel>> SeparateInLists(List<GetUsersInDivisionModel> source)
+        //{
+        //    return source
+        //        .OrderBy(o => o.FirstName)
+        //        .GroupBy(s => s.DivisionId)
+        //        .OrderBy(g => g.Key)
+        //        .Select(g => g.ToList())
+        //        .ToList();
+        //}
     }
 }

@@ -79,7 +79,7 @@ namespace LetterApp.Core
 
         public static bool FilteredMembers
         {
-            get => Preferences.Get(nameof(FilteredMembers), true);
+            get => Preferences.Get(nameof(FilteredMembers), false);
             set => Preferences.Set(nameof(FilteredMembers), value);
         }
 
@@ -97,7 +97,6 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
             Preferences.Remove(nameof(FilteredMembers));
-            //TODO Delete DB
         }
     }
 }

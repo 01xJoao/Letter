@@ -50,11 +50,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         }
 
         private UserModel _user;
+        private List<int> _allDivisionsUser;
 
         public ContactListsModel ContactLists { get; set; }
         public List<ContactTabModel> ContactTab { get; set; }
 
+        private List<List<GetUsersInDivisionModel>> _userDivisions;
+
         private List<GetUsersInDivisionModel> _usersInDivision;
+        private List<GetUsersInDivisionModel> _unfilteredUsers;
 
         private XPCommand _filterCommand;
         public XPCommand FilterCommand => _filterCommand ?? (_filterCommand = new XPCommand(async () => await Filter()));
@@ -78,42 +82,30 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public override async Task InitializeAsync()
         {
             _isFilterActive = AppSettings.FilteredMembers;
-
             _user = Realm.Find<UserModel>(AppSettings.UserId);
+
             SetDivisionTabs(_user);
-
-            var allDivisionsUser = new List<int>();
-
-            foreach (var division in _user.Divisions)
-            {
-                if (division.IsDivisonActive && division.IsUserInDivisionActive)
-                {
-                    allDivisionsUser.Add(division.DivisionID);
-                }
-            }
 
             //Creates a List with all memebers
             _usersInDivision = new List<GetUsersInDivisionModel>();
             foreach (var user in Realm.All<GetUsersInDivisionModel>())
             {
-                foreach (int divisionId in allDivisionsUser)
+                foreach (int divisionId in _allDivisionsUser)
                 {
-                    if (user?.DivisionId == divisionId)
+                    if(divisionId == user.DivisionId)
                         _usersInDivision.Add(user);
                 }
             }
 
-            //Separate the members in diferent lits(divisions)
-            ContactLists = new ContactListsModel
-            {
-                Contacts = SeparateInLists(_usersInDivision)
-            };
+            SetContactList(_usersInDivision);
         }
 
         public override async Task Appearing()
         {
             try
             {
+                var shouldUpdateView = false;
+
                 var result = await _contactsService.GetUsersFromAllDivisions();
 
                 foreach (var res in result)
@@ -124,26 +116,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     Realm.Write(() => Realm.Add(res, true));
                 }
 
-                var shouldUpdateView = false;
-
                 if (ContactLists.Contacts == null || ContactLists?.Contacts?.Count == 0)
                     shouldUpdateView = true;
 
-                ContactLists = new ContactListsModel
-                {
-                    Contacts = SeparateInLists(result)
-                };
-
-                if (_usersInDivision.Count != result.Count)
+                if (_unfilteredUsers.Count != result.Count)
                     shouldUpdateView = true;
-                
-                _usersInDivision = result;
 
-                if (ContactTab == null || ContactTab?.Count != ContactLists?.Contacts?.Count || shouldUpdateView)
+                if (ContactTab == null || ContactTab?.Count == 0 || shouldUpdateView)
                 {
+                    shouldUpdateView = true;
                     await UpdateUser();
-                    shouldUpdateView = true;
                 }
+
+                SetContactList(result);
 
                 if (shouldUpdateView)
                     RaisePropertyChanged(nameof(ConfigureView));
@@ -187,6 +172,18 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     dividionIndex++;
                 }
             }
+
+            _userDivisions = new List<List<GetUsersInDivisionModel>>();
+            _allDivisionsUser = new List<int>();
+            foreach (var division in user.Divisions)
+            {
+                if (division.IsDivisonActive && division.IsUserInDivisionActive)
+                {
+                    _allDivisionsUser.Add(division.DivisionID);
+
+                    _userDivisions.Add(new List<GetUsersInDivisionModel>());
+                }
+            }
         }
 
         private void SettingSwitchDivision(int viewIndex)
@@ -211,30 +208,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 RaisePropertyChanged(nameof(UpdateTabBar));
         }
 
-        private void Search(string search)
-        {
-            var users = new List<GetUsersInDivisionModel>();
-
-            if (string.IsNullOrEmpty(search))
-                users = _usersInDivision;
-            else
-                users = _usersInDivision.FindAll(x => x.SearchContainer.Contains(search.ToLower()));
-
-            ContactLists = new ContactListsModel
-            {
-                Contacts = SeparateInLists(users)
-            };
-
-            for (int i; ContactTab.Count > ContactLists.Contacts.Count;)
-            {
-                ContactLists.Contacts.Add(new List<GetUsersInDivisionModel>());
-            }
-                
-
-            RaisePropertyChanged(nameof(IsSearching));
-        }
-
-
         private async Task ContactEvent(Tuple<ContactEventType, int> user)
         {
             switch (user.Item1)
@@ -247,22 +220,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
         }
 
-        public List<List<GetUsersInDivisionModel>> SeparateInLists(List<GetUsersInDivisionModel> source)
-        {
-            return source
-                .OrderBy(o => o.FirstName)
-                .GroupBy(s => s.DivisionId)
-                .OrderBy(g => g.Key)
-                .Select(g => g.ToList())
-                .ToList();
-        }
-
         private async Task Filter()
         {
             try
             {
                 var result = await _dialogService.ShowFilter(DialogTitle, DialogSwitchLabel, DialogDescription, DialogButton, _isFilterActive);
-
 
                 if (result == _isFilterActive)
                     return;
@@ -270,12 +232,70 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     _isFilterActive = result;
                     AppSettings.FilteredMembers = result;
+                    SetContactList(_unfilteredUsers);
+                    RaisePropertyChanged(nameof(IsSearching));
                 }
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
             }
+        }
+
+        private void Search(string search)
+        {
+            var users = new List<GetUsersInDivisionModel>();
+
+            if (string.IsNullOrEmpty(search))
+                users = _usersInDivision;
+            else
+                users = _usersInDivision.FindAll(x => x.SearchContainer.Contains(search.ToLower()));
+
+            SetContactList(users, true);
+
+            RaisePropertyChanged(nameof(IsSearching));
+        }
+
+        private void SetContactList(List<GetUsersInDivisionModel> users, bool isSearching = false)
+        {
+            _usersInDivision = users.OrderBy(x => x.FirstName).ToList();
+            _unfilteredUsers = new List<GetUsersInDivisionModel>();
+
+            int divisionIndex = 0;
+            foreach (var divion in _userDivisions)
+            {
+                divion.Clear();
+
+                foreach (var user in _usersInDivision)
+                {
+                    if (user.DivisionId == _allDivisionsUser[divisionIndex])
+                    {
+                        if (_isFilterActive)
+                        {
+                            if (user.DivisionId == user.MainDivisionId)
+                                divion.Add(user);
+                        }
+                        else 
+                        {
+                            divion.Add(user);
+                        }
+
+                        _unfilteredUsers.Add(user);
+                    }
+                }
+
+                divisionIndex++;
+            }
+
+
+
+            ContactLists = new ContactListsModel
+            {
+                Contacts = _userDivisions
+            };
+
+
+
         }
 
         private bool CanExecute(object value) => !IsBusy;

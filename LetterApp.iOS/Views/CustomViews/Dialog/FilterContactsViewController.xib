@@ -82,7 +82,7 @@
                             <rect key="frame" x="252" y="92" width="51" height="31"/>
                         </switch>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GTP-L8-2eQ">
-                            <rect key="frame" x="25.5" y="148" width="275.5" height="20.5"/>
+                            <rect key="frame" x="25.5" y="148" width="270.5" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -90,7 +90,6 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="GTP-L8-2eQ" firstAttribute="trailing" secondItem="LqA-r3-3BO" secondAttribute="trailing" id="3Qp-16-Osa"/>
                         <constraint firstItem="oHY-T4-Ffc" firstAttribute="leading" secondItem="HLj-OW-4Pl" secondAttribute="leading" id="42H-jl-YV2"/>
                         <constraint firstItem="LqA-r3-3BO" firstAttribute="top" secondItem="HLj-OW-4Pl" secondAttribute="bottom" constant="31" id="6Kw-kS-gvw"/>
                         <constraint firstAttribute="trailing" secondItem="chi-Tp-K3s" secondAttribute="trailing" constant="15" id="B2F-w3-MX9"/>
@@ -103,6 +102,7 @@
                         <constraint firstAttribute="trailing" secondItem="pJv-FW-GE6" secondAttribute="trailing" id="eBb-6u-qbg"/>
                         <constraint firstItem="LqA-r3-3BO" firstAttribute="leading" secondItem="oHY-T4-Ffc" secondAttribute="trailing" constant="15" id="j5a-6d-O3o"/>
                         <constraint firstItem="HLj-OW-4Pl" firstAttribute="leading" secondItem="l5D-bD-vFi" secondAttribute="leading" constant="25" id="ldm-9S-Ls8"/>
+                        <constraint firstAttribute="trailing" secondItem="GTP-L8-2eQ" secondAttribute="trailing" constant="25" id="q1u-dZ-KbP"/>
                         <constraint firstAttribute="bottom" secondItem="pJv-FW-GE6" secondAttribute="bottom" id="thR-F8-zlM"/>
                         <constraint firstAttribute="trailing" secondItem="LqA-r3-3BO" secondAttribute="trailing" constant="20" id="uCp-JY-7JY"/>
                         <constraint firstItem="GTP-L8-2eQ" firstAttribute="top" secondItem="LqA-r3-3BO" secondAttribute="bottom" constant="25" id="vKO-Yc-EAb"/>
