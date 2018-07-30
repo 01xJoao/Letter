@@ -50,6 +50,15 @@ namespace LetterApp.iOS.Services
         {
             if (viewController is IRootView)
             {
+
+                if (viewController is MainViewController)
+                {
+                    var xVC = viewController as IXiOSView;
+                    var index = xVC.ParameterData == null ? 0 : (int)xVC.ParameterData;
+                    var viewC = viewController as MainViewController;
+                    viewC.SetVisibleView(index);
+                }
+
                 Debug.WriteLine($"ViewController is a Root Controller");
                 SetRootViewController(viewController);
             }

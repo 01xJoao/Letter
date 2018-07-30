@@ -141,9 +141,7 @@ namespace LetterApp.Core.ViewModels
         private async Task NavigateToMain()
         {
             AppSettings.MainMenuAllowed = true;
-
-            AppSettings.TabIndex = _tabIndex;
-            await NavigationService.NavigateAsync<MainViewModel, object>(null);
+            await NavigationService.NavigateAsync<MainViewModel, int>(_tabIndex);
         }
 
         private async Task Logout()

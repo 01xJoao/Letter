@@ -77,12 +77,6 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(UserNoInternetNotified), value);
         }
 
-        public static int TabIndex
-        {
-            get => Preferences.Get(nameof(TabIndex), 0);
-            set => Preferences.Set(nameof(TabIndex), value);
-        }
-
         public static void Logout()
         {
             Preferences.Remove(nameof(IsUserLogged));
@@ -96,7 +90,6 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(CallNotifications));
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
-            Preferences.Remove(nameof(TabIndex));
             //TODO Delete DB
         }
     }

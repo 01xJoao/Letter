@@ -8,11 +8,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
     public class MainViewModel : XViewModel
     {
-        public int TabIndex => AppSettings.TabIndex;
-
-        private XPCommand _setDefaultTabCommand;
-        public XPCommand SetDefaultTabCommand => _setDefaultTabCommand ?? (_setDefaultTabCommand = new XPCommand(() => AppSettings.TabIndex = 0));
-
         public MainViewModel() {}
 
         #region resources
