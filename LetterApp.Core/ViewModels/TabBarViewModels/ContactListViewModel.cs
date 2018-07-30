@@ -244,12 +244,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void Search(string search)
         {
-            var users = new List<GetUsersInDivisionModel>();
+            string[] searchSplit = search.ToLower().Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+             var users = new List<GetUsersInDivisionModel>();
 
             if (string.IsNullOrEmpty(search))
                 users = _usersInDivision;
             else
-                users = _usersInDivision.FindAll(x => x.SearchContainer.Contains(search.ToLower()));
+                users = _usersInDivision.FindAll(x => searchSplit.All(s => x.SearchContainer.Contains(s)));
 
             SetContactList(users, true);
 
@@ -258,15 +260,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void SetContactList(List<GetUsersInDivisionModel> users, bool isSearching = false)
         {
-            _usersInDivision = users.OrderBy(x => x.FirstName).ToList();
-            _unfilteredUsers = new List<GetUsersInDivisionModel>();
+            users = users.OrderBy(x => x.FirstName).ToList();
+
+            if(!isSearching)
+                _unfilteredUsers = new List<GetUsersInDivisionModel>();
 
             int divisionIndex = 0;
             foreach (var divion in _userDivisions)
             {
                 divion.Clear();
 
-                foreach (var user in _usersInDivision)
+                foreach (var user in users)
                 {
                     if (user.DivisionId == _allDivisionsUser[divisionIndex])
                     {
@@ -280,22 +284,21 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             divion.Add(user);
                         }
 
-                        _unfilteredUsers.Add(user);
+                        if (!isSearching)
+                            _unfilteredUsers.Add(user);
                     }
                 }
 
                 divisionIndex++;
             }
 
-
-
             ContactLists = new ContactListsModel
             {
                 Contacts = _userDivisions
             };
 
-
-
+            if (!isSearching)
+                _usersInDivision = users;
         }
 
         private bool CanExecute(object value) => !IsBusy;
