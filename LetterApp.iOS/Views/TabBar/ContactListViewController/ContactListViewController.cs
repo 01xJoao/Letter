@@ -24,6 +24,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private UISearchController _serach;
         private UIViewController _visibleViewController;
 
+        private int _heightForAnimationTab = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
         private bool _isSearchActive;
         private int _currentPageViewIndex;
         private bool _disableUnderline;
@@ -70,7 +71,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _serach.SearchBar.BarStyle = UIBarStyle.Black;
 
             var textFieldInsideSearchBar = _serach.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
-            textFieldInsideSearchBar.AttributedPlaceholder = new NSAttributedString("Search", foregroundColor: UIColor.White);
+            textFieldInsideSearchBar.AttributedPlaceholder = new NSAttributedString(ViewModel.SearchLabel, foregroundColor: UIColor.White);
             textFieldInsideSearchBar.ReturnKeyType = UIReturnKeyType.Done;
             var backgroundField = textFieldInsideSearchBar.Subviews[0];
             backgroundField.Alpha = 0f;
@@ -218,8 +219,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             }
 
             _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight;
-
-            _barView.Frame = new CGRect(0, _tabScrollView.Frame.Height - 2, sizeForTab, 2);
+            _barView.Frame = new CGRect(0, _isSearchActive ? _heightForAnimationTab + _tabScrollView.Frame.Height - 2 :  _tabScrollView.Frame.Height - 2, sizeForTab, 2);
             _barView.Hidden = _disableUnderline || _totalTabs <= 1;
             _separatorView.Hidden = false;
         }

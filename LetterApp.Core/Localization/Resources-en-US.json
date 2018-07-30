@@ -674,5 +674,9 @@
   {
     "key": "Contacts_DialogButton",
     "translated": "Filter"
+  },
+  {
+    "key": "Contacts_Search",
+    "translated": "Search by name, email, position..."
   }
 ]

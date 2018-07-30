@@ -111,8 +111,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 foreach (var res in result)
                 {
                     res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
-                    var contacNumber = res.ShowNumber ? res.ContactNumber : string.Empty;
-                    res.SearchContainer = $"{res.FirstName.ToLower()} {res.LastName.ToLower()} {contacNumber} {res.Email.ToLower()} {res.Position.ToLower()}";
+                    var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                    res.SearchContainer = $"{res?.FirstName?.ToLower()} {res?.LastName?.ToLower()} {contacNumber} {res?.Email?.ToLower()} {res?.Position?.ToLower()}";
                     Realm.Write(() => Realm.Add(res, true));
                 }
 
@@ -260,7 +260,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void SetContactList(List<GetUsersInDivisionModel> users, bool isSearching = false)
         {
-            users = users.OrderBy(x => x.FirstName).ToList();
+            users = users.OrderBy(x => x?.FirstName).ToList();
 
             if(!isSearching)
                 _unfilteredUsers = new List<GetUsersInDivisionModel>();
@@ -313,6 +313,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         #region Resources
 
         public string Title => L10N.Localize("Contacts_Title");
+        public string SearchLabel => L10N.Localize("Contacts_Search");
 
         private string DialogTitle => L10N.Localize("Contacts_DialogTitle");
         private string DialogSwitchLabel => L10N.Localize("Contacts_DialogSwitchLabel");
