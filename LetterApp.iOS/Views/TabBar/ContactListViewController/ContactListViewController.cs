@@ -43,10 +43,12 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _barView = new UIView();
             _barView.BackgroundColor = Colors.MainBlue;
             _separatorView.BackgroundColor = Colors.GrayDividerContacts;
+            _separatorView.Hidden = true;
 
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.PrefersLargeTitles = true;
             this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Automatic;
+            this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "contacts_filter", OpenFilter);
 
             _pageViewController = new UIPageViewController(UIPageViewControllerTransitionStyle.Scroll, UIPageViewControllerNavigationOrientation.Horizontal);
 
@@ -93,6 +95,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
+        private void OpenFilter(object sender, EventArgs e)
+        {
+            ViewModel.FilterCommand.Execute();
+        }
+
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -132,7 +139,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         {
             if (ViewModel.ContactLists.Contacts.Count == 0)
                 return;
-
+            
             //Page
             _viewControllers = new List<XBoardPageViewController>();
 
@@ -214,6 +221,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             _barView.Frame = new CGRect(0, _tabScrollView.Frame.Height - 2, sizeForTab, 2);
             _barView.Hidden = _disableUnderline || _totalTabs <= 1;
+            _separatorView.Hidden = false;
         }
 
         private void UpdatePageView()

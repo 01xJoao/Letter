@@ -104,8 +104,7 @@ namespace LetterApp.iOS.Views.ChangePassword
             NavigationController.NavigationBar.TintColor = Colors.White;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
-            this.NavigationItem.LeftBarButtonItem = backButton;
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
             NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
 
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;

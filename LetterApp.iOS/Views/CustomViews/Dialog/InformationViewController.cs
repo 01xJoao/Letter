@@ -6,7 +6,6 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 {
     public partial class InformationViewController : UIViewController
     {
-
         private string _title;
         private string _text1;
         private string _text2;

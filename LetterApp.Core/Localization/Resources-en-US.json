@@ -658,5 +658,21 @@
   {
     "key": "Contacts_Title",
     "translated": "Contacts"
+  },
+  {
+    "key": "Contacts_DialogTitle",
+    "translated": "Filter Contacts"
+  },
+  {
+    "key": "Contacts_DialogSwitchLabel",
+    "translated": "Filter members by main division"
+  },
+  {
+    "key": "Contacts_DialogDescription",
+    "translated": "When on, members will only appear in their main division, and not in all divisions they are in."
+  },
+  {
+    "key": "Contacts_DialogButton",
+    "translated": "Filter"
   }
 ]

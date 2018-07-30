@@ -17,6 +17,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     {
         private IAuthenticationService _authenticationService;
         private IContactsService _contactsService;
+        private IDialogService _dialogService;
+
+        private bool _isFilterActive;
 
         private bool _updateTabBar;
         public bool UpdateTabBar
@@ -53,6 +56,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private List<GetUsersInDivisionModel> _usersInDivision;
 
+        private XPCommand _filterCommand;
+        public XPCommand FilterCommand => _filterCommand ?? (_filterCommand = new XPCommand(async () => await Filter()));
+
         private XPCommand<string> _searchCommand;
         public XPCommand<string> SearchCommand => _searchCommand ?? (_searchCommand = new XPCommand<string>((search) => Search(search)));
 
@@ -62,14 +68,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<Tuple<ContactEventType, int>> _contactCommand;
         public XPCommand<Tuple<ContactEventType, int>> ContactCommand => _contactCommand ?? (_contactCommand = new XPCommand<Tuple<ContactEventType, int>>(async (user) => await ContactEvent(user), CanExecute));
 
-        public ContactListViewModel(IContactsService contactsService, IAuthenticationService authenticationService)
+        public ContactListViewModel(IContactsService contactsService, IAuthenticationService authenticationService, IDialogService dialogService)
         {
             _authenticationService = authenticationService;
             _contactsService = contactsService;
+            _dialogService = dialogService;
         }
 
         public override async Task InitializeAsync()
         {
+            _isFilterActive = AppSettings.FilteredMembers;
+
             _user = Realm.Find<UserModel>(AppSettings.UserId);
             SetDivisionTabs(_user);
 
@@ -248,6 +257,27 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 .ToList();
         }
 
+        private async Task Filter()
+        {
+            try
+            {
+                var result = await _dialogService.ShowFilter(DialogTitle, DialogSwitchLabel, DialogDescription, DialogButton, _isFilterActive);
+
+
+                if (result == _isFilterActive)
+                    return;
+                else
+                {
+                    _isFilterActive = result;
+                    AppSettings.FilteredMembers = result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
         private bool CanExecute(object value) => !IsBusy;
 
         public enum ContactEventType
@@ -260,6 +290,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         #region Resources
 
         public string Title => L10N.Localize("Contacts_Title");
+
+        private string DialogTitle => L10N.Localize("Contacts_DialogTitle");
+        private string DialogSwitchLabel => L10N.Localize("Contacts_DialogSwitchLabel");
+        private string DialogDescription => L10N.Localize("Contacts_DialogDescription");
+        private string DialogButton => L10N.Localize("Contacts_DialogButton");
 
         #endregion
     }

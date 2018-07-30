@@ -301,6 +301,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_1x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_2x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -386,6 +390,7 @@
     <Folder Include="Resources\Assets.xcassets\user_chat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\search.imageset\" />
     <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\contacts_filter.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -438,6 +443,7 @@
     <InterfaceDefinition Include="Views\CustomViews\TabBarView\TabBarView.xib" />
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -679,6 +685,10 @@
       <DependentUpon>ContactsCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\ContactsSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.designer.cs">
+      <DependentUpon>FilterContactsViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

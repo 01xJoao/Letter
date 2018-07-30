@@ -12,8 +12,8 @@ namespace LetterApp.iOS.Services
 {
     public class DialogService : IDialogService
     {
-        LOTAnimationView _lottieAnimation;
-        UIView _view;
+        private LOTAnimationView _lottieAnimation;
+        private UIView _view;
 
         public void ShowAlert(string title, AlertType alertType, float duration)
         {
@@ -52,6 +52,16 @@ namespace LetterApp.iOS.Services
 
             var questionView = new QuestionViewController(title, buttonText, val => tcs.TrySetResult(val), questionType);
             questionView.Show();
+
+            return tcs.Task;
+        }
+
+        public Task<bool> ShowFilter(string title = "", string switchText = "", string descriptionText = "", string buttonText = "", bool isActive = true)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var filterView = new FilterContactsViewController(title, switchText, descriptionText, buttonText, isActive ,val => tcs.TrySetResult(val));
+            filterView.Show();
 
             return tcs.Task;
         }

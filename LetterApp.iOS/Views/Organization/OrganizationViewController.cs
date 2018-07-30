@@ -91,8 +91,7 @@ namespace LetterApp.iOS.Views.Organization
         {
             base.ViewWillAppear(animated);
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.White };
-            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
-            this.NavigationItem.LeftBarButtonItem = backButton;
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
             this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
             this.NavigationController.NavigationBar.Translucent = false;
