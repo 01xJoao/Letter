@@ -233,25 +233,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _currentPageViewIndex = visibleTab;
 
             if(_isKeyboardVisible)
-                SetGestureRecugnizer();
+                SetGestureRecognizer();
             
             _visibleViewController = _pageViewController.ViewControllers[0];
-        }
-
-        private void SetGestureRecugnizer()
-        {
-            var alreadyHasGesture = false;
-            foreach (var ges in _tableViews[_currentPageViewIndex].GestureRecognizers)
-            {
-                if (ges == gesture)
-                {
-                    alreadyHasGesture = true;
-                    break;
-                }
-            }
-
-            if (!alreadyHasGesture)
-                _tableViews[_currentPageViewIndex].AddGestureRecognizer(gesture);
         }
 
         private void UpdateTabBar()
@@ -315,6 +299,24 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(gesture);
         }
 
+        private void SetGestureRecognizer(bool shouldRemove = false)
+        {
+            var alreadyHasGesture = false;
+            foreach (var ges in _tableViews[_currentPageViewIndex].GestureRecognizers)
+            {
+                if (ges == gesture)
+                {
+                    alreadyHasGesture = true;
+                    break;
+                }
+            }
+
+            if (!alreadyHasGesture)
+                _tableViews[_currentPageViewIndex].AddGestureRecognizer(gesture);
+            else if (alreadyHasGesture && shouldRemove)
+                _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(gesture);
+        }
+
         [Export("scrollViewDidScroll:")]
         public virtual void Scrolled(UIScrollView scrollView)
         {
@@ -329,7 +331,6 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
         {
             var height = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
-
             var heghtForSubview = PhoneModelExtensions.IsIphoneX() ? 17.5f : 30;
 
             if(!_isSearchActive)
@@ -347,7 +348,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                );
             }
 
-            SetGestureRecugnizer();
+            SetGestureRecognizer();
             _isSearchActive = true;
             _isKeyboardVisible = true;
         }
@@ -355,6 +356,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private void OnSearchBar_OnEditingStopped(object sender, EventArgs e)
         {
             _isKeyboardVisible = false;
+            SetGestureRecognizer(true);
         }
 
         private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
