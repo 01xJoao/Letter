@@ -197,7 +197,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
 
             _tabScrollView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
-            _tabScrollView.ContentSize = new CGSize(sizeForTab * _totalTabs, LocalConstants.Contacts_TabHeight);
+            _tabScrollView.ContentSize = new CGSize(sizeForTab * _totalTabs, _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight);
             _tabScrollView.AutosizesSubviews = false;
             _tabScrollView.LayoutIfNeeded();
 
@@ -338,19 +338,12 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
         {
-            var height = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
-            var heghtForSubview = PhoneModelExtensions.IsIphoneX() ? 17.5f : 30;
-
             if(!_isSearchActive)
             {
-                _tabScrollTopConstraint.Constant = height;
+                _tabScrollTopConstraint.Constant = _heightForAnimationTab;
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
                    () => {
-
-                    if(_totalTabs == 1)
-                        _tabScrollView.Subviews[0].Frame = new CGRect(_tabScrollView.Frame.X, _tabScrollView.Frame.Y - heghtForSubview, _tabScrollView.Frame.Width, _tabScrollTopConstraint.Constant);
-                  
-                    _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y + height, _barView.Frame.Width, _barView.Frame.Height);
+                        _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y + _heightForAnimationTab, _barView.Frame.Width, _barView.Frame.Height);
                         this.View.LayoutIfNeeded();
                    }, null
                );
@@ -369,18 +362,12 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
         {
-            var height = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
-
             if (_isSearchActive)
             {
                 _tabScrollTopConstraint.Constant = 0;
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
-                   () =>
-                   {
-                    if(_totalTabs == 1)
-                        _tabScrollView.Subviews[0].Frame = _tabScrollView.Frame;
-                  
-                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - height, _barView.Frame.Width, _barView.Frame.Height);
+                   () => {
+                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - _heightForAnimationTab, _barView.Frame.Width, _barView.Frame.Height);
                        this.View.LayoutIfNeeded();
                    }, null
                );
