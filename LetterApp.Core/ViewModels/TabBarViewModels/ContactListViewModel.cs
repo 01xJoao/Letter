@@ -22,6 +22,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private bool _isFilterActive;
         private DateTime _lastContactsUpdate;
 
+
         private bool _updateTabBar;
         public bool UpdateTabBar
         {
@@ -82,7 +83,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task InitializeAsync()
         {
-            _lastContactsUpdate = AppSettings.LastContactsUpdate;
+            _lastContactsUpdate = default(DateTime);
             _isFilterActive = AppSettings.FilteredMembers;
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
@@ -104,7 +105,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
-            if (DateTime.Now < _lastContactsUpdate)
+            if (DateTime.Now < _lastContactsUpdate && !AppSettings.UpdateContacts)
                 return;
 
             try
@@ -141,9 +142,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 if (shouldUpdateView)
                     RaisePropertyChanged(nameof(ConfigureView));
 
-
-                AppSettings.LastContactsUpdate = DateTime.Now.AddMinutes(20);
-                _lastContactsUpdate = AppSettings.LastContactsUpdate;
+                _lastContactsUpdate = DateTime.Now.AddMinutes(10);
+                AppSettings.UpdateContacts = false;
             }
             catch (Exception ex)
             {

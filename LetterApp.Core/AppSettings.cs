@@ -83,10 +83,10 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(FilteredMembers), value);
         }
 
-        public static DateTime LastContactsUpdate
+        public static bool UpdateContacts
         {
-            get => Preferences.Get(nameof(LastContactsUpdate), default(DateTime));
-            set => Preferences.Set(nameof(LastContactsUpdate), value);
+            get => Preferences.Get(nameof(UpdateContacts), true);
+            set => Preferences.Set(nameof(UpdateContacts), value);
         } 
 
         public static void Logout()
@@ -103,7 +103,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
             Preferences.Remove(nameof(FilteredMembers));
-            Preferences.Remove(nameof(LastContactsUpdate));
+            Preferences.Remove(nameof(UpdateContacts));
         }
     }
 }
