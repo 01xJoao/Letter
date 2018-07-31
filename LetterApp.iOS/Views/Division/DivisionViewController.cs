@@ -20,6 +20,7 @@ namespace LetterApp.iOS.Views.Division
             base.ViewDidLoad();
 
             Loading(true);
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -72,7 +73,6 @@ namespace LetterApp.iOS.Views.Division
             UIButtonExtensions.SetupButtonAppearance(_button2, Colors.MainBlue, 15f, ViewModel.CallLabel);
 
             _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
-            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
 
             _button1.TouchUpInside -= OnButton1_TouchUpInside;

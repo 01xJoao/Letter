@@ -18,7 +18,9 @@ namespace LetterApp.iOS.Views.Organization
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             Loading(true);
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -61,7 +63,6 @@ namespace LetterApp.iOS.Views.Organization
             }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
             _tableView.Source = new OrganizationSource(_tableView, ViewModel.ProfileOrganization, ViewModel.ProfileDetails);
-            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
 
             _buttonView1.BackgroundColor = Colors.ConnectViewButton1;
