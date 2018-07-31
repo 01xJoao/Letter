@@ -391,6 +391,7 @@
     <Folder Include="Resources\Assets.xcassets\search.imageset\" />
     <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
     <Folder Include="Resources\Assets.xcassets\contacts_filter.imageset\" />
+    <Folder Include="Views\Member\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -444,6 +445,7 @@
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
+    <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -688,6 +690,10 @@
     <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.cs" />
     <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.designer.cs">
       <DependentUpon>FilterContactsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Member\MemberViewController.cs" />
+    <Compile Include="Views\Member\MemberViewController.designer.cs">
+      <DependentUpon>MemberViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
