@@ -111,8 +111,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 foreach (var res in result)
                 {
                     res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+
                     var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
-                    res.SearchContainer = $"{res?.FirstName?.ToLower()} {res?.LastName?.ToLower()} {contacNumber} {res?.Email?.ToLower()} {res?.Position?.ToLower()}";
+
+                    string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+
+                    stringSearch = StringUtils.NormalizeString(stringSearch);
+
+                    res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
+
+                    //res.SearchContainer = $"{res?.FirstName?.ToLower()} {res?.LastName?.ToLower()} {res?.Position?.ToLower()} {contacNumber} {res?.Email?.ToLower()}";
+
                     Realm.Write(() => Realm.Add(res, true));
                 }
 
@@ -245,6 +254,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private void Search(string search)
         {
             string[] searchSplit = search.ToLower().Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+            searchSplit = StringUtils.NormalizeString(searchSplit);
 
              var users = new List<GetUsersInDivisionModel>();
 
