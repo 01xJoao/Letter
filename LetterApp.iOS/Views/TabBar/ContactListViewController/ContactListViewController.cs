@@ -23,6 +23,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private UIPanGestureRecognizer gesture = new UIPanGestureRecognizer();
         private UISearchController _serach;
         private UIViewController _visibleViewController;
+        private UITextField _textFieldInsideSearchBar;
 
         private int _heightForAnimationTab = PhoneModelExtensions.IsIphoneX() ? 40 : 20;
         private bool _isSearchActive;
@@ -70,10 +71,12 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _serach.SearchBar.TintColor = Colors.White;
             _serach.SearchBar.BarStyle = UIBarStyle.Black;
 
-            var textFieldInsideSearchBar = _serach.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
-            textFieldInsideSearchBar.AttributedPlaceholder = new NSAttributedString(ViewModel.SearchLabel, foregroundColor: UIColor.White);
-            textFieldInsideSearchBar.ReturnKeyType = UIReturnKeyType.Done;
-            var backgroundField = textFieldInsideSearchBar.Subviews[0];
+            _textFieldInsideSearchBar = _serach.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
+            _textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
+            _textFieldInsideSearchBar.ReturnKeyType = UIReturnKeyType.Done;
+            _textFieldInsideSearchBar.ClearButtonMode = UITextFieldViewMode.Never;
+
+            var backgroundField = _textFieldInsideSearchBar.Subviews[0];
             backgroundField.Alpha = 0f;
 
             _serach.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
@@ -336,6 +339,24 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             }
         }
 
+        private void SetSearchView()
+        {
+            if(_isKeyboardVisible && _isSearchActive)
+            {
+                if(_textFieldInsideSearchBar.Text == ViewModel.SearchLabel)
+                {
+                    _textFieldInsideSearchBar.Text = string.Empty;
+                    _textFieldInsideSearchBar.ClearButtonMode = UITextFieldViewMode.Always;
+                }
+            }
+
+            if(!_isSearchActive && !_isKeyboardVisible)
+            {
+                _textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
+                _textFieldInsideSearchBar.ClearButtonMode = UITextFieldViewMode.Never;
+            }
+        }
+
         private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
         {
             if(!_isSearchActive)
@@ -352,6 +373,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             SetGestureRecognizer();
             _isSearchActive = true;
             _isKeyboardVisible = true;
+            SetSearchView();
         }
 
         private void OnSearchBar_OnEditingStopped(object sender, EventArgs e)
@@ -364,16 +386,17 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         {
             if (_isSearchActive)
             {
+                _isKeyboardVisible = false;
+                _isSearchActive = false;
+
                 _tabScrollTopConstraint.Constant = 0;
                 UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
                    () => {
                        _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - _heightForAnimationTab, _barView.Frame.Width, _barView.Frame.Height);
                        this.View.LayoutIfNeeded();
-                   }, null
+                }, SetSearchView
                );
             }
-
-            _isSearchActive = false;
         }
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)

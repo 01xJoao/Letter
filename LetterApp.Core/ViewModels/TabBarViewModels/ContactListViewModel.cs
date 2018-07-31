@@ -256,6 +256,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void Search(string search)
         {
+            if (search == SearchLabel)
+                return;
+            
             string[] searchSplit = search.ToLower().Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
             searchSplit = StringUtils.NormalizeString(searchSplit);
