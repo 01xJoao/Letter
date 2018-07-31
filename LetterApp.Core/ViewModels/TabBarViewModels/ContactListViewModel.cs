@@ -20,6 +20,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private IDialogService _dialogService;
 
         private bool _isFilterActive;
+        private DateTime _lastContactsUpdate;
 
         private bool _updateTabBar;
         public bool UpdateTabBar
@@ -81,6 +82,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task InitializeAsync()
         {
+            _lastContactsUpdate = AppSettings.LastContactsUpdate;
             _isFilterActive = AppSettings.FilteredMembers;
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
@@ -102,6 +104,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
+            if (DateTime.Now < _lastContactsUpdate)
+                return;
+
             try
             {
                 var shouldUpdateView = false;
@@ -113,15 +118,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
 
                     var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
-
                     string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
-
                     stringSearch = StringUtils.NormalizeString(stringSearch);
-
                     res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
-
-                    //res.SearchContainer = $"{res?.FirstName?.ToLower()} {res?.LastName?.ToLower()} {res?.Position?.ToLower()} {contacNumber} {res?.Email?.ToLower()}";
-
                     Realm.Write(() => Realm.Add(res, true));
                 }
 
@@ -141,6 +140,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 if (shouldUpdateView)
                     RaisePropertyChanged(nameof(ConfigureView));
+
+
+                AppSettings.LastContactsUpdate = DateTime.Now.AddMinutes(20);
+                _lastContactsUpdate = AppSettings.LastContactsUpdate;
             }
             catch (Exception ex)
             {
@@ -239,8 +242,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     return;
                 else
                 {
-                    _isFilterActive = result;
                     AppSettings.FilteredMembers = result;
+                    _isFilterActive = result;
                     SetContactList(_unfilteredUsers);
                     RaisePropertyChanged(nameof(IsSearching));
                 }
