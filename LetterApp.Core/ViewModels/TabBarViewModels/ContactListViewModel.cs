@@ -225,7 +225,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             switch (user.Item1)
             {
                 case ContactEventType.OpenProfile:
-                    await NavigationService.NavigateAsync<MembersProfileViewModel, int>(user.Item2);
+                    await NavigationService.NavigateAsync<MemberViewModel, int>(user.Item2);
                     break;
                 default:
                     break;
