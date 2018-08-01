@@ -33,7 +33,6 @@ namespace LetterApp.iOS.Views.Division
                 case nameof(ViewModel.Division):
                     SetupView();
                     break;
-
                 default:
                     break;
             }
@@ -72,14 +71,14 @@ namespace LetterApp.iOS.Views.Division
             UIButtonExtensions.SetupButtonAppearance(_button1, Colors.MainBlue, 15f, ViewModel.SendEmailLabel);
             UIButtonExtensions.SetupButtonAppearance(_button2, Colors.MainBlue, 15f, ViewModel.CallLabel);
 
-            _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
-            _tableView.ReloadData();
-
             _button1.TouchUpInside -= OnButton1_TouchUpInside;
             _button1.TouchUpInside += OnButton1_TouchUpInside;
 
             _button2.TouchUpInside -= OnButton2_TouchUpInside;
             _button2.TouchUpInside += OnButton2_TouchUpInside;   
+
+            _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
+            _tableView.ReloadData();
         }
 
         private void OnButton1_TouchUpInside(object sender, EventArgs e)
@@ -125,9 +124,10 @@ namespace LetterApp.iOS.Views.Division
 
         public override void ViewDidDisappear(bool animated)
         {
+            base.ViewDidDisappear(animated);
+
             if (this.IsMovingFromParentViewController)
             {
-                base.ViewDidDisappear(animated);
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }

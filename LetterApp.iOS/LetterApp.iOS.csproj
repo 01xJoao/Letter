@@ -695,6 +695,7 @@
     <Compile Include="Views\Member\MemberViewController.designer.cs">
       <DependentUpon>MemberViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sources\MemberSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

@@ -678,5 +678,17 @@
   {
     "key": "Contacts_Search",
     "translated": "Search by name, email, position..."
+  },
+  {
+    "key": "Member_NoDescription",
+    "translated": "The user doesn't have any description."
+  },
+  {
+    "key": "Member_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Member_Chat",
+    "translated": "Chat"
   }
 ]

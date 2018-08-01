@@ -109,9 +109,10 @@ namespace LetterApp.iOS.Views.Organization
 
         public override void ViewDidDisappear(bool animated)
         {
+            base.ViewDidDisappear(animated);
+
             if (this.IsMovingFromParentViewController)
             {
-                base.ViewDidDisappear(animated);
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }
