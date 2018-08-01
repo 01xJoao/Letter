@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -23,7 +25,7 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _memberProfileModel, value);
         }
 
-        public MemberDetailsModel MemberDetails { get; private set; }
+        public ProfileDetailsModel MemberDetails { get; private set; }
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
@@ -39,14 +41,73 @@ namespace LetterApp.Core.ViewModels
             _userId = userId;
         }
 
-        public override async Task InitializeAsync()
-        {
-
-        }
-
         public override async Task Appearing()
         {
+            _memberProfileModel = Realm.Find<MembersProfileModel>(_userId);
+            SetupModels(_memberProfileModel);
 
+            try
+            {
+                var result = await _memberService.GetMemberProfile(_userId);
+
+                if(result.StatusCode == 200)
+                {
+                    Realm.Write(() => Realm.Add(result, true));
+
+                    if(_memberProfileModel == null || _memberProfileModel.LastUpdateTicks < result.LastUpdateTicks)
+                    {
+                        SetupModels(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private void SetupModels(MembersProfileModel memberProfileModel)
+        {
+            if (memberProfileModel == null)
+                return;
+
+            var profileDetails = new List<ProfileDetail>();
+
+            if (!string.IsNullOrEmpty(memberProfileModel.Position))
+            {
+                var profileDetail1 = new ProfileDetail();
+                profileDetail1.Description = Role;
+                profileDetail1.Value = memberProfileModel.Position;
+                profileDetails.Add(profileDetail1);
+            }
+
+            if (!string.IsNullOrEmpty(memberProfileModel.Email))
+            {
+                var profileDetail2 = new ProfileDetail();
+                profileDetail2.Description = Email;
+                profileDetail2.Value = memberProfileModel.Email;
+                profileDetails.Add(profileDetail2);
+            }
+
+            if (!string.IsNullOrEmpty(memberProfileModel.ContactNumber))
+            {
+                var profileDetail3 = new ProfileDetail();
+                profileDetail3.Description = Mobile;
+                profileDetail3.Value = memberProfileModel.ContactNumber;
+                profileDetails.Add(profileDetail3);
+            }
+
+            if (!string.IsNullOrEmpty(memberProfileModel.Divisions))
+            {
+                var profileDetail4 = new ProfileDetail();
+                profileDetail4.Description = DivisionsLabel;
+                profileDetail4.Value = memberProfileModel.Divisions;
+                profileDetails.Add(profileDetail4);
+            }
+
+            MemberDetails = new ProfileDetailsModel(profileDetails);
+            _memberProfileModel = null;
+            MemberProfileModel = memberProfileModel;
         }
 
         private async Task CloseView()

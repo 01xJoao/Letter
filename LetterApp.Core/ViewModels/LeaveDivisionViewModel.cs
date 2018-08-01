@@ -57,7 +57,6 @@ namespace LetterApp.Core.ViewModels
 
                 if (res.StatusCode == 206)
                 {
-                    AppSettings.UpdateContacts = true;
                     Realm.Write(() => _user.Divisions.Remove(division));
 
                     var userDivisions = _user.Divisions.Any(x => x.IsDivisonActive == true && (x.IsUserInDivisionActive == true || x.IsUnderReview == true));

@@ -83,12 +83,6 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(FilteredMembers), value);
         }
 
-        public static bool UpdateContacts
-        {
-            get => Preferences.Get(nameof(UpdateContacts), true);
-            set => Preferences.Set(nameof(UpdateContacts), value);
-        } 
-
         public static void Logout()
         {
             Preferences.Remove(nameof(IsUserLogged));
@@ -103,7 +97,6 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
             Preferences.Remove(nameof(FilteredMembers));
-            Preferences.Remove(nameof(UpdateContacts));
         }
     }
 }

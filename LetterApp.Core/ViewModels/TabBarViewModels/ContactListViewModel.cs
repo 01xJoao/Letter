@@ -105,7 +105,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
-            if (DateTime.Now < _lastContactsUpdate && !AppSettings.UpdateContacts)
+            if (DateTime.Now < _lastContactsUpdate && _user.Divisions.Count == _allDivisionsUser.Count)
                 return;
 
             try
@@ -143,7 +143,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     RaisePropertyChanged(nameof(ConfigureView));
 
                 _lastContactsUpdate = DateTime.Now.AddMinutes(10);
-                AppSettings.UpdateContacts = false;
             }
             catch (Exception ex)
             {
