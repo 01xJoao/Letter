@@ -64,6 +64,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     {
                         SetupModels(user);
                         RaisePropertyChanged(nameof(UpdateView));
+                        _updateView = false;
                     }
                 }
             }
