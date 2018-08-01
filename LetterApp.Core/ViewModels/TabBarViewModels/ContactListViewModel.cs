@@ -22,7 +22,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private bool _isFilterActive;
         private DateTime _lastContactsUpdate;
 
-
         private bool _updateTabBar;
         public bool UpdateTabBar
         {
@@ -191,7 +190,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 if (division.IsDivisonActive && division.IsUserInDivisionActive)
                 {
                     _allDivisionsUser.Add(division.DivisionID);
-
                     _userDivisions.Add(new List<GetUsersInDivisionModel>());
                 }
             }
@@ -200,7 +198,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private void SettingSwitchDivision(int viewIndex)
         {
             object boolObject = false;
-
             SwitchDivision(boolObject, viewIndex);
         }
 
@@ -210,7 +207,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             tab.IsSelected = false;
 
             var tabSelected = ContactTab.Find(x => x.DivisionIndex == division);
-
             tabSelected.IsSelected = true;
 
             if ((bool)shouldUpdateView)

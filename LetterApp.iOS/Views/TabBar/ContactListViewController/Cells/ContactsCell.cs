@@ -28,11 +28,20 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 
             _imageView.Image?.Dispose();
 
-            var picture = string.Copy(user.Picture); 
+            if(!string.IsNullOrEmpty(user?.Picture))
+            {
+                var picture = string.Copy(user.Picture); 
 
-            ImageService.Instance.LoadStream((token) => {
-                return ImageHelper.GetStreamFromImageByte(token, picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+                ImageService.Instance.LoadStream((token) => {
+                    return ImageHelper.GetStreamFromImageByte(token, picture);
+                }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+
+                picture = null;
+            }
+            else
+            {
+                _imageView.Image = UIImage.FromBundle("warning_image");
+            }
 
             _chatImage.Image = UIImage.FromBundle("user_chat");
             _callImage.Image = UIImage.FromBundle("tabbar_call_selected");
@@ -43,14 +52,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
             _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
             _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
 
-            //_profileButton.TouchUpInside -= OnProfileButton_TouchUpInside;
-            //_profileButton.TouchUpInside += OnProfileButton_TouchUpInside;
         }
-
-        //private void OnProfileButton_TouchUpInside(object sender, EventArgs e)
-        //{
-        //    _contactEventHandler?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.OpenProfile, _userId));
-        //}
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)
         {

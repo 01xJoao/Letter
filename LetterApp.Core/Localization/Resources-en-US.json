@@ -65,7 +65,7 @@
   },
   {
     "key": "Code_E116",
-    "translated": "No positions found."
+    "translated": "No roles found."
   },
   {
     "key": "Code_E117",
@@ -97,7 +97,7 @@
   },
   {
     "key": "Code_S203",
-    "translated": "New position defined."
+    "translated": "New role set."
   },
   {
     "key": "Code_S204",
@@ -113,7 +113,7 @@
   },
   {
     "key": "Code_S207",
-    "translated": "Account successfully created! \n We sent an email with an activation code."
+    "translated": "Account successfully created! \n An email with an activation code was sent."
   },
   {
     "key": "Code_S208",
@@ -145,7 +145,7 @@
   },
   {
     "key": "OnBoardingViewModel_CallSubtitle",
-    "translated": "Send private messages or call someone for free!"
+    "translated": "Send instant messages or call someone for free!"
   },
   {
     "key": "OnBoardingViewModel_SignIn",
@@ -197,7 +197,7 @@
   },
   {
     "key": "LoginViewModel_EmailHint",
-    "translated": "Organization email"
+    "translated": "Email"
   },
   {
     "key": "LoginViewModel_SendCode",
@@ -249,7 +249,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_EmailConfirmation",
-    "translated": "We sent an email with a verification code. \n (Please check your SPAM folder)"
+    "translated": "An email with a verification code was sent. \n (Please check your SPAM folder)"
   },
   {
     "key": "RecoverPasswordViewModel_PasswordMatch",
@@ -677,7 +677,7 @@
   },
   {
     "key": "Contacts_Search",
-    "translated": "Search by name, email, position..."
+    "translated": "Search by name, email, role..."
   },
   {
     "key": "Member_NoDescription",
