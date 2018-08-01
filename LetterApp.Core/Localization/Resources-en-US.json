@@ -293,11 +293,11 @@
   },
   {
     "key": "RegisterViewModel_UserAgreement",
-    "translated": "You must accept the terms and conditions."
+    "translated": "You must accept the Terms and Conditions."
   },
   {
     "key": "RegisterViewModel_InvalidString",
-    "translated": "Numbers and Symbols (like !@#$?%) are only accepted on the password field."
+    "translated": "Numbers and symbols (like !@#$?%) are only accepted on the password field."
   },
   {
     "key": "RegisterViewModel_DamnEmojis",
@@ -325,7 +325,7 @@
   },
   {
     "key": "ActivateAccountViewModel_ActivationCompleted",
-    "translated": "your account has been activated! \n Please Sign In."
+    "translated": "Your account has been activated! \n Please Sign In."
   },
   {
     "key": "SelectOrganization_AccessButton",

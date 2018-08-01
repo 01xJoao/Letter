@@ -217,7 +217,7 @@
   },
   {
     "key": "RecoverPasswordViewModel_NewPassAgainTitle",
-    "translated": "Repeat new password"
+    "translated": "Repetir a nova palavra-passe"
   },
   {
     "key": "RecoverPasswordViewModel_EmailAddress",
@@ -249,135 +249,135 @@
   },
   {
     "key": "RecoverPasswordViewModel_EmailConfirmation",
-    "translated": "We sent an email with a verification code. \n (Please check your SPAM folder)"
+    "translated": "Foi enviado um email com o código de verificação. (Verifique a pasta de SPAM)"
   },
   {
     "key": "RecoverPasswordViewModel_PasswordMatch",
-    "translated": "Passwords don't match."
+    "translated": "As palavras-passe não coincidem."
   },
   {
     "key": "RecoverPasswordViewModel_PasswordWeak",
-    "translated": "Password not strong enought. \n Must be at least 8 characters long."
+    "translated": "Palavra-passe não é suficiente forte. \n Deverá ter no mínimo 8 caracteres."
   },
   {
     "key": "RecoverPasswordViewModel_PasswordChanged",
-    "translated": "Password changed successfully! \n Please Sign In."
+    "translated": "Palavra-passe alterada com sucesso! \n Inicie sessão."
   },
   {
     "key": "RegisterViewModel_FirstName",
-    "translated": "First name"
+    "translated": "Primeiro nome"
   },
   {
     "key": "RegisterViewModel_LastName",
-    "translated": "Last name"
+    "translated": "Último nome"
   },
   {
     "key": "RegisterViewModel_PhoneNumber",
-    "translated": "Phone number"
+    "translated": "Número de telefone"
   },
   {
     "key": "RegisterViewModel_Agreement",
-    "translated": "By creating an account, you agree to <u>Letter's User Agreement</u> and <u>Privacy Policy</u>, and confirm that you're at least 18 years old."
+    "translated": "Ao criar uma conta, está a aceitar os <u> Termos de Utilização </u> a <u> Política de Privacidade </u>, e confirma que tem mais de 18 anos."
   },
   {
     "key": "RegisterViewModel_Title",
-    "translated": "Create Account"
+    "translated": "Criar Conta"
   },
   {
     "key": "RegisterViewModel_CreateAccountButton",
-    "translated": "Agree & Create Account"
+    "translated": "Aceitar & Criar Conta"
   },
   {
     "key": "RegisterViewModel_EmptyForm",
-    "translated": "Please fill in all the fields."
+    "translated": "Por favor preencha todos os campos."
   },
   {
     "key": "RegisterViewModel_UserAgreement",
-    "translated": "You must accept the terms and conditions."
+    "translated": "Você deve aceitar os Termos e Condições."
   },
   {
     "key": "RegisterViewModel_InvalidString",
-    "translated": "Numbers and Symbols (like !@#$?%) are only accepted on the password field."
+    "translated": "Números e símbolos (como !@#$?%) apenas são permitidos no campo da palavra-passe."
   },
   {
     "key": "RegisterViewModel_DamnEmojis",
-    "translated": "Please don't insert emojis 😘"
+    "translated": "Por favor não insira emojis"
   },
   {
     "key": "ActivateAccountViewModel_Title",
-    "translated": "Activate Account"
+    "translated": "Activar Conta"
   },
   {
     "key": "ActivateAccountViewModel_Submit",
-    "translated": "Submit"
+    "translated": "Submeter"
   },
   {
     "key": "ActivateAccountViewModel_PlaceHolder",
-    "translated": "Activation code"
+    "translated": "Código de activação"
   },
   {
     "key": "ActivateAccountViewModel_ResendCodeButton",
-    "translated": "Resend code"
+    "translated": "Reenviar código"
   },
   {
     "key": "ActivateAccountViewModel_ActivateLabel",
-    "translated": "You need to activate your account. \n Missing the email? Have you checked your Spam folder?"
+    "translated": "Você tem de activar a sua conta. \n Não encontra o email? Já verificou na pasta de SPAM?"
   },
   {
     "key": "ActivateAccountViewModel_ActivationCompleted",
-    "translated": "your account has been activated! \n Please Sign In."
+    "translated": "A sua conta foi activada! \n Inicie sessão."
   },
   {
     "key": "SelectOrganization_AccessButton",
-    "translated": "Access"
+    "translated": "Aceder"
   },
   {
     "key": "SelectOrganization_TitleLabel",
-    "translated": "Enter organization name or email you want to join:"
+    "translated": "Insira o nome ou email da organização que pretende aceder:"
   },
   {
     "key": "SelectOrganization_TextHint",
-    "translated": "Type organization..."
+    "translated": "Insira a organização..."
   },
   {
     "key": "SelectOrganization_Organization",
-    "translated": "Organization"
+    "translated": "Organização"
   },
   {
     "key": "SelectOrganization_AccessHint",
-    "translated": "Access Code"
+    "translated": "Código de acesso"
   },
   {
     "key": "SelectOrganization_EnterButton",
-    "translated": "Enter"
+    "translated": "Entrar"
   },
   {
     "key": "SelectDivision_PrivateLabel",
-    "translated": "Private Divisions"
+    "translated": "Divisões Privadas"
   },
   {
     "key": "SelectDivision_PublicLabel",
-    "translated": "Public Divisions"
+    "translated": "Divisões Publicas"
   },
   {
     "key": "SelectDivision_InsertText",
-    "translated": "Access code"
+    "translated": "Código de acesso"
   },
   {
     "key": "SelectDivision_SubmitButton",
-    "translated": "Join"
+    "translated": "Entrar"
   },
   {
     "key": "SelectDivision_LeaveOrganization",
-    "translated": "Leave Organization"
+    "translated": "Sair da Organização"
   },
   {
     "key": "SelectDivision_TitleLabel",
-    "translated": "Select Division"
+    "translated": "Selecionar Divisão"
   },
   {
     "key": "SelectDivision_TitleMainLabel",
-    "translated": "Select Main Division"
+    "translated": "Selecionar Divisão Principal"
   },
   {
     "key": "SelectDivision_EmailLabel",
@@ -385,79 +385,79 @@
   },
   {
     "key": "SelectDivision_MembersLabel",
-    "translated": "Users"
+    "translated": "Utilizadores"
   },
   {
     "key": "SelectDivision_DescriptionLabel",
-    "translated": "Description:"
+    "translated": "Descrição:"
   },
   {
     "key": "SelectPosition_TitleLabel",
-    "translated": "Select your role"
+    "translated": "Selecione a sua posição"
   },
   {
     "key": "SelectPosition_Select",
-    "translated": "Select"
+    "translated": "Selecionar"
   },
   {
     "key": "SelectPosition_SelectPosition",
-    "translated": "Role"
+    "translated": "Posição"
   },
   {
     "key": "Pending_Title",
-    "translated": "Account"
+    "translated": "Conta"
   },
   {
     "key": "Pending_Subtitle",
-    "translated": "Your account is \n pending for approval"
+    "translated": "A sua conta \n está em revisão"
   },
   {
     "key": "Pending_Description",
-    "translated": "Your will receive an confirmation email."
+    "translated": "Você receberá um email de confirmação."
   },
   {
     "key": "Pending_Help",
-    "translated": "Need help?"
+    "translated": "Precisa de ajuda?"
   },
   {
     "key": "Pending_LeaveButton",
-    "translated": "Leave division"
+    "translated": "Sair da divisão"
   },
   {
     "key": "Pending_LogoutButton",
-    "translated": "Sign out"
+    "translated": "Terminar sessão"
   },
   {
     "key": "Pending_ContinueButton",
-    "translated": "Continue"
+    "translated": "Continuar"
   },
   {
     "key": "Pending_Updated",
-    "translated": "Your account is under review."
+    "translated": "A sua conta está em revisão."
   },
   {
     "key": "DialogLogout_Question",
-    "translated": "Do you want to sign out?"
+    "translated": "Você pretende terminar sessão?"
   },
   {
     "key": "DialogLogout_Button",
-    "translated": "Sign Out"
+    "translated": "Sair"
   },
   {
     "key": "DialogOrganization_Question",
-    "translated": "Do you want to leave the organization?"
+    "translated": "Você pretende sair da organização?"
   },
   {
     "key": "DialogDelete_Question",
-    "translated": "Do you want to delete your account?"
+    "translated": "Você pretende apagar a sua conta?"
   },
   {
     "key": "UserProfile_DescriptionHint",
-    "translated": "Describe yourself in 40 characters."
+    "translated": "Descreva-se em 40 caracteres."
   },
   {
     "key": "UserProfile_Role",
-    "translated": "Role"
+    "translated": "Posição"
   },
   {
     "key": "UserProfile_Email",
@@ -465,95 +465,95 @@
   },
   {
     "key": "UserProfile_Mobile",
-    "translated": "Mobile"
+    "translated": "Contacto"
   },
   {
     "key": "UserProfile_Divisions",
-    "translated": "Divisions"
+    "translated": "Divisões"
   },
   {
     "key": "UserProfile_SettingImage",
-    "translated": "Setting up new image"
+    "translated": "A definir nova imagem."
   },
   {
     "key": "UserSettings_SettingsTitle",
-    "translated": "Settings"
+    "translated": "Definições"
   },
   {
     "key": "UserSettings_AccountSection",
-    "translated": "Account"
+    "translated": "Conta"
   },
   {
     "key": "UserSettings_NotificationsSection",
-    "translated": "Notifications"
+    "translated": "Notificações"
   },
   {
     "key": "UserSettings_InformationSection",
-    "translated": "Information"
+    "translated": "Informação"
   },
   {
     "key": "UserSettings_DangerZoneSection",
-    "translated": "Danger Zone"
+    "translated": "Zona Perigosa"
   },
   {
     "key": "UserSettings_PhoneNumberLabel",
-    "translated": "Phone number"
+    "translated": "Número de telemóvel"
   },
   {
     "key": "UserSettings_AllowPhoneCallsLabel",
-    "translated": "Allow phone calls"
+    "translated": "Permitir telefonemas"
   },
   {
     "key": "UserSettings_AllowPhoneCallsDescription",
-    "translated": "When on, users can see your phone number and call you."
+    "translated": "Quando ligado, utilizadores podem ver o seu número e telefonar."
   },
   {
     "key": "UserSettings_PasswordLabel",
-    "translated": "Password"
+    "translated": "Palavra-Passe"
   },
   {
     "key": "UserSettings_MessageLabel",
-    "translated": "Message notifications"
+    "translated": "Notificação de mensagem"
   },
   {
     "key": "UserSettings_CallLabel",
-    "translated": "Call notifications"
+    "translated": "Notificação de telefonema"
   },
   {
     "key": "UserSettings_GroupLabel",
-    "translated": "Group notifications"
+    "translated": "Notificação de grupo"
   },
   {
     "key": "UserSettings_ContactUsLabel",
-    "translated": "Contact us"
+    "translated": "Contate-nos"
   },
   {
     "key": "UserSettings_TermsOfService",
-    "translated": "Terms of service"
+    "translated": "Termos de serviço"
   },
   {
     "key": "UserSettings_CreateOrgLabel",
-    "translated": "Create your own organization"
+    "translated": "Cria uma organização"
   },
   {
     "key": "UserSettings_SignOutLabel",
-    "translated": "Sign out"
+    "translated": "Terminar sessão"
   },
   {
     "key": "UserSettings_LeaveDivisionLabel",
-    "translated": "Leave divisions"
+    "translated": "Sair da divisão"
   },
   {
     "key": "UserSettings_LeaveOrgLabel",
-    "translated": "Leave organization"
+    "translated": "Sair da organização"
   },
   {
     "key": "UserSettings_DeleteAccountLabel",
-    "translated": "Delete account"
+    "translated": "Apagar conta"
   },
   {
     "key": "UserSettings_CellNumber",
-    "translated": "Invalid phone number."
+    "translated": "Número de telefone errado"
   },
   {
     "key": "ChangePassword_Title",
@@ -573,7 +573,7 @@
   },
   {
     "key": "UserSettings_Confirm",
-    "translated": "Insira a palavra-passe."
+    "translated": "Insira a palavra-passe para confirmar."
   },
   {
     "key": "LeaveDivision_Title",
@@ -609,7 +609,7 @@
   },
   {
     "key": "Division_Mobile",
-    "translated": "Número de telefone"
+    "translated": "Contacto"
   },
   {
     "key": "Division_Call",
@@ -653,7 +653,7 @@
   },
   {
     "key": "Organization_Mobile",
-    "translated": "Número de telefone"
+    "translated": "Contacto"
   },
   {
     "key": "Contacts_Title",
@@ -661,7 +661,7 @@
   },
   {
     "key": "Contacts_DialogTitle",
-    "translated": "Filtrar contactos"
+    "translated": "Filtrar Contactos"
   },
   {
     "key": "Contacts_DialogSwitchLabel",
