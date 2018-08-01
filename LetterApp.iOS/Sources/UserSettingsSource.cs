@@ -64,11 +64,13 @@ namespace LetterApp.iOS.Sources
                     {
                         case (int)Account.PhoneNumber: 
                             var phoneCell = tableView.DequeueReusableCell(PhoneNumberCell.Key) as PhoneNumberCell;
+                            phoneCell.SelectionStyle = UITableViewCellSelectionStyle.None;
                             phoneCell.Configure(_phoneModel);
                             cell = phoneCell;
                             break;
                         case (int)Account.AllowPhoneCalls:
                             var allowCallsCell = tableView.DequeueReusableCell(AllowPhoneCallsCell.Key) as AllowPhoneCallsCell;
+                            allowCallsCell.SelectionStyle = UITableViewCellSelectionStyle.None;
                             allowCallsCell.Configure(_allowCallsModel);
                             cell = allowCallsCell;
                             break;
@@ -81,9 +83,10 @@ namespace LetterApp.iOS.Sources
                     break;
 
                 case (int)Sections.Notifications:
-                    var notCell = tableView.DequeueReusableCell(SwitchCell.Key) as SwitchCell;
-                    notCell.Configure(_switchModel[indexPath.Row]);
-                    cell = notCell;
+                    var notificationCell = tableView.DequeueReusableCell(SwitchCell.Key) as SwitchCell;
+                    notificationCell.SelectionStyle = UITableViewCellSelectionStyle.None;
+                    notificationCell.Configure(_switchModel[indexPath.Row]);
+                    cell = notificationCell;
                     break;
                 case (int)Sections.Information:
                     var infoCell = tableView.DequeueReusableCell(LabelWithArrowCell.Key) as LabelWithArrowCell;
@@ -98,8 +101,28 @@ namespace LetterApp.iOS.Sources
                     break;
             }
 
-            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             return cell;
+        }
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            tableView.DeselectRow(indexPath, true);
+
+            if (indexPath.Section == (int)Sections.Account)
+            {
+                if(indexPath.Row == (int)Account.Password)
+                {
+                    _passwordTypeModel?.TypeEvent?.Invoke(this, _passwordTypeModel.Type);
+                }
+            }
+            else if(indexPath.Section == (int)Sections.Information)
+            {
+                _typeModelInformation[indexPath.Row]?.TypeEvent?.Invoke(this, _typeModelInformation[indexPath.Row].Type);
+            }
+            else if (indexPath.Section == (int)Sections.DangerZone)
+            {
+                _typeModelDanger[indexPath.Row]?.TypeEvent?.Invoke(this, _typeModelDanger[indexPath.Row].Type);
+            }
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

@@ -43,14 +43,14 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
             _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
             _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
 
-            _profileButton.TouchUpInside -= OnProfileButton_TouchUpInside;
-            _profileButton.TouchUpInside += OnProfileButton_TouchUpInside;
+            //_profileButton.TouchUpInside -= OnProfileButton_TouchUpInside;
+            //_profileButton.TouchUpInside += OnProfileButton_TouchUpInside;
         }
 
-        private void OnProfileButton_TouchUpInside(object sender, EventArgs e)
-        {
-            _contactEventHandler?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.OpenProfile, _userId));
-        }
+        //private void OnProfileButton_TouchUpInside(object sender, EventArgs e)
+        //{
+        //    _contactEventHandler?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.OpenProfile, _userId));
+        //}
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)
         {

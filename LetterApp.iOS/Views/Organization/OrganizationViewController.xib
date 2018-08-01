@@ -29,14 +29,14 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yUE-ha-PiR">
-                    <rect key="frame" x="123.5" y="25" width="127" height="127"/>
+                    <rect key="frame" x="123.5" y="15" width="127" height="127"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="127" id="6OH-N4-3Qp"/>
                         <constraint firstAttribute="width" secondItem="yUE-ha-PiR" secondAttribute="height" id="YhA-k5-H7b"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pkw-Dk-kUf">
-                    <rect key="frame" x="30" y="174" width="315" height="0.0"/>
+                    <rect key="frame" x="30" y="162" width="315" height="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -90,19 +90,19 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pFK-eL-QTb">
-                    <rect key="frame" x="0.0" y="184" width="375" height="428"/>
+                    <rect key="frame" x="0.0" y="175" width="375" height="437"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="yUE-ha-PiR" firstAttribute="top" secondItem="2" secondAttribute="top" constant="25" id="CQI-pR-Hf2"/>
+                <constraint firstItem="yUE-ha-PiR" firstAttribute="top" secondItem="2" secondAttribute="top" constant="15" id="CQI-pR-Hf2"/>
                 <constraint firstItem="pFK-eL-QTb" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="EgT-IB-JTO"/>
-                <constraint firstItem="Pkw-Dk-kUf" firstAttribute="top" secondItem="yUE-ha-PiR" secondAttribute="bottom" constant="22" id="HXo-z6-tKa"/>
+                <constraint firstItem="Pkw-Dk-kUf" firstAttribute="top" secondItem="yUE-ha-PiR" secondAttribute="bottom" constant="20" id="HXo-z6-tKa"/>
                 <constraint firstItem="yUE-ha-PiR" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="I1h-OL-TeH"/>
                 <constraint firstAttribute="bottom" secondItem="0Kz-tJ-WrE" secondAttribute="bottom" id="Oev-vy-veF"/>
                 <constraint firstAttribute="trailing" secondItem="0Kz-tJ-WrE" secondAttribute="trailing" id="RX0-Fu-wzo"/>
-                <constraint firstItem="pFK-eL-QTb" firstAttribute="top" secondItem="Pkw-Dk-kUf" secondAttribute="bottom" constant="10" id="V4o-vN-C9A"/>
+                <constraint firstItem="pFK-eL-QTb" firstAttribute="top" secondItem="Pkw-Dk-kUf" secondAttribute="bottom" constant="13" id="V4o-vN-C9A"/>
                 <constraint firstAttribute="trailing" secondItem="Pkw-Dk-kUf" secondAttribute="trailing" constant="30" id="aWt-Js-uvj"/>
                 <constraint firstAttribute="trailing" secondItem="pFK-eL-QTb" secondAttribute="trailing" id="bB6-xy-2im"/>
                 <constraint firstItem="0Kz-tJ-WrE" firstAttribute="top" secondItem="pFK-eL-QTb" secondAttribute="bottom" id="faQ-cm-blR"/>

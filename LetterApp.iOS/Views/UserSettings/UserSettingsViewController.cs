@@ -61,8 +61,7 @@ namespace LetterApp.iOS.Views.UserSettings
 
         private void CloseView(object sender, EventArgs e)
         {
-            if (ViewModel.CloseViewCommand.CanExecute())
-                ViewModel.CloseViewCommand.Execute();
+            ViewModel.CloseViewCommand.Execute();
         }
 
         public override void ViewWillDisappear(bool animated)

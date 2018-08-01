@@ -47,7 +47,7 @@
                             <rect key="frame" x="17" y="27" width="30" height="30"/>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Gw-TQ-qhd">
-                            <rect key="frame" x="123.5" y="30" width="127" height="127"/>
+                            <rect key="frame" x="123.5" y="40" width="127" height="127"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="127" id="KJI-Aa-JOL"/>
                                 <constraint firstAttribute="width" secondItem="5Gw-TQ-qhd" secondAttribute="height" id="bmN-54-r9h"/>
@@ -60,7 +60,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MPy-WW-KLV">
-                            <rect key="frame" x="30" y="190" width="315" height="0.0"/>
+                            <rect key="frame" x="30" y="187" width="315" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -75,14 +75,14 @@
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="centerX" secondItem="Y9d-gF-26d" secondAttribute="centerX" id="FUB-r6-YMv"/>
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="width" secondItem="Y9d-gF-26d" secondAttribute="width" constant="12" id="K9d-iw-Lvg"/>
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="centerY" secondItem="Y9d-gF-26d" secondAttribute="centerY" id="QLW-cp-kPK"/>
-                        <constraint firstItem="5Gw-TQ-qhd" firstAttribute="top" secondItem="Qxy-8T-vpq" secondAttribute="top" constant="30" id="Tes-Id-iik"/>
+                        <constraint firstItem="5Gw-TQ-qhd" firstAttribute="top" secondItem="Qxy-8T-vpq" secondAttribute="top" constant="40" id="Tes-Id-iik"/>
                         <constraint firstItem="Y9d-gF-26d" firstAttribute="leading" secondItem="Qxy-8T-vpq" secondAttribute="leading" constant="23" id="YAL-um-AbT"/>
                         <constraint firstItem="Y9d-gF-26d" firstAttribute="top" secondItem="Qxy-8T-vpq" secondAttribute="top" constant="33" id="dsm-yr-OIl"/>
                         <constraint firstItem="MPy-WW-KLV" firstAttribute="trailing" secondItem="GH5-zq-zby" secondAttribute="trailing" id="jkR-cI-qxd"/>
                         <constraint firstAttribute="height" constant="240" id="r3s-r2-Z1q"/>
                         <constraint firstAttribute="trailing" secondItem="GH5-zq-zby" secondAttribute="trailing" constant="30" id="syf-tV-Ha5"/>
-                        <constraint firstItem="GH5-zq-zby" firstAttribute="top" secondItem="5Gw-TQ-qhd" secondAttribute="bottom" constant="25" id="xQw-Hd-ye1"/>
-                        <constraint firstItem="MPy-WW-KLV" firstAttribute="top" secondItem="GH5-zq-zby" secondAttribute="bottom" constant="8" id="y29-iW-B24"/>
+                        <constraint firstItem="GH5-zq-zby" firstAttribute="top" secondItem="5Gw-TQ-qhd" secondAttribute="bottom" constant="15" id="xQw-Hd-ye1"/>
+                        <constraint firstItem="MPy-WW-KLV" firstAttribute="top" secondItem="GH5-zq-zby" secondAttribute="bottom" constant="5" id="y29-iW-B24"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gdc-wP-sCc">

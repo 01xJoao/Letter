@@ -18,7 +18,6 @@ namespace LetterApp.iOS.Sources
         public ContactsSource(UITableView tableView, List<GetUsersInDivisionModel> contacts)
         {
             _contacts = contacts;
-
             tableView.RegisterNibForCellReuse(ContactsCell.Nib, ContactsCell.Key);
         }
 
@@ -26,8 +25,13 @@ namespace LetterApp.iOS.Sources
         {
             var contactCell = tableView.DequeueReusableCell(ContactsCell.Key) as ContactsCell;
             contactCell.Configure(_contacts[indexPath.Row], ContactEvent);
-            contactCell.SelectionStyle = UITableViewCellSelectionStyle.None;
             return contactCell;
+        }
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            tableView.DeselectRow(indexPath, true);
+            ContactEvent?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.OpenProfile, _contacts[indexPath.Row].UserId));
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath) => LocalConstants.Contacts_CellHeight;

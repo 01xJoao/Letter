@@ -132,8 +132,8 @@ namespace LetterApp.iOS.Sources
         {
             if(indexPath.Section == (int)Sections.Divisions)
             {
-                DivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
                 tableView.DeselectRow(indexPath, true);
+                DivisionSelectedEvent?.Invoke(this, _divisions[indexPath.Row]);
             }
         }
 
