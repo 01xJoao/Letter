@@ -13,6 +13,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
     public partial class ContactsCell : UITableViewCell
     {
         private int _userId;
+        private string _picture;
         private EventHandler<Tuple<ContactEventType, int>> _contactEventHandler;
         public static readonly NSString Key = new NSString("ContactsCell");
         public static readonly UINib Nib = UINib.FromName("ContactsCell", NSBundle.MainBundle);
@@ -30,13 +31,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 
             if(!string.IsNullOrEmpty(user?.Picture))
             {
-                var picture = string.Copy(user.Picture); 
+                _picture = string.Copy(user.Picture); 
 
                 ImageService.Instance.LoadStream((token) => {
-                    return ImageHelper.GetStreamFromImageByte(token, picture);
-                }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
-
-                picture = null;
+                    return ImageHelper.GetStreamFromImageByte(token, _picture);
+                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Retry(3, 200).Finish(CleanString).Transform(new CircleTransformation()).Into(_imageView);
             }
             else
             {
@@ -52,6 +51,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
             _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
             _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
 
+        }
+
+        private void CleanString(IScheduledWork obj)
+        {
+            _picture = null;
         }
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)

@@ -23,8 +23,6 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
 
             _tableView.SetContentOffset(new CGPoint(0, 0), false);
             _tableView.BackgroundColor = Colors.White;
-
-            _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, LocalConstants.Profile_TableHeaderHeight));
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             SetupTableView();
@@ -47,6 +45,7 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
         {
             _tableView.Source = new UserProfileSource(_tableView, ViewModel.ProfileDetails, ViewModel.ProfileDivision);
 
+            _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, LocalConstants.Profile_TableHeaderHeight));
             var tableHeader = ProfileHeaderView.Create();
             tableHeader.Configure(ViewModel.ProfileHeader);
             tableHeader.Frame = _tableView.TableHeaderView.Frame;

@@ -65,7 +65,7 @@ namespace LetterApp.iOS.Views.Member
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
 
             UILabelExtensions.SetupLabelAppearance(_nameLabel, $"{ViewModel.MemberProfileModel.FirstName} {ViewModel.MemberProfileModel.LastName}", Colors.White, 22f);

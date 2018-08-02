@@ -90,6 +90,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             //Creates a List with all memebers
             _usersInDivision = new List<GetUsersInDivisionModel>();
+
             foreach (var user in Realm.All<GetUsersInDivisionModel>())
             {
                 foreach (int divisionId in _allDivisionsUser)
@@ -106,12 +107,18 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             if (DateTime.Now < _lastContactsUpdate && _user.Divisions.Count == _allDivisionsUser.Count)
                 return;
-
+            
             try
             {
                 var shouldUpdateView = false;
 
                 var result = await _contactsService.GetUsersFromAllDivisions();
+
+                if (result == null && result.Count == 0)
+                    return;
+
+                 
+                Realm.Write(() => {  Realm.RemoveAll<GetUsersInDivisionModel>(); });
 
                 foreach (var res in result)
                 {
@@ -121,7 +128,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
                     stringSearch = StringUtils.NormalizeString(stringSearch);
                     res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
-                    Realm.Write(() => Realm.Add(res, true));
+
+                    Realm.Write(() => { Realm.Add(res, true); });
                 }
 
                 if (ContactLists.Contacts == null || ContactLists?.Contacts?.Count == 0)
@@ -136,6 +144,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     await UpdateUser();
                 }
 
+                _usersInDivision = result;
                 SetContactList(result);
 
                 if (shouldUpdateView)
