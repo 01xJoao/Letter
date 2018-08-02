@@ -52,9 +52,16 @@ namespace LetterApp.Core.ViewModels
 
                 if(result.StatusCode == 200)
                 {
+                    bool shouldUpdateView = false;
+
+                    if (_memberProfileModel == null || _memberProfileModel.LastUpdateTicks < result.LastUpdateTicks)
+                    {
+                        shouldUpdateView = true;
+                    }
+
                     Realm.Write(() => Realm.Add(result, true));
 
-                    if(_memberProfileModel == null || _memberProfileModel.LastUpdateTicks < result.LastUpdateTicks)
+                    if(shouldUpdateView)
                     {
                         SetupModels(result);
                     }

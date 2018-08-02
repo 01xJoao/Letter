@@ -36,7 +36,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             CustomUIExtensions.ViewShadow(_backGroundView);
 
             UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.Black, 24f, UIFontWeight.Medium);
-            UILabelExtensions.SetupLabelAppearance(_switchLabel, _switchText, Colors.Black, 15f);
+            UILabelExtensions.SetupLabelAppearance(_switchLabel, _switchText, Colors.Black, 14f);
             UILabelExtensions.SetupLabelAppearance(_descriptionLabel, _descriptionText, Colors.GrayLabel, 12f);
 
             _buttonColorBig.BackgroundColor = Colors.MainBlue;
