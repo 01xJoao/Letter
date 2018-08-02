@@ -105,7 +105,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
-            if (DateTime.Now < _lastContactsUpdate && _user.Divisions.Count == _allDivisionsUser.Count)
+            if (DateTime.Now < _lastContactsUpdate && _user.Divisions.Where(x => x.IsUserInDivisionActive).Count() == _allDivisionsUser.Count)
                 return;
             
             try
@@ -116,9 +116,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 if (result == null && result.Count == 0)
                     return;
-
-                 
-                Realm.Write(() => {  Realm.RemoveAll<GetUsersInDivisionModel>(); });
 
                 foreach (var res in result)
                 {
@@ -136,7 +133,28 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     shouldUpdateView = true;
 
                 if (_unfilteredUsers.Count != result.Count)
+                {
+                    Realm.Write(() => 
+                    {
+                        foreach (var user in Realm.All<GetUsersInDivisionModel>())
+                        {
+                            var removeUser = true;
+
+                            foreach (var res in result)
+                            {
+                                if (user.UserId == res.UserId)
+                                {
+                                    removeUser = false;
+                                }
+                            }
+
+                            if (removeUser)
+                                Realm.Remove(user);
+                        }
+                    });
+
                     shouldUpdateView = true;
+                }
 
                 if (ContactTab == null || ContactTab?.Count == 0 || shouldUpdateView)
                 {
@@ -144,7 +162,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     await UpdateUser();
                 }
 
-                _usersInDivision = result;
                 SetContactList(result);
 
                 if (shouldUpdateView)
