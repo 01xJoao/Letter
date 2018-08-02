@@ -181,7 +181,7 @@
   },
   {
     "key": "LoginViewModel_ForgotPassButton",
-    "translated": "Recuperar palavra-passe?"
+    "translated": "Recuperar palavra-passe"
   },
   {
     "key": "LoginViewModel_SignUpButton",
@@ -197,7 +197,7 @@
   },
   {
     "key": "LoginViewModel_EmailHint",
-    "translated": "Email"
+    "translated": "Endereço email"
   },
   {
     "key": "LoginViewModel_SendCode",
@@ -441,7 +441,7 @@
   },
   {
     "key": "DialogLogout_Button",
-    "translated": "Sair"
+    "translated": "Terminar sessão"
   },
   {
     "key": "DialogOrganization_Question",
