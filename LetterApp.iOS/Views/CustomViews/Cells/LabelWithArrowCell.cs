@@ -32,14 +32,6 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
 
             UILabelExtensions.SetupLabelAppearance(_label, cell.Description, Colors.Black, 15f);
             _imageView.Image = UIImage.FromBundle("arrow_right");
-
-            _button.TouchUpInside -= OnButton_TouchUpInside;
-            _button.TouchUpInside += OnButton_TouchUpInside;
-        }
-
-        private void OnButton_TouchUpInside(object sender, EventArgs e)
-        {
-            _cell.TypeEvent?.Invoke(this, _cell.Type);
         }
     }
 }

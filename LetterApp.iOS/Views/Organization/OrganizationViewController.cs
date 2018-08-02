@@ -18,7 +18,9 @@ namespace LetterApp.iOS.Views.Organization
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             Loading(true);
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -45,23 +47,22 @@ namespace LetterApp.iOS.Views.Organization
         {
             Loading(false);
 
-            this.View.BackgroundColor = Colors.OrganizationBlue;
+            this.View.BackgroundColor = Colors.MainBlue;
             _tableView.BackgroundColor = Colors.MainBlue4;
 
             this.Title = ViewModel.Organization.Name;
 
             if (!string.IsNullOrEmpty(ViewModel.Organization.Description))
-                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Organization.Description, Colors.Black, 14f);
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Organization.Description, Colors.White, 14f);
             else
-                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.OrganizationNoDescription, Colors.GrayDivider, 14f, italic: true);
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.OrganizationNoDescription, Colors.ProfileGrayWhiter, 14f, italic: true);
 
             _imageView.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, ViewModel.Organization.Picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
             _tableView.Source = new OrganizationSource(_tableView, ViewModel.ProfileOrganization, ViewModel.ProfileDetails);
-            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.ReloadData();
 
             _buttonView1.BackgroundColor = Colors.ConnectViewButton1;
@@ -91,8 +92,7 @@ namespace LetterApp.iOS.Views.Organization
         {
             base.ViewWillAppear(animated);
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.White };
-            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
-            this.NavigationItem.LeftBarButtonItem = backButton;
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
             this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
             this.NavigationController.NavigationBar.Translucent = false;
@@ -109,9 +109,10 @@ namespace LetterApp.iOS.Views.Organization
 
         public override void ViewDidDisappear(bool animated)
         {
+            base.ViewDidDisappear(animated);
+
             if (this.IsMovingFromParentViewController)
             {
-                base.ViewDidDisappear(animated);
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }

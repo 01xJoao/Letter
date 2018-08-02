@@ -165,6 +165,7 @@ namespace LetterApp.Core.ViewModels
                         await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
                         AppSettings.Logout();
                         await NavigationService.Close(this);
+                        Realm.Write(() => Realm.RemoveAll());
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
                     }
                     else
@@ -231,6 +232,7 @@ namespace LetterApp.Core.ViewModels
                     await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
                     AppSettings.Logout();
                     await NavigationService.Close(this);
+                    Realm.Write(() => Realm.RemoveAll());
                 }
             }
             catch (Exception ex)

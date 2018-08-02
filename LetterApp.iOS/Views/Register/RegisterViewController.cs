@@ -99,8 +99,7 @@ namespace LetterApp.iOS.Views.Register
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
-            this.NavigationItem.LeftBarButtonItem = backButton;
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
             NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
 
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;

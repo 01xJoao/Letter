@@ -7,6 +7,7 @@ namespace LetterApp.iOS.Helpers
     {
         public static UIColor MainBlue => UIColor.FromRGB(38, 95, 135);                        
         public static UIColor BlueSetup => UIColor.FromRGB(24, 91, 138);                        //#207CC5
+        public static UIColor SearchBlue => UIColor.FromRGB(38, 95, 135);                        //#207CC5
         public static UIColor MainBlue4 => UIColor.FromRGB(246, 248, 250);                      //#207CC5
         public static UIColor OrganizationBlue => UIColor.FromRGB(236, 243, 248);               //#207CC5
         public static UIColor SelectBlue => UIColor.FromRGB(20, 119, 196);                      //#308ACE
@@ -29,6 +30,7 @@ namespace LetterApp.iOS.Helpers
         public static UIColor ProfileGrayWhiter => UIColor.FromRGB(224, 224, 224);              //#E0E0E0
         public static UIColor ProfileGrayDivision => UIColor.FromRGB(216, 216, 216);             //#D8D8D8
         public static UIColor ConnectViewButton2 => UIColor.FromRGB(245, 245, 245);            
-        public static UIColor ConnectViewButton1 => UIColor.FromRGB(250, 250, 250);             
+        public static UIColor ConnectViewButton1 => UIColor.FromRGB(250, 250, 250); 
+        public static UIColor GrayDividerContacts => UIColor.FromRGB(225, 225, 225);    
     }
 }

@@ -32,17 +32,10 @@
                             <constraint firstAttribute="width" secondItem="GwY-jW-Aj6" secondAttribute="height" multiplier="1:1" id="EKR-7T-AkF"/>
                         </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="enJ-Qx-YpH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="enJ-Qx-YpH" firstAttribute="width" secondItem="YTl-1W-gDM" secondAttribute="width" id="Keb-ql-dkQ"/>
                     <constraint firstItem="urf-V0-258" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="KpR-ng-FQ2"/>
-                    <constraint firstItem="enJ-Qx-YpH" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="MRJ-lo-RgA"/>
-                    <constraint firstItem="enJ-Qx-YpH" firstAttribute="height" secondItem="YTl-1W-gDM" secondAttribute="height" id="PCP-lT-cJA"/>
-                    <constraint firstItem="enJ-Qx-YpH" firstAttribute="centerX" secondItem="YTl-1W-gDM" secondAttribute="centerX" id="bW7-rY-K8x"/>
                     <constraint firstAttribute="trailing" secondItem="GwY-jW-Aj6" secondAttribute="trailing" constant="17" id="gsG-WD-iQL"/>
                     <constraint firstItem="GwY-jW-Aj6" firstAttribute="centerY" secondItem="urf-V0-258" secondAttribute="centerY" id="orX-Eo-tUq"/>
                     <constraint firstItem="urf-V0-258" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="20" id="qPd-1Q-mqi"/>
@@ -52,7 +45,6 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="_arrowWithConstraint" destination="AHg-VX-AgX" id="umK-xt-XxD"/>
-                <outlet property="_button" destination="enJ-Qx-YpH" id="ml7-Pm-aua"/>
                 <outlet property="_imageView" destination="GwY-jW-Aj6" id="gMq-gZ-Hpo"/>
                 <outlet property="_label" destination="urf-V0-258" id="neD-bE-CSF"/>
             </connections>

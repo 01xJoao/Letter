@@ -65,7 +65,7 @@
   },
   {
     "key": "Code_E116",
-    "translated": "No positions found."
+    "translated": "No roles found."
   },
   {
     "key": "Code_E117",
@@ -97,7 +97,7 @@
   },
   {
     "key": "Code_S203",
-    "translated": "New position defined."
+    "translated": "New role set."
   },
   {
     "key": "Code_S204",
@@ -113,7 +113,7 @@
   },
   {
     "key": "Code_S207",
-    "translated": "Account successfully created! \n We sent an email with an activation code."
+    "translated": "Account successfully created! \n An email with an activation code was sent."
   },
   {
     "key": "Code_S208",
@@ -145,7 +145,7 @@
   },
   {
     "key": "OnBoardingViewModel_CallSubtitle",
-    "translated": "Send private messages or call someone for free!"
+    "translated": "Send instant messages or call someone for free!"
   },
   {
     "key": "OnBoardingViewModel_SignIn",
@@ -197,7 +197,7 @@
   },
   {
     "key": "LoginViewModel_EmailHint",
-    "translated": "Organization email"
+    "translated": "Email"
   },
   {
     "key": "LoginViewModel_SendCode",
@@ -249,11 +249,11 @@
   },
   {
     "key": "RecoverPasswordViewModel_EmailConfirmation",
-    "translated": "We sent an email with a verification code. \n (Please check your SPAM folder)"
+    "translated": "An email with a verification code was sent. \n (Please check your SPAM folder)"
   },
   {
     "key": "RecoverPasswordViewModel_PasswordMatch",
-    "translated": "Passwords don't match, try again."
+    "translated": "Passwords don't match."
   },
   {
     "key": "RecoverPasswordViewModel_PasswordWeak",
@@ -293,11 +293,11 @@
   },
   {
     "key": "RegisterViewModel_UserAgreement",
-    "translated": "You must accept the terms and conditions."
+    "translated": "You must accept the Terms and Conditions."
   },
   {
     "key": "RegisterViewModel_InvalidString",
-    "translated": "Numbers and Symbols (like !@#$?%) are only accepted on the password field."
+    "translated": "Numbers and symbols (like !@#$?%) are only accepted on the password field."
   },
   {
     "key": "RegisterViewModel_DamnEmojis",
@@ -325,7 +325,7 @@
   },
   {
     "key": "ActivateAccountViewModel_ActivationCompleted",
-    "translated": "your account has been activated! \n Please Sign In."
+    "translated": "Your account has been activated! \n Please Sign In."
   },
   {
     "key": "SelectOrganization_AccessButton",
@@ -374,6 +374,10 @@
   {
     "key": "SelectDivision_TitleLabel",
     "translated": "Select Division"
+  },
+  {
+    "key": "SelectDivision_TitleMainLabel",
+    "translated": "Select Main Division"
   },
   {
     "key": "SelectDivision_EmailLabel",
@@ -501,7 +505,7 @@
   },
   {
     "key": "UserSettings_AllowPhoneCallsDescription",
-    "translated": "When on, people can see your phone number and call you."
+    "translated": "When on, users can see your phone number and call you."
   },
   {
     "key": "UserSettings_PasswordLabel",
@@ -650,5 +654,41 @@
   {
     "key": "Organization_Mobile",
     "translated": "Phone number"
+  },
+  {
+    "key": "Contacts_Title",
+    "translated": "Contacts"
+  },
+  {
+    "key": "Contacts_DialogTitle",
+    "translated": "Filter Contacts"
+  },
+  {
+    "key": "Contacts_DialogSwitchLabel",
+    "translated": "Filter members by main division"
+  },
+  {
+    "key": "Contacts_DialogDescription",
+    "translated": "When on, users will only appear in their main division, and not in all divisions they are members of."
+  },
+  {
+    "key": "Contacts_DialogButton",
+    "translated": "Filter"
+  },
+  {
+    "key": "Contacts_Search",
+    "translated": "Search by name, email, role..."
+  },
+  {
+    "key": "Member_NoDescription",
+    "translated": "The user doesn't have any description."
+  },
+  {
+    "key": "Member_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Member_Chat",
+    "translated": "Chat"
   }
 ]

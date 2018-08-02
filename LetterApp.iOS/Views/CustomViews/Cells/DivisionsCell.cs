@@ -44,7 +44,6 @@ namespace LetterApp.iOS.Views.CustomViews.Cells
             _scrollView.ContentSize = new CGSize(contentSize, LocalConstants.Profile_DivisionHeight);
             _scrollView.AutosizesSubviews = false;
             _scrollView.LayoutIfNeeded();
-            _scrollView.LayoutSubviews();
 
         }
 

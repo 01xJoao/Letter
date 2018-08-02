@@ -104,7 +104,7 @@ namespace LetterApp.iOS.Views.SelectDivision
             _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
             _closeButton.TintColor = Colors.White;
             _backgroundView.BackgroundColor = Colors.SelectBlue;
-            UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.TitleLabel, Colors.White, 24f);
+            UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewUser ? ViewModel.TitleMainLabel : ViewModel.TitleLabel, Colors.White, 24f);
             CustomUIExtensions.LabelShadow(_titleLabel);
         }
 

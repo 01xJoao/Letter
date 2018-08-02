@@ -30,7 +30,7 @@ namespace LetterApp.iOS.Views.Division.Cells
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, division.Picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
 
 

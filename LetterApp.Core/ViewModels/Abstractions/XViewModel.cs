@@ -39,6 +39,7 @@ namespace LetterApp.Core.ViewModels.Abstractions
         public void InitializeViewModel()
         {
             #if DEBUG
+
                 _realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
             #else
                 _realm = Realm.GetInstance();

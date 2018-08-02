@@ -12,9 +12,10 @@ using LetterApp.Models.DTO.ReceivedModels;
 
 namespace LetterApp.Core.ViewModels
 {
-    public class PendingApprovalViewModel : XViewModel
+    public class PendingApprovalViewModel : XViewModel<int>
     {
         private int _organizationId;
+        private int _tabIndex;
         public DivisionModel Division { get; set; }
 
         private bool _isLoading = true;
@@ -57,6 +58,11 @@ namespace LetterApp.Core.ViewModels
             _dialogService = dialogService;
             _authenticationService = authenticationService;
             _statusCodeService = statusCodeService;
+        }
+
+        protected override void Prepare(int tabIndex)
+        {
+            _tabIndex = tabIndex;
         }
 
         public override async Task Appearing() => await CheckUser();
@@ -135,7 +141,7 @@ namespace LetterApp.Core.ViewModels
         private async Task NavigateToMain()
         {
             AppSettings.MainMenuAllowed = true;
-            await NavigationService.NavigateAsync<MainViewModel, object>(null);
+            await NavigationService.NavigateAsync<MainViewModel, int>(_tabIndex);
         }
 
         private async Task Logout()

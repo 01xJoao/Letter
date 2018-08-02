@@ -76,8 +76,6 @@ namespace LetterApp.iOS.Views.Login
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 14f, ViewModel.SignUpButton);
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
             UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 12f, ViewModel.ForgotPasswordButton);
-
-            _forgotPassButton.SetNeedsLayout();
             _forgotPassButton.LayoutIfNeeded();
 
             UIButton keyboardButton = new UIButton();

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
-using LetterApp.Core.Helpers.Commands;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
@@ -42,68 +41,49 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             _statusCodeService = statusCodeService;
         }
 
+        public override async Task InitializeAsync()
+        {
+            _user = Realm.Find<UserModel>(AppSettings.UserId);
+            SetupModels(_user);
+        }
+
         public override async Task Appearing()
         {
-            if (IsBusy)
-                return;
-            
-            SetupModels();
-
             try
             {
-                var userCheck = await _autheticationService.CheckUser();
+                var result = await _autheticationService.CheckUser();
 
-                if (userCheck.StatusCode == 200)
+                if (result.StatusCode == 200)
                 {
-                    if (userCheck.LastUpdateTime.Ticks > _user.LastUpdateTime)
+                    if (result.LastUpdateTime.Ticks > _user.LastUpdateTime)
                         _updateView = true;
 
-                    var user = new UserModel();
+                    var user = RealmUtils.UpdateUser(Realm, result);
 
-                    user.UserID = userCheck.UserID;
-                    user.Email = userCheck.Email;
-                    user.FirstName = userCheck.FirstName;
-                    user.LastName = userCheck.LastName;
-                    user.Position = userCheck.Position;
-                    user.Picture = userCheck.Picture;
-                    user.Description = userCheck.Description;
-                    user.ContactNumber = userCheck.ContactNumber;
-                    user.ShowContactNumber = userCheck.ShowContactNumber;
-                    user.OrganizationID = userCheck.OrganizationID;
-                    foreach (var divion in userCheck.Divisions)
-                        user.Divisions.Add(divion);
-                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
-
-                    Realm.Write(() => {
-                        Realm.Add(user, true);
-                    }); 
+                    if(_updateView)
+                    {
+                        SetupModels(user);
+                        RaisePropertyChanged(nameof(UpdateView));
+                        _updateView = false;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
             }
-            finally
-            {
-                if(_updateView)
-                {
-                    SetupModels();
-                    RaisePropertyChanged(nameof(UpdateView));
-                }
-            }
         }
 
-        private void SetupModels()
+        private void SetupModels(UserModel user)
         {
-            _user = Realm.Find<UserModel>(AppSettings.UserId);
-
-            ProfileHeader = new ProfileHeaderModel($"{_user.FirstName} {_user.LastName}", _user.Description, _user.Picture, OpenGalery, UpdateDescription, OpenSettings);
+         
+            ProfileHeader = new ProfileHeaderModel($"{user.FirstName} {user.LastName}", user.Description, user.Picture, OpenGalery, UpdateDescription, OpenSettings);
 
             var divisions = new List<ProfileDivisionDetails>();
 
-            if(_user.Divisions != null)
+            if(user.Divisions != null)
             {
-                foreach(var division in _user.Divisions)
+                foreach(var division in user.Divisions)
                 {
                     if(division.IsUserInDivisionActive && division.IsDivisonActive)
                     {
@@ -120,27 +100,27 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             var profileDetails = new List<ProfileDetail>();
 
-            if(!string.IsNullOrEmpty(_user.Position))
+            if(!string.IsNullOrEmpty(user.Position))
             {
                 var profileDetail1 = new ProfileDetail();
                 profileDetail1.Description = Role;
-                profileDetail1.Value = _user.Position;
+                profileDetail1.Value = user.Position;
                 profileDetails.Add(profileDetail1);
             }
 
-            if (!string.IsNullOrEmpty(_user.Email))
+            if (!string.IsNullOrEmpty(user.Email))
             {
                 var profileDetail2 = new ProfileDetail();
                 profileDetail2.Description = Email;
-                profileDetail2.Value = _user.Email;
+                profileDetail2.Value = user.Email;
                 profileDetails.Add(profileDetail2);
             }
 
-            if (!string.IsNullOrEmpty(_user.ContactNumber))
+            if (!string.IsNullOrEmpty(user.ContactNumber))
             {
                 var profileDetail3 = new ProfileDetail();
                 profileDetail3.Description = Mobile;
-                profileDetail3.Value = _user.ContactNumber;
+                profileDetail3.Value = user.ContactNumber;
                 profileDetails.Add(profileDetail3);
             }
 

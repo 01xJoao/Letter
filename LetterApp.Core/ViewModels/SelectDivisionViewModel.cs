@@ -116,7 +116,7 @@ namespace LetterApp.Core.ViewModels
 
                     if (res.StatusCode == 200)
                     {
-                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
+                        await NavigationService.NavigateAsync<PendingApprovalViewModel, int>(NewUser ? 2 : 3);
                         await NavigationService.PopToRoot(false);
                     }
                     else
@@ -187,6 +187,7 @@ namespace LetterApp.Core.ViewModels
         #region Resources
 
         public string TitleLabel => L10N.Localize("SelectDivision_TitleLabel");
+        public string TitleMainLabel => L10N.Localize("SelectDivision_TitleMainLabel");
         private string QuestionLabel => L10N.Localize("DialogLogout_Question");
         private string QuestionButton => L10N.Localize("DialogLogout_Button");
         private string MailLabel => L10N.Localize("SelectDivision_EmailLabel");

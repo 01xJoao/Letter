@@ -61,6 +61,7 @@ namespace LetterApp.iOS.Views.Base
         #region Keyboard
 
         public virtual bool HandlesKeyboardNotifications => false;
+        public bool KeyboardIsVisible = false;
         private NSObject _keyboardWillShow;
         private NSObject _keyboardWillHide;
         private UITapGestureRecognizer _keyboardTapGesture;
@@ -79,7 +80,10 @@ namespace LetterApp.iOS.Views.Base
             }
         }
 
-        public virtual void OnKeyboardNotification(bool changeKeyboardState) {}
+        public virtual void OnKeyboardNotification(bool changeKeyboardState) 
+        {
+            KeyboardIsVisible = changeKeyboardState;
+        }
 
         protected void DismissKeyboardOnBackgroundTap()
         {

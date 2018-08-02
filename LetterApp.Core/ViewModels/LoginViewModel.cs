@@ -81,16 +81,22 @@ namespace LetterApp.Core.ViewModels
                     AppSettings.IsUserLogged = true;
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
-                    await CheckUser();
+
+                    await NavigationService.NavigateAsync<LoadingViewModel, object>(null);
                 }
                 else if (currentUser.StatusCode == 102)
                 {
+                    AppSettings.Logout();
+                    UserEmail = value.Item1;
+                    await SecureStorage.SetAsync("password", value.Item2);
+
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(value.Item1);
                     await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Info);
                 }
                 else
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(currentUser.StatusCode), AlertType.Error);
+
             }
             catch (Exception ex)
             {
@@ -100,80 +106,6 @@ namespace LetterApp.Core.ViewModels
             {
                 IsBusy = false;
                 IsSigningIn = false;
-            }
-        }
-
-        private async Task CheckUser()
-        {
-            try
-            {
-                var userCheck = await _authService.CheckUser();
-
-                if (userCheck.StatusCode == 200)
-                {
-                    AppSettings.UserId = userCheck.UserID;
-
-                    var user = new UserModel();
-
-                    user.UserID = userCheck.UserID;
-                    user.Email = userCheck.Email;
-                    user.FirstName = userCheck.FirstName;
-                    user.LastName = userCheck.LastName;
-                    user.Position = userCheck.Position;
-                    user.Picture = userCheck.Picture;
-                    user.Description = userCheck.Description;
-                    user.ContactNumber = userCheck.ContactNumber;
-                    user.ShowContactNumber = userCheck.ShowContactNumber;
-                    user.OrganizationID = userCheck.OrganizationID;
-                    foreach(var divion in userCheck?.Divisions)
-                        user.Divisions.Add(divion);
-                    user.LastUpdateTime = userCheck.LastUpdateTime.Ticks;
-
-                    Realm.Write(() => {
-                        Realm.Add(user, true);
-                    }); 
-
-                    bool userIsActiveInDivision = false;
-                    bool anyDivisionActive = false;
-                    bool userIsUnderReview = false;
-
-                    if (userCheck?.Divisions?.Count > 0)
-                    {
-                        anyDivisionActive = userCheck.Divisions.Any(x => x.IsDivisonActive == true);
-                        userIsActiveInDivision = userCheck.Divisions.Any(x => x.IsUserInDivisionActive == true && x.IsDivisonActive == true);
-                        userIsUnderReview = userCheck.Divisions.Any(x => x.IsUserInDivisionActive == false && x.IsUnderReview == true && x.IsDivisonActive == true);
-                    }
-
-                    if (userCheck.OrganizationID == null)
-                    {
-                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, string>(userCheck.Email);
-                    }
-                    else if (string.IsNullOrEmpty(userCheck.Position))
-                    {
-                        await NavigationService.NavigateAsync<SelectPositionViewModel, int>((int)userCheck.OrganizationID);
-                    }
-                    else if ((userCheck.Divisions == null || userCheck?.Divisions?.Count == 0) || !anyDivisionActive || (!userIsActiveInDivision && !userIsUnderReview))
-                    {
-                        await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)userCheck.OrganizationID, true));
-                    }
-                    else if (!userIsActiveInDivision && userIsUnderReview)
-                    {
-                        await NavigationService.NavigateAsync<PendingApprovalViewModel, object>(null);
-                    }
-                    else
-                    {
-                        AppSettings.MainMenuAllowed = true;
-                        await NavigationService.NavigateAsync<MainViewModel, object>(null);
-                    }
-                }
-                else
-                {
-                    _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(userCheck.StatusCode), AlertType.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
             }
         }
 

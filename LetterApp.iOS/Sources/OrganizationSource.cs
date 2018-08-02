@@ -88,7 +88,7 @@ namespace LetterApp.iOS.Sources
         {
             switch (section)
             {
-                case (int)Sections.Details: return (int)Details.Count;
+                case (int)Sections.Details: return _details.Details.Count;
                 case (int)Sections.Divisions: return 1;
                 default: return 0;
             }
@@ -98,14 +98,6 @@ namespace LetterApp.iOS.Sources
         {
             Details,
             Divisions,
-            Count
-        }
-
-        private enum Details
-        {
-            Address,
-            Email,
-            Mobile,
             Count
         }
     }

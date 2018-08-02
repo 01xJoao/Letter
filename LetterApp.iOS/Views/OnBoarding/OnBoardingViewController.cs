@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -38,7 +37,7 @@ namespace LetterApp.iOS.Views.OnBoarding
                 new BoardPageViewController(2, ViewModel.CallTitle, ViewModel.CallSubtitle, "board_chat")
             };
 
-            var onBoardPageSource = new OnBoardPageSource(viewControllers);
+            var onBoardPageSource = new PageSource(viewControllers);
             _pageViewController.DataSource = onBoardPageSource;
             _pageViewController.SetViewControllers(new UIViewController[] { viewControllers.FirstOrDefault() }, UIPageViewControllerNavigationDirection.Forward, false, null);
 
@@ -53,7 +52,7 @@ namespace LetterApp.iOS.Views.OnBoarding
 
         private void DidTransition(object sender, UIPageViewFinishedAnimationEventArgs e)
         {
-            if(e.Finished)
+            if(e.Completed)
             {
                 var viewController = _pageViewController.ViewControllers[0] as XBoardPageViewController;
                 _pageControl.CurrentPage = viewController.Index;

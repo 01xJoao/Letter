@@ -1,4 +1,5 @@
 ﻿using System;
+using Realms;
 using Xamarin.Essentials;
 namespace LetterApp.Core
 {
@@ -76,6 +77,12 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(UserNoInternetNotified), value);
         }
 
+        public static bool FilteredMembers
+        {
+            get => Preferences.Get(nameof(FilteredMembers), false);
+            set => Preferences.Set(nameof(FilteredMembers), value);
+        }
+
         public static void Logout()
         {
             Preferences.Remove(nameof(IsUserLogged));
@@ -89,6 +96,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(CallNotifications));
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
+            Preferences.Remove(nameof(FilteredMembers));
         }
     }
 }

@@ -20,6 +20,7 @@ namespace LetterApp.iOS.Views.Division
             base.ViewDidLoad();
 
             Loading(true);
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -32,7 +33,6 @@ namespace LetterApp.iOS.Views.Division
                 case nameof(ViewModel.Division):
                     SetupView();
                     break;
-
                 default:
                     break;
             }
@@ -55,14 +55,14 @@ namespace LetterApp.iOS.Views.Division
             if (!string.IsNullOrEmpty(ViewModel.Division.Description))
                 UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.Division.Description, Colors.White, 13f);
             else
-                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.DivisionNoDescription, Colors.GrayIndicator, 13f, italic: true);
+                UILabelExtensions.SetupLabelAppearance(_descriptionLabel, ViewModel.DivisionNoDescription, Colors.ProfileGrayWhiter, 13f, italic: true);
 
             _memberImage.Image = UIImage.FromBundle("members");
 
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, ViewModel.Division.Picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
 
             _buttonView1.BackgroundColor = Colors.ConnectViewButton1;
@@ -71,15 +71,14 @@ namespace LetterApp.iOS.Views.Division
             UIButtonExtensions.SetupButtonAppearance(_button1, Colors.MainBlue, 15f, ViewModel.SendEmailLabel);
             UIButtonExtensions.SetupButtonAppearance(_button2, Colors.MainBlue, 15f, ViewModel.CallLabel);
 
-            _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
-            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
-            _tableView.ReloadData();
-
             _button1.TouchUpInside -= OnButton1_TouchUpInside;
             _button1.TouchUpInside += OnButton1_TouchUpInside;
 
             _button2.TouchUpInside -= OnButton2_TouchUpInside;
             _button2.TouchUpInside += OnButton2_TouchUpInside;   
+
+            _tableView.Source = new DivisionSource(_tableView, ViewModel.OrganizationInfo, ViewModel.ProfileDetails);
+            _tableView.ReloadData();
         }
 
         private void OnButton1_TouchUpInside(object sender, EventArgs e)
@@ -97,8 +96,7 @@ namespace LetterApp.iOS.Views.Division
             base.ViewWillAppear(animated);
 
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.White };
-            var backButton = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
-            this.NavigationItem.LeftBarButtonItem = backButton;
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
             this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
             this.NavigationController.NavigationBar.Translucent = false;
@@ -126,9 +124,10 @@ namespace LetterApp.iOS.Views.Division
 
         public override void ViewDidDisappear(bool animated)
         {
+            base.ViewDidDisappear(animated);
+
             if (this.IsMovingFromParentViewController)
             {
-                base.ViewDidDisappear(animated);
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }

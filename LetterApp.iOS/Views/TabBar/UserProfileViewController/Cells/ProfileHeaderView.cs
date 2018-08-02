@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
@@ -38,7 +38,7 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, profile.Picture);
-            }).LoadingPlaceholder("add_photo", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            }).ErrorPlaceholder("add_photo", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
 
             CustomUIExtensions.LabelShadow(_nameLabel);

@@ -52,9 +52,11 @@ namespace LetterApp.Core.ViewModels
 
                 if(result.StatusCode == 200)
                 {
+                    AppSettings.IsUserLogged = true;
                     await NavigationService.Close(this);
-                    await Task.Delay(TimeSpan.FromSeconds(0.3));
-                    _dialogService.ShowAlert(ActivationCompleted, AlertType.Success, 4f);
+                    await NavigationService.NavigateAsync<LoadingViewModel, object>(null);
+                    //await Task.Delay(TimeSpan.FromSeconds(0.3));
+                    //_dialogService.ShowAlert(ActivationCompleted, AlertType.Success, 4f);
                 }
                 else
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription((result.StatusCode)), AlertType.Error);

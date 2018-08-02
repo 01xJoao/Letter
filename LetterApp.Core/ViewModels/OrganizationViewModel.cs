@@ -64,39 +64,12 @@ namespace LetterApp.Core.ViewModels
 
                     if (result.LastUpdateTicks > _organization?.LastUpdateTicks || _organization == null)
                         shouldUpdateView = true;
-
-                    var org = new OrganizationModel();
-
-                    var user = Realm.Find<UserModel>(AppSettings.UserId);
-
-                    org.OrganizationID = result.OrganizationID;
-                    org.Name = result.Name;
-                    org.Description = result.Description;
-                    org.Picture = result.Picture;
-                    org.Description = result.Description;
-                    org.ContactNumber = result.ContactNumber;
-                    org.Address = result.Address;
-                    org.Email = result.Email;
-                    org.LastUpdateTicks = result.LastUpdateTicks;
-                    foreach (var divion in result?.Divisions)
-                    {
-                        var userInDivision = user.Divisions.Where(x => x.DivisionID == divion.DivisionID).FirstOrDefault();
-
-                        if(userInDivision != null)
-                        {
-                            divion.IsUserInDivisionActive = userInDivision.IsUserInDivisionActive;
-                            divion.IsUnderReview = userInDivision.IsUnderReview;
-                        }
-
-                        org.Divisions.Add(divion);
-                    }
-                    Realm.Write(() => {
-                        Realm.Add(org, true);
-                    });
+                    
+                    var organization = RealmUtils.UpdateOrganization(Realm, Realm.Find<UserModel>(AppSettings.UserId), result);
 
                     if(shouldUpdateView)
                     {
-                        _organization = org;
+                        _organization = organization;
                         SetupModels(_organization);
                     }
                 }
@@ -111,8 +84,7 @@ namespace LetterApp.Core.ViewModels
         {
             if (organization == null)
                 return;
-
-
+            
             var organizations = new List<ProfileOrganizationDetails>();
 
             if (organization.Divisions != null)

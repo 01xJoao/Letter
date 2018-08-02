@@ -289,6 +289,22 @@
     <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users.png" />
     <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -368,6 +384,14 @@
     <Folder Include="Resources\Assets.xcassets\members.imageset\" />
     <Folder Include="Views\Organization\" />
     <Folder Include="Views\Organization\Cells\" />
+    <Folder Include="Views\CustomViews\TabBarView\" />
+    <Folder Include="Views\TabBar\ContactListViewController\PageViewController\" />
+    <Folder Include="Views\TabBar\ContactListViewController\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\user_chat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\search.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\contacts_filter.imageset\" />
+    <Folder Include="Views\Member\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -417,6 +441,11 @@
     <InterfaceDefinition Include="Views\Organization\OrganizationViewController.xib" />
     <InterfaceDefinition Include="Views\Organization\Cells\OrganizationDivisionsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\TabBarView\TabBarView.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
+    <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -468,7 +497,7 @@
     <Compile Include="Views\OnBoarding\OnBoardingViewController.designer.cs">
       <DependentUpon>OnBoardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sources\OnBoardPageSource.cs" />
+    <Compile Include="Sources\PageSource.cs" />
     <Compile Include="Helpers\Animations.cs" />
     <Compile Include="Helpers\UIButtonExtensions.cs" />
     <Compile Include="Helpers\UITextFieldExtensions.cs" />
@@ -645,6 +674,28 @@
     <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.designer.cs">
       <DependentUpon>OrganizationDivisionsView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomViews\TabBarView\TabBarView.cs" />
+    <Compile Include="Views\CustomViews\TabBarView\TabBarView.designer.cs">
+      <DependentUpon>TabBarView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.designer.cs">
+      <DependentUpon>ContactPageViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.designer.cs">
+      <DependentUpon>ContactsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ContactsSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.designer.cs">
+      <DependentUpon>FilterContactsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Member\MemberViewController.cs" />
+    <Compile Include="Views\Member\MemberViewController.designer.cs">
+      <DependentUpon>MemberViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\MemberSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

@@ -24,7 +24,7 @@ namespace LetterApp.iOS.Views.Division.Cells
             _imageView.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, organizationInfoModel.Picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
             UILabelExtensions.SetupLabelAppearance(_sectionLabel, organizationInfoModel.Section, Colors.ProfileGray, 12f);
             UILabelExtensions.SetupLabelAppearance(_label, organizationInfoModel.Name, Colors.ProfileGrayDarker, 14f, UIFontWeight.Medium);

@@ -25,9 +25,9 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
 
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, division.Picture);
-            }).LoadingPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
-            CustomUIExtensions.RoundShadow(_imageView);
+            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
+            CustomUIExtensions.RoundShadow(_imageView);
             CustomUIExtensions.LabelShadow(_titleLabel);
 
             UILabelExtensions.SetupLabelAppearance(_titleLabel, division.Name, Colors.White, 16f, UIFontWeight.Bold);

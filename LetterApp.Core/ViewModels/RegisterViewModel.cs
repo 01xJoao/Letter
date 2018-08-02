@@ -11,6 +11,7 @@ using LetterApp.Core.Models.Cells;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.RequestModels;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -83,10 +84,14 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 207)
                 {
+                    AppSettings.Logout();
+                    AppSettings.UserEmail = user.Email;
+                    await SecureStorage.SetAsync("password", user.Password); 
+
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
-                    await NavigationService.Close(this);
+                    await CloseView();
                     await NavigationService.NavigateAsync<ActivateAccountViewModel, string>(user.Email);
-                    await Task.Delay(TimeSpan.FromSeconds(0.8));
+                    await Task.Delay(TimeSpan.FromSeconds(0.8f));
                     _dialogService.ShowAlert(_statusService.GetStatusCodeDescription(result.StatusCode), AlertType.Success, 8f);
                 }
                 else
@@ -142,15 +147,15 @@ namespace LetterApp.Core.ViewModels
                 return false;
             }
 
-            if(user.Phone.Length < 8)
+            if(user.Phone.Length > 16 || user.Phone.Length < 8)
             {
-                _dialogService.ShowAlert(PasswordMatch, AlertType.Error, 3.5f);
+                _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error, 3.5f);
                 return false;
             }
 
             if (!_userAgreed)
             {
-                _dialogService.ShowAlert(AlertPhoneNumber, AlertType.Error);
+                _dialogService.ShowAlert(UserAgreement, AlertType.Error);
                 return false;
             }
 
