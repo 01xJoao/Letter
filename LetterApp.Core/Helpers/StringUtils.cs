@@ -8,7 +8,7 @@ namespace LetterApp.Core.Helpers
 {
     public static class StringUtils
     {
-        private static string _specialChars = "<>@!#$%^&*()_+[]{}?:;|'\"\\,./~`-=";
+        private static string _specialChars = "<>@!#$%^&*()_+[]{}?:;|'\"\\,./~`-=1234567890";
 
         public static bool IsLettersOnly(string str)
         {

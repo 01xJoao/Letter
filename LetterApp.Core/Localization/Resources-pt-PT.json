@@ -9,11 +9,11 @@
   },
   {
     "key": "Code_E102",
-    "translated": "A conta ainda não foi ativada, por favor ativa a tua conta."
+    "translated": "A conta ainda não foi ativada, por favor ativa a sua conta."
   },
   {
     "key": "Code_E103",
-    "translated": "A tua conta foi desativada."
+    "translated": "A sua conta foi desativada."
   },
   {
     "key": "Code_E104",
@@ -33,7 +33,7 @@
   },
   {
     "key": "Code_E108",
-    "translated": "O teu domínio de email não é válido para esta divisão."
+    "translated": "O seu domínio de email não é válido para esta divisão."
   },
   {
     "key": "Code_E109",
@@ -53,7 +53,7 @@
   },
   {
     "key": "Code_E113",
-    "translated": "O teu email não é válido nesta organização."
+    "translated": "O seu email não é válido nesta organização."
   },
   {
     "key": "Code_E114",
@@ -129,7 +129,7 @@
   },
   {
     "key": "OnBoardingViewModel_LetterSlogan",
-    "translated": "Escreve algo..."
+    "translated": "Escreva algo..."
   },
   {
     "key": "OnBoardingViewModel_Register",
@@ -137,23 +137,23 @@
   },
   {
     "key": "OnBoardingViewModel_RegisterSubtitle",
-    "translated": "Regista-te com o email da tua organização e fica com acesso imediato a todos os teus colegas!"
+    "translated": "Registe-se com o email da sua organização e fique com acesso imediato a todos os seus colegas!"
   },
   {
     "key": "OnBoardingViewModel_Call",
-    "translated": "Escreve ou Telefona"
+    "translated": "Escreva ou Telefone"
   },
   {
     "key": "OnBoardingViewModel_CallSubtitle",
-    "translated": "Envia mensagens instantâneas ou telefona gratuitamente!"
+    "translated": "Envie mensagens instantâneas ou telefone gratuitamente!"
   },
   {
     "key": "OnBoardingViewModel_SignIn",
-    "translated": "Já tens conta? Entra Aqui"
+    "translated": "Já tem conta? Entre Aqui"
   },
   {
     "key": "OnBoardingViewModel_SignUp",
-    "translated": "Regista-te"
+    "translated": "Criar Conta"
   },
   {
     "key": "MainViewModel_ChatTab",
@@ -173,7 +173,7 @@
   },
   {
     "key": "LoginViewModel_EmailLabel",
-    "translated": "Endereço Email"
+    "translated": "Endereço email"
   },
   {
     "key": "LoginViewModel_PasswordLabel",
@@ -185,7 +185,7 @@
   },
   {
     "key": "LoginViewModel_SignUpButton",
-    "translated": "Primeira vêz a usar Letter? Regista-te!"
+    "translated": "Primeira vêz a usar Letter? Crie uma conta!"
   },
   {
     "key": "LoginViewModel_SignInButton",
@@ -209,7 +209,7 @@
   },
   {
     "key": "LoginViewModel_InvalidEmail",
-    "translated": "O teu email não aparenta ser válido."
+    "translated": "O seu email não aparenta ser válido."
   },
   {
     "key": "RecoverPasswordViewModel_NewPassTitle",
@@ -301,7 +301,7 @@
   },
   {
     "key": "RegisterViewModel_DamnEmojis",
-    "translated": "Por favor não insira emojis"
+    "translated": "Por favor não insira emojis."
   },
   {
     "key": "ActivateAccountViewModel_Title",
@@ -513,15 +513,15 @@
   },
   {
     "key": "UserSettings_MessageLabel",
-    "translated": "Notificação de mensagem"
+    "translated": "Notificações de mensagens"
   },
   {
     "key": "UserSettings_CallLabel",
-    "translated": "Notificação de telefonema"
+    "translated": "Notificações de telefonemas"
   },
   {
     "key": "UserSettings_GroupLabel",
-    "translated": "Notificação de grupo"
+    "translated": "Notificações de grupo"
   },
   {
     "key": "UserSettings_ContactUsLabel",
@@ -533,7 +533,7 @@
   },
   {
     "key": "UserSettings_CreateOrgLabel",
-    "translated": "Cria uma organização"
+    "translated": "Criar uma organização"
   },
   {
     "key": "UserSettings_SignOutLabel",
@@ -553,7 +553,7 @@
   },
   {
     "key": "UserSettings_CellNumber",
-    "translated": "Número de telefone errado"
+    "translated": "Número de telefone errado."
   },
   {
     "key": "ChangePassword_Title",
