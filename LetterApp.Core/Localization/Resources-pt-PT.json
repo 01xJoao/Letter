@@ -273,7 +273,7 @@
   },
   {
     "key": "RegisterViewModel_PhoneNumber",
-    "translated": "Número de telefone"
+    "translated": "Número de telémovel"
   },
   {
     "key": "RegisterViewModel_Agreement",
@@ -553,7 +553,7 @@
   },
   {
     "key": "UserSettings_CellNumber",
-    "translated": "Número de telefone errado."
+    "translated": "Número de telemóvel errado."
   },
   {
     "key": "ChangePassword_Title",
