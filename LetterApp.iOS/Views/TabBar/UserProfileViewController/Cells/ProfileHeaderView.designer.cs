@@ -10,6 +10,7 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 {
+    [Register ("ProfileHeaderView")]
     partial class ProfileHeaderView
     {
         [Outlet]

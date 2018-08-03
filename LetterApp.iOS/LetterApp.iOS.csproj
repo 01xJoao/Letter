@@ -162,6 +162,9 @@
     <Reference Include="Realm.Sync">
       <HintPath>..\packages\Realm.3.1.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Agora.Full.iOS">
+      <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.2.3\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -398,6 +401,8 @@
     <Folder Include="Views\Member\" />
     <Folder Include="Resources\Assets.xcassets\new_call.imageset\" />
     <Folder Include="Views\TabBar\CallListViewController\Cells\" />
+    <Folder Include="AgoraIO\" />
+    <Folder Include="Views\Call\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -453,6 +458,7 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
     <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallCell.xib" />
+    <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -708,6 +714,11 @@
       <DependentUpon>CallCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\CallSource.cs" />
+    <Compile Include="AgoraIO\AgoraRtcDelegate.cs" />
+    <Compile Include="Views\Call\CallViewController.cs" />
+    <Compile Include="Views\Call\CallViewController.designer.cs">
+      <DependentUpon>CallViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

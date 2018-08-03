@@ -10,6 +10,7 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.CustomViews.Dialog
 {
+    [Register ("AlertView")]
     partial class AlertView
     {
         [Outlet]

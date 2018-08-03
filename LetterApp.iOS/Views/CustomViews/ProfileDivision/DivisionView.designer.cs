@@ -10,6 +10,7 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
 {
+    [Register ("DivisionView")]
     partial class DivisionView
     {
         [Outlet]

@@ -8,7 +8,6 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
 {
-    [Register("DivisionView")]
     public partial class DivisionView : UIView
     {
         private EventHandler<int> _divisionEvent;

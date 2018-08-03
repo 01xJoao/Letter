@@ -34,6 +34,30 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController.Cells
 
         void ReleaseDesignerOutlets ()
         {
+            if (_callLabel != null) {
+                _callLabel.Dispose ();
+                _callLabel = null;
+            }
+
+            if (_dateLabel != null) {
+                _dateLabel.Dispose ();
+                _dateLabel = null;
+            }
+
+            if (_imageView != null) {
+                _imageView.Dispose ();
+                _imageView = null;
+            }
+
+            if (_nameLabel != null) {
+                _nameLabel.Dispose ();
+                _nameLabel = null;
+            }
+
+            if (_roleLabel != null) {
+                _roleLabel.Dispose ();
+                _roleLabel = null;
+            }
         }
     }
 }

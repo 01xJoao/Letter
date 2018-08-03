@@ -10,6 +10,7 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.CustomViews.TabBarView
 {
+    [Register ("TabBarView")]
     partial class TabBarView
     {
         [Outlet]

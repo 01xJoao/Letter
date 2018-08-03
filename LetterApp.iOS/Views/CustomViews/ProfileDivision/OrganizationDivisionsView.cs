@@ -9,7 +9,6 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
 {
-    [Register("OrganizationDivisionsView")]
     public partial class OrganizationDivisionsView : UIView
     {
         public static readonly UINib Nib = UINib.FromName("OrganizationDivisionsView", NSBundle.MainBundle);

@@ -9,18 +9,27 @@ namespace LetterApp.iOS.Sources
 {
 	public class CallSource : UITableViewSource
     {
+        public event EventHandler<int> OpenCallerProfile;
+        public event EventHandler<int> CallEvent;
         private List<CallModel> _calls;
 
         public CallSource(UITableView tableView, List<CallModel> calls)
         {
             _calls = calls;
-
             tableView.RegisterNibForCellReuse(CallCell.Nib, CallCell.Key);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            throw new NotImplementedException();
+            var callCell = tableView.DequeueReusableCell(CallCell.Key) as CallCell;
+            callCell.Configure(_calls[indexPath.Row], OpenCallerProfile);
+            return callCell;
+        }
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            tableView.DeselectRow(indexPath, true);
+            CallEvent?.Invoke(this, _calls[indexPath.Row].CallerId);
         }
 
         public override nint RowsInSection(UITableView tableview, nint section) => _calls.Count;

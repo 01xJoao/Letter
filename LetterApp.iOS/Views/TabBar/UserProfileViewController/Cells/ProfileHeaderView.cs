@@ -10,7 +10,6 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 {
-    [Register("ProfileHeaderView")]
     public partial class ProfileHeaderView : UIView
     {
         private ProfileHeaderModel _profile;
