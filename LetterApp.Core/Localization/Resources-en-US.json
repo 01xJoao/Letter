@@ -718,5 +718,9 @@
   {
     "key": "Call_Decline",
     "translated": "Decline"
+  },
+  {
+    "key": "Call_Connecting",
+    "translated": "Connecting..."
   }
 ]

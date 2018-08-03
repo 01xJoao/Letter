@@ -59,6 +59,9 @@ namespace LetterApp.iOS.Views.Call
             _endCallButton.TouchUpInside -= OnEndCallButton_TouchUpInside;
             _endCallButton.TouchUpInside += OnEndCallButton_TouchUpInside;
 
+            UILabelExtensions.SetupLabelAppearance(_letterInfoLabel, ViewModel.LetterLabel, Colors.White, 16f);
+            UILabelExtensions.SetupLabelAppearance(_callDetailLabel, ViewModel.ConnectingLabel, Colors.White, 18f);
+
             _letterIconImage.Image = UIImage.FromBundle("letter_curved");
             _endCallImage.Image = UIImage.FromBundle("end_call");
 
@@ -89,13 +92,20 @@ namespace LetterApp.iOS.Views.Call
             if (PhoneModelExtensions.IsIphoneX())
                 _nameLabelHeightConstraint.Constant = _nameLabelHeightConstraint.Constant + 30;
 
-            UILabelExtensions.SetupLabelAppearance(_fullNameLabel, ViewModel.MemberFullName, Colors.White, 33f);
-            UILabelExtensions.SetupLabelAppearance(_letterInfoLabel, ViewModel.LetterLabel, Colors.White, 16f);
+            int nameSize = 33;
+
+            if(PhoneModelExtensions.IsSmallIphone())
+            {
+                nameSize = 25;
+                _callDetailsHeightConstraint.Constant = 20;
+            }
+
+            UILabelExtensions.SetupLabelAppearance(_fullNameLabel, ViewModel.MemberFullName, Colors.White, nameSize);
 
             if (ViewModel.StartedCall)
             {
                 CallStarted();
-                UILabelExtensions.SetupLabelAppearance(_callDetailLabel, ViewModel.CallingLabel, Colors.White, 18f);
+                _callDetailLabel.Text = ViewModel.CallingLabel;
             }
             else
             {
@@ -107,7 +117,8 @@ namespace LetterApp.iOS.Views.Call
 
                 UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.DeclineLabel, Colors.White, 12f);
                 UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.AcceptLabel, Colors.White, 12f);
-                UILabelExtensions.SetupLabelAppearance(_callDetailLabel, $"{ViewModel.MemberProfileModel.FirstName} {ViewModel.IsCallingLabel}", Colors.White, 18f);
+
+                _callDetailLabel.Text = $"{ViewModel.MemberProfileModel.FirstName} {ViewModel.IsCallingLabel}";
             }
 
             if(string.IsNullOrEmpty(ViewModel.MemberProfileModel.Picture))
@@ -122,12 +133,10 @@ namespace LetterApp.iOS.Views.Call
                     return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
                 }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_pictureImage);
 
-
-                _pictureImage.Image?.Dispose();
+                _backgroundImage.Image?.Dispose();
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new BlurredTransformation(3)).Into(_backgroundImage);
-
+                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new BlurredTransformation(4f)).Into(_backgroundImage);
             }
         }
 
@@ -151,7 +160,7 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.SpeakerLabel, Colors.White, 12f);
             UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.MuteLabel, Colors.White, 12f);
 
-            UILabelExtensions.SetupLabelAppearance(_callDetailLabel, "", Colors.White, 16f, UIFontWeight.Semibold);
+            _callDetailLabel.Text = "";
         }
 
         private void SetupAgoraIO()

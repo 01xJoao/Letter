@@ -19,6 +19,9 @@ namespace LetterApp.iOS.Views.Call
 		UIKit.UILabel _callDetailLabel { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _callDetailsHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIButton _endCallButton { get; set; }
 
 		[Outlet]
@@ -85,6 +88,11 @@ namespace LetterApp.iOS.Views.Call
 				_endCallImage = null;
 			}
 
+			if (_fullNameLabel != null) {
+				_fullNameLabel.Dispose ();
+				_fullNameLabel = null;
+			}
+
 			if (_letterIconImage != null) {
 				_letterIconImage.Dispose ();
 				_letterIconImage = null;
@@ -120,11 +128,6 @@ namespace LetterApp.iOS.Views.Call
 				_nameLabelHeightConstraint = null;
 			}
 
-			if (_fullNameLabel != null) {
-				_fullNameLabel.Dispose ();
-				_fullNameLabel = null;
-			}
-
 			if (_pictureImage != null) {
 				_pictureImage.Dispose ();
 				_pictureImage = null;
@@ -148,6 +151,11 @@ namespace LetterApp.iOS.Views.Call
 			if (_speakerLabel != null) {
 				_speakerLabel.Dispose ();
 				_speakerLabel = null;
+			}
+
+			if (_callDetailsHeightConstraint != null) {
+				_callDetailsHeightConstraint.Dispose ();
+				_callDetailsHeightConstraint = null;
 			}
 		}
 	}

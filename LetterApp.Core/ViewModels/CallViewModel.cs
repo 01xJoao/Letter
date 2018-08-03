@@ -135,6 +135,7 @@ namespace LetterApp.Core.ViewModels
         public string MuteLabel         => L10N.Localize("Call_Mute");
         public string AcceptLabel       => L10N.Localize("Call_Accept");
         public string DeclineLabel      => L10N.Localize("Call_Decline");
+        public string ConnectingLabel   => L10N.Localize("Call_Connecting");
 
         #endregion
     }
