@@ -18,8 +18,15 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
 
         private void ConfigureView()
         {
-            this.Title = "Calls";
+            this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.PrefersLargeTitles = true;
+            this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "new_call", OpenContacts);
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+        }
+
+        private void OpenContacts(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public override void ViewWillDisappear(bool animated)

@@ -7,15 +7,21 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.CallListViewController
 {
     [Register ("CallListViewController")]
     partial class CallListViewController
     {
+        [Outlet]
+        UIKit.UITableView _tableView { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
+            if (_tableView != null) {
+                _tableView.Dispose ();
+                _tableView = null;
+            }
         }
     }
 }

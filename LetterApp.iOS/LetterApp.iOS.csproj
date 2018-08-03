@@ -305,6 +305,10 @@
     <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter.png" />
     <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -392,6 +396,8 @@
     <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
     <Folder Include="Resources\Assets.xcassets\contacts_filter.imageset\" />
     <Folder Include="Views\Member\" />
+    <Folder Include="Resources\Assets.xcassets\new_call.imageset\" />
+    <Folder Include="Views\TabBar\CallListViewController\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -446,6 +452,7 @@
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
     <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -696,6 +703,11 @@
       <DependentUpon>MemberViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\MemberSource.cs" />
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallCell.cs" />
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallCell.designer.cs">
+      <DependentUpon>CallCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\CallSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
