@@ -249,7 +249,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     await NavigationService.NavigateAsync<MemberViewModel, int>(user.Item2);
                     break;
                 case ContactEventType.Call:
-                    await NavigationService.NavigateAsync<CallViewModel, int>(user.Item2);
+                    await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(user.Item2, true));
                     break;
                 default:
                     break;

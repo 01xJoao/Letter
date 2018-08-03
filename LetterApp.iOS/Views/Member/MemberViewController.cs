@@ -39,6 +39,9 @@ namespace LetterApp.iOS.Views.Member
 
         private void SetupView()
         {
+
+            _backHeightConstraint.Constant = _backHeightConstraint.Constant + (PhoneModelExtensions.IsIphoneX() ? 20 : 0); 
+
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             _headerView.BackgroundColor = Colors.MainBlue;
@@ -49,12 +52,6 @@ namespace LetterApp.iOS.Views.Member
 
             UIButtonExtensions.SetupButtonAppearance(_chatButton, Colors.MainBlue, 15f, ViewModel.ChatLabel);
             UIButtonExtensions.SetupButtonAppearance(_callButton, Colors.MainBlue, 15f, ViewModel.CallLabel);
-
-            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
-            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
-
-            _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
-            _callButton.TouchUpInside += OnCallButton_TouchUpInside;   
 
             _backButton.TouchUpInside -= OnBackButton_TouchUpInside;
             _backButton.TouchUpInside += OnBackButton_TouchUpInside;
@@ -77,6 +74,12 @@ namespace LetterApp.iOS.Views.Member
 
             _tableView.Source = new MemberSource(_tableView, ViewModel.MemberDetails);
             _tableView.ReloadData();
+
+            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
+            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+
+            _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
+            _callButton.TouchUpInside += OnCallButton_TouchUpInside;   
         }
 
         private void OnCallButton_TouchUpInside(object sender, EventArgs e)

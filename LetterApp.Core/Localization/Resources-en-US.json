@@ -690,5 +690,33 @@
   {
     "key": "Member_Chat",
     "translated": "Chat"
+  },
+  {
+    "key": "Call_Letter",
+    "translated": "Letter Audio"
+  },
+  {
+    "key": "Call_Calling",
+    "translated": "Calling..."
+  },
+  {
+    "key": "Call_IsCalling",
+    "translated": "is calling..."
+  },
+  {
+    "key": "Call_Speaker",
+    "translated": "Speaker"     
+  },
+  {
+    "key": "Call_Mute",
+    "translated": "Mute"
+  },
+  {
+    "key": "Call_Accept",
+    "translated": "Accept"
+  },
+  {
+    "key": "Call_Decline",
+    "translated": "Decline"
   }
 ]

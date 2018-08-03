@@ -312,6 +312,20 @@
     <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px.png" />
     <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\end_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\end_call.imageset\endcall.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\decline_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\decline_call.imageset\decline.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\accept_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\accept_call.imageset\accept.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_on.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_on.imageset\speaker_on.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_off.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_off.imageset\speaker_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\micro_on.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\micro_off.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -403,6 +417,13 @@
     <Folder Include="Views\TabBar\CallListViewController\Cells\" />
     <Folder Include="AgoraIO\" />
     <Folder Include="Views\Call\" />
+    <Folder Include="Resources\Assets.xcassets\end_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\decline_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\accept_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\speaker_on.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\speaker_off.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\micro_on.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\micro_off.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />

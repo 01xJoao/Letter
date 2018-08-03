@@ -14,6 +14,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MemberViewController">
             <connections>
                 <outlet property="_backButton" destination="YXJ-Fm-oUY" id="Gbr-BL-tP2"/>
+                <outlet property="_backHeightConstraint" destination="dsm-yr-OIl" id="iXR-3h-age"/>
                 <outlet property="_backImage" destination="Y9d-gF-26d" id="y8C-S6-Y7C"/>
                 <outlet property="_callButton" destination="uVa-f8-oCl" id="sjq-B5-Un9"/>
                 <outlet property="_callView" destination="f3C-uo-KFG" id="P8H-XG-9Wg"/>
