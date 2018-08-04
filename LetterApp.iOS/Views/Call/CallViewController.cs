@@ -136,7 +136,7 @@ namespace LetterApp.iOS.Views.Call
                 _backgroundImage.Image?.Dispose();
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new BlurredTransformation(4f)).Into(_backgroundImage);
+                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
             }
         }
 
