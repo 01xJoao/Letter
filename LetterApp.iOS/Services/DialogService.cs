@@ -60,7 +60,7 @@ namespace LetterApp.iOS.Services
         {
             var tcs = new TaskCompletionSource<bool>();
 
-            var filterView = new FilterContactsViewController(title, switchText, descriptionText, buttonText, isActive ,val => tcs.TrySetResult(val));
+            var filterView = new FilterContactsViewController(title, switchText, descriptionText, buttonText, isActive, val => tcs.TrySetResult(val));
             filterView.Show();
 
             return tcs.Task;

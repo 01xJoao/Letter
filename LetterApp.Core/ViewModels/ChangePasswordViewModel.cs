@@ -5,6 +5,7 @@ using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -63,6 +64,8 @@ namespace LetterApp.Core.ViewModels
 
                 if(result.StatusCode == 200)
                 {
+                    await SecureStorage.SetAsync("password", value.Item2);
+
                     await CloseView();
                     await Task.Delay(TimeSpan.FromSeconds(0.3));
                     _dialogService.ShowAlert(PasswordChanged, AlertType.Success, 5f);

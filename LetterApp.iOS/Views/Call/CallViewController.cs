@@ -21,6 +21,7 @@ namespace LetterApp.iOS.Views.Call
     {
         public override bool ShowAsPresentView => true;
 
+        private string _backgroundImg;
         private CancellationTokenSource _timerCTS;
         private int _callTime;
 
@@ -30,19 +31,7 @@ namespace LetterApp.iOS.Views.Call
         public AgoraRtcDelegate AgoraDelegate;
         public AgoraRtcEngineKit AgoraKit;
 
-        private bool _audioMuted;
-        public bool AudioMuted
-        {
-            get => _audioMuted;
-            set
-            {
-                _audioMuted = value;
-
-            }
-        }
-
         public CallViewController() : base("CallViewController", null) { }
-
 
         public override void ViewDidLoad()
         {
@@ -60,7 +49,7 @@ namespace LetterApp.iOS.Views.Call
             _endCallButton.TouchUpInside += OnEndCallButton_TouchUpInside;
 
             UILabelExtensions.SetupLabelAppearance(_letterInfoLabel, ViewModel.LetterLabel, Colors.White, 16f);
-            UILabelExtensions.SetupLabelAppearance(_callDetailLabel, ViewModel.ConnectingLabel, Colors.White, 18f);
+            UILabelExtensions.SetupLabelAppearance(_callDetailLabel, ViewModel.ConnectingLabel, Colors.White.ColorWithAlpha(0.8f), 18f);
 
             _letterIconImage.Image = UIImage.FromBundle("letter_curved");
             _endCallImage.Image = UIImage.FromBundle("end_call");
@@ -81,6 +70,7 @@ namespace LetterApp.iOS.Views.Call
                     break;
                 case nameof(ViewModel.InCall):
                     CallStarted();
+                    SetupAgoraIO();
                     break;
                 default:
                     break;
@@ -131,13 +121,18 @@ namespace LetterApp.iOS.Views.Call
                 _pictureImage.Image?.Dispose();
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_pictureImage);
+                }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_pictureImage);
+
+                _backgroundImg = string.Copy(ViewModel.MemberProfileModel.Picture);
 
                 _backgroundImage.Image?.Dispose();
                 ImageService.Instance.LoadStream((token) => {
-                    return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
+                    return ImageHelper.GetStreamFromImageByte(token, _backgroundImg);
+                }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
             }
+
+            if(ViewModel.StartedCall)
+                SetupAgoraIO();
         }
 
         private void CallStarted()
@@ -145,8 +140,8 @@ namespace LetterApp.iOS.Views.Call
             _speakerIcon.Hidden = false;
             _muteIcon.Hidden = false;
 
-            _speakerIcon.Image = UIImage.FromBundle("speaker_off");
-            _muteIcon.Image = UIImage.FromBundle("micro_on");
+            _speakerIcon.Image = ViewModel.SpeakerOn ? UIImage.FromBundle("speaker_on") : UIImage.FromBundle("speaker_off");
+            _muteIcon.Image = ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
 
             _speakerBackgroundImage.Image = new UIImage();
             _muteBackgroundImage.Image = new UIImage();
@@ -161,6 +156,9 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.MuteLabel, Colors.White, 12f);
 
             _callDetailLabel.Text = "";
+
+            if (AgoraDelegate == null)
+                SetupAgoraIO();
         }
 
         private void SetupAgoraIO()
@@ -198,7 +196,7 @@ namespace LetterApp.iOS.Views.Call
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            ViewModel.EndCallCommand.Execute();
+            LeaveChannel();
         }
 
         private void JoiningCompleted(NSString channel, nuint uid, nint elapsed)
@@ -213,6 +211,8 @@ namespace LetterApp.iOS.Views.Call
             //ChangeContent
             _remoteId = (uint)uid;
             RefreshDebug();
+
+            StartTimer();
         }
 
         public void DidOfflineOfUid(AgoraRtcEngineKit engine, nuint uid, UserOfflineReason reason)
@@ -222,10 +222,11 @@ namespace LetterApp.iOS.Views.Call
 
         public void LeaveChannel()
         {
-            AgoraKit.LeaveChannel(null);
-            //Leave View
+            AgoraKit?.LeaveChannel(null);
             AgoraKit?.Dispose();
             AgoraKit = null;
+
+            ViewModel.EndCallCommand.Execute();
         }
 
         private void RefreshDebug()
@@ -233,10 +234,11 @@ namespace LetterApp.iOS.Views.Call
             Debug.WriteLine($"local: {_localId}\nremote: {_remoteId}");
         }
 
-        public void StartUpdate()
+        public void StartTimer()
         {
-            if (_timerCTS != null) _timerCTS.Cancel();
+            _timerCTS?.Cancel();
             _timerCTS = new CancellationTokenSource();
+
             var ignore = UpdateAsync(_timerCTS.Token);
         }
 
@@ -245,35 +247,45 @@ namespace LetterApp.iOS.Views.Call
             while (!_timerCTS.IsCancellationRequested)
             {
                 _callDetailLabel.Text = TimeSpan.FromSeconds(_callTime++).ToString();
-                await Task.Delay(1000, token);
+
+                try
+                {
+                    await Task.Delay(1000, token);
+                }
+                catch (Exception ex) {}
             }
+
             return null;
         }
 
-        public void StopUpdate()
+        public void StopTimer()
         {
-            if (_timerCTS != null) _timerCTS.Cancel();
+            _timerCTS?.Cancel();
             _timerCTS = null;
         }
 
-        //public async Task UpdaterAsync(CancellationToken cts)
-        //{
-        //    while (!_timerCTS.IsCancellationRequested)
-        //    {
-        //        _nameLabel.Text = TimeSpan.FromSeconds(_callTime++).ToString();
-        //        await Task.Delay(1000, cts);   
-        //    }
-        //}
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            UIDevice.CurrentDevice.ProximityMonitoringEnabled = true;
+        }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             UIApplication.SharedApplication.IdleTimerDisabled = false;
+            UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
+            StopTimer();
+
+            _backgroundImg = null;
         }
 
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
+
+            if (this.IsMovingFromParentViewController)
+                MemoryUtility.ReleaseUIViewWithChildren(this.View);
         }
     }
 }

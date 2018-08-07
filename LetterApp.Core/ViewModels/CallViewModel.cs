@@ -69,13 +69,18 @@ namespace LetterApp.Core.ViewModels
 
             MemberProfileModel = Realm.Find<MembersProfileModel>(CallerId);
             MemberFullName = $"{MemberProfileModel?.FirstName} {MemberProfileModel?.LastName}";
+
+            //AudioService.SetSpeakerOn(SpeakerOn);
         }
 
         public override async Task Appearing()
         {
+            if (StartedCall)
+                CallingAudio();
+            
             if (MemberProfileModel != null)
                 return;
-            
+
             try
             {
                 var result = await _memberService.GetMemberProfile(CallerId);
@@ -96,11 +101,22 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task CallingAudio()
+        {
+            var result = await AudioService.CallWaiting();
+
+            if (result)
+            {
+                await EndCall();
+            }
+        }
+
         private void LeftButtonAction()
         {
             if (StartedCall || InCall)
             {
                 SpeakerOn = !SpeakerOn;
+                //AudioService.SetSpeakerOn(SpeakerOn);
             }
             else
             {
@@ -122,6 +138,8 @@ namespace LetterApp.Core.ViewModels
 
         private async Task EndCall()
         {
+            AudioService.StopAudio();
+            AudioService.CallEnded();
             await NavigationService.Close(this);
         }
 

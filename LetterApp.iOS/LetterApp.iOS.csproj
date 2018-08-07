@@ -424,6 +424,7 @@
     <Folder Include="Resources\Assets.xcassets\speaker_off.imageset\" />
     <Folder Include="Resources\Assets.xcassets\micro_on.imageset\" />
     <Folder Include="Resources\Assets.xcassets\micro_off.imageset\" />
+    <Folder Include="Audio\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -740,6 +741,7 @@
     <Compile Include="Views\Call\CallViewController.designer.cs">
       <DependentUpon>CallViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\AudioPlayerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -751,6 +753,8 @@
     <BundleResource Include="Resources\loading.json" />
     <BundleResource Include="Resources\loading_white.json" />
     <BundleResource Include="Resources\en.Iproj\InfoPList.strings" />
+    <BundleResource Include="Audio\iphone_call.mp3" />
+    <BundleResource Include="Audio\waiting_call.aiff" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
