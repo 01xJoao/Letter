@@ -196,7 +196,7 @@ namespace LetterApp.iOS.Views.Call
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            LeaveChannel();
+            ViewModel.EndCallCommand.Execute();
         }
 
         private void JoiningCompleted(NSString channel, nuint uid, nint elapsed)
@@ -217,15 +217,6 @@ namespace LetterApp.iOS.Views.Call
 
         public void DidOfflineOfUid(AgoraRtcEngineKit engine, nuint uid, UserOfflineReason reason)
         {
-            LeaveChannel();
-        }
-
-        public void LeaveChannel()
-        {
-            AgoraKit?.LeaveChannel(null);
-            AgoraKit?.Dispose();
-            AgoraKit = null;
-
             ViewModel.EndCallCommand.Execute();
         }
 
@@ -277,6 +268,9 @@ namespace LetterApp.iOS.Views.Call
             UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
             StopTimer();
 
+            AgoraKit?.LeaveChannel(null);
+            AgoraKit?.Dispose();
+            AgoraKit = null;
             _backgroundImg = null;
         }
 
