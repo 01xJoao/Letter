@@ -38,6 +38,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _endCallCommand;
         public XPCommand EndCallCommand => _endCallCommand ?? (_endCallCommand = new XPCommand(async () => await EndCall()));
 
+        private XPCommand _stopAudioCommand;
+        public XPCommand StopAudioCommand => _stopAudioCommand ?? (_stopAudioCommand = new XPCommand(() => AudioService.StopAudio()));
+
         private bool _inCall;
         public bool InCall
         {

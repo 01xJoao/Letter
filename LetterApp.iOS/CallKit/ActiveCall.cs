@@ -1,12 +1,19 @@
 ﻿using System;
 using CoreFoundation;
 using Foundation;
+using LetterApp.Core;
+using LetterApp.Core.Helpers;
+using LetterApp.Core.Services.Interfaces;
+using LetterApp.Core.ViewModels;
+using SimpleInjector;
 using UIKit;
 
 namespace LetterApp.iOS.CallKit
 {
     public class ActiveCall
     {
+        private IXNavigationService _navigationService;
+
         #region Private Variables
         public bool isConnecting;
         public bool isConnected;
@@ -17,6 +24,7 @@ namespace LetterApp.iOS.CallKit
         public NSUuid UUID { get; set; }
         public bool isOutgoing { get; set; }
         public string Handle { get; set; }
+        public int CallerId { get; set; }
         public DateTime StartedConnectingOn { get; set; }
         public DateTime ConnectedOn { get; set; }
         public DateTime EndedOn { get; set; }
@@ -61,13 +69,16 @@ namespace LetterApp.iOS.CallKit
         #endregion
 
         #region Constructors
-        public ActiveCall() {}
-
-        public ActiveCall(NSUuid uuid, string handle, bool outgoing)
+        public ActiveCall(IXNavigationService navigationService) 
         {
-            // Initialize
+            _navigationService = navigationService;
+        }
+
+        public ActiveCall(NSUuid uuid, string callerName, int callerId, bool outgoing)
+        {
             this.UUID = uuid;
-            this.Handle = handle;
+            this.Handle = callerName;
+            this.CallerId = callerId;
             this.isOutgoing = outgoing;
         }
         #endregion
@@ -76,34 +87,21 @@ namespace LetterApp.iOS.CallKit
         public void StartCall(ActiveCallbackDelegate completionHandler)
         {
 
-            //// Simulate the call starting successfully
-            //completionHandler(true);
-
-            //// Simulate making a starting and completing a connection
-            //DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, 3000), () => {
-            //    // Note that the call is starting
-            //    IsConnecting = true;
-
-            //    // Simulate pause before connecting
-            //    DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, 1500), () => {
-            //        // Note that the call has connected
-            //        IsConnecting = false;
-            //        IsConnected = true;
-            //    });
-            //});
         }
 
         public void AnswerCall(ActiveCallbackDelegate completionHandler)
         {
             // Simulate the call being answered
-            //IsConnected = true;
+            IsConnected = true;
             //completionHandler(true);
+
+            App.StartCall(CallerId);
         }
 
         public void EndCall(ActiveCallbackDelegate completionHandler)
         {
             // Simulate the call ending
-            //IsConnected = false;
+            IsConnected = false;
             //completionHandler(true);
         }
         #endregion

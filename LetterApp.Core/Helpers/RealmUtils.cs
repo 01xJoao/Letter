@@ -73,11 +73,11 @@ namespace LetterApp.Core.Helpers
             return organization;
         }
 
-        public static string GetCallerName(string callerId)
+        public static string GetCallerName(int callerId)
         {
             var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
             var members = realm.All<GetUsersInDivisionModel>();
-            var caller = members.Where(x => x.UserId == Int32.Parse(callerId)).First();
+            var caller = members.Where(x => x.UserId == callerId).First();
 
             string fullname = string.Empty;
 

@@ -16,8 +16,6 @@ namespace LetterApp.iOS.Views.Member
 {
     public partial class MemberViewController : XViewController<MemberViewModel>
     {
-        private ActiveCallManager CallManager = new ActiveCallManager();
-
         public MemberViewController() : base("MemberViewController", null) {}
 
         public override void ViewDidLoad()
@@ -89,12 +87,7 @@ namespace LetterApp.iOS.Views.Member
 
         private void OnCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            //using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
-            //{
-            //    appDelegate.CallProviderDelegate.CallManager.StartCall("969338899");
-            //}
 
-            CallManager.StartCall("969338899");
         }
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)

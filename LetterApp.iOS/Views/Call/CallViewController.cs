@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CallKit;
@@ -12,6 +13,7 @@ using Foundation;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.AgoraIO;
+using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.Base;
 using SinchSdk;
@@ -30,8 +32,9 @@ namespace LetterApp.iOS.Views.Call
         uint _localId = 0;
         uint _remoteId = 0;
 
-        //public AgoraRtcDelegate AgoraDelegate;
-        //public AgoraRtcEngineKit AgoraKit;
+        public AgoraRtcDelegate AgoraDelegate;
+        public AgoraRtcEngineKit AgoraKit;
+
 
         ISINCall call;
         public ISINCall Call
@@ -50,9 +53,16 @@ namespace LetterApp.iOS.Views.Call
             get
             {
                 var appDelgate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
-
                 return appDelgate.Client;
+            }
+        }
 
+        ProviderDelegate CallProvider
+        {
+            get
+            {
+                var appDelgate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
+                return appDelgate.CallProviderDelegate;
             }
         }
 
@@ -63,9 +73,7 @@ namespace LetterApp.iOS.Views.Call
             base.ViewDidLoad();
 
             if(ViewModel.StartedCall)
-            {
                 ConfigureCallStarter();
-            }
 
             this.View.BackgroundColor = Colors.Black;
 
@@ -94,9 +102,7 @@ namespace LetterApp.iOS.Views.Call
         private void ConfigureCallStarter()
         {
             Client.CallClient.CallUserWithId(ViewModel.CallerId.ToString());
-
-            //var controller = new CXCallController();
-            //var transaction = new CXTransaction()
+            CallProvider.CallManager.StartCall(ViewModel.MemberFullName);
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -137,17 +143,21 @@ namespace LetterApp.iOS.Views.Call
             }
             else
             {
-                _speakerIcon.Hidden = true;
-                _muteIcon.Hidden = true;
-
-                _speakerBackgroundImage.Image = UIImage.FromBundle("decline_call");
-                _muteBackgroundImage.Image = UIImage.FromBundle("accept_call");
-
-                UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.DeclineLabel, Colors.White, 12f);
-                UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.AcceptLabel, Colors.White, 12f);
-
-                _callDetailLabel.Text = $"{ViewModel.MemberProfileModel.FirstName} {ViewModel.IsCallingLabel}";
+                ViewModel.RightButtonCommand.Execute();
             }
+            //else
+            //{
+            //    _speakerIcon.Hidden = true;
+            //    _muteIcon.Hidden = true;
+
+            //    _speakerBackgroundImage.Image = UIImage.FromBundle("decline_call");
+            //    _muteBackgroundImage.Image = UIImage.FromBundle("accept_call");
+
+            //    UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.DeclineLabel, Colors.White, 12f);
+            //    UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.AcceptLabel, Colors.White, 12f);
+
+            //    _callDetailLabel.Text = $"{ViewModel.MemberProfileModel.FirstName} {ViewModel.IsCallingLabel}";
+            //}
 
             if(string.IsNullOrEmpty(ViewModel.MemberProfileModel.Picture))
             {
@@ -195,19 +205,19 @@ namespace LetterApp.iOS.Views.Call
 
             _callDetailLabel.Text = "";
 
-            //if (AgoraDelegate == null)
-                //SetupAgoraIO();
+            if (AgoraDelegate == null)
+                SetupAgoraIO();
         }
 
         private void SetupAgoraIO()
         {
-            //AgoraDelegate = new AgoraRtcDelegate(this);
-            //AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, AgoraDelegate);
-            //AgoraKit.SetChannelProfile(ChannelProfile.Communication);
-            //AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, ViewModel.RoomName, null, 0, JoiningCompleted);
+            AgoraDelegate = new AgoraRtcDelegate(this);
+            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, AgoraDelegate);
+            AgoraKit.SetChannelProfile(ChannelProfile.Communication);
+            AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, ViewModel.RoomName, null, 0, JoiningCompleted);
 
-            //AgoraKit.SetEnableSpeakerphone(ViewModel.SpeakerOn);
-            //AgoraKit.MuteLocalAudioStream(ViewModel.MutedOn);
+            AgoraKit.SetEnableSpeakerphone(ViewModel.SpeakerOn);
+            AgoraKit.MuteLocalAudioStream(ViewModel.MutedOn);
         }
 
         private void OnLeftButton_TouchUpInside(object sender, EventArgs e)
@@ -216,7 +226,7 @@ namespace LetterApp.iOS.Views.Call
 
             if(ViewModel.StartedCall || ViewModel.InCall)
             {
-               // AgoraKit?.SetEnableSpeakerphone(ViewModel.SpeakerOn);
+                AgoraKit?.SetEnableSpeakerphone(ViewModel.SpeakerOn);
                 _speakerIcon.Image = ViewModel.SpeakerOn ? UIImage.FromBundle("speaker_on") : UIImage.FromBundle("speaker_off");
             }
         }
@@ -227,7 +237,7 @@ namespace LetterApp.iOS.Views.Call
 
             if (ViewModel.StartedCall || ViewModel.InCall)
             {
-                //AgoraKit?.MuteLocalAudioStream(ViewModel.MutedOn);
+                AgoraKit?.MuteLocalAudioStream(ViewModel.MutedOn);
                 _muteIcon.Image = ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
             }
         }
@@ -242,11 +252,16 @@ namespace LetterApp.iOS.Views.Call
             _localId = (uint)uid;
             UIApplication.SharedApplication.IdleTimerDisabled = true;
             RefreshDebug();
+
+
         }
 
         public void DidEnterRoom(AgoraRtcEngineKit engine, nuint uid, nint elapsed)
         {
+            ViewModel.StopAudioCommand.Execute();
             //ChangeContent
+            Call?.Hangup();
+
             _remoteId = (uint)uid;
             RefreshDebug();
 
@@ -306,10 +321,13 @@ namespace LetterApp.iOS.Views.Call
             UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
             StopTimer();
 
-            //AgoraKit?.LeaveChannel(null);
-            //AgoraKit?.Dispose();
-            //AgoraKit = null;
+            AgoraKit?.LeaveChannel(null);
+            AgoraKit?.Dispose();
+            AgoraKit = null;
             _backgroundImg = null;
+
+            CallProvider.CallManager.EndCall();
+            Call?.Hangup();
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -318,6 +336,12 @@ namespace LetterApp.iOS.Views.Call
 
             if (this.IsMovingFromParentViewController)
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
+        }
+
+        [Export("callDidEnd:")]
+        void CallDidEnd(ISINCall xcall)
+        {
+            
         }
 
         public void DidReset(CXProvider provider)

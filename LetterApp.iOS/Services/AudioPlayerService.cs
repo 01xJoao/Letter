@@ -69,9 +69,7 @@ namespace LetterApp.iOS.Services
 
             _callWaitingCount++;
 
-            Debug.WriteLine(_callWaitingCount + " - " + _callActive);
-
-            if (_callWaitingCount < 4 && _callActive)
+            if (_callWaitingCount < 20 && _callActive)
             {
                 CallWaiting();
             }

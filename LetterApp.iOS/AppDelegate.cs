@@ -22,7 +22,7 @@ namespace LetterApp.iOS
         public RootViewController RootController;
 
         public static NSData DeviceToken;
-        public ActiveCallManager CallManager = new ActiveCallManager();
+        public ActiveCallManager CallManager;
         public ProviderDelegate CallProviderDelegate { get; set; }
 
         public ISINClient Client { get; set; }
@@ -32,6 +32,7 @@ namespace LetterApp.iOS
         {
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
+            CallManager = new ActiveCallManager();
             CallProviderDelegate = new ProviderDelegate(CallManager);
 
             NavigationController = new UINavigationController();
@@ -120,6 +121,12 @@ namespace LetterApp.iOS
         void client(ISINClient client, string message, string area, SINLogSeverity severity, NSDate timestamp)
         {
             Debug.WriteLine(message);
+        }
+
+        [Export("callDidEnd:")]
+        void CallDidEnd(ISINCall xcall)
+        {
+
         }
 
         public override void OnResignActivation(UIApplication application){}

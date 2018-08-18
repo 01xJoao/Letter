@@ -49,7 +49,8 @@ namespace LetterApp.iOS.CallKit
             // Scan for requested call
             foreach (ActiveCall call in Calls)
             {
-                if (call.UUID == uuid) return call;
+                if (call.UUID.ToString() == uuid.ToString()) 
+                    return call;
             }
 
             // Not found
@@ -69,10 +70,11 @@ namespace LetterApp.iOS.CallKit
             SendTransactionRequest(transaction);
         }
 
-        public void EndCall(ActiveCall call)
+        public void EndCall()
         {
+            var activeCall = Calls.Find(x => x.IsOnHold == false);
             // Build action
-            var endCallAction = new CXEndCallAction(call.UUID);
+            var endCallAction = new CXEndCallAction(activeCall.UUID);
 
             // Create transaction
             var transaction = new CXTransaction(endCallAction);

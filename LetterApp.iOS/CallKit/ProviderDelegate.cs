@@ -23,7 +23,7 @@ namespace LetterApp.iOS.CallKit
             CallManager = callManager;
 
             // Define handle types
-            var handleTypes = new[] { (NSNumber)(int)CXHandleType.PhoneNumber};
+            var handleTypes = new[] { (NSNumber)(int)CXHandleType.Generic};
 
             // Get Image Mask
             var maskImage = UIImage.FromBundle("letter_curved");
@@ -56,7 +56,10 @@ namespace LetterApp.iOS.CallKit
         public override void PerformStartCallAction(CXProvider provider, CXStartCallAction action)
         {
             // Create new call record
-            var activeCall = new ActiveCall(action.CallUuid, action.CallHandle.Value, true);
+            var activeCall = new ActiveCall(action.CallUuid, action.CallHandle.Value, 0, true);
+
+            // Add call to manager
+            CallManager.Calls.Add(activeCall);
 
             // Monitor state changes
             activeCall.StartingConnectionChanged += (call) => {
@@ -82,9 +85,6 @@ namespace LetterApp.iOS.CallKit
                 {
                     // Yes, inform the system
                     action.Fulfill();
-
-                    // Add call to manager
-                    CallManager.Calls.Add(activeCall);
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace LetterApp.iOS.CallKit
 
         public override void PerformAnswerCallAction(CXProvider provider, CXAnswerCallAction action)
         {
-            // Find requested call
+            //Find requested call
             var call = CallManager.FindCall(action.CallUuid);
 
             // Found?
@@ -182,20 +182,21 @@ namespace LetterApp.iOS.CallKit
 
         public override void DidActivateAudioSession(CXProvider provider, AVFoundation.AVAudioSession audioSession)
         {
-            audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
-            audioSession.SetActive(true);
+            //audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+            //audioSession.SetActive(true);
         }
 
         public override void DidDeactivateAudioSession(CXProvider provider, AVFoundation.AVAudioSession audioSession)
         {
-            audioSession.SetActive(false);
+           // audioSession.SetActive(false);
         }
         #endregion
 
         #region Public Methods
         public void ReportIncomingCall(NSUuid uuid, string handle)
         {
-            var callerName = RealmUtils.GetCallerName(handle);
+            var callerId = Int32.Parse(handle);
+            var callerName = RealmUtils.GetCallerName(callerId);
 
             // Create update to describe the incoming call and caller
             var update = new CXCallUpdate();
@@ -208,7 +209,7 @@ namespace LetterApp.iOS.CallKit
                 if (error == null)
                 {
                     // Yes, report to call manager
-                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, false));
+                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false));
                 }
                 else
                 {
@@ -216,6 +217,8 @@ namespace LetterApp.iOS.CallKit
                     Console.WriteLine("Error: {0}", error);
                 }
             });
+
+
         }
         #endregion
     }
