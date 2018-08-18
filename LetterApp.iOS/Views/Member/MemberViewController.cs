@@ -1,9 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using CallKit;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
+using Foundation;
 using LetterApp.Core.ViewModels;
+using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
@@ -13,6 +16,8 @@ namespace LetterApp.iOS.Views.Member
 {
     public partial class MemberViewController : XViewController<MemberViewModel>
     {
+        private ActiveCallManager CallManager = new ActiveCallManager();
+
         public MemberViewController() : base("MemberViewController", null) {}
 
         public override void ViewDidLoad()
@@ -84,7 +89,12 @@ namespace LetterApp.iOS.Views.Member
 
         private void OnCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            
+            //using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
+            //{
+            //    appDelegate.CallProviderDelegate.CallManager.StartCall("969338899");
+            //}
+
+            CallManager.StartCall("969338899");
         }
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)

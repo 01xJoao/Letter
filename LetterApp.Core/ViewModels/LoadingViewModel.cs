@@ -13,6 +13,13 @@ namespace LetterApp.Core.ViewModels
 {
     public class LoadingViewModel : XViewModel
     {
+        private bool _updateSinchClient;
+        public bool UpdateSinchClient
+        {
+            get => _updateSinchClient;
+            set => SetProperty(ref _updateSinchClient, value);
+        }
+
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
@@ -55,8 +62,13 @@ namespace LetterApp.Core.ViewModels
                         return;
                     }
 
+                    bool updateSinch = AppSettings.UserId == 0;
+
                     AppSettings.UserId = userCheck.UserID;
                     var user = RealmUtils.UpdateUser(Realm, userCheck);
+
+                    if (updateSinch)
+                        UpdateSinchClient = true;
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;

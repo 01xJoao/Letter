@@ -690,5 +690,9 @@
   {
     "key": "Member_Chat",
     "translated": "Conversar"
+  },
+  {
+    "key": "Call_Anonym",
+    "translated": "Desconhecido"
   }
 ]

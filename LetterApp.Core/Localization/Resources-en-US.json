@@ -722,5 +722,9 @@
   {
     "key": "Call_Connecting",
     "translated": "Connecting..."
+  },
+  {
+    "key": "Call_Anonym",
+    "translated": "Unknown Caller"
   }
 ]

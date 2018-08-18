@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using LetterApp.Core.Localization;
+using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.ReceivedModels;
 using Realms;
 
@@ -26,8 +28,9 @@ namespace LetterApp.Core.Helpers
 
             foreach (var divion in userCheck?.Divisions)
                 user.Divisions.Add(divion);
-            
-            realm.Write(() => {
+
+            realm.Write(() =>
+            {
                 realm.Add(user, true);
             });
 
@@ -62,11 +65,28 @@ namespace LetterApp.Core.Helpers
                 organization.Divisions.Add(divion);
             }
 
-            realm.Write(() => {
+            realm.Write(() =>
+            {
                 realm.Add(organization, true);
             });
 
             return organization;
+        }
+
+        public static string GetCallerName(string callerId)
+        {
+            var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            var members = realm.All<GetUsersInDivisionModel>();
+            var caller = members.Where(x => x.UserId == Int32.Parse(callerId)).First();
+
+            string fullname = string.Empty;
+
+            if (caller != null)
+                fullname = $"{caller?.FirstName} {caller?.LastName}";
+            else
+                fullname = L10N.Localize("Call_Anonym");
+
+            return fullname;
         }
     }
 }
