@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CallKit;
 using Foundation;
 
@@ -60,8 +61,12 @@ namespace LetterApp.iOS.CallKit
         public void StartCall(string contact)
         {
             // Build call action
-            var handle = new CXHandle(CXHandleType.PhoneNumber, contact);
-            var startCallAction = new CXStartCallAction(new NSUuid(), handle);
+            var handle = new CXHandle(CXHandleType.Generic, contact);
+
+            var newCall = new ActiveCall(new NSUuid(), contact, 0, true);
+            Calls.Add(newCall);
+
+            var startCallAction = new CXStartCallAction(newCall.UUID, handle);
 
             // Create transaction
             var transaction = new CXTransaction(startCallAction);
@@ -73,6 +78,13 @@ namespace LetterApp.iOS.CallKit
         public void EndCall()
         {
             var activeCall = Calls.Find(x => x.IsOnHold == false);
+
+            if (activeCall == null || activeCall == default(ActiveCall))
+                activeCall = Calls.LastOrDefault();
+
+            if (activeCall == null)
+                activeCall = new ActiveCall(new NSUuid(), "", 0, false);
+
             // Build action
             var endCallAction = new CXEndCallAction(activeCall.UUID);
 
@@ -81,6 +93,8 @@ namespace LetterApp.iOS.CallKit
 
             // Inform system of call request
             SendTransactionRequest(transaction);
+
+            //Calls.Remove(activeCall);
         }
 
         public void PlaceCallOnHold(ActiveCall call)

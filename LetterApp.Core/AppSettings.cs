@@ -61,7 +61,7 @@ namespace LetterApp.Core
 
         public static bool CallNotifications
         {
-            get => Preferences.Get(nameof(CallNotifications), false);
+            get => Preferences.Get(nameof(CallNotifications), true);
             set => Preferences.Set(nameof(CallNotifications), value);
         }
 

@@ -10,25 +10,24 @@ namespace LetterApp.iOS.Services
 {
     public class AudioPlayerService : IAudioPlayerService
     {
+        private AVAudioSession _audioSession = AVAudioSession.SharedInstance();
+        private AVAudioPlayer _audioSessionWaitingRing;
         private SystemSound[] _systemSound = new SystemSound[(int)AudioTypes.Count];
         private TaskCompletionSource<bool> _callWaitingTask = new TaskCompletionSource<bool>();
 
         private bool _callActive; 
         private int _callWaitingCount;
-        private int _callEndedCount;
 
         public AudioPlayerService()
         {
             _systemSound[(int)AudioTypes.CallReceiving] = new SystemSound(NSUrl.FromFilename("Audio/iphone_call.mp3"));
-            _systemSound[(int)AudioTypes.CallWaiting] = new SystemSound(NSUrl.FromFilename("Audio/waiting_call.aiff"));
             _systemSound[(int)AudioTypes.CallEnded] = new SystemSound(1071);
             _systemSound[(int)AudioTypes.MessageReceivedInApp] = new SystemSound(1003);
             _systemSound[(int)AudioTypes.MessageReceivedOutApp] = new SystemSound(1004);
             _systemSound[(int)AudioTypes.MessageSend] = new SystemSound(1007);
 
-            _systemSound[(int)AudioTypes.CallEnded].AddSystemSoundCompletion(CallEndedEvent);
-            _systemSound[(int)AudioTypes.CallWaiting].AddSystemSoundCompletion(async () => await CallWaintingEvent());
-
+            _audioSessionWaitingRing = new AVAudioPlayer(NSUrl.FromFilename("Audio/waiting_call.aiff"), "aiff", out NSError err);
+            _audioSessionWaitingRing.Volume = 1;
         }
 
         public void CallReceiving()
@@ -38,14 +37,19 @@ namespace LetterApp.iOS.Services
 
         public Task<bool> CallWaiting()
         {
+            _callWaitingTask = new TaskCompletionSource<bool>();
+
             _callActive = true;
-            _systemSound[(int)AudioTypes.CallWaiting].PlaySystemSound();
+            CallWaintingEvent();
+
             return _callWaitingTask.Task;
         }
 
-        public void CallEnded()
+        public async Task CallEnded()
         {
-            _systemSound[(int)AudioTypes.CallEnded].PlaySystemSound();
+            await _systemSound[(int)AudioTypes.CallEnded].PlaySystemSoundAsync();
+            await _systemSound[(int)AudioTypes.CallEnded].PlaySystemSoundAsync();
+            await _systemSound[(int)AudioTypes.CallEnded].PlaySystemSoundAsync();
         }
 
         public void MessageReceivedInApp()
@@ -71,7 +75,8 @@ namespace LetterApp.iOS.Services
 
             if (_callWaitingCount < 20 && _callActive)
             {
-                CallWaiting();
+                _audioSessionWaitingRing.Play();
+                CallWaintingEvent();
             }
             else
             {
@@ -80,31 +85,14 @@ namespace LetterApp.iOS.Services
             }
         }
 
-        private void CallEndedEvent()
-        {
-            _callEndedCount++;
-
-            Debug.WriteLine(_callEndedCount);
-
-            if (_callEndedCount < 3)
-                CallEnded();
-            else
-                StopAudio();
-        }
-
         public void StopAudio()
         {
             _systemSound[(int)AudioTypes.CallReceiving].Close();
-            _systemSound[(int)AudioTypes.CallWaiting].Close();
+            _audioSessionWaitingRing.Stop();
 
             _callWaitingTask.TrySetResult(false);
 
-            _callWaitingTask = new TaskCompletionSource<bool>();
-
             _systemSound[(int)AudioTypes.CallReceiving] = new SystemSound(NSUrl.FromFilename("Audio/iphone_call.mp3"));
-            _systemSound[(int)AudioTypes.CallWaiting] = new SystemSound(NSUrl.FromFilename("Audio/waiting_call.aiff"));
-
-            _systemSound[(int)AudioTypes.CallWaiting].AddSystemSoundCompletion(async () => await CallWaintingEvent());
 
             Debug.WriteLine("Audio Stoped");
 
@@ -115,7 +103,6 @@ namespace LetterApp.iOS.Services
         {
             _callActive = false;
             _callWaitingCount = 0;
-            _callEndedCount = 0;
         }
     }
 }

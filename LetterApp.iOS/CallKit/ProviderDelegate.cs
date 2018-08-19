@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AVFoundation;
 using CallKit;
 using Foundation;
@@ -55,11 +56,7 @@ namespace LetterApp.iOS.CallKit
 
         public override void PerformStartCallAction(CXProvider provider, CXStartCallAction action)
         {
-            // Create new call record
-            var activeCall = new ActiveCall(action.CallUuid, action.CallHandle.Value, 0, true);
-
-            // Add call to manager
-            CallManager.Calls.Add(activeCall);
+            var activeCall = CallManager.FindCall(action.CallUuid);
 
             // Monitor state changes
             activeCall.StartingConnectionChanged += (call) => {
@@ -128,32 +125,40 @@ namespace LetterApp.iOS.CallKit
             // Find requested call
             var call = CallManager.FindCall(action.CallUuid);
 
+            provider.ReportConnectedOutgoingCall(call.UUID, (NSDate)default);
+
             // Found?
             if (call == null)
             {
                 // No, inform system and exit
-                action.Fail();
+                //action.Fail();
                 return;
             }
+            else
+            {
+                action.Fulfill();
+                CallManager.Calls.Remove(call);
+            }
 
-            // Attempt to answer call
-            call.EndCall((successful) => {
-                // Was the call successfully answered?
-                if (successful)
-                {
-                    // Remove call from manager's queue
-                    CallManager.Calls.Remove(call);
+            //// Attempt to answer call
+            //call.EndCall((successful) => {
+            //    // Was the call successfully answered?
+            //    if (successful)
+            //    {
+            //        // Remove call from manager's queue
+            //        CallManager.Calls.Remove(call);
 
-                    // Yes, inform system
-                    action.Fulfill();
-                }
-                else
-                {
-                    // No, inform system
-                    action.Fail();
-                }
-            });
+            //        // Yes, inform system
+            //        action.Fulfill();
+            //    }
+            //    else
+            //    {
+            //        // No, inform system
+            //        action.Fail();
+            //    }
+            //});
         }
+
 
         public override void PerformSetHeldCallAction(CXProvider provider, CXSetHeldCallAction action)
         {
@@ -178,17 +183,18 @@ namespace LetterApp.iOS.CallKit
         public override void TimedOutPerformingAction(CXProvider provider, CXAction action)
         {
             // Inform user that the action has timed out
+            action.Fulfill();
         }
 
         public override void DidActivateAudioSession(CXProvider provider, AVFoundation.AVAudioSession audioSession)
         {
-            //audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
-            //audioSession.SetActive(true);
+            audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+            audioSession.SetActive(true);
         }
 
         public override void DidDeactivateAudioSession(CXProvider provider, AVFoundation.AVAudioSession audioSession)
         {
-           // audioSession.SetActive(false);
+           audioSession.SetActive(false);
         }
         #endregion
 

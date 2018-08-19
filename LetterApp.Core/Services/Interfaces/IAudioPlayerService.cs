@@ -7,7 +7,7 @@ namespace LetterApp.Core.Services.Interfaces
     {
         void CallReceiving();
         Task<bool> CallWaiting();
-        void CallEnded();
+        Task CallEnded();
 
         void MessageSend();
         void MessageReceivedInApp();

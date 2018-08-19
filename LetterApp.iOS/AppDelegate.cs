@@ -14,7 +14,7 @@ namespace LetterApp.iOS
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : UIApplicationDelegate, ISINClientDelegate, ISINCallClientDelegate, ISINManagedPushDelegate
+    public class AppDelegate : UIApplicationDelegate, ISINClientDelegate, ISINCallClientDelegate, ISINManagedPushDelegate, ISINCallDelegate
     {
         // class-level declarations
         public override UIWindow Window { get; set; }
@@ -92,7 +92,7 @@ namespace LetterApp.iOS
         public void DidReceiveIncomingPushWithPayload(ISINManagedPush managedPush, NSDictionary payload, string pushType)
         {
 
-            if (pushType == "PKPushTypeVoIP")
+            if (pushType == "PKPushTypeVoIP" && AppSettings.CallNotifications)
             {
                 var callInfo = payload["sin"].ToString();
                 var caller = Client.RelayRemotePushNotificationPayload(callInfo);
@@ -126,7 +126,6 @@ namespace LetterApp.iOS
         [Export("callDidEnd:")]
         void CallDidEnd(ISINCall xcall)
         {
-
         }
 
         public override void OnResignActivation(UIApplication application){}

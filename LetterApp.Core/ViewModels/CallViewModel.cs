@@ -36,7 +36,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand RightButtonCommand => _rightButtonCommand ?? (_rightButtonCommand = new XPCommand(() => RightButtonAction()));
 
         private XPCommand _endCallCommand;
-        public XPCommand EndCallCommand => _endCallCommand ?? (_endCallCommand = new XPCommand(async () => await EndCall()));
+        public XPCommand EndCallCommand => _endCallCommand ?? (_endCallCommand = new XPCommand(async () => await EndCall(), CanExecute));
 
         private XPCommand _stopAudioCommand;
         public XPCommand StopAudioCommand => _stopAudioCommand ?? (_stopAudioCommand = new XPCommand(() => AudioService.StopAudio()));
@@ -72,8 +72,6 @@ namespace LetterApp.Core.ViewModels
 
             MemberProfileModel = Realm.Find<MembersProfileModel>(CallerId);
             MemberFullName = $"{MemberProfileModel?.FirstName} {MemberProfileModel?.LastName}";
-
-            //AudioService.SetSpeakerOn(SpeakerOn);
         }
 
         public override async Task Appearing()
@@ -109,9 +107,7 @@ namespace LetterApp.Core.ViewModels
             var result = await AudioService.CallWaiting();
 
             if (result)
-            {
                 await EndCall();
-            }
         }
 
         private void LeftButtonAction()
@@ -119,7 +115,6 @@ namespace LetterApp.Core.ViewModels
             if (StartedCall || InCall)
             {
                 SpeakerOn = !SpeakerOn;
-                //AudioService.SetSpeakerOn(SpeakerOn);
             }
             else
             {
@@ -141,11 +136,14 @@ namespace LetterApp.Core.ViewModels
 
         private async Task EndCall()
         {
+            IsBusy = true;
+
             AudioService.StopAudio();
-            AudioService.CallEnded();
+            await AudioService.CallEnded();
             await NavigationService.Close(this);
         }
 
+        private bool CanExecute() => !IsBusy;
 
         #region Resources
 

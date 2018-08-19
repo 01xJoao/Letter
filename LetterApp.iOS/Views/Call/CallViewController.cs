@@ -21,7 +21,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.Call
 {
-    public partial class CallViewController : XViewController<CallViewModel>, ICXProviderDelegate, ISINCallDelegate, ISINCallClientDelegate
+    public partial class CallViewController : XViewController<CallViewModel>, ISINCallDelegate, ISINCallClientDelegate
     {
         public override bool ShowAsPresentView => true;
 
@@ -72,9 +72,6 @@ namespace LetterApp.iOS.Views.Call
         {
             base.ViewDidLoad();
 
-            if(ViewModel.StartedCall)
-                ConfigureCallStarter();
-
             this.View.BackgroundColor = Colors.Black;
 
             _speakerButton.TouchUpInside -= OnLeftButton_TouchUpInside;
@@ -98,6 +95,15 @@ namespace LetterApp.iOS.Views.Call
             if(ViewModel.MemberProfileModel != null)
                 SetupView();
         }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (ViewModel.StartedCall)
+                ConfigureCallStarter();
+        }
+
 
         private void ConfigureCallStarter()
         {
@@ -244,7 +250,8 @@ namespace LetterApp.iOS.Views.Call
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            ViewModel.EndCallCommand.Execute();
+            if (ViewModel.EndCallCommand.CanExecute())
+                ViewModel.EndCallCommand.Execute();
         }
 
         private void JoiningCompleted(NSString channel, nuint uid, nint elapsed)
@@ -252,14 +259,12 @@ namespace LetterApp.iOS.Views.Call
             _localId = (uint)uid;
             UIApplication.SharedApplication.IdleTimerDisabled = true;
             RefreshDebug();
-
-
         }
 
         public void DidEnterRoom(AgoraRtcEngineKit engine, nuint uid, nint elapsed)
         {
             ViewModel.StopAudioCommand.Execute();
-            //ChangeContent
+
             Call?.Hangup();
 
             _remoteId = (uint)uid;
@@ -270,7 +275,8 @@ namespace LetterApp.iOS.Views.Call
 
         public void DidOfflineOfUid(AgoraRtcEngineKit engine, nuint uid, UserOfflineReason reason)
         {
-            ViewModel.EndCallCommand.Execute();
+            if(ViewModel.EndCallCommand.CanExecute())
+                ViewModel.EndCallCommand.Execute();
         }
 
         private void RefreshDebug()
@@ -327,6 +333,7 @@ namespace LetterApp.iOS.Views.Call
             _backgroundImg = null;
 
             CallProvider.CallManager.EndCall();
+
             Call?.Hangup();
         }
 
@@ -340,11 +347,6 @@ namespace LetterApp.iOS.Views.Call
 
         [Export("callDidEnd:")]
         void CallDidEnd(ISINCall xcall)
-        {
-            
-        }
-
-        public void DidReset(CXProvider provider)
         {
         }
     }
