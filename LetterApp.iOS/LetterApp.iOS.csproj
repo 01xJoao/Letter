@@ -757,7 +757,6 @@
     </Compile>
     <Compile Include="Services\AudioPlayerService.cs" />
     <Compile Include="CallKit\ActiveCall.cs" />
-    <Compile Include="CallKit\StartCallRequest.cs" />
     <Compile Include="CallKit\ActiveCallManager.cs" />
     <Compile Include="CallKit\ProviderDelegate.cs" />
   </ItemGroup>
