@@ -1,25 +1,19 @@
 ﻿using System;
-using CoreFoundation;
 using Foundation;
-using LetterApp.Core;
-using LetterApp.Core.Helpers;
-using LetterApp.Core.Services.Interfaces;
-using LetterApp.Core.ViewModels;
-using SimpleInjector;
 using SinchSdk;
-using UIKit;
 
 namespace LetterApp.iOS.CallKit
 {
     public class ActiveCall
     {
         #region Private Variables
-        public bool isConnecting;
-        public bool isConnected;
-        public bool isOnhold;
+        private bool isConnecting;
+        private bool isConnected;
+        private bool isOnhold;
         #endregion
 
         #region Computed Properties
+
         public NSUuid UUID { get; set; }
         public bool IsOutgoing { get; set; }
         public string Handle { get; set; }
@@ -31,48 +25,43 @@ namespace LetterApp.iOS.CallKit
 
         public bool IsConnecting
         {
-            get { return isConnecting; }
+            get => isConnecting;
             set
             {
                 isConnecting = value;
+
                 if (isConnecting) 
                     StartedConnectingOn = DateTime.Now;
+                
                 RaiseStartingConnectionChanged();
             }
         }
 
         public bool IsConnected
         {
-            get { return isConnected; }
+            get => isConnected;
             set
             {
                 isConnected = value;
+
                 if (isConnected)
-                {
                     ConnectedOn = DateTime.Now;
-                }
                 else
-                {
                     EndedOn = DateTime.Now;
-                }
+                
                 RaiseConnectedChanged();
             }
         }
 
         public bool IsOnHold
         {
-            get { return isOnhold; }
-            set
-            {
-                isOnhold = value;
-            }
+            get => isOnhold;
+            set => isOnhold = value;
         }
+
         #endregion
 
         #region Constructors
-        public ActiveCall() 
-        { 
-        }
 
         public ActiveCall(NSUuid uuid, string callerName, int callerId, bool outgoing, ISINCall call)
         {
@@ -82,9 +71,11 @@ namespace LetterApp.iOS.CallKit
             this.IsOutgoing = outgoing;
             this.SINCall = call;
         }
+
         #endregion
 
         #region Public Methods
+
         public void StartCall() 
         {
             IsConnecting = true;
@@ -99,6 +90,7 @@ namespace LetterApp.iOS.CallKit
         #endregion
 
         #region Events
+
         public delegate void ActiveCallbackDelegate(bool successful);
         public delegate void ActiveCallStateChangedDelegate(ActiveCall call);
 
@@ -117,6 +109,7 @@ namespace LetterApp.iOS.CallKit
             if (this.ConnectedChanged != null) 
                 this.ConnectedChanged(this);
         }
+
         #endregion
     }
 }

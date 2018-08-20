@@ -10,6 +10,7 @@ using FFImageLoading.Transformations;
 using FFImageLoading.Work;
 using Foundation;
 using LetterApp.Core.AgoraIO;
+using LetterApp.Core.Exceptions;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.AgoraIO;
 using LetterApp.iOS.CallKit;
@@ -269,7 +270,10 @@ namespace LetterApp.iOS.Views.Call
                 {
                     await Task.Delay(1000, token);
                 }
-                catch (Exception ex) {}
+                catch (Exception ex) 
+                {
+                    Ui.Handle(ex as dynamic);
+                }
             }
 
             return null;
