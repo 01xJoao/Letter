@@ -6,14 +6,13 @@ using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels;
 using SimpleInjector;
+using SinchSdk;
 using UIKit;
 
 namespace LetterApp.iOS.CallKit
 {
     public class ActiveCall
     {
-        private IXNavigationService _navigationService;
-
         #region Private Variables
         public bool isConnecting;
         public bool isConnected;
@@ -22,12 +21,13 @@ namespace LetterApp.iOS.CallKit
 
         #region Computed Properties
         public NSUuid UUID { get; set; }
-        public bool isOutgoing { get; set; }
+        public bool IsOutgoing { get; set; }
         public string Handle { get; set; }
         public int CallerId { get; set; }
         public DateTime StartedConnectingOn { get; set; }
         public DateTime ConnectedOn { get; set; }
         public DateTime EndedOn { get; set; }
+        public ISINCall SINCall { get; set; }
 
         public bool IsConnecting
         {
@@ -35,7 +35,8 @@ namespace LetterApp.iOS.CallKit
             set
             {
                 isConnecting = value;
-                if (isConnecting) StartedConnectingOn = DateTime.Now;
+                if (isConnecting) 
+                    StartedConnectingOn = DateTime.Now;
                 RaiseStartingConnectionChanged();
             }
         }
@@ -69,41 +70,32 @@ namespace LetterApp.iOS.CallKit
         #endregion
 
         #region Constructors
-        public ActiveCall(IXNavigationService navigationService) 
-        {
-            _navigationService = navigationService;
+        public ActiveCall() 
+        { 
         }
 
-        public ActiveCall(NSUuid uuid, string callerName, int callerId, bool outgoing)
+        public ActiveCall(NSUuid uuid, string callerName, int callerId, bool outgoing, ISINCall call)
         {
             this.UUID = uuid;
             this.Handle = callerName;
             this.CallerId = callerId;
-            this.isOutgoing = outgoing;
+            this.IsOutgoing = outgoing;
+            this.SINCall = call;
         }
         #endregion
 
         #region Public Methods
-        public void StartCall(ActiveCallbackDelegate completionHandler)
+        public void StartCall() 
         {
-
+            IsConnecting = true;
         }
 
         public void AnswerCall(ActiveCallbackDelegate completionHandler)
         {
-            // Simulate the call being answered
+            IsConnecting = false;
             IsConnected = true;
-            //completionHandler(true);
-
-            App.StartCall(CallerId);
         }
 
-        public void EndCall(ActiveCallbackDelegate completionHandler)
-        {
-            // Simulate the call ending
-            IsConnected = false;
-            //completionHandler(true);
-        }
         #endregion
 
         #region Events

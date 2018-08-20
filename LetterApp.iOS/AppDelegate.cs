@@ -14,7 +14,7 @@ namespace LetterApp.iOS
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : UIApplicationDelegate, ISINClientDelegate, ISINCallClientDelegate, ISINManagedPushDelegate, ISINCallDelegate
+    public class AppDelegate : UIApplicationDelegate, ISINClientDelegate, ISINCallClientDelegate, ISINManagedPushDelegate
     {
         // class-level declarations
         public override UIWindow Window { get; set; }
@@ -56,7 +56,7 @@ namespace LetterApp.iOS
 
             if(AppSettings.UserId != 0)
                 InitSinchClientWithUserId(AppSettings.UserId.ToString());
-
+            
             return true;
         }
 
@@ -86,12 +86,13 @@ namespace LetterApp.iOS
                 Client.SetSupportPushNotifications(true);
                 Client.Start();
                 Client.StartListeningOnActiveConnection();
+
+                CallProviderDelegate.StartCallClientDelegate();
             }
         }
 
         public void DidReceiveIncomingPushWithPayload(ISINManagedPush managedPush, NSDictionary payload, string pushType)
         {
-
             if (pushType == "PKPushTypeVoIP" && AppSettings.CallNotifications)
             {
                 var callInfo = payload["sin"].ToString();
@@ -101,7 +102,6 @@ namespace LetterApp.iOS
             }
         }
 
-        //Update Credentials
         public void DidUpdatePushCredentials(PKPushRegistry registry, PKPushCredentials credentials, string type)
         {
             Client.RegisterPushNotificationData(credentials.Token);
@@ -123,16 +123,11 @@ namespace LetterApp.iOS
             Debug.WriteLine(message);
         }
 
-        [Export("callDidEnd:")]
-        void CallDidEnd(ISINCall xcall)
-        {
-        }
-
-        public override void OnResignActivation(UIApplication application){}
-        public override void DidEnterBackground(UIApplication application){}
-        public override void WillEnterForeground(UIApplication application){}
-        public override void OnActivated(UIApplication application){}
-        public override void WillTerminate(UIApplication application){}
+        public override void OnResignActivation(UIApplication application) {}
+        public override void DidEnterBackground(UIApplication application) {}
+        public override void WillEnterForeground(UIApplication application) {}
+        public override void OnActivated(UIApplication application) {}
+        public override void WillTerminate(UIApplication application) {}
     }
 }
 

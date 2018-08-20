@@ -26,7 +26,6 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
 
         private void OpenContacts(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
         }
 
         public override void ViewWillDisappear(bool animated)

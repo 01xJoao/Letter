@@ -15,12 +15,11 @@ namespace LetterApp.iOS.Services
         private SystemSound[] _systemSound = new SystemSound[(int)AudioTypes.Count];
         private TaskCompletionSource<bool> _callWaitingTask = new TaskCompletionSource<bool>();
 
-        private bool _callActive; 
+        private bool _isCalling; 
         private int _callWaitingCount;
 
         public AudioPlayerService()
         {
-            _systemSound[(int)AudioTypes.CallReceiving] = new SystemSound(NSUrl.FromFilename("Audio/iphone_call.mp3"));
             _systemSound[(int)AudioTypes.CallEnded] = new SystemSound(1071);
             _systemSound[(int)AudioTypes.MessageReceivedInApp] = new SystemSound(1003);
             _systemSound[(int)AudioTypes.MessageReceivedOutApp] = new SystemSound(1004);
@@ -30,16 +29,11 @@ namespace LetterApp.iOS.Services
             _audioSessionWaitingRing.Volume = 1;
         }
 
-        public void CallReceiving()
-        {
-            _systemSound[(int)AudioTypes.CallReceiving].PlayAlertSound();
-        }
-
         public Task<bool> CallWaiting()
         {
             _callWaitingTask = new TaskCompletionSource<bool>();
 
-            _callActive = true;
+            _isCalling = true;
             CallWaintingEvent();
 
             return _callWaitingTask.Task;
@@ -73,7 +67,7 @@ namespace LetterApp.iOS.Services
 
             _callWaitingCount++;
 
-            if (_callWaitingCount < 20 && _callActive)
+            if (_callWaitingCount < 20 && _isCalling)
             {
                 _audioSessionWaitingRing.Play();
                 CallWaintingEvent();
@@ -87,12 +81,9 @@ namespace LetterApp.iOS.Services
 
         public void StopAudio()
         {
-            _systemSound[(int)AudioTypes.CallReceiving].Close();
             _audioSessionWaitingRing.Stop();
 
             _callWaitingTask.TrySetResult(false);
-
-            _systemSound[(int)AudioTypes.CallReceiving] = new SystemSound(NSUrl.FromFilename("Audio/iphone_call.mp3"));
 
             Debug.WriteLine("Audio Stoped");
 
@@ -101,7 +92,7 @@ namespace LetterApp.iOS.Services
 
         private void CleanCall()
         {
-            _callActive = false;
+            _isCalling = false;
             _callWaitingCount = 0;
         }
     }

@@ -5,7 +5,6 @@ namespace LetterApp.Core.Services.Interfaces
 {
     public interface IAudioPlayerService
     {
-        void CallReceiving();
         Task<bool> CallWaiting();
         Task CallEnded();
 

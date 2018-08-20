@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CallKit;
 using Foundation;
+using SinchSdk;
+using UIKit;
 
 namespace LetterApp.iOS.CallKit
 {
@@ -10,6 +12,15 @@ namespace LetterApp.iOS.CallKit
     {
         #region Private Variables
         private CXCallController CallController = new CXCallController();
+
+        private ISINClient Client
+        {
+            get
+            {
+                var appDelgate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
+                return appDelgate.Client;
+            }
+        }
         #endregion
 
         #region Computed Properties
@@ -58,12 +69,14 @@ namespace LetterApp.iOS.CallKit
             return null;
         }
 
-        public void StartCall(string contact)
+        public ActiveCall StartCall(string name, int id)
         {
-            // Build call action
-            var handle = new CXHandle(CXHandleType.Generic, contact);
+            var call = Client.CallClient.CallUserWithId(id.ToString());
 
-            var newCall = new ActiveCall(new NSUuid(), contact, 0, true);
+            // Build call action
+            var handle = new CXHandle(CXHandleType.Generic, name);
+
+            var newCall = new ActiveCall(new NSUuid(), name, id, true, call);
             Calls.Add(newCall);
 
             var startCallAction = new CXStartCallAction(newCall.UUID, handle);
@@ -73,28 +86,28 @@ namespace LetterApp.iOS.CallKit
 
             // Inform system of call request
             SendTransactionRequest(transaction);
+
+            return newCall;
         }
 
-        public void EndCall()
+        public void EndCall(ActiveCall call)
         {
-            var activeCall = Calls.Find(x => x.IsOnHold == false);
+            //var activeCall = Calls.Find(x => x.IsOnHold == false);
 
-            if (activeCall == null || activeCall == default(ActiveCall))
-                activeCall = Calls.LastOrDefault();
+            if (call == null || call == default(ActiveCall))
+                call = Calls.LastOrDefault();
 
-            if (activeCall == null)
-                activeCall = new ActiveCall(new NSUuid(), "", 0, false);
+            if (call != null)
+            {
+                // Build action
+                var endCallAction = new CXEndCallAction(call.UUID);
 
-            // Build action
-            var endCallAction = new CXEndCallAction(activeCall.UUID);
+                // Create transaction
+                var transaction = new CXTransaction(endCallAction);
 
-            // Create transaction
-            var transaction = new CXTransaction(endCallAction);
-
-            // Inform system of call request
-            SendTransactionRequest(transaction);
-
-            //Calls.Remove(activeCall);
+                // Inform system of call request
+                SendTransactionRequest(transaction);
+            }
         }
 
         public void PlaceCallOnHold(ActiveCall call)

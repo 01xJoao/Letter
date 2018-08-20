@@ -15,9 +15,6 @@ namespace LetterApp.Core.ViewModels.Abstractions
         private static IXNavigationService _navigationService;
         protected static IXNavigationService NavigationService = _navigationService ?? (_navigationService = App.Container.GetInstance<IXNavigationService>());
 
-        private static IAudioPlayerService _audioService;
-        protected static IAudioPlayerService AudioService = _audioService ?? (_audioService = App.Container.GetInstance<IAudioPlayerService>());
-
         public event PropertyChangedEventHandler PropertyChanged;
         private static readonly PropertyChangedEventArgs AllPropertiesChanged = new PropertyChangedEventArgs(string.Empty);
 

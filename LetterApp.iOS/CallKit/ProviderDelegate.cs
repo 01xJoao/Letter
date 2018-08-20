@@ -1,21 +1,45 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using AVFoundation;
 using CallKit;
 using Foundation;
+using LetterApp.Core;
 using LetterApp.Core.Helpers;
-using Realms;
+using LetterApp.Core.Services.Interfaces;
+using SinchSdk;
 using UIKit;
 
 namespace LetterApp.iOS.CallKit
 {
-    public class ProviderDelegate : CXProviderDelegate
+    public class ProviderDelegate : CXProviderDelegate, ISINCallClientDelegate, ISINCallDelegate
     {
         #region Computed Properties
         public ActiveCallManager CallManager { get; set; }
         public CXProviderConfiguration Configuration { get; set; }
         public CXProvider Provider { get; set; }
         #endregion
+
+        private ISINCall Call { get; set; }
+
+        private ISINAudioController AudioController
+        {
+            get
+            {
+                var appDelegate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
+
+                return appDelegate.Client.AudioController;
+            }
+        }
+
+        private ISINClient Client
+        {
+            get
+            {
+                var appDelgate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
+                return appDelgate.Client;
+            }
+        }
 
         #region Constructors
         public ProviderDelegate(ActiveCallManager callManager)
@@ -24,7 +48,7 @@ namespace LetterApp.iOS.CallKit
             CallManager = callManager;
 
             // Define handle types
-            var handleTypes = new[] { (NSNumber)(int)CXHandleType.Generic};
+            var handleTypes = new[] {(NSNumber)(int)CXHandleType.Generic};
 
             // Get Image Mask
             var maskImage = UIImage.FromBundle("letter_curved");
@@ -50,7 +74,6 @@ namespace LetterApp.iOS.CallKit
         #region Override Methods
         public override void DidReset(CXProvider provider)
         {
-            // Remove all calls
             CallManager.Calls.Clear();
         }
 
@@ -75,26 +98,16 @@ namespace LetterApp.iOS.CallKit
                 }
             };
 
-            // Start call
-            activeCall.StartCall((successful) => {
-                // Was the call able to be started?
-                if (successful)
-                {
-                    // Yes, inform the system
-                    action.Fulfill();
-                }
-                else
-                {
-                    // No, inform system
-                    action.Fail();
-                }
-            });
+            activeCall.StartCall();
+            AudioController.StartPlayingSoundFile(PathForSound("ringback.wav"), true);
         }
 
         public override void PerformAnswerCallAction(CXProvider provider, CXAnswerCallAction action)
         {
             //Find requested call
             var call = CallManager.FindCall(action.CallUuid);
+
+            AudioController.StopPlayingSoundFile();
 
             // Found?
             if (call == null)
@@ -103,12 +116,18 @@ namespace LetterApp.iOS.CallKit
                 action.Fail();
                 return;
             }
+            else
+            {
+                if (!call.IsOutgoing)
+                    App.StartCall(call.CallerId);
+            }
 
             // Attempt to answer call
             call.AnswerCall((successful) => {
                 // Was the call successfully answered?
                 if (successful)
                 {
+
                     // Yes, inform system
                     action.Fulfill();
                 }
@@ -125,38 +144,23 @@ namespace LetterApp.iOS.CallKit
             // Find requested call
             var call = CallManager.FindCall(action.CallUuid);
 
-            provider.ReportConnectedOutgoingCall(call.UUID, (NSDate)default);
+            AudioController.StopPlayingSoundFile();
+
+            AudioController.StartPlayingSoundFile(PathForSound("EndCallSound.wav"), false);
+
 
             // Found?
             if (call == null)
             {
-                // No, inform system and exit
-                //action.Fail();
                 return;
             }
             else
             {
+                provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
                 action.Fulfill();
+                call.SINCall?.Hangup();
                 CallManager.Calls.Remove(call);
             }
-
-            //// Attempt to answer call
-            //call.EndCall((successful) => {
-            //    // Was the call successfully answered?
-            //    if (successful)
-            //    {
-            //        // Remove call from manager's queue
-            //        CallManager.Calls.Remove(call);
-
-            //        // Yes, inform system
-            //        action.Fulfill();
-            //    }
-            //    else
-            //    {
-            //        // No, inform system
-            //        action.Fail();
-            //    }
-            //});
         }
 
 
@@ -164,6 +168,8 @@ namespace LetterApp.iOS.CallKit
         {
             // Find requested call
             var call = CallManager.FindCall(action.CallUuid);
+
+            AudioController.StopPlayingSoundFile();
 
             // Found?
             if (call == null)
@@ -196,6 +202,11 @@ namespace LetterApp.iOS.CallKit
         {
            audioSession.SetActive(false);
         }
+
+        string PathForSound(string soundName)
+        {
+            return Path.Combine(NSBundle.MainBundle.ResourcePath, soundName);
+        }
         #endregion
 
         #region Public Methods
@@ -215,7 +226,7 @@ namespace LetterApp.iOS.CallKit
                 if (error == null)
                 {
                     // Yes, report to call manager
-                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false));
+                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, Call));
                 }
                 else
                 {
@@ -223,9 +234,27 @@ namespace LetterApp.iOS.CallKit
                     Console.WriteLine("Error: {0}", error);
                 }
             });
-
-
         }
+
+        public void StartCallClientDelegate()
+        {
+            Client.CallClient.WeakDelegate = this;
+        }
+
         #endregion
+
+        [Export("client:didReceiveIncomingCall:")]
+        void ClientDidReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
+        {
+            Call = xcall;
+            Call.WeakDelegate = this;
+        }
+
+        [Export("callDidEnd:")]
+        public void CallDidEnd(ISINCall xcall)
+        {
+            var call = CallManager.Calls.Where(x => x?.SINCall?.CallId == xcall.CallId).LastOrDefault();
+            CallManager.EndCall(call);
+        }
     }
 }

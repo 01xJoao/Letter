@@ -38,9 +38,6 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _endCallCommand;
         public XPCommand EndCallCommand => _endCallCommand ?? (_endCallCommand = new XPCommand(async () => await EndCall(), CanExecute));
 
-        private XPCommand _stopAudioCommand;
-        public XPCommand StopAudioCommand => _stopAudioCommand ?? (_stopAudioCommand = new XPCommand(() => AudioService.StopAudio()));
-
         private bool _inCall;
         public bool InCall
         {
@@ -76,9 +73,6 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task Appearing()
         {
-            if (StartedCall)
-                CallingAudio();
-            
             if (MemberProfileModel != null)
                 return;
 
@@ -102,23 +96,11 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private async Task CallingAudio()
-        {
-            var result = await AudioService.CallWaiting();
-
-            if (result)
-                await EndCall();
-        }
-
         private void LeftButtonAction()
         {
             if (StartedCall || InCall)
             {
                 SpeakerOn = !SpeakerOn;
-            }
-            else
-            {
-                //Send Push Notification that call was not accepted
             }
         }
 
@@ -137,9 +119,6 @@ namespace LetterApp.Core.ViewModels
         private async Task EndCall()
         {
             IsBusy = true;
-
-            AudioService.StopAudio();
-            await AudioService.CallEnded();
             await NavigationService.Close(this);
         }
 
