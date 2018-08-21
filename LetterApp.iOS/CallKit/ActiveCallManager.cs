@@ -77,8 +77,14 @@ namespace LetterApp.iOS.CallKit
             var startCallAction = new CXStartCallAction(newCall.UUID, handle);
             var transaction = new CXTransaction(startCallAction);
             SendTransactionRequest(transaction);
-
             return newCall;
+        }
+
+        public void AnswerCall(ActiveCall call)
+        {
+            var answerCallAction = new CXAnswerCallAction(call.UUID);
+            var transaction = new CXTransaction(answerCallAction);
+            SendTransactionRequest(transaction);
         }
 
         public void EndCall(ActiveCall call)

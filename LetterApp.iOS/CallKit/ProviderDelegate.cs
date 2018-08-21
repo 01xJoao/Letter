@@ -1,11 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AVFoundation;
 using CallKit;
+using DT.Xamarin.Agora;
 using Foundation;
 using LetterApp.Core;
+using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
+using LetterApp.iOS.AgoraIO;
 using SinchSdk;
 using UIKit;
 
@@ -17,6 +21,7 @@ namespace LetterApp.iOS.CallKit
         public ActiveCallManager CallManager { get; set; }
         public CXProviderConfiguration Configuration { get; set; }
         public CXProvider Provider { get; set; }
+        public AgoraRtcEngineKit AgoraKit { get; set; }
         #endregion
 
         private ISINCall Call { get; set; }
@@ -83,6 +88,7 @@ namespace LetterApp.iOS.CallKit
                 {
                     // Inform system that the call is starting
                     Provider.ReportConnectingOutgoingCall(call.UUID, (NSDate)call.StartedConnectingOn);
+                    action.Fulfill();
                 }
             };
 
@@ -92,6 +98,7 @@ namespace LetterApp.iOS.CallKit
                 {
                     // Inform system that the call has connected
                     provider.ReportConnectedOutgoingCall(call.UUID, (NSDate)call.ConnectedOn);
+                    action.Fulfill();
                 }
             };
 
@@ -116,13 +123,8 @@ namespace LetterApp.iOS.CallKit
                     App.StartCall(call.CallerId);
             }
 
-            call.AnswerCall((successful) =>
-            {
-                if (successful)
-                    action.Fulfill();
-                else
-                    action.Fail();
-            });
+            call.AnswerCall();
+            action.Fulfill();
         }
 
         public override void PerformEndCallAction(CXProvider provider, CXEndCallAction action)
@@ -138,10 +140,11 @@ namespace LetterApp.iOS.CallKit
             }
             else
             {
-                provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
-                action.Fulfill();
-                call.SINCall?.Hangup();
+                AgoraCallEnded();
+                call?.SINCall?.Hangup();
+
                 CallManager.Calls.Remove(call);
+                action.Fulfill();
             }
         }
 
@@ -169,14 +172,24 @@ namespace LetterApp.iOS.CallKit
 
         public override void DidActivateAudioSession(CXProvider provider, AVAudioSession audioSession)
         {
-            audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
-            audioSession.SetActive(true);
+            //audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+            //audioSession.SetActive(true);
         }
 
         public override void DidDeactivateAudioSession(CXProvider provider, AVAudioSession audioSession)
         {
-            audioSession.SetActive(false);
+            //audioSession.SetActive(false);
         }
+
+        public override void PerformSetMutedCallAction(CXProvider provider, CXSetMutedCallAction action)
+        {
+            AgoraSetMute(action.Muted);
+            action.Fulfill();
+        }
+
+
+        public override void PerformSetGroupCallAction(CXProvider provider, CXSetGroupCallAction action) {}
+
 
         #endregion
 
@@ -194,6 +207,11 @@ namespace LetterApp.iOS.CallKit
 
             var update = new CXCallUpdate();
             update.RemoteHandle = new CXHandle(CXHandleType.Generic, callerName);
+            update.SupportsDtmf = true;
+            update.HasVideo = false;
+            update.SupportsGrouping = false;
+            update.SupportsHolding = false;
+            update.SupportsUngrouping = false;
 
             // Report incoming call to system
             Provider.ReportNewIncomingCall(uuid, update, (error) =>
@@ -207,7 +225,7 @@ namespace LetterApp.iOS.CallKit
 
         #endregion
 
-        #region SIN Client Delegate Methods
+        #region SINClientDelegate Methods
 
         [Export("client:didReceiveIncomingCall:")]
         void ClientDidReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
@@ -218,9 +236,84 @@ namespace LetterApp.iOS.CallKit
 
         [Export("callDidEnd:")]
         public void CallDidEnd(ISINCall xcall)
+        {         
+            var call = CallManager.Calls.LastOrDefault();
+
+            if(call != null)
+            {
+                call.Ended = true;
+
+                if (call.IsConnected == false)
+                    CallManager.EndCall(call);
+            }
+            else
+            {
+                Call?.Hangup();
+            }
+        }
+
+        #endregion
+
+
+        #region AgoraIO
+
+        private TaskCompletionSource<bool> _joinedCompleted;
+
+        public Task<bool> SetupAgoraIO(AgoraRtcDelegate agoraRtcDelegate, string roomName, bool speaker, bool muted)
         {
-            var call = CallManager.Calls.Where(x => x?.SINCall?.CallId == xcall.CallId).LastOrDefault();
-            CallManager.EndCall(call);
+            _joinedCompleted = new TaskCompletionSource<bool>();
+
+            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, agoraRtcDelegate);
+            AgoraKit.SetChannelProfile(ChannelProfile.Communication);
+            AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, roomName, null, 0, (NSString arg, nuint arg1, nint arg2) =>
+            {
+                var call = CallManager.Calls.LastOrDefault();
+
+                if (call != null && !call.Ended)
+                    _joinedCompleted.TrySetResult(true);
+                else
+                    _joinedCompleted.TrySetResult(false);
+
+                _joinedCompleted = null;
+
+            });
+            AgoraKit.SetEnableSpeakerphone(speaker);
+            AgoraKit.MuteLocalAudioStream(muted);
+
+            return _joinedCompleted.Task;
+        }
+
+        public void AgoraCallStarted()
+        {
+            var call = CallManager.Calls.LastOrDefault();
+
+
+            if (call == null)
+                return;
+
+            if(call.IsOutgoing)
+            {
+                AudioController.StopPlayingSoundFile();
+                call.AnswerCall();
+                call?.SINCall?.Hangup();
+            }
+        }
+
+        public void AgoraCallEnded()
+        {
+            AgoraKit?.LeaveChannel(null);
+            AgoraKit?.Dispose();
+            AgoraKit = null;
+        }
+
+        public void AgoraSetSpeaker(bool speakerOn)
+        {
+            AgoraKit?.SetEnableSpeakerphone(speakerOn);
+        }
+
+        public void AgoraSetMute(bool mutedOn)
+        {
+            AgoraKit?.MuteLocalAudioStream(mutedOn);
         }
 
         #endregion

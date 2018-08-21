@@ -29,11 +29,11 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _memberProfileModel, value);
         }
 
-        private XPCommand _leftButtonCommand;
-        public XPCommand LeftButtonCommand => _leftButtonCommand ?? (_leftButtonCommand = new XPCommand(() => LeftButtonAction()));
+        private XPCommand<bool> _leftButtonCommand;
+        public XPCommand<bool> LeftButtonCommand => _leftButtonCommand ?? (_leftButtonCommand = new XPCommand<bool>((value) => LeftButtonAction(value)));
 
-        private XPCommand _rightButtonCommand;
-        public XPCommand RightButtonCommand => _rightButtonCommand ?? (_rightButtonCommand = new XPCommand(() => RightButtonAction()));
+        private XPCommand<bool> _rightButtonCommand;
+        public XPCommand<bool> RightButtonCommand => _rightButtonCommand ?? (_rightButtonCommand = new XPCommand<bool>((value) => RightButtonAction(value)));
 
         private XPCommand _endCallCommand;
         public XPCommand EndCallCommand => _endCallCommand ?? (_endCallCommand = new XPCommand(async () => await EndCall(), CanExecute));
@@ -96,24 +96,14 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private void LeftButtonAction()
+        private void LeftButtonAction(bool value)
         {
-            if (StartedCall || InCall)
-            {
-                SpeakerOn = !SpeakerOn;
-            }
+            SpeakerOn = value;
         }
 
-        private void RightButtonAction()
+        private void RightButtonAction(bool value)
         {
-            if (StartedCall || InCall)
-            {
-                MutedOn = !MutedOn;
-            }
-            else
-            {
-                InCall = true;
-            }
+            MutedOn = value;
         }
 
         private async Task EndCall()

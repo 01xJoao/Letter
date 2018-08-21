@@ -692,6 +692,38 @@
     "translated": "Conversar"
   },
   {
+    "key": "Call_Letter",
+    "translated": "Áudio Letter"
+  },
+  {
+    "key": "Call_Calling",
+    "translated": "A ligar..."
+  },
+  {
+    "key": "Call_IsCalling",
+    "translated": "A conectar..."
+  },
+  {
+    "key": "Call_Speaker",
+    "translated": "Altifalante"
+  },
+  {
+    "key": "Call_Mute",
+    "translated": "Sem som"
+  },
+  {
+    "key": "Call_Accept",
+    "translated": "Aceitar"
+  },
+  {
+    "key": "Call_Decline",
+    "translated": "Recusar"
+  },
+  {
+    "key": "Call_Connecting",
+    "translated": "A Connectar..."
+  },
+  {
     "key": "Call_Anonym",
     "translated": "Desconhecido"
   }

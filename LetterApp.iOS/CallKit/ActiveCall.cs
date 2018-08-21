@@ -7,9 +7,11 @@ namespace LetterApp.iOS.CallKit
     public class ActiveCall
     {
         #region Private Variables
-        private bool isConnecting;
-        private bool isConnected;
-        private bool isOnhold;
+        public bool isConnecting;
+        public bool isConnected;
+        public bool isOnhold;
+
+        private bool ended;
         #endregion
 
         #region Computed Properties
@@ -59,6 +61,12 @@ namespace LetterApp.iOS.CallKit
             set => isOnhold = value;
         }
 
+        public bool Ended
+        {
+            get => ended;
+            set => ended = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -81,9 +89,9 @@ namespace LetterApp.iOS.CallKit
             IsConnecting = true;
         }
 
-        public void AnswerCall(ActiveCallbackDelegate completionHandler)
+        public void AnswerCall()
         {
-            IsConnecting = false;
+            isConnecting = false;
             IsConnected = true;
         }
 

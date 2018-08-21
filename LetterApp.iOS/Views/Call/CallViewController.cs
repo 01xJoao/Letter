@@ -1,16 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DT.Xamarin.Agora;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
-using Foundation;
-using LetterApp.Core.AgoraIO;
-using LetterApp.Core.Exceptions;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.AgoraIO;
 using LetterApp.iOS.CallKit;
@@ -25,13 +20,10 @@ namespace LetterApp.iOS.Views.Call
         public override bool ShowAsPresentView => true;
 
         private string _backgroundImg;
-        private CancellationTokenSource _timerCTS;
         private int _callTime;
-        private uint _localId;
-        private uint _remoteId;
+        private CancellationTokenSource _timerCTS;
 
-        public AgoraRtcDelegate AgoraDelegate;
-        public AgoraRtcEngineKit AgoraKit;
+        public AgoraRtcDelegate AgoraDelegate { get; set; }
 
         private ActiveCall _activeCall;
         private ProviderDelegate CallProvider
@@ -68,24 +60,26 @@ namespace LetterApp.iOS.Views.Call
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-
-            if(ViewModel.MemberProfileModel != null)
-                SetupView();
         }
 
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
+            if (ViewModel.MemberProfileModel != null)
+                SetupView();
+            
             if (ViewModel.StartedCall)
                 _activeCall = CallProvider.CallManager.StartCall(ViewModel.MemberFullName, ViewModel.CallerId);
             else
             {
                 _activeCall = CallProvider.CallManager.Calls.LastOrDefault();
 
-                if (_activeCall == null)
+                if(_activeCall == null)
                 {
-                    if(ViewModel.EndCallCommand.CanExecute())
+                    CallProvider.AgoraCallEnded();
+
+                    if (ViewModel.EndCallCommand.CanExecute())
                         ViewModel.EndCallCommand.Execute();
                 }
             }
@@ -97,10 +91,6 @@ namespace LetterApp.iOS.Views.Call
             {
                 case nameof(ViewModel.MemberProfileModel):
                     SetupView();
-                    break;
-                case nameof(ViewModel.InCall):
-                    CallStarted();
-                    SetupAgoraIO();
                     break;
                 default:
                     break;
@@ -122,15 +112,8 @@ namespace LetterApp.iOS.Views.Call
 
             UILabelExtensions.SetupLabelAppearance(_fullNameLabel, ViewModel.MemberFullName, Colors.White, nameSize);
 
-            if (ViewModel.StartedCall)
-            {
-                CallStarted();
-                _callDetailLabel.Text = ViewModel.CallingLabel;
-            }
-            else
-            {
-                ViewModel.RightButtonCommand.Execute();
-            }
+            CallStarted();
+            _callDetailLabel.Text = ViewModel.CallingLabel;
 
             if(string.IsNullOrEmpty(ViewModel.MemberProfileModel.Picture))
             {
@@ -151,9 +134,6 @@ namespace LetterApp.iOS.Views.Call
                     return ImageHelper.GetStreamFromImageByte(token, _backgroundImg);
                 }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
             }
-
-            if(ViewModel.StartedCall)
-                SetupAgoraIO();
         }
 
         private void CallStarted()
@@ -179,84 +159,85 @@ namespace LetterApp.iOS.Views.Call
             _callDetailLabel.Text = "";
 
             if (AgoraDelegate == null)
-                SetupAgoraIO();
+                SetAgoraIO();
         }
 
-        private void SetupAgoraIO()
+        private async Task SetAgoraIO()
         {
             AgoraDelegate = new AgoraRtcDelegate(this);
-            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, AgoraDelegate);
-            AgoraKit.SetChannelProfile(ChannelProfile.Communication);
-            AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, ViewModel.RoomName, null, 0, JoiningCompleted);
+            bool callIsActive = await CallProvider.SetupAgoraIO(AgoraDelegate, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
 
-            AgoraKit.SetEnableSpeakerphone(ViewModel.SpeakerOn);
-            AgoraKit.MuteLocalAudioStream(ViewModel.MutedOn);
+            if(!callIsActive)
+            {
+                CallProvider.AgoraCallEnded();
+
+                if (ViewModel.EndCallCommand.CanExecute())
+                    ViewModel.EndCallCommand.Execute();
+            }
         }
 
         private void OnLeftButton_TouchUpInside(object sender, EventArgs e)
         {
-            ViewModel.LeftButtonCommand.Execute();
+            //ViewModel.LeftButtonCommand.Execute();
 
-            if(ViewModel.StartedCall || ViewModel.InCall)
-            {
-                AgoraKit?.SetEnableSpeakerphone(ViewModel.SpeakerOn);
-                _speakerIcon.Image = ViewModel.SpeakerOn ? UIImage.FromBundle("speaker_on") : UIImage.FromBundle("speaker_off");
-            }
+            CallProvider.AgoraSetSpeaker(!ViewModel.SpeakerOn);
+            //_speakerIcon.Image = ViewModel.SpeakerOn ? UIImage.FromBundle("speaker_on") : UIImage.FromBundle("speaker_off");
         }
 
         private void OnRightButton_TouchUpInside(object sender, EventArgs e)
         {
-            ViewModel.RightButtonCommand.Execute();
+            //ViewModel.RightButtonCommand.Execute();
 
-            if (ViewModel.StartedCall || ViewModel.InCall)
-            {
-                AgoraKit?.MuteLocalAudioStream(ViewModel.MutedOn);
-                _muteIcon.Image = ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
-            }
+            _muteIcon.Image = !ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
+            CallProvider.AgoraSetMute(!ViewModel.MutedOn);
+            //_muteIcon.Image = ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
+        }
+
+        public void AudioMuted(bool muted)
+        {
+            ViewModel.RightButtonCommand.Execute(muted);
         }
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
             if (ViewModel.EndCallCommand.CanExecute())
             {
+                CallProvider.AgoraCallEnded();
                 CallProvider.CallManager.EndCall(_activeCall);
                 _activeCall = null;
-                AgoraKit?.LeaveChannel(null);
                 ViewModel.EndCallCommand.Execute();
             }
         }
 
-        private void JoiningCompleted(NSString channel, nuint uid, nint elapsed)
+        public void DidEnterRoom()
         {
-            _localId = (uint)uid;
-            UIApplication.SharedApplication.IdleTimerDisabled = true;
-            RefreshDebug();
-        }
-
-        public void DidEnterRoom(AgoraRtcEngineKit engine, nuint uid, nint elapsed)
-        {
-            _remoteId = (uint)uid;
-            RefreshDebug();
-
+            CallProvider.AgoraCallStarted();
             StartTimer();
         }
 
-        public void DidOfflineOfUid(AgoraRtcEngineKit engine, nuint uid, UserOfflineReason reason)
+        public void DidOfflineOfUid()
         {
+            CallProvider.AgoraCallEnded();
+
             if(ViewModel.EndCallCommand.CanExecute())
                 ViewModel.EndCallCommand.Execute();
         }
 
-        private void RefreshDebug()
+        public void UserEndedCallOnCallKitScreen()
         {
-            Debug.WriteLine($"local: {_localId}\nremote: {_remoteId}");
+            if(CallProvider.CallManager.Calls.Count > 0)
+                CallProvider.CallManager.Calls.Remove(_activeCall);
+
+            _activeCall = null;
+
+            if (ViewModel.EndCallCommand.CanExecute())
+                ViewModel.EndCallCommand.Execute();
         }
 
         public void StartTimer()
         {
             _timerCTS?.Cancel();
             _timerCTS = new CancellationTokenSource();
-
             var ignore = UpdateAsync(_timerCTS.Token);
         }
 
@@ -270,10 +251,7 @@ namespace LetterApp.iOS.Views.Call
                 {
                     await Task.Delay(1000, token);
                 }
-                catch (Exception ex) 
-                {
-                    Ui.Handle(ex as dynamic);
-                }
+                catch (Exception ex){}
             }
 
             return null;
@@ -294,13 +272,9 @@ namespace LetterApp.iOS.Views.Call
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            UIApplication.SharedApplication.IdleTimerDisabled = false;
             UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
 
             StopTimer();
-            AgoraKit?.LeaveChannel(null);
-            AgoraKit?.Dispose();
-            AgoraKit = null;
             _backgroundImg = null;
 
             if(_activeCall != null)

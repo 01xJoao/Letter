@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using DT.Xamarin.Agora;
+using Foundation;
 using LetterApp.iOS.Views.Call;
 
 namespace LetterApp.iOS.AgoraIO
@@ -17,13 +18,24 @@ namespace LetterApp.iOS.AgoraIO
         public override void DidJoinedOfUid(AgoraRtcEngineKit engine, nuint uid, nint elapsed)
         {
             Debug.WriteLine($"DidJoinedOfUid {uid}");
-            _controller.DidEnterRoom(engine, uid, elapsed);
+            _controller.DidEnterRoom();
         }
 
         public override void DidOfflineOfUid(AgoraRtcEngineKit engine, nuint uid, UserOfflineReason reason)
         {
             Debug.WriteLine($"DidOfflineOfUid {uid}");
-            _controller.DidOfflineOfUid(engine, uid, reason);
+            _controller.DidOfflineOfUid();
+        }
+
+        public override void DidLeaveChannelWithStats(AgoraRtcEngineKit engine, AgoraChannelStats stats)
+        {
+            Debug.WriteLine($"DidLeftChannel {stats}");
+            _controller.UserEndedCallOnCallKitScreen();
+        }
+
+        public override void DidAudioMuted(AgoraRtcEngineKit engine, bool muted, nuint uid)
+        {
+            _controller.AudioMuted(muted);
         }
     }
 }
