@@ -273,10 +273,6 @@ namespace LetterApp.iOS.CallKit
                 if (call.IsConnected == false)
                     CallManager.EndCall(call);
             }
-            else
-            {
-                Call?.Hangup();
-            }
         }
 
         #endregion
