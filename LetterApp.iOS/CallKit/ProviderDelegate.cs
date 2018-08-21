@@ -25,20 +25,31 @@ namespace LetterApp.iOS.CallKit
         public CXProvider Provider { get; set; }
         public AgoraRtcEngineKit AgoraKit { get; set; }
 
-
         private CallViewController _viewController;
         private AVAudioSession audioSession = AVAudioSession.SharedInstance();
 
         #endregion
 
-        private ISINCall Call { get; set; }
+        private ISINCall call;
+        public ISINCall Call
+        {
+            get
+            {
+                return call;
+            }
+
+            set
+            {
+                call = value;
+                call.WeakDelegate = this;
+            }
+        }
 
         private ISINAudioController AudioController
         {
             get
             {
                 var appDelegate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
-
                 return appDelegate.Client.AudioController;
             }
         }
@@ -87,6 +98,8 @@ namespace LetterApp.iOS.CallKit
         public override void PerformStartCallAction(CXProvider provider, CXStartCallAction action)
         {
             var activeCall = CallManager.FindCall(action.CallUuid);
+            Call = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString());
+            activeCall.SINCall = Call;
 
             // Monitor state changes
             activeCall.StartingConnectionChanged += (call) =>
@@ -194,7 +207,6 @@ namespace LetterApp.iOS.CallKit
             action.Fulfill();
         }
 
-
         public override void PerformSetGroupCallAction(CXProvider provider, CXSetGroupCallAction action) {}
 
 
@@ -247,7 +259,6 @@ namespace LetterApp.iOS.CallKit
             }
             
             Call = xcall;
-            Call.WeakDelegate = this;
         }
 
         [Export("callDidEnd:")]
@@ -277,7 +288,6 @@ namespace LetterApp.iOS.CallKit
 
         public Task<bool> SetupAgoraIO(CallViewController viewController, string roomName, bool speaker, bool muted)
         {
-
             _viewController = viewController;
             _joinedCompleted = new TaskCompletionSource<bool>();
 

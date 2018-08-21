@@ -12,15 +12,6 @@ namespace LetterApp.iOS.CallKit
     {
         #region Private Variables
         private CXCallController CallController = new CXCallController();
-
-        private ISINClient Client
-        {
-            get
-            {
-                var appDelgate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
-                return appDelgate.Client;
-            }
-        }
         #endregion
 
         #region Computed Properties
@@ -69,8 +60,7 @@ namespace LetterApp.iOS.CallKit
 
         public ActiveCall StartCall(string name, int id)
         {
-            var call = Client.CallClient.CallUserWithId(id.ToString());
-            var newCall = new ActiveCall(new NSUuid(), name, id, true, call);
+            var newCall = new ActiveCall(new NSUuid(), name, id, true, null);
             Calls.Add(newCall);
 
             var handle = new CXHandle(CXHandleType.Generic, name);
