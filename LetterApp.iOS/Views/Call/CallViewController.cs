@@ -3,9 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AVFoundation;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
+using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.AgoraIO;
 using LetterApp.iOS.CallKit;
@@ -23,6 +25,7 @@ namespace LetterApp.iOS.Views.Call
         private int _callTime;
         private CancellationTokenSource _timerCTS;
 
+        private NSObject _speakerObserver;
         public AgoraRtcDelegate AgoraDelegate { get; set; }
 
         private ActiveCall _activeCall;
@@ -113,7 +116,9 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_fullNameLabel, ViewModel.MemberFullName, Colors.White, nameSize);
 
             CallStarted();
-            _callDetailLabel.Text = ViewModel.CallingLabel;
+
+            if(ViewModel.StartedCall)
+                _callDetailLabel.Text = ViewModel.CallingLabel;
 
             if(string.IsNullOrEmpty(ViewModel.MemberProfileModel.Picture))
             {
@@ -156,8 +161,6 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.SpeakerLabel, Colors.White, 12f);
             UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.MuteLabel, Colors.White, 12f);
 
-            _callDetailLabel.Text = "";
-
             if (AgoraDelegate == null)
                 SetAgoraIO();
         }
@@ -165,7 +168,7 @@ namespace LetterApp.iOS.Views.Call
         private async Task SetAgoraIO()
         {
             AgoraDelegate = new AgoraRtcDelegate(this);
-            bool callIsActive = await CallProvider.SetupAgoraIO(AgoraDelegate, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
+            bool callIsActive = await CallProvider.SetupAgoraIO(this, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
 
             if(!callIsActive)
             {
@@ -178,25 +181,24 @@ namespace LetterApp.iOS.Views.Call
 
         private void OnLeftButton_TouchUpInside(object sender, EventArgs e)
         {
-            //ViewModel.LeftButtonCommand.Execute();
-
             CallProvider.AgoraSetSpeaker(!ViewModel.SpeakerOn);
-            //_speakerIcon.Image = ViewModel.SpeakerOn ? UIImage.FromBundle("speaker_on") : UIImage.FromBundle("speaker_off");
+            ViewModel.LeftButtonCommand.Execute();
+            _speakerIcon.Image = ViewModel.SpeakerOn ? UIImage.FromBundle("speaker_on") : UIImage.FromBundle("speaker_off");
         }
 
         private void OnRightButton_TouchUpInside(object sender, EventArgs e)
         {
-            //ViewModel.RightButtonCommand.Execute();
-
-            _muteIcon.Image = !ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
-            CallProvider.AgoraSetMute(!ViewModel.MutedOn);
-            //_muteIcon.Image = ViewModel.MutedOn ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
+            CallProvider.AgoraSetMute(!ViewModel.MutedOn, true);
         }
 
-        public void AudioMuted(bool muted)
+        public void AudioMuted(bool value)
         {
-            ViewModel.RightButtonCommand.Execute(muted);
+            ViewModel.RightButtonCommand.Execute(value);
+
+            if (NSThread.Current.IsMainThread)
+                _muteIcon.Image = value ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
         }
+
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {

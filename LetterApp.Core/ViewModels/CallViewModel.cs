@@ -19,7 +19,12 @@ namespace LetterApp.Core.ViewModels
         public string RoomName { get; private set; }
         public string MemberFullName { get; private set; }
 
-        public bool MutedOn { get; set; }
+        private bool _mutedOn;
+        public bool MutedOn 
+        {             
+            get => _mutedOn;
+            set => SetProperty(ref _mutedOn, value);
+        }
         public bool SpeakerOn { get; set; }
 
         private MembersProfileModel _memberProfileModel;
@@ -29,8 +34,8 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _memberProfileModel, value);
         }
 
-        private XPCommand<bool> _leftButtonCommand;
-        public XPCommand<bool> LeftButtonCommand => _leftButtonCommand ?? (_leftButtonCommand = new XPCommand<bool>((value) => LeftButtonAction(value)));
+        private XPCommand _leftButtonCommand;
+        public XPCommand LeftButtonCommand => _leftButtonCommand ?? (_leftButtonCommand = new XPCommand(LeftButtonAction));
 
         private XPCommand<bool> _rightButtonCommand;
         public XPCommand<bool> RightButtonCommand => _rightButtonCommand ?? (_rightButtonCommand = new XPCommand<bool>((value) => RightButtonAction(value)));
@@ -67,7 +72,7 @@ namespace LetterApp.Core.ViewModels
 
             _inCall = false;
 
-            MemberProfileModel = Realm.Find<MembersProfileModel>(CallerId);
+            _memberProfileModel = Realm.Find<MembersProfileModel>(CallerId);
             MemberFullName = $"{MemberProfileModel?.FirstName} {MemberProfileModel?.LastName}";
         }
 
@@ -96,14 +101,14 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private void LeftButtonAction(bool value)
+        private void LeftButtonAction()
         {
-            SpeakerOn = value;
+            SpeakerOn = !SpeakerOn;
         }
 
         private void RightButtonAction(bool value)
         {
-            MutedOn = value;
+            _mutedOn = value;
         }
 
         private async Task EndCall()

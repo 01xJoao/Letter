@@ -114,6 +114,13 @@ namespace LetterApp.iOS.CallKit
             SendTransactionRequest(transaction);
         }
 
+        public void MuteCall(ActiveCall call, bool mute)
+        {
+            var holdCallAction = new CXSetMutedCallAction(call.UUID, mute);
+            var transaction = new CXTransaction(holdCallAction);
+            SendTransactionRequest(transaction);
+        }
+
         #endregion
     }
 }

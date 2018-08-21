@@ -32,10 +32,5 @@ namespace LetterApp.iOS.AgoraIO
             Debug.WriteLine($"DidLeftChannel {stats}");
             _controller.UserEndedCallOnCallKitScreen();
         }
-
-        public override void DidAudioMuted(AgoraRtcEngineKit engine, bool muted, nuint uid)
-        {
-            _controller.AudioMuted(muted);
-        }
     }
 }

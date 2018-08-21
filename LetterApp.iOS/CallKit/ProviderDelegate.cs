@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using LetterApp.Core;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
 using LetterApp.iOS.AgoraIO;
+using LetterApp.iOS.Views.Call;
 using SinchSdk;
 using UIKit;
 
@@ -22,6 +24,11 @@ namespace LetterApp.iOS.CallKit
         public CXProviderConfiguration Configuration { get; set; }
         public CXProvider Provider { get; set; }
         public AgoraRtcEngineKit AgoraKit { get; set; }
+
+
+        private CallViewController _viewController;
+        private AVAudioSession audioSession = AVAudioSession.SharedInstance();
+
         #endregion
 
         private ISINCall Call { get; set; }
@@ -202,6 +209,9 @@ namespace LetterApp.iOS.CallKit
 
         public void ReportIncomingCall(NSUuid uuid, string handle)
         {
+            if (CallManager.Calls.LastOrDefault() != null)
+                return;
+
             var callerId = Int32.Parse(handle);
             var callerName = RealmUtils.GetCallerName(callerId);
 
@@ -230,6 +240,12 @@ namespace LetterApp.iOS.CallKit
         [Export("client:didReceiveIncomingCall:")]
         void ClientDidReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
         {
+            if (CallManager.Calls.LastOrDefault() != null)
+            {
+                xcall.Hangup();
+                return;
+            }
+            
             Call = xcall;
             Call.WeakDelegate = this;
         }
@@ -259,11 +275,13 @@ namespace LetterApp.iOS.CallKit
 
         private TaskCompletionSource<bool> _joinedCompleted;
 
-        public Task<bool> SetupAgoraIO(AgoraRtcDelegate agoraRtcDelegate, string roomName, bool speaker, bool muted)
+        public Task<bool> SetupAgoraIO(CallViewController viewController, string roomName, bool speaker, bool muted)
         {
+
+            _viewController = viewController;
             _joinedCompleted = new TaskCompletionSource<bool>();
 
-            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, agoraRtcDelegate);
+            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, viewController.AgoraDelegate);
             AgoraKit.SetChannelProfile(ChannelProfile.Communication);
             AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, roomName, null, 0, (NSString arg, nuint arg1, nint arg2) =>
             {
@@ -311,9 +329,17 @@ namespace LetterApp.iOS.CallKit
             AgoraKit?.SetEnableSpeakerphone(speakerOn);
         }
 
-        public void AgoraSetMute(bool mutedOn)
+        public void AgoraSetMute(bool mutedOn, bool fromView = false)
         {
-            AgoraKit?.MuteLocalAudioStream(mutedOn);
+            if(fromView)
+            {
+                CallManager.MuteCall(CallManager.Calls.LastOrDefault(), mutedOn);
+            }
+            else
+            {
+                AgoraKit?.MuteLocalAudioStream(mutedOn);
+                _viewController.AudioMuted(mutedOn);
+            }
         }
 
         #endregion
