@@ -21,8 +21,9 @@ namespace LetterApp.iOS.CallKit
         public CXProviderConfiguration Configuration { get; set; }
         public CXProvider Provider { get; set; }
         public AgoraRtcEngineKit AgoraKit { get; set; }
-        private CallViewController _viewController;
         #endregion
+
+        private CallViewController _viewController;
 
         private ISINCall _sinCall;
         public ISINCall SINCall
@@ -59,16 +60,12 @@ namespace LetterApp.iOS.CallKit
         {
             CallManager = callManager;
 
-            var handleTypes = new[] { (NSNumber)(int)CXHandleType.Generic };
-
-            var maskImage = UIImage.FromBundle("letter_logo");
-
             Configuration = new CXProviderConfiguration("Letter")
             {
                 SupportsVideo = false,
                 MaximumCallsPerCallGroup = 1,
-                SupportedHandleTypes = new NSSet<NSNumber>(handleTypes),
-                IconTemplateImageData = maskImage.AsPNG(),
+                SupportedHandleTypes = new NSSet<NSNumber>((NSNumber)(int)CXHandleType.Generic),
+                IconTemplateImageData = UIImage.FromBundle("letter_logo").AsPNG(),
                 RingtoneSound = "Audio/iphone_call.mp3"
             };
 
