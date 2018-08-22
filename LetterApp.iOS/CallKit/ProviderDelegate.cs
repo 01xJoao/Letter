@@ -9,7 +9,6 @@ using LetterApp.Core;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
 using LetterApp.iOS.Views.Call;
-using Plugin.SimpleAudioPlayer;
 using SinchSdk;
 using UIKit;
 
@@ -23,8 +22,6 @@ namespace LetterApp.iOS.CallKit
         public CXProvider Provider { get; set; }
         public AgoraRtcEngineKit AgoraKit { get; set; }
         private CallViewController _viewController;
-        private ISimpleAudioPlayer AudioPlayer;
-
         #endregion
 
         private ISINCall _sinCall;
@@ -94,12 +91,6 @@ namespace LetterApp.iOS.CallKit
 
             if (activeCall == null)
                 return;
-
-            //AudioPlayer = CrossSimpleAudioPlayer.Current;
-            //AudioPlayer.Load(PathForSound("ringback.wav"));
-            //AudioPlayer.Loop = true;
-            //AudioPlayer.Volume = 1;
-            //AudioPlayer.Play();
 
             AudioController.StartPlayingSoundFile(PathForSound("ringback.wav"), true);
 
@@ -292,10 +283,6 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallEnded()
         {
-            AudioPlayer?.Stop();
-            AudioPlayer?.Dispose();
-            AudioPlayer = null;
-
             AgoraKit?.LeaveChannel(_viewController.UserEndedCall);
             AgoraKit?.Dispose();
             AgoraKit = null;
