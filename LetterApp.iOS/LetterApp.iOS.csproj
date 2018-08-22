@@ -755,7 +755,6 @@
     <Compile Include="Views\Call\CallViewController.designer.cs">
       <DependentUpon>CallViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\AudioPlayerService.cs" />
     <Compile Include="CallKit\ActiveCall.cs" />
     <Compile Include="CallKit\ActiveCallManager.cs" />
     <Compile Include="CallKit\ProviderDelegate.cs" />
