@@ -21,7 +21,7 @@ namespace LetterApp.Core
 
         public static void StartCall(int callerId)
         {
-            NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(callerId, false));
+             NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(callerId, false));
         }
 
         public static void Initialize()

@@ -93,8 +93,6 @@ namespace LetterApp.iOS.Views.Call
 
             UILabelExtensions.SetupLabelAppearance(_fullNameLabel, ViewModel.MemberFullName, Colors.White, nameSize);
 
-            CallStarted();
-
             if (ViewModel.StartedCall)
                 _callDetailLabel.Text = ViewModel.CallingLabel;
 
@@ -119,9 +117,11 @@ namespace LetterApp.iOS.Views.Call
                     return ImageHelper.GetStreamFromImageByte(token, _backgroundImg);
                 }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
             }
+
+            StartCall();
         }
 
-        private void CallStarted()
+        private void StartCall()
         {
             _speakerIcon.Hidden = false;
             _muteIcon.Hidden = false;
@@ -141,19 +141,12 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.SpeakerLabel, Colors.White, 12f);
             UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.MuteLabel, Colors.White, 12f);
 
-            if (ViewModel.StartedCall)
-                _activeCall = CallProvider.CallManager.StartCall(ViewModel.MemberFullName, ViewModel.CallerId);
-
-            SetAgoraIO();
-        }
-
-        private void SetAgoraIO()
-        {
             AgoraDelegate = new AgoraRtcDelegate(this);
             CallProvider.SetupAgoraIO(this, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
 
-            if (ViewModel.StartedCall == false)
-                _activeCall = CallProvider.CallManager.Calls.LastOrDefault();
+            _activeCall = ViewModel.StartedCall
+                ? CallProvider.CallManager.StartCall(ViewModel.MemberFullName, ViewModel.CallerId)
+                : CallProvider.CallManager.Calls.LastOrDefault();
         }
 
         private void OnLeftButton_TouchUpInside(object sender, EventArgs e)
@@ -187,7 +180,7 @@ namespace LetterApp.iOS.Views.Call
             CallProvider.CallManager.EndCall(_activeCall);
         }
 
-        public void UserEndedCall(AgoraChannelStats stats)
+        public void UserEndedCall()
         {
             if (ViewModel.EndCallCommand.CanExecute())
                 ViewModel.EndCallCommand.Execute();

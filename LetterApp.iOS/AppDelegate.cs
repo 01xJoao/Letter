@@ -98,7 +98,7 @@ namespace LetterApp.iOS
                 var callInfo = payload["sin"].ToString();
                 var caller = Client.RelayRemotePushNotificationPayload(callInfo);
 
-                CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult.RemoteUserId);
+                CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
             }
         }
 

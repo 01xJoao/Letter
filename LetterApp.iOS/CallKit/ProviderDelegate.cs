@@ -23,7 +23,10 @@ namespace LetterApp.iOS.CallKit
         public AgoraRtcEngineKit AgoraKit { get; set; }
         #endregion
 
-        private CallViewController _viewController;
+        #region private Properties
+        private string _roomName { get; set; }
+        private CallViewController _callViewController { get; set; }
+        #endregion
 
         private ISINCall _sinCall;
         public ISINCall SINCall
@@ -111,7 +114,7 @@ namespace LetterApp.iOS.CallKit
                 return;
             }
 
-            if (!call.IsOutgoing)
+            if(!call.IsOutgoing)
                 App.StartCall(call.CallerId);
 
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
@@ -185,12 +188,13 @@ namespace LetterApp.iOS.CallKit
             Client.CallClient.WeakDelegate = this;
         }
 
-        public void ReportIncomingCall(NSUuid uuid, string handle)
+        public void ReportIncomingCall(NSUuid uuid, ISINCallNotificationResult handle)
         {
             if (CallManager.Calls.LastOrDefault() != null)
                 return;
+                
 
-            var callerId = Int32.Parse(handle);
+            var callerId = Int32.Parse(handle.RemoteUserId);
             var callerName = RealmUtils.GetCallerName(callerId);
 
             var update = new CXCallUpdate();
@@ -205,7 +209,9 @@ namespace LetterApp.iOS.CallKit
             Provider.ReportNewIncomingCall(uuid, update, (error) =>
             {
                 if (error == null)
+                {
                     CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, SINCall));
+                }
                 else
                 {
                     Console.WriteLine("Error: {0}", error);
@@ -230,6 +236,18 @@ namespace LetterApp.iOS.CallKit
             SINCall = xcall;
         }
 
+        [Export("client:willReceiveIncomingCall:")]
+        void ClientWillReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
+        {
+            if (CallManager.Calls.LastOrDefault() != null)
+            {
+                xcall.Hangup();
+                return;
+            }
+
+            SINCall = xcall;
+        }
+
         [Export("callDidEnd:")]
         public void CallDidEnd(ISINCall xcall)
         {         
@@ -251,15 +269,15 @@ namespace LetterApp.iOS.CallKit
 
         #region AgoraIO
 
-        public void SetupAgoraIO(CallViewController viewController, string roomName, bool speaker, bool muted)
+        public void SetupAgoraIO(CallViewController callViewController, string roomName, bool speaker, bool muted)
         {
-            _viewController = viewController;
-
-            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, viewController.AgoraDelegate);
+            _roomName = roomName;
+            _callViewController = callViewController;
+            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, _callViewController.AgoraDelegate);
             AgoraKit.SetChannelProfile(ChannelProfile.Communication);
             AgoraKit.SetEnableSpeakerphone(speaker);
             AgoraKit.MuteLocalAudioStream(muted);
-            AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, roomName, null, 0, null);
+            AgoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, null);
         }
 
         public void AgoraCallStarted()
@@ -268,8 +286,7 @@ namespace LetterApp.iOS.CallKit
 
             if (call == null)
                 return;
-
-            //Needs to be here
+                
             call.AnswerCall();
 
             if (call.IsOutgoing)
@@ -281,9 +298,16 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallEnded()
         {
-            AgoraKit?.LeaveChannel(_viewController.UserEndedCall);
+            AgoraKit?.LeaveChannel(AgoraLeftChannelCompleted);
+        }
+
+        private void AgoraLeftChannelCompleted(AgoraChannelStats stats)
+        {
+            _callViewController.UserEndedCall();
             AgoraKit?.Dispose();
             AgoraKit = null;
+            _callViewController = null;
+            _roomName = string.Empty;
         }
 
         public void AgoraSetSpeaker(bool speakerOn)
@@ -300,7 +324,7 @@ namespace LetterApp.iOS.CallKit
             else
             {
                 AgoraKit?.MuteLocalAudioStream(mutedOn);
-                _viewController.AudioMuted(mutedOn);
+                _callViewController.AudioMuted(mutedOn);
             }
         }
 

@@ -30,7 +30,7 @@ namespace LetterApp.iOS.AgoraIO
         public override void DidLeaveChannelWithStats(AgoraRtcEngineKit engine, AgoraChannelStats stats)
         {
             Debug.WriteLine($"DidLeftChannel {stats}");
-            _controller.UserEndedCall(stats);
+            _controller.UserEndedCall();
         }
     }
 }
