@@ -20,12 +20,13 @@ namespace LetterApp.iOS.CallKit
         public ActiveCallManager CallManager { get; set; }
         public CXProviderConfiguration Configuration { get; set; }
         public CXProvider Provider { get; set; }
-        public AgoraRtcEngineKit AgoraKit { get; set; }
+
         #endregion
 
         #region private Properties
-        private string _roomName { get; set; }
-        private CallViewController _callViewController { get; set; }
+        private string _roomName;
+        private CallViewController _callViewController;
+        private AgoraRtcEngineKit _agoraKit;
         #endregion
 
         private ISINCall _sinCall;
@@ -205,7 +206,6 @@ namespace LetterApp.iOS.CallKit
             update.SupportsHolding = false;
             update.SupportsUngrouping = false;
 
-            // Report incoming call to system
             Provider.ReportNewIncomingCall(uuid, update, (error) =>
             {
                 if (error == null)
@@ -224,6 +224,18 @@ namespace LetterApp.iOS.CallKit
 
         #region SINClientDelegate Methods
 
+        //[Export("client:willReceiveIncomingCall:")]
+        //void ClientWillReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
+        //{
+        //    if (CallManager.Calls.LastOrDefault() != null)
+        //    {
+        //        xcall.Hangup();
+        //        return;
+        //    }
+
+        //    SINCall = xcall;
+        //}
+
         [Export("client:didReceiveIncomingCall:")]
         void ClientDidReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
         {
@@ -233,18 +245,6 @@ namespace LetterApp.iOS.CallKit
                 return;
             }
             
-            SINCall = xcall;
-        }
-
-        [Export("client:willReceiveIncomingCall:")]
-        void ClientWillReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
-        {
-            if (CallManager.Calls.LastOrDefault() != null)
-            {
-                xcall.Hangup();
-                return;
-            }
-
             SINCall = xcall;
         }
 
@@ -273,11 +273,11 @@ namespace LetterApp.iOS.CallKit
         {
             _roomName = roomName;
             _callViewController = callViewController;
-            AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, _callViewController.AgoraDelegate);
-            AgoraKit.SetChannelProfile(ChannelProfile.Communication);
-            AgoraKit.SetEnableSpeakerphone(speaker);
-            AgoraKit.MuteLocalAudioStream(muted);
-            AgoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, null);
+            _agoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, _callViewController.AgoraDelegate);
+            _agoraKit.SetChannelProfile(ChannelProfile.Communication);
+            _agoraKit.SetEnableSpeakerphone(speaker);
+            _agoraKit.MuteLocalAudioStream(muted);
+            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, null);
         }
 
         public void AgoraCallStarted()
@@ -298,21 +298,21 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallEnded()
         {
-            AgoraKit?.LeaveChannel(AgoraLeftChannelCompleted);
+            _agoraKit?.LeaveChannel(AgoraLeftChannelCompleted);
         }
 
         private void AgoraLeftChannelCompleted(AgoraChannelStats stats)
         {
             _callViewController.UserEndedCall();
-            AgoraKit?.Dispose();
-            AgoraKit = null;
+            _agoraKit?.Dispose();
+            _agoraKit = null;
             _callViewController = null;
             _roomName = string.Empty;
         }
 
         public void AgoraSetSpeaker(bool speakerOn)
         {
-            AgoraKit?.SetEnableSpeakerphone(speakerOn);
+            _agoraKit?.SetEnableSpeakerphone(speakerOn);
         }
 
         public void AgoraSetMute(bool mutedOn, bool fromView = false)
@@ -323,7 +323,7 @@ namespace LetterApp.iOS.CallKit
             }
             else
             {
-                AgoraKit?.MuteLocalAudioStream(mutedOn);
+                _agoraKit?.MuteLocalAudioStream(mutedOn);
                 _callViewController.AudioMuted(mutedOn);
             }
         }

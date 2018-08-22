@@ -6,13 +6,6 @@ namespace LetterApp.iOS.CallKit
 {
     public class ActiveCall
     {
-        #region Private Variables
-        public bool isConnecting;
-        public bool isConnected;
-        public bool isOnhold;
-        public bool ended;
-        #endregion
-
         #region Computed Properties
 
         public NSUuid UUID { get; set; }
@@ -20,30 +13,10 @@ namespace LetterApp.iOS.CallKit
         public string Handle { get; set; }
         public int CallerId { get; set; }
         public ISINCall SINCall { get; set; }
-
-        public bool IsConnecting
-        {
-            get => isConnecting;
-            set => isConnecting = value;
-        }
-
-        public bool IsConnected
-        {
-            get => isConnected;
-            set => isConnected = value;
-        }
-
-        public bool IsOnHold
-        {
-            get => isOnhold;
-            set => isOnhold = value;
-        }
-
-        public bool Ended
-        {
-            get => ended;
-            set => ended = value;
-        }
+        public bool IsConnecting { get; set; }
+        public bool IsConnected { get; set; }
+        public bool IsOnHold { get; set; }
+        public bool Ended { get; set; }
 
         #endregion
 
@@ -69,31 +42,7 @@ namespace LetterApp.iOS.CallKit
 
         public void AnswerCall()
         {
-            isConnecting = false;
             IsConnected = true;
-        }
-
-        #endregion
-
-        #region Events
-
-        public delegate void ActiveCallbackDelegate(bool successful);
-        public delegate void ActiveCallStateChangedDelegate(ActiveCall call);
-
-        public event ActiveCallStateChangedDelegate StartingConnectionChanged;
-
-        internal void RaiseStartingConnectionChanged()
-        {
-            if (this.StartingConnectionChanged != null) 
-                this.StartingConnectionChanged(this);
-        }
-
-        public event ActiveCallStateChangedDelegate ConnectedChanged;
-
-        internal void RaiseConnectedChanged()
-        {
-            if (this.ConnectedChanged != null) 
-                this.ConnectedChanged(this);
         }
 
         #endregion

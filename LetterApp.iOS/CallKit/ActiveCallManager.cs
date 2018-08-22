@@ -15,9 +15,7 @@ namespace LetterApp.iOS.CallKit
         #endregion
 
         #region Computed Properties
-
         public List<ActiveCall> Calls { get; set; }
-
         #endregion
 
         #region Constructors

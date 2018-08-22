@@ -24,10 +24,9 @@ namespace LetterApp.iOS.Views.Call
         private string _backgroundImg;
         private int _callTime;
         private CancellationTokenSource _timerCTS;
+        private ActiveCall _activeCall;
 
         public AgoraRtcDelegate AgoraDelegate { get; set; }
-
-        private ActiveCall _activeCall;
 
         private ProviderDelegate CallProvider
         {
@@ -70,7 +69,7 @@ namespace LetterApp.iOS.Views.Call
             switch (e.PropertyName)
             {
                 case nameof(ViewModel.MemberProfileModel):
-                    if (AgoraDelegate == null)
+                    if (_activeCall == null)
                         SetupView();
                     break;
                 default:
@@ -168,7 +167,6 @@ namespace LetterApp.iOS.Views.Call
             if (NSThread.Current.IsMainThread)
                 _muteIcon.Image = value ? UIImage.FromBundle("micro_off") : UIImage.FromBundle("micro_on");
         }
-
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
