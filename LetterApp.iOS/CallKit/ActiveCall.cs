@@ -10,8 +10,7 @@ namespace LetterApp.iOS.CallKit
         public bool isConnecting;
         public bool isConnected;
         public bool isOnhold;
-
-        private bool ended;
+        public bool ended;
         #endregion
 
         #region Computed Properties
@@ -20,39 +19,18 @@ namespace LetterApp.iOS.CallKit
         public bool IsOutgoing { get; set; }
         public string Handle { get; set; }
         public int CallerId { get; set; }
-        public DateTime StartedConnectingOn { get; set; }
-        public DateTime ConnectedOn { get; set; }
-        public DateTime EndedOn { get; set; }
         public ISINCall SINCall { get; set; }
 
         public bool IsConnecting
         {
             get => isConnecting;
-            set
-            {
-                isConnecting = value;
-
-                if (isConnecting) 
-                    StartedConnectingOn = DateTime.Now;
-                
-                RaiseStartingConnectionChanged();
-            }
+            set => isConnecting = value;
         }
 
         public bool IsConnected
         {
             get => isConnected;
-            set
-            {
-                isConnected = value;
-
-                if (isConnected)
-                    ConnectedOn = DateTime.Now;
-                else
-                    EndedOn = DateTime.Now;
-                
-                RaiseConnectedChanged();
-            }
+            set => isConnected = value;
         }
 
         public bool IsOnHold

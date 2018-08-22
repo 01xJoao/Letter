@@ -89,6 +89,10 @@ namespace LetterApp.Core.ViewModels
                 {
                     MemberFullName = $"{result.FirstName} {result.LastName}";
                     MemberProfileModel = result;
+
+                    Realm.Write(() => {
+                        Realm.Add(result, true);
+                    });
                 }
                 else
                 {

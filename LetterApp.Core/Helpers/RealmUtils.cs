@@ -77,7 +77,7 @@ namespace LetterApp.Core.Helpers
         {
             var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
             var members = realm.All<GetUsersInDivisionModel>();
-            var caller = members.Where(x => x.UserId == callerId).First();
+            var caller = members.Where(x => x.UserId == callerId)?.FirstOrDefault();
 
             string fullname = string.Empty;
 

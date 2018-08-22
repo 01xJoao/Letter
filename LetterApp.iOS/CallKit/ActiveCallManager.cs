@@ -67,21 +67,22 @@ namespace LetterApp.iOS.CallKit
             var startCallAction = new CXStartCallAction(newCall.UUID, handle);
             var transaction = new CXTransaction(startCallAction);
             SendTransactionRequest(transaction);
+
             return newCall;
         }
 
         public void AnswerCall(ActiveCall call)
         {
-            var answerCallAction = new CXAnswerCallAction(call.UUID);
-            var transaction = new CXTransaction(answerCallAction);
-            SendTransactionRequest(transaction);
+            if (call != null)
+            {
+                var answerCallAction = new CXAnswerCallAction(call.UUID);
+                var transaction = new CXTransaction(answerCallAction);
+                SendTransactionRequest(transaction);
+            }
         }
 
         public void EndCall(ActiveCall call)
         {
-            if (call == null || call == default(ActiveCall))
-                call = Calls.LastOrDefault();
-
             if (call != null)
             {
                 var endCallAction = new CXEndCallAction(call.UUID);
@@ -92,23 +93,32 @@ namespace LetterApp.iOS.CallKit
 
         public void PlaceCallOnHold(ActiveCall call)
         {
-            var holdCallAction = new CXSetHeldCallAction(call.UUID, true);
-            var transaction = new CXTransaction(holdCallAction);
-            SendTransactionRequest(transaction);
+            if (call != null)
+            {
+                var holdCallAction = new CXSetHeldCallAction(call.UUID, true);
+                var transaction = new CXTransaction(holdCallAction);
+                SendTransactionRequest(transaction);
+            }
         }
 
         public void RemoveCallFromOnHold(ActiveCall call)
         {
-            var holdCallAction = new CXSetHeldCallAction(call.UUID, false);
-            var transaction = new CXTransaction(holdCallAction);
-            SendTransactionRequest(transaction);
+            if (call != null)
+            {
+                var holdCallAction = new CXSetHeldCallAction(call.UUID, false);
+                var transaction = new CXTransaction(holdCallAction);
+                SendTransactionRequest(transaction);
+            }
         }
 
         public void MuteCall(ActiveCall call, bool mute)
         {
-            var holdCallAction = new CXSetMutedCallAction(call.UUID, mute);
-            var transaction = new CXTransaction(holdCallAction);
-            SendTransactionRequest(transaction);
+            if (call != null)
+            {
+                var holdCallAction = new CXSetMutedCallAction(call.UUID, mute);
+                var transaction = new CXTransaction(holdCallAction);
+                SendTransactionRequest(transaction);
+            }
         }
 
         #endregion

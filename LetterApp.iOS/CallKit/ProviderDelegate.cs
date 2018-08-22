@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using AVFoundation;
 using CallKit;
 using DT.Xamarin.Agora;
@@ -10,8 +8,8 @@ using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
-using LetterApp.iOS.AgoraIO;
 using LetterApp.iOS.Views.Call;
+using Plugin.SimpleAudioPlayer;
 using SinchSdk;
 using UIKit;
 
@@ -24,33 +22,19 @@ namespace LetterApp.iOS.CallKit
         public CXProviderConfiguration Configuration { get; set; }
         public CXProvider Provider { get; set; }
         public AgoraRtcEngineKit AgoraKit { get; set; }
-
         private CallViewController _viewController;
-        private AVAudioSession audioSession = AVAudioSession.SharedInstance();
+        private ISimpleAudioPlayer AudioPlayer;
 
         #endregion
 
-        private ISINCall call;
-        public ISINCall Call
+        private ISINCall _sinCall;
+        public ISINCall SINCall
         {
-            get
-            {
-                return call;
-            }
-
+            get => _sinCall;
             set
             {
-                call = value;
-                call.WeakDelegate = this;
-            }
-        }
-
-        private ISINAudioController AudioController
-        {
-            get
-            {
-                var appDelegate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
-                return appDelegate.Client.AudioController;
+                _sinCall = value;
+                _sinCall.WeakDelegate = this;
             }
         }
 
@@ -60,6 +44,15 @@ namespace LetterApp.iOS.CallKit
             {
                 var appDelgate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
                 return appDelgate.Client;
+            }
+        }
+
+        private ISINAudioController AudioController
+        {
+            get
+            {
+                var appDelegate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
+                return appDelegate.Client.AudioController;
             }
         }
 
@@ -98,81 +91,65 @@ namespace LetterApp.iOS.CallKit
         public override void PerformStartCallAction(CXProvider provider, CXStartCallAction action)
         {
             var activeCall = CallManager.FindCall(action.CallUuid);
-            Call = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString());
-            activeCall.SINCall = Call;
 
-            // Monitor state changes
-            activeCall.StartingConnectionChanged += (call) =>
-            {
-                if (call.IsConnecting)
-                {
-                    // Inform system that the call is starting
-                    Provider.ReportConnectingOutgoingCall(call.UUID, (NSDate)call.StartedConnectingOn);
-                    action.Fulfill();
-                }
-            };
+            if (activeCall == null)
+                return;
 
-            activeCall.ConnectedChanged += (call) =>
-            {
-                if (call.IsConnected)
-                {
-                    // Inform system that the call has connected
-                    provider.ReportConnectedOutgoingCall(call.UUID, (NSDate)call.ConnectedOn);
-                    action.Fulfill();
-                }
-            };
+            //AudioPlayer = CrossSimpleAudioPlayer.Current;
+            //AudioPlayer.Load(PathForSound("ringback.wav"));
+            //AudioPlayer.Loop = true;
+            //AudioPlayer.Volume = 1;
+            //AudioPlayer.Play();
 
-            activeCall.StartCall();
             AudioController.StartPlayingSoundFile(PathForSound("ringback.wav"), true);
+
+            activeCall.SINCall = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString()); ;
+            activeCall.StartCall();
+
+            Provider.ReportConnectingOutgoingCall(activeCall.UUID, NSDate.Now);
+            action.Fulfill();
         }
 
         public override void PerformAnswerCallAction(CXProvider provider, CXAnswerCallAction action)
         {
-            var call = CallManager.FindCall(action.CallUuid);
+            AudioController?.StopPlayingSoundFile();
 
-            AudioController.StopPlayingSoundFile();
+            var call = CallManager.FindCall(action.CallUuid);
 
             if (call == null)
             {
                 action.Fail();
                 return;
             }
-            else
-            {
-                if (!call.IsOutgoing)
-                    App.StartCall(call.CallerId);
-            }
 
-            call.AnswerCall();
+            if (!call.IsOutgoing)
+                App.StartCall(call.CallerId);
+
+            provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
             action.Fulfill();
         }
 
         public override void PerformEndCallAction(CXProvider provider, CXEndCallAction action)
         {
-            var call = CallManager.FindCall(action.CallUuid);
-
-            AudioController.StopPlayingSoundFile();
+            AudioController?.StopPlayingSoundFile();
             AudioController.StartPlayingSoundFile(PathForSound("EndCallSound.wav"), false);
 
-            if (call == null)
-            {
-                return;
-            }
-            else
-            {
-                AgoraCallEnded();
-                call?.SINCall?.Hangup();
+            var call = CallManager.FindCall(action.CallUuid);
 
-                CallManager.Calls.Remove(call);
-                action.Fulfill();
-            }
+            if (call == null)
+                return;
+
+            AgoraCallEnded();
+            call?.SINCall?.Hangup();
+            CallManager.Calls.Remove(call);
+
+            provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
+            action.Fulfill();
         }
 
         public override void PerformSetHeldCallAction(CXProvider provider, CXSetHeldCallAction action)
         {
             var call = CallManager.FindCall(action.CallUuid);
-
-            AudioController.StopPlayingSoundFile();
 
             if (call == null)
             {
@@ -239,9 +216,12 @@ namespace LetterApp.iOS.CallKit
             Provider.ReportNewIncomingCall(uuid, update, (error) =>
             {
                 if (error == null)
-                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, Call));
+                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, SINCall));
                 else
+                {
                     Console.WriteLine("Error: {0}", error);
+                    AgoraCallEnded();
+                }
             });
         }
 
@@ -258,7 +238,7 @@ namespace LetterApp.iOS.CallKit
                 return;
             }
             
-            Call = xcall;
+            SINCall = xcall;
         }
 
         [Export("callDidEnd:")]
@@ -273,6 +253,8 @@ namespace LetterApp.iOS.CallKit
                 if (call.IsConnected == false)
                     CallManager.EndCall(call);
             }
+
+            _sinCall = null;
         }
 
         #endregion
@@ -280,52 +262,41 @@ namespace LetterApp.iOS.CallKit
 
         #region AgoraIO
 
-        private TaskCompletionSource<bool> _joinedCompleted;
-
-        public Task<bool> SetupAgoraIO(CallViewController viewController, string roomName, bool speaker, bool muted)
+        public void SetupAgoraIO(CallViewController viewController, string roomName, bool speaker, bool muted)
         {
             _viewController = viewController;
-            _joinedCompleted = new TaskCompletionSource<bool>();
 
             AgoraKit = AgoraRtcEngineKit.SharedEngineWithAppIdAndDelegate(AgoraSettings.AgoraAPI, viewController.AgoraDelegate);
             AgoraKit.SetChannelProfile(ChannelProfile.Communication);
-            AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, roomName, null, 0, (NSString arg, nuint arg1, nint arg2) =>
-            {
-                var call = CallManager.Calls.LastOrDefault();
-
-                if (call != null && !call.Ended)
-                    _joinedCompleted.TrySetResult(true);
-                else
-                    _joinedCompleted.TrySetResult(false);
-
-                _joinedCompleted = null;
-
-            });
             AgoraKit.SetEnableSpeakerphone(speaker);
             AgoraKit.MuteLocalAudioStream(muted);
-
-            return _joinedCompleted.Task;
+            AgoraKit.JoinChannelByToken(AgoraSettings.AgoraAPI, roomName, null, 0, null);
         }
 
         public void AgoraCallStarted()
         {
             var call = CallManager.Calls.LastOrDefault();
 
-
             if (call == null)
                 return;
 
-            if(call.IsOutgoing)
+            //Needs to be here
+            call.AnswerCall();
+
+            if (call.IsOutgoing)
             {
-                AudioController.StopPlayingSoundFile();
-                call.AnswerCall();
+                CallManager.AnswerCall(call);
                 call?.SINCall?.Hangup();
             }
         }
 
         public void AgoraCallEnded()
         {
-            AgoraKit?.LeaveChannel(null);
+            AudioPlayer?.Stop();
+            AudioPlayer?.Dispose();
+            AudioPlayer = null;
+
+            AgoraKit?.LeaveChannel(_viewController.UserEndedCall);
             AgoraKit?.Dispose();
             AgoraKit = null;
         }

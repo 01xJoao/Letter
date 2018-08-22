@@ -179,6 +179,12 @@
     <Reference Include="Sinch.ServerSdk">
       <HintPath>..\packages\Sinch.ServerSdk.1.3.0-beta1\lib\netstandard1.3\Sinch.ServerSdk.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.SimpleAudioPlayer.Abstractions">
+      <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.2.1.1-beta\lib\Xamarin.iOS10\Plugin.SimpleAudioPlayer.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.SimpleAudioPlayer">
+      <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.2.1.1-beta\lib\Xamarin.iOS10\Plugin.SimpleAudioPlayer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />

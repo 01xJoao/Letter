@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AVFoundation;
+using DT.Xamarin.Agora;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
@@ -25,10 +25,10 @@ namespace LetterApp.iOS.Views.Call
         private int _callTime;
         private CancellationTokenSource _timerCTS;
 
-        private NSObject _speakerObserver;
         public AgoraRtcDelegate AgoraDelegate { get; set; }
 
         private ActiveCall _activeCall;
+
         private ProviderDelegate CallProvider
         {
             get
@@ -65,35 +65,13 @@ namespace LetterApp.iOS.Views.Call
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
-            if (ViewModel.MemberProfileModel != null)
-                SetupView();
-            
-            if (ViewModel.StartedCall)
-                _activeCall = CallProvider.CallManager.StartCall(ViewModel.MemberFullName, ViewModel.CallerId);
-            else
-            {
-                _activeCall = CallProvider.CallManager.Calls.LastOrDefault();
-
-                if(_activeCall == null)
-                {
-                    CallProvider.AgoraCallEnded();
-
-                    if (ViewModel.EndCallCommand.CanExecute())
-                        ViewModel.EndCallCommand.Execute();
-                }
-            }
-        }
-
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case nameof(ViewModel.MemberProfileModel):
-                    SetupView();
+                    if (AgoraDelegate == null)
+                        SetupView();
                     break;
                 default:
                     break;
@@ -107,7 +85,7 @@ namespace LetterApp.iOS.Views.Call
 
             int nameSize = 33;
 
-            if(PhoneModelExtensions.IsSmallIphone())
+            if (PhoneModelExtensions.IsSmallIphone())
             {
                 nameSize = 25;
                 _callDetailsHeightConstraint.Constant = 20;
@@ -117,10 +95,10 @@ namespace LetterApp.iOS.Views.Call
 
             CallStarted();
 
-            if(ViewModel.StartedCall)
+            if (ViewModel.StartedCall)
                 _callDetailLabel.Text = ViewModel.CallingLabel;
 
-            if(string.IsNullOrEmpty(ViewModel.MemberProfileModel.Picture))
+            if (string.IsNullOrEmpty(ViewModel.MemberProfileModel.Picture))
             {
                 _pictureImage.Hidden = true;
                 _backgroundImage.Hidden = true;
@@ -128,14 +106,16 @@ namespace LetterApp.iOS.Views.Call
             else
             {
                 _pictureImage.Image?.Dispose();
-                ImageService.Instance.LoadStream((token) => {
+                ImageService.Instance.LoadStream((token) =>
+                {
                     return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
                 }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_pictureImage);
 
                 _backgroundImg = string.Copy(ViewModel.MemberProfileModel.Picture);
 
                 _backgroundImage.Image?.Dispose();
-                ImageService.Instance.LoadStream((token) => {
+                ImageService.Instance.LoadStream((token) =>
+                {
                     return ImageHelper.GetStreamFromImageByte(token, _backgroundImg);
                 }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
             }
@@ -161,22 +141,19 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_speakerLabel, ViewModel.SpeakerLabel, Colors.White, 12f);
             UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.MuteLabel, Colors.White, 12f);
 
-            if (AgoraDelegate == null)
-                SetAgoraIO();
+            if (ViewModel.StartedCall)
+                _activeCall = CallProvider.CallManager.StartCall(ViewModel.MemberFullName, ViewModel.CallerId);
+
+            SetAgoraIO();
         }
 
-        private async Task SetAgoraIO()
+        private void SetAgoraIO()
         {
             AgoraDelegate = new AgoraRtcDelegate(this);
-            bool callIsActive = await CallProvider.SetupAgoraIO(this, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
+            CallProvider.SetupAgoraIO(this, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
 
-            if(!callIsActive)
-            {
-                CallProvider.AgoraCallEnded();
-
-                if (ViewModel.EndCallCommand.CanExecute())
-                    ViewModel.EndCallCommand.Execute();
-            }
+            if (ViewModel.StartedCall == false)
+                _activeCall = CallProvider.CallManager.Calls.LastOrDefault();
         }
 
         private void OnLeftButton_TouchUpInside(object sender, EventArgs e)
@@ -202,13 +179,18 @@ namespace LetterApp.iOS.Views.Call
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
+            CallProvider.CallManager.EndCall(_activeCall);
+        }
+
+        public void DidOfflineOfUid()
+        {
+            CallProvider.CallManager.EndCall(_activeCall);
+        }
+
+        public void UserEndedCall(AgoraChannelStats stats)
+        {
             if (ViewModel.EndCallCommand.CanExecute())
-            {
-                CallProvider.AgoraCallEnded();
-                CallProvider.CallManager.EndCall(_activeCall);
-                _activeCall = null;
                 ViewModel.EndCallCommand.Execute();
-            }
         }
 
         public void DidEnterRoom()
@@ -217,30 +199,45 @@ namespace LetterApp.iOS.Views.Call
             StartTimer();
         }
 
-        public void DidOfflineOfUid()
-        {
-            CallProvider.AgoraCallEnded();
+        #region Views
 
-            if(ViewModel.EndCallCommand.CanExecute())
-                ViewModel.EndCallCommand.Execute();
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            UIDevice.CurrentDevice.ProximityMonitoringEnabled = true;
+
+            if (ViewModel.MemberProfileModel != null)
+                SetupView();
         }
 
-        public void UserEndedCallOnCallKitScreen()
+        public override void ViewWillDisappear(bool animated)
         {
-            if(CallProvider.CallManager.Calls.Count > 0)
-                CallProvider.CallManager.Calls.Remove(_activeCall);
-
+            StopTimer();
+            AgoraDelegate = null;
+            _backgroundImg = null;
             _activeCall = null;
 
-            if (ViewModel.EndCallCommand.CanExecute())
-                ViewModel.EndCallCommand.Execute();
+            UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
+            base.ViewWillDisappear(animated);
         }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            if (this.IsMovingFromParentViewController)
+                MemoryUtility.ReleaseUIViewWithChildren(this.View);
+        }
+
+        #endregion
+
+        #region Timers
 
         public void StartTimer()
         {
             _timerCTS?.Cancel();
             _timerCTS = new CancellationTokenSource();
-            var ignore = UpdateAsync(_timerCTS.Token);
+            UpdateAsync(_timerCTS.Token);
         }
 
         private async Task<object> UpdateAsync(CancellationToken token)
@@ -253,7 +250,7 @@ namespace LetterApp.iOS.Views.Call
                 {
                     await Task.Delay(1000, token);
                 }
-                catch (Exception ex){}
+                catch (Exception) {}
             }
 
             return null;
@@ -265,31 +262,7 @@ namespace LetterApp.iOS.Views.Call
             _timerCTS = null;
         }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);
-            UIDevice.CurrentDevice.ProximityMonitoringEnabled = true;
-        }
-
-        public override void ViewWillDisappear(bool animated)
-        {
-            base.ViewWillDisappear(animated);
-            UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
-
-            StopTimer();
-            _backgroundImg = null;
-
-            if(_activeCall != null)
-                CallProvider.CallManager.EndCall(_activeCall);
-        }
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            base.ViewDidDisappear(animated);
-
-            if (this.IsMovingFromParentViewController)
-                MemoryUtility.ReleaseUIViewWithChildren(this.View);
-        }
+        #endregion
     }
 }
 
