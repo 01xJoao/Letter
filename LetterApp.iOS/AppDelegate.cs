@@ -120,7 +120,7 @@ namespace LetterApp.iOS
         [Export("client:logMessage:area:severity:timestamp:")]
         void client(ISINClient client, string message, string area, SINLogSeverity severity, NSDate timestamp)
         {
-            Debug.WriteLine(message);
+            //Debug.WriteLine(message);
         }
 
         public override void OnResignActivation(UIApplication application) {}

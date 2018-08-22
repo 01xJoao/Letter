@@ -91,7 +91,8 @@ namespace LetterApp.iOS.CallKit
 
             AudioController.StartPlayingSoundFile(PathForSound("ringback.wav"), true);
 
-            activeCall.SINCall = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString()); ;
+            SINCall = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString());
+            activeCall.SINCall = SINCall;
             activeCall.StartCall();
 
             Provider.ReportConnectingOutgoingCall(activeCall.UUID, NSDate.Now);
