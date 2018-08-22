@@ -21,7 +21,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private UIPageViewController _pageViewController;
         private List<XBoardPageViewController> _viewControllers;
         private UIPanGestureRecognizer gesture = new UIPanGestureRecognizer();
-        private UISearchController _serach;
+        private UISearchController _search;
         private UIViewController _visibleViewController;
         private UITextField _textFieldInsideSearchBar;
 
@@ -64,14 +64,14 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             ConfigureView();
 
-            _serach = new UISearchController(searchResultsController: null) {
+            _search = new UISearchController(searchResultsController: null) {
                 DimsBackgroundDuringPresentation = false,    
             };
 
-            _serach.SearchBar.TintColor = Colors.White;
-            _serach.SearchBar.BarStyle = UIBarStyle.Black;
+            _search.SearchBar.TintColor = Colors.White;
+            _search.SearchBar.BarStyle = UIBarStyle.Black;
 
-            _textFieldInsideSearchBar = _serach.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
+            _textFieldInsideSearchBar = _search.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
             _textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
             _textFieldInsideSearchBar.ReturnKeyType = UIReturnKeyType.Done;
             _textFieldInsideSearchBar.ClearButtonMode = UITextFieldViewMode.Never;
@@ -79,21 +79,21 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             var backgroundField = _textFieldInsideSearchBar.Subviews[0];
             backgroundField.Alpha = 0f;
 
-            _serach.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
-            _serach.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("clear"), UISearchBarIcon.Clear, UIControlState.Normal);
+            _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
+            _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("clear"), UISearchBarIcon.Clear, UIControlState.Normal);
 
-            _serach.SearchBar.OnEditingStarted -= OnSearchBar_OnEditingStarted;
-            _serach.SearchBar.OnEditingStarted += OnSearchBar_OnEditingStarted;
+            _search.SearchBar.OnEditingStarted -= OnSearchBar_OnEditingStarted;
+            _search.SearchBar.OnEditingStarted += OnSearchBar_OnEditingStarted;
 
-            _serach.SearchBar.OnEditingStopped -= OnSearchBar_OnEditingStopped;
-            _serach.SearchBar.OnEditingStopped += OnSearchBar_OnEditingStopped;
+            _search.SearchBar.OnEditingStopped -= OnSearchBar_OnEditingStopped;
+            _search.SearchBar.OnEditingStopped += OnSearchBar_OnEditingStopped;
 
-            _serach.SearchBar.CancelButtonClicked -= OnSearchBar_CancelButtonClicked;
-            _serach.SearchBar.CancelButtonClicked += OnSearchBar_CancelButtonClicked;
+            _search.SearchBar.CancelButtonClicked -= OnSearchBar_CancelButtonClicked;
+            _search.SearchBar.CancelButtonClicked += OnSearchBar_CancelButtonClicked;
 
-            _serach.SearchResultsUpdater = this;
+            _search.SearchResultsUpdater = this;
             this.DefinesPresentationContext = true;
-            this.NavigationItem.SearchController = _serach;
+            this.NavigationItem.SearchController = _search;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -304,7 +304,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private void HandleDrag(UIPanGestureRecognizer gesture)
         {
             if (_isSearchActive) {
-                _serach.SearchBar.ResignFirstResponder();
+                _search.SearchBar.ResignFirstResponder();
             }
 
             _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(gesture);
