@@ -77,18 +77,15 @@ namespace LetterApp.iOS
 
         private void InitSinchClientWithUserId(string userId)
         {
-            if (Client == null)
-            {
-                Client = SinchSdk.Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
-                Client.WeakDelegate = this;
-                Client.SetSupportCalling(true);
-                Client.EnableManagedPushNotifications();
-                Client.SetSupportPushNotifications(true);
-                Client.Start();
-                Client.StartListeningOnActiveConnection();
+            Client = SinchSdk.Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
+            Client.WeakDelegate = this;
+            Client.SetSupportCalling(true);
+            Client.EnableManagedPushNotifications();
+            Client.SetSupportPushNotifications(true);
+            Client.Start();
+            Client.StartListeningOnActiveConnection();
 
-                CallProviderDelegate.StartCallClientDelegate();
-            }
+            CallProviderDelegate.StartCallClientDelegate();
         }
 
         public void DidReceiveIncomingPushWithPayload(ISINManagedPush managedPush, NSDictionary payload, string pushType)
