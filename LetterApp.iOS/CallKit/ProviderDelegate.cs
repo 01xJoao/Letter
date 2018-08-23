@@ -70,8 +70,7 @@ namespace LetterApp.iOS.CallKit
                 MaximumCallGroups = 1,
                 MaximumCallsPerCallGroup = 1,
                 SupportedHandleTypes = new NSSet<NSNumber>((NSNumber)(int)CXHandleType.Generic),
-                IconTemplateImageData = UIImage.FromBundle("letter_logo").AsPNG(),
-                RingtoneSound = "Audio/iphone_call.mp3"
+                IconTemplateImageData = UIImage.FromBundle("letter_logo").AsPNG()
             };
 
             Provider = new CXProvider(Configuration);
