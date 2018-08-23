@@ -171,6 +171,7 @@ namespace LetterApp.iOS.Views.Call
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
             CallProvider.CallManager.EndCall(_activeCall);
+            _activeCall = null;
         }
 
         public void DidOfflineOfUid()

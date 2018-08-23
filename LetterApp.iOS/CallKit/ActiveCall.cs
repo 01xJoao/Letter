@@ -45,6 +45,11 @@ namespace LetterApp.iOS.CallKit
             IsConnected = true;
         }
 
+        public void EndCall()
+        {
+            Ended = true;
+        }
+
         #endregion
     }
 }

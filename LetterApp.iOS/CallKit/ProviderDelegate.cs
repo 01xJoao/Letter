@@ -67,6 +67,7 @@ namespace LetterApp.iOS.CallKit
             Configuration = new CXProviderConfiguration("Letter")
             {
                 SupportsVideo = false,
+                MaximumCallGroups = 1,
                 MaximumCallsPerCallGroup = 1,
                 SupportedHandleTypes = new NSSet<NSNumber>((NSNumber)(int)CXHandleType.Generic),
                 IconTemplateImageData = UIImage.FromBundle("letter_logo").AsPNG(),
@@ -255,7 +256,7 @@ namespace LetterApp.iOS.CallKit
 
             if(call != null)
             {
-                call.Ended = true;
+                call.EndCall();
 
                 if (call.IsConnected == false)
                     CallManager.EndCall(call);
