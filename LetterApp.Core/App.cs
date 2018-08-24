@@ -26,8 +26,8 @@ namespace LetterApp.Core
 
         public static void Initialize()
         {
-            //InitializeDatabase();
             InitializeIoC();
+            //InitializeDatabase();
         }
 
         public static void InitializeIoC()

@@ -5,6 +5,7 @@ using Foundation;
 using LetterApp.Core;
 using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Views.Base;
+using ObjCRuntime;
 using PushKit;
 using SinchSdk;
 using UIKit;
@@ -57,6 +58,18 @@ namespace LetterApp.iOS
             if(AppSettings.UserId != 0)
                 InitSinchClientWithUserId(AppSettings.UserId.ToString());
             
+            return true;
+        }
+
+        //TODO This might need to be changed when implementing chat
+        [Export("application:continueUserActivity:restorationHandler:")]
+        public bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+        {
+            if (RootController?.CurrentViewController is MainViewController)
+            {
+                var viewC = RootController.CurrentViewController as MainViewController;
+                viewC.SetVisibleView(1);
+            }
             return true;
         }
 
