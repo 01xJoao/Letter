@@ -342,6 +342,12 @@
     <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\micro_off.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\telephone-symbol-button.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\organization_noimage.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\division_noimage.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\profile_noimage2.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -442,6 +448,9 @@
     <Folder Include="Resources\Assets.xcassets\micro_off.imageset\" />
     <Folder Include="CallKit\" />
     <Folder Include="Resources\Assets.xcassets\call_cellular.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\profile_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\division_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\organization_noimage.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />

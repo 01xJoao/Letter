@@ -32,7 +32,7 @@ namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
             {
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, _division.Picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+                }).ErrorPlaceholder("division_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
                 _label.Hidden = false;
                 UILabelExtensions.SetupLabelAppearance(_label, _division.Name, Colors.ProfileGray, 13f);

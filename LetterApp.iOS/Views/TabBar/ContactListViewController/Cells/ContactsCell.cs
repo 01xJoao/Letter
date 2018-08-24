@@ -35,11 +35,12 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, _picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Retry(3, 200).Finish(CleanString).Transform(new CircleTransformation()).Into(_imageView);
+                }).ErrorPlaceholder("profile_noimage", ImageSource.CompiledResource).Retry(3, 200).Finish(CleanString).Transform(new CircleTransformation()).Into(_imageView);
             }
             else
             {
-                _imageView.Image = UIImage.FromBundle("warning_image");
+                _imageView.Image = UIImage.FromBundle("profile_noimage");
+                CustomUIExtensions.RoundView(_imageView);
             }
 
             _chatImage.Image = UIImage.FromBundle("user_chat");

@@ -21,7 +21,7 @@ namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
 
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, division.Picture);
-            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+            }).ErrorPlaceholder("division_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
             UILabelExtensions.SetupLabelAppearance(_nameLabel, division.Name, Colors.ProfileGrayDarker, 14f);
             UILabelExtensions.SetupLabelAppearance(_membersLabel, division.MembersCount, Colors.GrayLabel, 13f);
