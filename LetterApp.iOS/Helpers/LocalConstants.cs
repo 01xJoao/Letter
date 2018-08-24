@@ -47,5 +47,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Contacts_TabHeight = 45;
         public static nfloat Contacts_TabMinHeight = 25;
         public static nfloat Contacts_CellHeight = 75;
+
+        public static nfloat Contacts_TitleHeight = 23;
     }
 }

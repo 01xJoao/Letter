@@ -726,5 +726,25 @@
   {
     "key": "Call_Anonym",
     "translated": "Unknown Caller"
+  },
+  {
+    "key": "ContactDialog_Title",
+    "translated": "Make a call"
+  },
+  {
+    "key": "ContactDialog_TitleLetter",
+    "translated": "Letter call"
+  },
+  {
+    "key": "ContactDialog_DescriptionLetter",
+    "translated": "It's free, internet connection is necessary"
+  },
+  {
+    "key": "ContactDialog_TitlePhone",
+    "translated": "Phone call"
+  },
+  {
+    "key": "ContactDialog_DescriptionPhone",
+    "translated": "Call charges may apply"
   }
 ]

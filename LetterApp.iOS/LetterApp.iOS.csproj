@@ -340,6 +340,8 @@
     <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\micro_on.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\micro_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\telephone-symbol-button.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -439,6 +441,7 @@
     <Folder Include="Resources\Assets.xcassets\micro_on.imageset\" />
     <Folder Include="Resources\Assets.xcassets\micro_off.imageset\" />
     <Folder Include="CallKit\" />
+    <Folder Include="Resources\Assets.xcassets\call_cellular.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -495,6 +498,7 @@
     <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallCell.xib" />
     <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -758,6 +762,10 @@
     <Compile Include="CallKit\ActiveCall.cs" />
     <Compile Include="CallKit\ActiveCallManager.cs" />
     <Compile Include="CallKit\ProviderDelegate.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ContactViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ContactViewController.designer.cs">
+      <DependentUpon>ContactViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

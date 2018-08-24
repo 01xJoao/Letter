@@ -10,6 +10,7 @@ using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -101,6 +102,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
 
             SetContactList(_usersInDivision);
+            SetL10NResources();
         }
 
         public override async Task Appearing()
@@ -249,10 +251,40 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     await NavigationService.NavigateAsync<MemberViewModel, int>(user.Item2);
                     break;
                 case ContactEventType.Call:
-                    await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(user.Item2, true));
+                    ShowContactDialog(user.Item2);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private async Task ShowContactDialog(int userId)
+        {
+            var user = _usersInDivision.FirstOrDefault(x => x.UserId == userId);
+
+            if (user == null)
+                return;
+
+            try
+            {
+                var callType = await _dialogService.ShowContactOptions(LocationResources, user.ShowNumber);
+
+                switch (callType)
+                {
+                    case CallingType.Letter:
+                        if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(user.UserId, true));
+                        break;
+                    case CallingType.Cellphone:
+                        CallUtils.Call(user.ContactNumber);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
             }
         }
 
@@ -361,6 +393,21 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private string DialogDescription => L10N.Localize("Contacts_DialogDescription");
         private string DialogButton => L10N.Localize("Contacts_DialogButton");
 
+        private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
+        private string TitleDialog => L10N.Localize("ContactDialog_Title");
+        private string LetterDialog => L10N.Localize("ContactDialog_TitleLetter");
+        private string LetterDescriptionDialog => L10N.Localize("ContactDialog_DescriptionLetter");
+        private string PhoneDialog => L10N.Localize("ContactDialog_TitlePhone");
+        private string PhoneDescriptionDialog => L10N.Localize("ContactDialog_DescriptionPhone");
+
+        private void SetL10NResources()
+        {
+            LocationResources.Add("Title", TitleDialog);
+            LocationResources.Add("TitleLetter", LetterDialog);
+            LocationResources.Add("DescriptionLetter", LetterDescriptionDialog);
+            LocationResources.Add("TitlePhone", PhoneDialog);
+            LocationResources.Add("DescriptionPhone", PhoneDescriptionDialog);
+        }
         #endregion
     }
 }

@@ -27,41 +27,41 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="l" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ks7-ya-H1L">
-                        <rect key="frame" x="90" y="19" width="166" height="20.5"/>
+                        <rect key="frame" x="90" y="19" width="174" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="l" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GY6-bd-Mxn">
-                        <rect key="frame" x="90" y="40.5" width="166" height="20.5"/>
+                        <rect key="frame" x="90" y="40.5" width="174" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hiE-UK-i99">
-                        <rect key="frame" x="276" y="26" width="28" height="28"/>
+                        <rect key="frame" x="284" y="26" width="28" height="28"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="28" id="Xi7-6b-0cD"/>
                             <constraint firstAttribute="width" secondItem="hiE-UK-i99" secondAttribute="height" id="qcw-Vq-1dd"/>
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UW1-29-gAD">
-                        <rect key="frame" x="266" y="0.0" width="56" height="81.5"/>
+                        <rect key="frame" x="274" y="0.0" width="53" height="81.5"/>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BoV-ah-Bx7">
-                        <rect key="frame" x="334" y="28" width="24" height="24"/>
+                        <rect key="frame" x="339" y="28" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="BoV-ah-Bx7" secondAttribute="height" id="BMD-qK-acK"/>
                             <constraint firstAttribute="width" constant="24" id="MmI-ZA-Eo4"/>
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lfd-gz-Dnf">
-                        <rect key="frame" x="322" y="0.0" width="61" height="81.5"/>
+                        <rect key="frame" x="327" y="0.0" width="56" height="81.5"/>
                     </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="BoV-ah-Bx7" secondAttribute="trailing" constant="25" id="5ZQ-MO-9ZQ"/>
+                    <constraint firstAttribute="trailing" secondItem="BoV-ah-Bx7" secondAttribute="trailing" constant="20" id="5ZQ-MO-9ZQ"/>
                     <constraint firstItem="GY6-bd-Mxn" firstAttribute="trailing" secondItem="Ks7-ya-H1L" secondAttribute="trailing" id="8JH-mR-Omv"/>
                     <constraint firstItem="Ks7-ya-H1L" firstAttribute="leading" secondItem="3ul-ro-fzP" secondAttribute="trailing" constant="15" id="AyB-8n-ngc"/>
                     <constraint firstItem="3ul-ro-fzP" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="BLn-bN-aoI"/>
@@ -79,11 +79,11 @@
                     <constraint firstAttribute="bottom" secondItem="lfd-gz-Dnf" secondAttribute="bottom" id="rdy-FH-zR4"/>
                     <constraint firstItem="UW1-29-gAD" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" id="rg8-IX-wkD"/>
                     <constraint firstItem="hiE-UK-i99" firstAttribute="leading" secondItem="Ks7-ya-H1L" secondAttribute="trailing" constant="20" id="rzR-o1-6mt"/>
-                    <constraint firstItem="BoV-ah-Bx7" firstAttribute="leading" secondItem="hiE-UK-i99" secondAttribute="trailing" constant="30" id="s2K-wx-Sas"/>
+                    <constraint firstItem="BoV-ah-Bx7" firstAttribute="leading" secondItem="hiE-UK-i99" secondAttribute="trailing" constant="27" id="s2K-wx-Sas"/>
                     <constraint firstItem="GY6-bd-Mxn" firstAttribute="top" secondItem="Ks7-ya-H1L" secondAttribute="bottom" constant="1" id="uVr-kW-tFP"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="_callButton" destination="lfd-gz-Dnf" id="icy-BT-Q7G"/>
                 <outlet property="_callImage" destination="BoV-ah-Bx7" id="XZD-CC-iLw"/>

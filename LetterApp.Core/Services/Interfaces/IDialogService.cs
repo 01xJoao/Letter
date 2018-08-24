@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LetterApp.Core.Services.Interfaces
@@ -11,6 +12,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<bool> ShowInformation(string title = "", string text1 = "", string text2 = "",string text3 = "", string confirmButtonText = "");
         Task<bool> ShowQuestion(string title = "", string buttonText = "", QuestionType questionType = QuestionType.Normal);
         Task<bool> ShowFilter(string title = "", string switchText = "", string descriptionText = "", string buttonText = "", bool isActive = false);
+        Task<CallingType> ShowContactOptions(Dictionary<string, string> locationResources, bool showPhoneOption = true);
         void StartLoading();
         void StopLoading();
     }
@@ -46,5 +48,12 @@ namespace LetterApp.Core.Services.Interfaces
         Good,
         Bad,
         Normal
+    }
+
+    public enum CallingType
+    {
+        Letter,
+        Cellphone,
+        Close
     }
 }

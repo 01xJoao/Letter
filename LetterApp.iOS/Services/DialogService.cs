@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Airbnb.Lottie;
 using CoreGraphics;
 using LetterApp.Core.Services.Interfaces;
-using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.CustomViews.Dialog;
-using MBProgressHUD;
 using UIKit;
 
 namespace LetterApp.iOS.Services
@@ -62,6 +61,16 @@ namespace LetterApp.iOS.Services
 
             var filterView = new FilterContactsViewController(title, switchText, descriptionText, buttonText, isActive, val => tcs.TrySetResult(val));
             filterView.Show();
+
+            return tcs.Task;
+        }
+
+        public Task<CallingType> ShowContactOptions(Dictionary<string, string> locationResources, bool showPhoneOption = true)
+        {
+            var tcs = new TaskCompletionSource<CallingType>();
+
+            var contacView = new ContactViewController(locationResources, showPhoneOption, val => tcs.TrySetResult(val));
+            contacView.Show();
 
             return tcs.Task;
         }

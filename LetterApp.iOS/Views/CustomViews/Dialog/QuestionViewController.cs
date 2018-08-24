@@ -55,6 +55,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 17f, _button);
 
             _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
+            _closeButton.ContentMode = UIViewContentMode.ScaleAspectFit;
             _closeButton.TintColor = Colors.Black;
 
             _submitButton.TouchUpInside -= OnSubmitButton_TouchUpInside;

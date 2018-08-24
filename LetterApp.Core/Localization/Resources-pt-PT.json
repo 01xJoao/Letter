@@ -726,5 +726,25 @@
   {
     "key": "Call_Anonym",
     "translated": "Desconhecido"
+  },
+  {
+    "key": "ContactDialog_Title",
+    "translated": "Faça uma chamada"
+  },
+  {
+    "key": "ContactDialog_TitleLetter",
+    "translated": "Chamada via letter"
+  },
+  {
+    "key": "ContactDialog_DescriptionLetter",
+    "translated": "É gratuíto, necessário conexão à internet"
+  },
+  {
+    "key": "ContactDialog_TitlePhone",
+    "translated": "Chamada via telefone"
+  },
+  {
+    "key": "ContactDialog_DescriptionPhone",
+    "translated": "Taxas de chamadas podem ser aplicadas"
   }
 ]
