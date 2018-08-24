@@ -12,14 +12,13 @@ namespace LetterApp.Core.Models
         public string CallerPosition { get; set; }
         public string CallerPicture { get; set; }
         public long CallDate { get; set; }
-        public long CallDuration { get; set; }
-        public string CallType { get; set; }
+        public bool CallType { get; set; }
+        public bool Success { get; set; }
     }
 
     public enum CallType
     {
         Outgoing,
-        Incoming,
-        Missed
+        Incoming
     } 
 }

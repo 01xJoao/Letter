@@ -9,7 +9,7 @@ namespace LetterApp.iOS.Sources
 {
 	public class CallSource : UITableViewSource
     {
-        public event EventHandler<int> OpenCallerProfile;
+        public event EventHandler<int> OpenCallerProfileEvent;
         public event EventHandler<int> CallEvent;
         private List<CallModel> _calls;
 
@@ -22,7 +22,7 @@ namespace LetterApp.iOS.Sources
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var callCell = tableView.DequeueReusableCell(CallCell.Key) as CallCell;
-            callCell.Configure(_calls[indexPath.Row], OpenCallerProfile);
+            callCell.Configure(_calls[indexPath.Row], OpenCallerProfileEvent);
             return callCell;
         }
 

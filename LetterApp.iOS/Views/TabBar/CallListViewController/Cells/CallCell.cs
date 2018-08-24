@@ -9,7 +9,7 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController.Cells
     public partial class CallCell : UITableViewCell
     {
         private int _callerId;
-        EventHandler<int> _openProfile;
+        private EventHandler<int> _openProfile;
         public static readonly NSString Key = new NSString("CallCell");
         public static readonly UINib Nib = UINib.FromName("CallCell", NSBundle.MainBundle);
         protected CallCell(IntPtr handle) : base(handle){}
@@ -18,6 +18,15 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController.Cells
         {
             _callerId = call.CallerId;
             _openProfile = openProfile;
+
+
+            _openProfileButton.TouchUpInside -= OnOpenProfileButton_TouchUpInside;
+            _openProfileButton.TouchUpInside += OnOpenProfileButton_TouchUpInside;
+        }
+
+        private void OnOpenProfileButton_TouchUpInside(object sender, EventArgs e)
+        {
+            _openProfile?.Invoke(sender, _callerId);
         }
     }
 }
