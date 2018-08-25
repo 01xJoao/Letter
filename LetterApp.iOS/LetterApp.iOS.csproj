@@ -507,6 +507,7 @@
     <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
     <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -769,6 +770,10 @@
     <Compile Include="Views\CustomViews\Dialog\ContactViewController.cs" />
     <Compile Include="Views\CustomViews\Dialog\ContactViewController.designer.cs">
       <DependentUpon>ContactViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.cs" />
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.designer.cs">
+      <DependentUpon>CallHistoryCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

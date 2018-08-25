@@ -15,8 +15,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     {
         private readonly IDialogService _dialogService;
 
+        //Realms fields
         private List<CallModel> _calls;
+        private List<GetUsersInDivisionModel> _users;
 
+        //Model
         private List<CallHistoryModel> _callHistory;
         public List<CallHistoryModel> CallHistory
         {
@@ -30,47 +33,70 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             SetL10NResources();
         }
 
+        public override async Task InitializeAsync()
+        {
+            _users = Realm.All<GetUsersInDivisionModel>().ToList();
+        }
+
         public override async Task Appearing()
         {
-            CallHistory = new List<CallHistoryModel>();
+            if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
+                return;
+
+            _callHistory = new List<CallHistoryModel>();
 
             _calls = Realm.All<CallModel>().ToList();
 
-            var users = Realm.All<GetUsersInDivisionModel>().ToList();
-
             var lastCall = new CallHistoryModel();
 
-            var testCall = new CallModel();
-            testCall.CallerId = 59;
-            testCall.CallDate = DateTime.Now.Ticks;
-            testCall.CallId = 1;
-            testCall.IsNew = true;
-            testCall.CallType = 0;
-            testCall.Success = true;
+            var testCall0 = new CallModel();
+            testCall0.CallerId = 92;
+            testCall0.CallDate = DateTime.Now.Ticks;
+            testCall0.CallId = 21;
+            testCall0.IsNew = true;
+            testCall0.CallType = 1;
+            testCall0.Success = false;
 
             var testCall1 = new CallModel();
-            testCall1.CallerId = 84;
-            testCall1.CallDate = DateTime.Now.AddDays(-1).Ticks;
-            testCall1.CallId = 2;
-            testCall1.IsNew = false;
+            testCall1.CallerId = 92;
+            testCall1.CallDate = DateTime.Now.Ticks;
+            testCall1.CallId = 11;
+            testCall1.IsNew = true;
             testCall1.CallType = 1;
             testCall1.Success = false;
 
-            var testCalls = new List<CallModel>() { testCall, testCall1 };
+            var testCall2 = new CallModel();
+            testCall2.CallerId = 59;
+            testCall2.CallDate = DateTime.Now.AddDays(-1).Ticks;
+            testCall2.CallId = 1;
+            testCall2.IsNew = true;
+            testCall2.CallType = 0;
+            testCall2.Success = true;
+
+            var testCall3 = new CallModel();
+            testCall3.CallerId = 84;
+            testCall3.CallDate = DateTime.Now.AddDays(-2).Ticks;
+            testCall3.CallId = 2;
+            testCall3.IsNew = false;
+            testCall3.CallType = 1;
+            testCall3.Success = false;
+
+            var testCalls = new List<CallModel>() { testCall0, testCall1, testCall2, testCall3 };
 
             foreach (CallModel call in testCalls)
             {
-                var user = users.FirstOrDefault(x => x.UserId == call.CallerId);
+                var user = _users.FirstOrDefault(x => x.UserId == call.CallerId);
 
                 if (user == null)
                     continue;
 
                 var date = new DateTime(call.CallDate);
 
-                if (lastCall.CallerId == call.CallerId && DateUtils.CompareDates(call.CallDate, lastCall.CallDate))
+                if (lastCall.CallerId == call.CallerId && DateUtils.CompareDates(call.CallDate, lastCall.CallDate) && (int)lastCall.CallType  == call.CallType)
                 {
                     lastCall.CallDateText = DateUtils.CallsDateString(date);
                     lastCall.NumberOfCalls++;
+                    lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.NumberOfCalls})" : $"{Call_Incoming} ({lastCall.NumberOfCalls})";
                     continue;
                 }
 
@@ -79,9 +105,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     CallerId = call.CallerId,
                     CallDate = date,
                     CallDateText = DateUtils.CallsDateString(date),
-                    CallType = call.CallType == 0 ? Call_Outgoing : Call_Incoming,
+                    CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming,
+                    CallCountAndType = call.CallType == 0 ? Call_Outgoing : Call_Incoming,
                     HasSuccess = call.Success,
-                    IsNew = call.IsNew,
+                    ShouldAlert = call.IsNew && !call.Success && call.CallType == 1,
                     NumberOfCalls = 1,
                     CallerInfo = $"{user.FirstName} {user.LastName} · {user.Position}",
                     CallerPicture = user.Picture
@@ -92,13 +119,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 lastCall = callHistory;
             }
 
-            CallHistory = _callHistory;
+            if(_callHistory.Count > 0)
+                RaisePropertyChanged(nameof(CallHistory));
 
             //TODO This might need to be moved to Appeared or Disappering
-            Realm.Write(() =>
-            {
-                _calls.All(x => x.IsNew = false);
-            });
+            if(_calls.Any(x => x.IsNew == true))
+                Realm.Write(() => { _calls.All(x => x.IsNew = false); });
         }
 
         #region Resources

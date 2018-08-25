@@ -13,8 +13,7 @@ namespace LetterApp.Core.Helpers
 
         public static bool CompareDates(long date1, DateTime date2)
         {
-            var date = default(DateTime).AddMilliseconds(date1).ToLocalTime();
-            return date.Date == date2.Date;
+            return new DateTime(date1).Date == date2.Date;
         }
 
         //https://stackoverflow.com/questions/11/calculate-relative-time-in-c-sharp

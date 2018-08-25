@@ -8,9 +8,10 @@ namespace LetterApp.Core.Models
         public string CallerPicture { get; set; }
         public DateTime CallDate { get; set; }
         public string CallDateText { get; set; }
-        public string CallType { get; set; }
+        public CallType CallType { get; set; }
+        public string CallCountAndType { get; set; }
         public bool HasSuccess { get; set; }
         public int NumberOfCalls { get; set; }
-        public bool IsNew { get; set; }
+        public bool ShouldAlert { get; set; }
     }
 }
