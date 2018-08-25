@@ -11,9 +11,9 @@ namespace LetterApp.iOS.Sources
     {
         public event EventHandler<int> OpenCallerProfileEvent;
         public event EventHandler<int> CallEvent;
-        private List<CallModel> _calls;
+        private List<CallHistoryModel> _calls;
 
-        public CallSource(UITableView tableView, List<CallModel> calls)
+        public CallSource(UITableView tableView, List<CallHistoryModel> calls)
         {
             _calls = calls;
             tableView.RegisterNibForCellReuse(CallCell.Nib, CallCell.Key);

@@ -36,7 +36,7 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
 
         private void SetupTableView()
         {
-            var source = new CallSource(_tableView, ViewModel.Calls);
+            var source = new CallSource(_tableView, ViewModel.CallHistory);
             _tableView.Source = source;
 
             source.CallEvent -= OnSource_CallEvent;

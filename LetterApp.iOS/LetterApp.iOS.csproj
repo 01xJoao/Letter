@@ -505,7 +505,6 @@
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
     <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
-    <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallCell.xib" />
     <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
   </ItemGroup>
@@ -758,10 +757,6 @@
       <DependentUpon>MemberViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\MemberSource.cs" />
-    <Compile Include="Views\TabBar\CallListViewController\Cells\CallCell.cs" />
-    <Compile Include="Views\TabBar\CallListViewController\Cells\CallCell.designer.cs">
-      <DependentUpon>CallCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Sources\CallSource.cs" />
     <Compile Include="AgoraIO\AgoraRtcDelegate.cs" />
     <Compile Include="Views\Call\CallViewController.cs" />

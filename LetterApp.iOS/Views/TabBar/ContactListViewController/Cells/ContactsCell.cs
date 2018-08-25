@@ -21,15 +21,17 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 
         public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler)
         {
+            _imageView.Image?.Dispose();
+            _chatImage.Image?.Dispose();
+            _callImage.Image?.Dispose();
+
             _userId = user.UserId;
             _contactEventHandler = contactEventHandler;
 
             UILabelExtensions.SetupLabelAppearance(_nameLabel, $"{user.FirstName} {user.LastName}", Colors.ProfileGray, 14f, UIFontWeight.Semibold);
             UILabelExtensions.SetupLabelAppearance(_roleLabel, user.Position, Colors.Black, 13f);
 
-            _imageView.Image?.Dispose();
-
-            if(!string.IsNullOrEmpty(user?.Picture))
+            if (!string.IsNullOrEmpty(user?.Picture))
             {
                 _picture = string.Copy(user.Picture); 
 

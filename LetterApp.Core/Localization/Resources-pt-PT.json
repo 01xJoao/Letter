@@ -746,5 +746,61 @@
   {
     "key": "ContactDialog_DescriptionPhone",
     "translated": "Taxas de chamadas podem ser aplicadas"
+  },
+  {
+    "key": "date_Monday",
+    "translated": "Segunda"
+  },
+  {
+    "key": "date_Tuesday",
+    "translated": "Terça"
+  },
+  {
+    "key": "date_Wednesday",
+    "translated": "Quarta"
+  },
+  {
+    "key": "date_Thursday",
+    "translated": "Quinta"
+  },
+  {
+    "key": "date_Friday",
+    "translated": "Sexta"
+  },
+  {
+    "key": "date_Saturday",
+    "translated": "Sábado"
+  },
+  {
+    "key": "date_Sunday",
+    "translated": "Domingo"
+  },
+  {
+    "key": "date_Seconds",
+    "translated": " segundos atrás"
+  },
+  {
+    "key": "date_Minute",
+    "translated": "1 minuto atrás"
+  },
+  {
+    "key": "date_Minutes",
+    "translated": " minutos atrás"
+  },
+  {
+    "key": "date_Hour",
+    "translated": "1 hora atrás"
+  },
+  {
+    "key": "date_Hours",
+    "translated": " horas atrás"
+  },
+  {
+    "key": "date_Today",
+    "translated": "Hoje"
+  },
+  {
+    "key": "date_Yesterday",
+    "translated": "Ontem"
   }
 ]

@@ -746,5 +746,69 @@
   {
     "key": "ContactDialog_DescriptionPhone",
     "translated": "Call charges may apply"
+  },
+  {
+    "key": "date_Monday",
+    "translated": "Monday"
+  },
+  {
+    "key": "date_Tuesday",
+    "translated": "Tuesday"
+  },
+  {
+    "key": "date_Wednesday",
+    "translated": "Wednesday"
+  },
+  {
+    "key": "date_Thursday",
+    "translated": "Thursday"
+  },
+  {
+    "key": "date_Friday",
+    "translated": "Friday"
+  },
+  {
+    "key": "date_Saturday",
+    "translated": "Saturday"
+  },
+  {
+    "key": "date_Sunday",
+    "translated": "Sunday"
+  },
+  {
+    "key": "date_Seconds",
+    "translated": " seconds ago"
+  },
+  {
+    "key": "date_Minute",
+    "translated": "1 minute ago"
+  },
+  {
+    "key": "date_Minutes",
+    "translated": " minutes ago"
+  },
+  {
+    "key": "date_Hour",
+    "translated": "1 hour ago"
+  },
+  {
+    "key": "date_Hours",
+    "translated": " hours ago"
+  },
+  {
+    "key": "date_Today",
+    "translated": "Today"
+  },
+  {
+    "key": "date_Yesterday",
+    "translated": "Yesterday"
+  },
+  {
+    "key": "Call_Incoming",
+    "translated": "Incoming"
+  },
+  {
+    "key": "Call_Outgoing",
+    "translated": "Outgoing"
   }
 ]

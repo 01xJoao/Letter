@@ -1,8 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using CoreGraphics;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
