@@ -36,7 +36,8 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
 
         private void SetupTableView()
         {
-            var source = new CallSource(_tableView, ViewModel.CallHistory);
+            var source = new CallSource(_tableView, ViewModel.CallHistory, ViewModel.Delete);
+
             _tableView.Source = source;
 
             source.CallEvent -= OnSource_CallEvent;
@@ -45,7 +46,15 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
             source.OpenCallerProfileEvent -= OnSource_OpenCallerProfileEvent;
             source.OpenCallerProfileEvent += OnSource_OpenCallerProfileEvent;
 
+            source.DeleteCallEvent -= OnSource_DeleteCallEvent;
+            source.DeleteCallEvent += OnSource_DeleteCallEvent;
+
             _tableView.ReloadData();
+        }
+
+        private void OnSource_DeleteCallEvent(object sender, int e)
+        {
+            //Viewmodel.RemoveCall.Execute(indexRow)
         }
 
         private void OnSource_OpenCallerProfileEvent(object sender, int callerId)

@@ -810,5 +810,13 @@
   {
     "key": "Call_Outgoing",
     "translated": "Outgoing"
+  },
+  {
+    "key": "Call_Missed",
+    "translated": "Missed"
+  },
+  {
+    "key": "Delete",
+    "translated": "Delete"
   }
 ]

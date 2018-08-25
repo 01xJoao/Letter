@@ -49,33 +49,33 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             var lastCall = new CallHistoryModel();
 
-            var testCall0 = new CallModel();
-            testCall0.CallerId = 92;
-            testCall0.CallDate = DateTime.Now.Ticks;
-            testCall0.CallId = 21;
-            testCall0.IsNew = true;
-            testCall0.CallType = 1;
-            testCall0.Success = false;
-
             var testCall1 = new CallModel();
             testCall1.CallerId = 92;
-            testCall1.CallDate = DateTime.Now.Ticks;
+            testCall1.CallDate = DateTime.Now.AddDays(-1).Ticks;
             testCall1.CallId = 11;
             testCall1.IsNew = true;
             testCall1.CallType = 1;
             testCall1.Success = false;
 
+            var testCall0 = new CallModel();
+            testCall0.CallerId = 92;
+            testCall0.CallDate = DateTime.Now.AddDays(-1).AddHours(-4).Ticks;
+            testCall0.CallId = 21;
+            testCall0.IsNew = true;
+            testCall0.CallType = 1;
+            testCall0.Success = false;
+
             var testCall2 = new CallModel();
             testCall2.CallerId = 59;
-            testCall2.CallDate = DateTime.Now.AddDays(-1).Ticks;
+            testCall2.CallDate = DateTime.Now.AddDays(-2).Ticks;
             testCall2.CallId = 1;
             testCall2.IsNew = true;
             testCall2.CallType = 0;
             testCall2.Success = true;
 
             var testCall3 = new CallModel();
-            testCall3.CallerId = 84;
-            testCall3.CallDate = DateTime.Now.AddDays(-2).Ticks;
+            testCall3.CallerId = 86;
+            testCall3.CallDate = DateTime.Now.AddDays(-7).Ticks;
             testCall3.CallId = 2;
             testCall3.IsNew = false;
             testCall3.CallType = 1;
@@ -83,7 +83,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             var testCalls = new List<CallModel>() { testCall0, testCall1, testCall2, testCall3 };
 
-            foreach (CallModel call in testCalls)
+            foreach (CallModel call in testCalls.OrderBy(x => x.CallDate))
             {
                 var user = _users.FirstOrDefault(x => x.UserId == call.CallerId);
 
@@ -92,12 +92,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 var date = new DateTime(call.CallDate);
 
-                if (lastCall.CallerId == call.CallerId && DateUtils.CompareDates(call.CallDate, lastCall.CallDate) && (int)lastCall.CallType  == call.CallType)
+                if (lastCall.CallerId == call.CallerId && DateUtils.CompareDates(call.CallDate, lastCall.CallDate))
                 {
-                    lastCall.CallDateText = DateUtils.CallsDateString(date);
-                    lastCall.NumberOfCalls++;
-                    lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.NumberOfCalls})" : $"{Call_Incoming} ({lastCall.NumberOfCalls})";
-                    continue;
+                    if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
+                    {
+                        lastCall.CallDateText = DateUtils.CallsDateString(date);
+                        lastCall.NumberOfCalls++;
+                        lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.NumberOfCalls})" :
+                            call.Success ? $"{Call_Incoming} ({lastCall.NumberOfCalls})" : $"{Call_Missed} ({lastCall.NumberOfCalls})";
+                        continue;
+                    }
+
+                    //if(lastCall.CallType == CallType.Incoming)
+                        //lastCall.ShouldAlert = false;
                 }
 
                 var callHistory = new CallHistoryModel
@@ -106,7 +113,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     CallDate = date,
                     CallDateText = DateUtils.CallsDateString(date),
                     CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming,
-                    CallCountAndType = call.CallType == 0 ? Call_Outgoing : Call_Incoming,
+                    CallCountAndType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
                     HasSuccess = call.Success,
                     ShouldAlert = call.IsNew && !call.Success && call.CallType == 1,
                     NumberOfCalls = 1,
@@ -119,10 +126,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 lastCall = callHistory;
             }
 
+            _callHistory = _callHistory.OrderByDescending(x => x.CallDate).ToList();
+
             if(_callHistory.Count > 0)
                 RaisePropertyChanged(nameof(CallHistory));
-
-            //TODO This might need to be moved to Appeared or Disappering
+                
             if(_calls.Any(x => x.IsNew == true))
                 Realm.Write(() => { _calls.All(x => x.IsNew = false); });
         }
@@ -130,9 +138,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         #region Resources
 
         public string Title => L10N.Localize("MainViewModel_CallTab");
+        public string Delete => L10N.Localize("Delete");
 
         private string Call_Incoming => L10N.Localize("Call_Incoming");
         private string Call_Outgoing => L10N.Localize("Call_Outgoing");
+        private string Call_Missed => L10N.Localize("Call_Missed");
 
         private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string TitleDialog => L10N.Localize("ContactDialog_Title");

@@ -49,7 +49,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.PrefersLargeTitles = true;
-            this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Automatic;
+            this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
             this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "contacts_filter", OpenFilter);
 
             _pageViewController = new UIPageViewController(UIPageViewControllerTransitionStyle.Scroll, UIPageViewControllerNavigationOrientation.Horizontal);

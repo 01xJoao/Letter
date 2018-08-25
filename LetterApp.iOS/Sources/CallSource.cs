@@ -8,14 +8,18 @@ using UIKit;
 
 namespace LetterApp.iOS.Sources
 {
-	public class CallSource : UITableViewSource
+    public class CallSource : UITableViewSource
     {
         public event EventHandler<int> OpenCallerProfileEvent;
         public event EventHandler<int> CallEvent;
+        public event EventHandler<int> DeleteCallEvent;
+
+        private string _delete;
         private List<CallHistoryModel> _calls;
 
-        public CallSource(UITableView tableView, List<CallHistoryModel> calls)
+        public CallSource(UITableView tableView, List<CallHistoryModel> calls, string delete)
         {
+            _delete = delete;
             _calls = calls;
             tableView.RegisterNibForCellReuse(CallHistoryCell.Nib, CallHistoryCell.Key);
         }
@@ -31,6 +35,33 @@ namespace LetterApp.iOS.Sources
         {
             tableView.DeselectRow(indexPath, true);
             CallEvent?.Invoke(this, _calls[indexPath.Row].CallerId);
+        }
+
+        public override UITableViewRowAction[] EditActionsForRow(UITableView tableView, NSIndexPath indexPath)
+        {
+            UITableViewRowAction deleteButton = UITableViewRowAction.Create(
+                UITableViewRowActionStyle.Destructive,
+                _delete,
+                delegate {
+
+                    tableView.BeginUpdates();
+                    tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Bottom);
+				    _calls.RemoveAt(indexPath.Row);
+                    tableView.EndUpdates();
+                    tableView.ReloadData();
+
+                    DeleteCallEvent?.Invoke(this, indexPath.Row);
+                });
+
+            deleteButton.BackgroundColor = Colors.Red;
+
+            return new UITableViewRowAction[] { deleteButton };
+        }
+              
+        public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)
+        {
+            tableView.SetEditing(false, true);
+            return null;
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section) => new UIView();

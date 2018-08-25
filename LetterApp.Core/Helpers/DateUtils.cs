@@ -43,8 +43,8 @@ namespace LetterApp.Core.Helpers
             if (date.Date.AddDays(1) == DateTime.Now.Date)
                 return L10N.Localize("date_Yesterday");
 
-            if (delta > 48 * HOUR && delta < 168 * HOUR)
-                return L10N.Localize($"day_{date.DayOfWeek.ToString()}");
+            if (delta > 48 * HOUR && delta < 144 * HOUR || date.Date.AddDays(2) == DateTime.Now.Date)
+                return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
                 
             return date.Date.ToShortDateString();
         }

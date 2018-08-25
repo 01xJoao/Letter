@@ -802,5 +802,21 @@
   {
     "key": "date_Yesterday",
     "translated": "Ontem"
+  },
+  {
+    "key": "Call_Incoming",
+    "translated": "Recebida"
+  },
+  {
+    "key": "Call_Outgoing",
+    "translated": "Efetuada"
+  },
+  {
+    "key": "Call_Missed",
+    "translated": "Perdida"
+  },
+  {
+    "key": "Delete",
+    "translated": "Eliminar"
   }
 ]
