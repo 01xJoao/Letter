@@ -143,15 +143,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void DeleteCall(int index)
         {
-            var call = _callHistory[index].CallStack;
-
-            Realm.Write(() => 
-            { 
-                foreach(int callId in _callHistory[index].CallStack)
+            Realm.Write(() =>
+            {
+                foreach (int callId in _callHistory[index]?.CallStack)
                 {
-                    Realm.Remove(_calls.FirstOrDefault(x => x.CallId == callId));
+                    if (_calls.Any(x => x.CallId == callId))
+                        Realm.Remove(_calls.FirstOrDefault(x => x.CallId == callId));
                 }
             });
+
+            if (_callHistory.ElementAtOrDefault(2) != null)
+                _callHistory.RemoveAt(index);
         }
 
         #region Resources

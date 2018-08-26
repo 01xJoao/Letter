@@ -45,11 +45,9 @@ namespace LetterApp.iOS.Sources
                 delegate {
                     tableView.BeginUpdates();
                     tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Bottom);
-				    _calls.RemoveAt(indexPath.Row);
-                    tableView.EndUpdates();
-                    tableView.ReloadData();
-
                     DeleteCallEvent?.Invoke(this, indexPath.Row);
+                    tableView.EndUpdates();            
+                    tableView.ReloadData();
                 });
 
             deleteButton.BackgroundColor = Colors.Red;
