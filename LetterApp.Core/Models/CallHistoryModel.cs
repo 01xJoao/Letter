@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace LetterApp.Core.Models
 {
     public class CallHistoryModel
@@ -11,7 +13,7 @@ namespace LetterApp.Core.Models
         public CallType CallType { get; set; }
         public string CallCountAndType { get; set; }
         public bool HasSuccess { get; set; }
-        public int NumberOfCalls { get; set; }
+        public List<int> CallStack = new List<int>();
         public bool ShouldAlert { get; set; }
     }
 }

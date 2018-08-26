@@ -9,14 +9,14 @@ using UIKit;
 namespace LetterApp.iOS.Sources
 {
     public class CallSource : UITableViewSource
-    {
-        public event EventHandler<int> OpenCallerProfileEvent;
-        public event EventHandler<int> CallEvent;
-        public event EventHandler<int> DeleteCallEvent;
-
+    {       
         private string _delete;
         private List<CallHistoryModel> _calls;
 
+        public event EventHandler<int> OpenCallerProfileEvent;
+        public event EventHandler<int> CallEvent;
+        public event EventHandler<int> DeleteCallEvent;
+       
         public CallSource(UITableView tableView, List<CallHistoryModel> calls, string delete)
         {
             _delete = delete;
@@ -43,7 +43,6 @@ namespace LetterApp.iOS.Sources
                 UITableViewRowActionStyle.Destructive,
                 _delete,
                 delegate {
-
                     tableView.BeginUpdates();
                     tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Bottom);
 				    _calls.RemoveAt(indexPath.Row);

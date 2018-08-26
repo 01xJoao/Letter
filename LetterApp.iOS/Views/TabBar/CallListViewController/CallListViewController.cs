@@ -52,9 +52,9 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
             _tableView.ReloadData();
         }
 
-        private void OnSource_DeleteCallEvent(object sender, int e)
+        private void OnSource_DeleteCallEvent(object sender, int indexRow)
         {
-            //Viewmodel.RemoveCall.Execute(indexRow)
+			ViewModel.DeleteCallCommand.Execute(indexRow);
         }
 
         private void OnSource_OpenCallerProfileEvent(object sender, int callerId)

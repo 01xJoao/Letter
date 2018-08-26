@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Helpers;
+using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
@@ -26,6 +27,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             get => _callHistory;
             set => SetProperty(ref _callHistory, value);
         }
+
+        private XPCommand<int> _deleteCallCommand;
+        public XPCommand<int> DeleteCallCommand => _deleteCallCommand ?? (_deleteCallCommand = new XPCommand<int>(DeleteCall));
 
         public CallListViewModel(IDialogService dialogService) 
         {
@@ -59,7 +63,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             var testCall0 = new CallModel();
             testCall0.CallerId = 92;
-            testCall0.CallDate = DateTime.Now.AddDays(-1).AddHours(-4).Ticks;
+            testCall0.CallDate = DateTime.Now.AddDays(-1).AddHours(-1).Ticks;
             testCall0.CallId = 21;
             testCall0.IsNew = true;
             testCall0.CallType = 1;
@@ -97,9 +101,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
                     {
                         lastCall.CallDateText = DateUtils.CallsDateString(date);
-                        lastCall.NumberOfCalls++;
-                        lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.NumberOfCalls})" :
-                            call.Success ? $"{Call_Incoming} ({lastCall.NumberOfCalls})" : $"{Call_Missed} ({lastCall.NumberOfCalls})";
+                        lastCall.CallStack.Add(call.CallerId);
+                        lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
+                            call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
+
                         continue;
                     }
 
@@ -116,10 +121,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     CallCountAndType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
                     HasSuccess = call.Success,
                     ShouldAlert = call.IsNew && !call.Success && call.CallType == 1,
-                    NumberOfCalls = 1,
                     CallerInfo = $"{user.FirstName} {user.LastName} · {user.Position}",
                     CallerPicture = user.Picture
                 };
+
+                callHistory.CallStack.Add(call.CallId);
 
                 _callHistory.Add(callHistory);
 
@@ -133,6 +139,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 
             if(_calls.Any(x => x.IsNew == true))
                 Realm.Write(() => { _calls.All(x => x.IsNew = false); });
+        }
+
+        private void DeleteCall(int index)
+        {
+            var call = _callHistory[index].CallStack;
+
+            Realm.Write(() => 
+            { 
+                foreach(int callId in _callHistory[index].CallStack)
+                {
+                    Realm.Remove(_calls.FirstOrDefault(x => x.CallId == callId));
+                }
+            });
         }
 
         #region Resources
