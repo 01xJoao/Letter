@@ -28,6 +28,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             set => SetProperty(ref _callHistory, value);
         }
 
+        private XPCommand _openContactList;
+        public XPCommand OpenCallListCommand => _openContactList ?? (_openContactList = new XPCommand(OpenContactList));
+
         private XPCommand<int> _deleteCallCommand;
         public XPCommand<int> DeleteCallCommand => _deleteCallCommand ?? (_deleteCallCommand = new XPCommand<int>(DeleteCall));
 
@@ -53,41 +56,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             var lastCall = new CallHistoryModel();
 
-            var testCall1 = new CallModel();
-            testCall1.CallerId = 92;
-            testCall1.CallDate = DateTime.Now.AddDays(-1).Ticks;
-            testCall1.CallId = 11;
-            testCall1.IsNew = true;
-            testCall1.CallType = 1;
-            testCall1.Success = false;
-
-            var testCall0 = new CallModel();
-            testCall0.CallerId = 92;
-            testCall0.CallDate = DateTime.Now.AddDays(-1).AddHours(-1).Ticks;
-            testCall0.CallId = 21;
-            testCall0.IsNew = true;
-            testCall0.CallType = 1;
-            testCall0.Success = false;
-
-            var testCall2 = new CallModel();
-            testCall2.CallerId = 59;
-            testCall2.CallDate = DateTime.Now.AddDays(-2).Ticks;
-            testCall2.CallId = 1;
-            testCall2.IsNew = true;
-            testCall2.CallType = 0;
-            testCall2.Success = true;
-
-            var testCall3 = new CallModel();
-            testCall3.CallerId = 86;
-            testCall3.CallDate = DateTime.Now.AddDays(-7).Ticks;
-            testCall3.CallId = 2;
-            testCall3.IsNew = false;
-            testCall3.CallType = 1;
-            testCall3.Success = false;
-
-            var testCalls = new List<CallModel>() { testCall0, testCall1, testCall2, testCall3 };
-
-            foreach (CallModel call in testCalls.OrderBy(x => x.CallDate))
+            foreach (CallModel call in _calls.OrderBy(x => x.CallDate))
             {
                 var user = _users.FirstOrDefault(x => x.UserId == call.CallerId);
 
@@ -156,6 +125,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 _callHistory.RemoveAt(index);
         }
 
+        private void OpenContactList()
+        {
+            NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
+        }
+
         #region Resources
 
         public string Title => L10N.Localize("MainViewModel_CallTab");
@@ -185,3 +159,38 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
     }
 }
+
+
+//var testCall1 = new CallModel();
+//testCall1.CallerId = 92;
+//testCall1.CallDate = DateTime.Now.AddDays(-1).Ticks;
+//testCall1.CallId = 11;
+//testCall1.IsNew = true;
+//testCall1.CallType = 1;
+//testCall1.Success = false;
+
+//var testCall0 = new CallModel();
+//testCall0.CallerId = 92;
+//testCall0.CallDate = DateTime.Now.AddDays(-1).AddHours(-1).Ticks;
+//testCall0.CallId = 21;
+//testCall0.IsNew = true;
+//testCall0.CallType = 1;
+//testCall0.Success = false;
+
+//var testCall2 = new CallModel();
+//testCall2.CallerId = 59;
+//testCall2.CallDate = DateTime.Now.AddDays(-2).Ticks;
+//testCall2.CallId = 1;
+//testCall2.IsNew = true;
+//testCall2.CallType = 0;
+//testCall2.Success = true;
+
+//var testCall3 = new CallModel();
+//testCall3.CallerId = 86;
+//testCall3.CallDate = DateTime.Now.AddDays(-7).Ticks;
+//testCall3.CallId = 2;
+//testCall3.IsNew = false;
+//testCall3.CallType = 1;
+//testCall3.Success = false;
+
+//var testCalls = new List<CallModel>() { testCall0, testCall1, testCall2, testCall3 };

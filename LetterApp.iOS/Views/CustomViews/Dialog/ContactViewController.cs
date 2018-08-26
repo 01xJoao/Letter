@@ -33,11 +33,11 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
             _image1.Image = UIImage.FromBundle("letter_curved");
             UILabelExtensions.SetupLabelAppearance(_title1, _locationResources["TitleLetter"], Colors.Black, 18f, UIFontWeight.Medium);
-            UILabelExtensions.SetupLabelAppearance(_description1, _locationResources["DescriptionLetter"], Colors.DescriptionCall, 12f);
+            UILabelExtensions.SetupLabelAppearance(_description1, _locationResources["DescriptionLetter"], Colors.DescriptionCall, 11f);
 
             _image2.Image = UIImage.FromBundle("call_cellular");
             UILabelExtensions.SetupLabelAppearance(_title2, _locationResources["TitlePhone"], Colors.Black, 18f, UIFontWeight.Medium);
-            UILabelExtensions.SetupLabelAppearance(_description2, _locationResources["DescriptionPhone"], Colors.DescriptionCall, 12f);
+            UILabelExtensions.SetupLabelAppearance(_description2, _locationResources["DescriptionPhone"], Colors.DescriptionCall, 11f);
 
             _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
             _closeButton.ContentMode = UIViewContentMode.ScaleAspectFit;

@@ -660,6 +660,10 @@
     "translated": "Contactos"
   },
   {
+    "key": "Contacts_NewCall",
+    "translated": "Nova Chamada"
+  },
+  {
     "key": "Contacts_DialogTitle",
     "translated": "Filtrar Contactos"
   },
@@ -818,5 +822,9 @@
   {
     "key": "Delete",
     "translated": "Eliminar"
+  },
+  {
+    "key": "Cancel",
+    "translated": "Cancelar"
   }
 ]

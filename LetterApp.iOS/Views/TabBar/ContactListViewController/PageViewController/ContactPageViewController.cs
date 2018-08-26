@@ -11,16 +11,18 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
 {
     public partial class ContactPageViewController : XBoardPageViewController
     {
+        private bool _showOnlyCalls;
         private int _index;
         private EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> _contactEvent;
         private List<GetUsersInDivisionModel> _contactPage;
 
-        public ContactPageViewController(int index, List<GetUsersInDivisionModel> contactPage, EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> contactEvent) 
+        public ContactPageViewController(int index, List<GetUsersInDivisionModel> contactPage, EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> contactEvent, bool showOnlyCalls) 
             : base(index, "ContactPageViewController", null)
         {
             _index = index;
             _contactPage = contactPage;
             _contactEvent = contactEvent;
+            _showOnlyCalls = showOnlyCalls;
         }
 
         public override void ViewDidLoad()
@@ -33,7 +35,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
         {
             var contact = contactPage == null ? _contactPage : contactPage;
 
-            var source = new ContactsSource(_tableView, contact);
+            var source = new ContactsSource(_tableView, contact, _showOnlyCalls);
 
             source.ContactEvent -= OnSource_ContactEvent;
             source.ContactEvent += OnSource_ContactEvent;

@@ -19,7 +19,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
         public static readonly UINib Nib = UINib.FromName("ContactsCell", NSBundle.MainBundle);
         protected ContactsCell(IntPtr handle) : base(handle) {}
 
-        public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler)
+        public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler, bool showOnlyCalls)
         {
             _imageView.Image?.Dispose();
             _chatImage.Image?.Dispose();
@@ -45,14 +45,23 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
                 CustomUIExtensions.RoundView(_imageView);
             }
 
-            _chatImage.Image = UIImage.FromBundle("user_chat");
             _callImage.Image = UIImage.FromBundle("tabbar_call_selected");
 
             _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
             _callButton.TouchUpInside += OnCallButton_TouchUpInside;
 
-            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
-            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+            if(!showOnlyCalls)
+            {
+                _chatImage.Image = UIImage.FromBundle("user_chat");
+
+                _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
+                _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+            }
+            else
+            {
+                _chatImage.Hidden = true;
+                _chatButton.Hidden = true;
+            }
 
         }
 

@@ -14,11 +14,13 @@ using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
-    public class ContactListViewModel : XViewModel
+    public class ContactListViewModel : XViewModel<bool>
     {
         private IAuthenticationService _authenticationService;
         private IContactsService _contactsService;
         private IDialogService _dialogService;
+
+        public bool IsPresentViewForCalls { get; set; }
 
         private bool _isFilterActive;
         private DateTime _lastContactsUpdate;
@@ -74,11 +76,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<Tuple<ContactEventType, int>> _contactCommand;
         public XPCommand<Tuple<ContactEventType, int>> ContactCommand => _contactCommand ?? (_contactCommand = new XPCommand<Tuple<ContactEventType, int>>(async (user) => await ContactEvent(user), CanExecute));
 
+        private XPCommand _closeViewCommand;
+        public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+
         public ContactListViewModel(IContactsService contactsService, IAuthenticationService authenticationService, IDialogService dialogService)
         {
             _authenticationService = authenticationService;
             _contactsService = contactsService;
             _dialogService = dialogService;
+        }
+
+        protected override void Prepare(bool isPresentView = false)
+        {
+            IsPresentViewForCalls = isPresentView;
         }
 
         public override async Task InitializeAsync()
@@ -248,7 +258,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             switch (user.Item1)
             {
                 case ContactEventType.OpenProfile:
-                    await NavigationService.NavigateAsync<MemberViewModel, int>(user.Item2);
+                    if(!IsPresentViewForCalls)
+                        await NavigationService.NavigateAsync<MemberViewModel, int>(user.Item2);
+                    else
+                        ShowContactDialog(user.Item2);
                     break;
                 case ContactEventType.Call:
                     ShowContactDialog(user.Item2);
@@ -273,10 +286,18 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     case CallingType.Letter:
                         if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                        {
+                            if (IsPresentViewForCalls)
+                                await CloseView();
+
                             await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(user.UserId, true));
+                        }
                         break;
                     case CallingType.Cellphone:
                         CallUtils.Call(user.ContactNumber);
+
+                        if (IsPresentViewForCalls)
+                            await CloseView();
                         break;
                     default:
                         break;
@@ -374,7 +395,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 _usersInDivision = users;
         }
 
+        private async Task CloseView()
+        {
+            await NavigationService.Close(this);
+        }
+
         private bool CanExecute(object value) => !IsBusy;
+
+        private bool CanExecute() => !IsBusy;
 
         public enum ContactEventType
         {
@@ -387,6 +415,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public string Title => L10N.Localize("Contacts_Title");
         public string SearchLabel => L10N.Localize("Contacts_Search");
+        public string NewCallTitle => L10N.Localize("Contacts_NewCall");
+        public string Cancel => L10N.Localize("Cancel");
 
         private string DialogTitle => L10N.Localize("Contacts_DialogTitle");
         private string DialogSwitchLabel => L10N.Localize("Contacts_DialogSwitchLabel");
@@ -408,6 +438,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             LocationResources.Add("TitlePhone", PhoneDialog);
             LocationResources.Add("DescriptionPhone", PhoneDescriptionDialog);
         }
+
         #endregion
     }
 }

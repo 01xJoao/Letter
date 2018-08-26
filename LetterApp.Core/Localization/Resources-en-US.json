@@ -664,6 +664,10 @@
     "translated": "Filter Contacts"
   },
   {
+    "key": "Contacts_NewCall",
+    "translated": "New Call"
+  },
+  {
     "key": "Contacts_DialogSwitchLabel",
     "translated": "Filter users by main division"
   },
@@ -818,5 +822,9 @@
   {
     "key": "Delete",
     "translated": "Delete"
+  },
+  {
+    "key": "Cancel",
+    "translated": "Cancel"
   }
 ]

@@ -24,7 +24,6 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _isActivating, value);
         }
 
-
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 

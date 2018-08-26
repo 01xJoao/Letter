@@ -69,7 +69,7 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
 
         private void OpenContacts(object sender, EventArgs e)
         {
-            //ViewModel.OpenCallListCommand.CanExecute()
+            ViewModel.OpenCallListCommand.Execute();
         }
 
         public override void ViewWillDisappear(bool animated)
