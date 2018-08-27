@@ -109,12 +109,8 @@ namespace LetterApp.iOS
                 if (callType == "SIN_INCOMING_CALL")
                 {
                     var callInfo = payload["sin"].ToString();
-
-                    if (!string.IsNullOrEmpty(callInfo))
-                    {
-                        var caller = Client.RelayRemotePushNotificationPayload(callInfo);
-                        CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
-                    }
+                    var caller = Client.RelayRemotePushNotificationPayload(callInfo);
+                    CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
                 }
             }
         }
