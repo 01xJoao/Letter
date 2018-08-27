@@ -227,7 +227,7 @@ namespace LetterApp.iOS.CallKit
         [Export("client:willReceiveIncomingCall:")]
         public void WillReceiveIncomingCall(ISINCallClient client, ISINCall call)
         {
-            if (CallManager.Calls.LastOrDefault() != null)
+            if (SINCall != null && SINCall != call)
             {
                 call.Hangup();
                 return;
@@ -239,7 +239,7 @@ namespace LetterApp.iOS.CallKit
         [Export("client:didReceiveIncomingCall:")]
         public void DidReceiveIncomingCall(ISINCallClient client, ISINCall call)
         {
-            if (CallManager.Calls.LastOrDefault() != null)
+            if (SINCall != null && SINCall != call)
             {
                 call.Hangup();
                 return;

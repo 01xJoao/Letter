@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterApp.iOS", "LetterApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterApp.Tests", "LetterApp.Tests\LetterApp.Tests.csproj", "{BFF8F751-1B65-428B-8902-1BDAEFE076AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinchBinding", "..\..\Desktop\Sinch\SinchBinding\SinchBinding\SinchBinding.csproj", "{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,17 +53,5 @@ Global
 		{BFF8F751-1B65-428B-8902-1BDAEFE076AF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{BFF8F751-1B65-428B-8902-1BDAEFE076AF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{BFF8F751-1B65-428B-8902-1BDAEFE076AF}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Release|iPhone.Build.0 = Release|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

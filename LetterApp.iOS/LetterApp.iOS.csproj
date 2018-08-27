@@ -31,6 +31,7 @@
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <LangVersion>Latest</LangVersion>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchSdkVersion>11.4</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -175,6 +176,9 @@
     </Reference>
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.0.10.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="SinchBinding">
+      <HintPath>..\packages\JoaoPalma.Sinch.iOS.3.12.5\lib\xamarinios10\SinchBinding.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -783,10 +787,6 @@
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
       <Project>{848E6633-3205-4E4B-BAF3-7A61FC5631EC}</Project>
       <Name>LetterApp.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Desktop\Sinch\SinchBinding\SinchBinding\SinchBinding.csproj">
-      <Project>{9368E415-8252-48D2-8EF2-06A6F9BAF6A6}</Project>
-      <Name>SinchBinding</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
