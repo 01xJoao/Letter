@@ -16,6 +16,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     {
         private readonly IDialogService _dialogService;
 
+        public bool NoCalls { get; private set; }
+
         //Realms fields
         private List<CallModel> _calls;
         private List<GetUsersInDivisionModel> _users;
@@ -123,6 +125,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             if (_callHistory.ElementAtOrDefault(2) != null)
                 _callHistory.RemoveAt(index);
+
+            if(_callHistory.Count == 0)
+                RaisePropertyChanged(nameof(NoCalls));
         }
 
         private void OpenContactList()
@@ -134,6 +139,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public string Title => L10N.Localize("MainViewModel_CallTab");
         public string Delete => L10N.Localize("Delete");
+        public string NoRecentCalls => L10N.Localize("Calls_NoRecentCalls");
 
         private string Call_Incoming => L10N.Localize("Call_Incoming");
         private string Call_Outgoing => L10N.Localize("Call_Outgoing");

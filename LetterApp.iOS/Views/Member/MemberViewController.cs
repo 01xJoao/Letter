@@ -42,7 +42,6 @@ namespace LetterApp.iOS.Views.Member
 
         private void SetupView()
         {
-
             _backHeightConstraint.Constant = _backHeightConstraint.Constant + (PhoneModelExtensions.IsIphoneX() ? 20 : 0); 
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;

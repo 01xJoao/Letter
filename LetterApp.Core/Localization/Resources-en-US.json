@@ -826,5 +826,9 @@
   {
     "key": "Cancel",
     "translated": "Cancel"
+  },
+  {
+    "key": "Calls_NoRecentCalls",
+    "translated": "No recent calls"
   }
 ]

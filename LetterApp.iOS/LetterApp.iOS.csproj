@@ -348,6 +348,8 @@
     <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\organization_noimage.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\division_noimage.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\profile_noimage2.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\nocalls.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -451,6 +453,7 @@
     <Folder Include="Resources\Assets.xcassets\profile_noimage.imageset\" />
     <Folder Include="Resources\Assets.xcassets\division_noimage.imageset\" />
     <Folder Include="Resources\Assets.xcassets\organization_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\recent_calls.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
