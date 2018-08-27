@@ -24,6 +24,7 @@ namespace LetterApp.iOS.CallKit
         #endregion
 
         #region private Properties
+        private bool _comesFromBackground;
         private string _roomName;
         private CallViewController _callViewController;
         private AgoraRtcEngineKit _agoraKit;
@@ -133,7 +134,10 @@ namespace LetterApp.iOS.CallKit
                 return;
 
             AgoraCallEnded();
-            call?.SINCall?.Hangup();
+
+            if (call.IsConnecting && call.IsOutgoing == false)
+                call.SINCall?.Hangup();
+
             CallManager.Calls.Remove(call);
 
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
@@ -194,7 +198,6 @@ namespace LetterApp.iOS.CallKit
             if (CallManager.Calls.LastOrDefault() != null)
                 return;
                 
-
             var callerId = Int32.Parse(handle.RemoteUserId);
             var callerName = RealmUtils.GetCallerName(callerId);
 
@@ -210,7 +213,7 @@ namespace LetterApp.iOS.CallKit
             {
                 if (error == null)
                 {
-                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, SINCall));
+                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, SINCall, true));
                 }
                 else
                 {
@@ -227,25 +230,42 @@ namespace LetterApp.iOS.CallKit
         [Export("client:willReceiveIncomingCall:")]
         public void WillReceiveIncomingCall(ISINCallClient client, ISINCall call)
         {
-            if (SINCall != null && SINCall != call)
-            {
-                call.Hangup();
-                return;
-            }
+            var xcall = CallManager.Calls.LastOrDefault();
 
-            SINCall = call;
+            if (xcall == null)
+            {
+                _comesFromBackground = true;
+                SINCall = call;
+            }
+            else
+            {
+                if (xcall.IsConnected)
+                    call.Hangup();
+                else
+                    SINCall = call;
+            }
         }
 
         [Export("client:didReceiveIncomingCall:")]
         public void DidReceiveIncomingCall(ISINCallClient client, ISINCall call)
         {
-            if (SINCall != null && SINCall != call)
-            {
-                call.Hangup();
+            if (_comesFromBackground)
                 return;
-            }
 
-            SINCall = call;
+            var xcall = CallManager.Calls.LastOrDefault();
+
+            if (xcall == null)
+            {
+                _comesFromBackground = false;
+                SINCall = call;
+            }
+            else
+            {
+                if (xcall.IsConnected)
+                    call.Hangup();
+                else
+                    SINCall = call;
+            }
         }
 
         [Export("callDidEnd:")]
@@ -261,6 +281,7 @@ namespace LetterApp.iOS.CallKit
                     CallManager.EndCall(xcall);
             }
 
+            _comesFromBackground = false;
             _sinCall = null;
         }
 

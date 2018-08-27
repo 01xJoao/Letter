@@ -55,7 +55,7 @@ namespace LetterApp.iOS.CallKit
 
         public ActiveCall StartCall(string name, int id)
         {
-            var newCall = new ActiveCall(new NSUuid(), name, id, true, null);
+            var newCall = new ActiveCall(new NSUuid(), name, id, true, null, false);
             Calls.Add(newCall);
 
             var handle = new CXHandle(CXHandleType.Generic, name);

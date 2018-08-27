@@ -21,13 +21,14 @@ namespace LetterApp.iOS.CallKit
 
         #region Constructors
 
-        public ActiveCall(NSUuid uuid, string callerName, int callerId, bool outgoing, ISINCall call)
+        public ActiveCall(NSUuid uuid, string callerName, int callerId, bool outgoing, ISINCall call, bool isConnecting)
         {
             this.UUID = uuid;
             this.Handle = callerName;
             this.CallerId = callerId;
             this.IsOutgoing = outgoing;
             this.SINCall = call;
+            this.IsConnecting = isConnecting;
         }
 
         #endregion
@@ -37,10 +38,12 @@ namespace LetterApp.iOS.CallKit
         public void StartCall() 
         {
             IsConnecting = true;
+            IsConnected = false;
         }
 
         public void AnswerCall()
         {
+            IsConnecting = false;
             IsConnected = true;
         }
 
