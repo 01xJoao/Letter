@@ -35,9 +35,6 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _memberProfileModel, value);
         }
 
-        private XPCommand<CallModel> _addCallToHistoryCommand;
-        public XPCommand<CallModel> AddCallToHistoryCommand => _addCallToHistoryCommand ?? (_addCallToHistoryCommand = new XPCommand<CallModel>((call) => AddCallToHistory(call)));
-
         private XPCommand _leftButtonCommand;
         public XPCommand LeftButtonCommand => _leftButtonCommand ?? (_leftButtonCommand = new XPCommand(LeftButtonAction));
 
@@ -123,11 +120,6 @@ namespace LetterApp.Core.ViewModels
         {
             IsBusy = true;
             await NavigationService.Close(this);
-        }
-
-        private void AddCallToHistory(CallModel call)
-        {
-            Realm.Write(() => Realm.Add(call));
         }
 
         private bool CanExecute() => !IsBusy;

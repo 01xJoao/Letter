@@ -69,15 +69,21 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 if (lastCall.CallerId == call.CallerId && DateUtils.CompareDates(call.CallDate, lastCall.CallDate))
                 {
-                    if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
-                    {
+                    //if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
+                    //{
                         lastCall.CallDateText = DateUtils.CallsDateString(date);
                         lastCall.CallStack.Add(call.CallId);
                         lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
                             call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
 
+                        //new (remove this to back to original)
+                        lastCall.HasSuccess = call.Success;
+                        lastCall.CallDate = date;
+                        lastCall.CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming;
+                        lastCall.ShouldAlert = call.IsNew && !call.Success && call.CallType == 1;
+
                         continue;
-                    }
+                   // }
 
                     //if(lastCall.CallType == CallType.Incoming)
                         //lastCall.ShouldAlert = false;
@@ -114,16 +120,24 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void DeleteCall(int index)
         {
-            Realm.Write(() =>
+            var listCalls = new List<CallModel>();
+
+            foreach (string callId in _callHistory[index]?.CallStack)
             {
-                foreach (string callId in _callHistory[index]?.CallStack)
-                {
-                    if (_calls.Any(x => x.CallId == callId))
-                        Realm.Remove(_calls.FirstOrDefault(x => x.CallId == callId));
-                }
+                var call = _calls.Find(x => x.CallId == callId);
+
+                if (call != null)
+                    listCalls.Add(call);
+            }
+
+            Realm.Write(() => {
+                foreach (CallModel call in listCalls)
+                    Realm.Remove(call);
             });
 
-            if (_callHistory.ElementAtOrDefault(2) != null)
+            _calls = Realm.All<CallModel>().ToList();
+
+            if (_callHistory.ElementAtOrDefault(index) != null)
                 _callHistory.RemoveAt(index);
 
             if(_callHistory.Count == 0)

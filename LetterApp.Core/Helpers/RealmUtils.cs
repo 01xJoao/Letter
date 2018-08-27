@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Models;
 using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.ReceivedModels;
 using Realms;
@@ -75,7 +76,12 @@ namespace LetterApp.Core.Helpers
 
         public static string GetCallerName(int callerId)
         {
-            var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #if DEBUG
+                var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #else
+                var realm = Realm.GetInstance();
+            #endif
+
             var members = realm.All<GetUsersInDivisionModel>();
             var caller = members.Where(x => x.UserId == callerId)?.FirstOrDefault();
 
@@ -87,6 +93,17 @@ namespace LetterApp.Core.Helpers
                 fullname = L10N.Localize("Call_Anonym");
 
             return fullname;
+        }
+
+        public static void AddCallToHistory(CallModel call)
+        {
+            #if DEBUG
+                var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #else
+                var realm = Realm.GetInstance();
+            #endif
+
+            realm.Write(() => realm.Add(call));
         }
     }
 }

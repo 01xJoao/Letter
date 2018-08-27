@@ -150,8 +150,8 @@ namespace LetterApp.iOS.CallKit
                 IsNew = true
             };
 
-            //_callViewController.ViewModel?.AddCallToHistoryCommand.Execute(callHistory);
-
+            RealmUtils.AddCallToHistory(callHistory);
+          
             CallManager.Calls.Remove(call);
 
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
