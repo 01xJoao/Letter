@@ -830,5 +830,13 @@
   {
     "key": "Calls_NoRecentCalls",
     "translated": "Sem chamadas recentes"
+  },
+  {
+    "key": "Contacts_NoContacts",
+    "translated": "Sem Contactos"
+  },
+  {
+    "key": "Contacts_NoResults",
+    "translated": "Sem Resultados"
   }
 ]

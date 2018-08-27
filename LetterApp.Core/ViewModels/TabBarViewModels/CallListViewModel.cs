@@ -49,8 +49,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
-            if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
-                return;
+            //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
+                //return;
 
             _callHistory = new List<CallHistoryModel>();
 
@@ -72,7 +72,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
                     {
                         lastCall.CallDateText = DateUtils.CallsDateString(date);
-                        lastCall.CallStack.Add(call.CallerId);
+                        lastCall.CallStack.Add(call.CallId);
                         lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
                             call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
 
@@ -116,7 +116,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             Realm.Write(() =>
             {
-                foreach (int callId in _callHistory[index]?.CallStack)
+                foreach (string callId in _callHistory[index]?.CallStack)
                 {
                     if (_calls.Any(x => x.CallId == callId))
                         Realm.Remove(_calls.FirstOrDefault(x => x.CallId == callId));

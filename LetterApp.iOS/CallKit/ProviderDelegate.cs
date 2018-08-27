@@ -8,7 +8,9 @@ using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
+using LetterApp.Core.Models;
 using LetterApp.iOS.Views.Call;
+using Realms;
 using SinchBinding;
 using UIKit;
 
@@ -135,8 +137,20 @@ namespace LetterApp.iOS.CallKit
 
             AgoraCallEnded();
 
-            if (call.IsConnecting && call.IsOutgoing == false)
+            if (call.IsConnecting && call.Ended == false)
                 call.SINCall?.Hangup();
+
+            var callHistory = new CallModel
+            {
+                CallId = call.SINCall.CallId,
+                CallDate = DateTime.Now.Ticks,
+                CallerId = call.CallerId,
+                CallType = call.IsOutgoing ? 0 : 1,
+                Success = call.IsConnected,
+                IsNew = true
+            };
+
+            //_callViewController.ViewModel?.AddCallToHistoryCommand.Execute(callHistory);
 
             CallManager.Calls.Remove(call);
 

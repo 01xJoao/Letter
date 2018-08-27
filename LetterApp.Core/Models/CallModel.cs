@@ -6,7 +6,7 @@ namespace LetterApp.Core.Models
     public class CallModel : RealmObject
     {
         [PrimaryKey]
-        public int CallId { get; set; }
+        public string CallId { get; set; }
         public int CallerId { get; set; }
         public long CallDate { get; set; }
         public int CallType { get; set; }

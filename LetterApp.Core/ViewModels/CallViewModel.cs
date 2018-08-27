@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Models;
 using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
@@ -33,6 +34,9 @@ namespace LetterApp.Core.ViewModels
             get => _memberProfileModel;
             set => SetProperty(ref _memberProfileModel, value);
         }
+
+        private XPCommand<CallModel> _addCallToHistoryCommand;
+        public XPCommand<CallModel> AddCallToHistoryCommand => _addCallToHistoryCommand ?? (_addCallToHistoryCommand = new XPCommand<CallModel>((call) => AddCallToHistory(call)));
 
         private XPCommand _leftButtonCommand;
         public XPCommand LeftButtonCommand => _leftButtonCommand ?? (_leftButtonCommand = new XPCommand(LeftButtonAction));
@@ -119,6 +123,11 @@ namespace LetterApp.Core.ViewModels
         {
             IsBusy = true;
             await NavigationService.Close(this);
+        }
+
+        private void AddCallToHistory(CallModel call)
+        {
+            Realm.Write(() => Realm.Add(call));
         }
 
         private bool CanExecute() => !IsBusy;

@@ -13,7 +13,7 @@ namespace LetterApp.Core.Models
         public CallType CallType { get; set; }
         public string CallCountAndType { get; set; }
         public bool HasSuccess { get; set; }
-        public List<int> CallStack = new List<int>();
+        public List<string> CallStack = new List<string>();
         public bool ShouldAlert { get; set; }
     }
 }

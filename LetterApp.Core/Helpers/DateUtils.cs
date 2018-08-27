@@ -19,7 +19,7 @@ namespace LetterApp.Core.Helpers
         //https://stackoverflow.com/questions/11/calculate-relative-time-in-c-sharp
         public static string CallsDateString(DateTime date)
         {
-            var ts = new TimeSpan(DateTime.UtcNow.Ticks - date.Ticks);
+            var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
             double delta = Math.Abs(ts.TotalSeconds);
 
             if (delta < 1 * MINUTE)

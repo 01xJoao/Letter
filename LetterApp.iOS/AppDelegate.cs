@@ -102,10 +102,20 @@ namespace LetterApp.iOS
         {
             if (pushType == "PKPushTypeVoIP" && AppSettings.CallNotifications)
             {
-                var callInfo = payload["sin"].ToString();
-                var caller = Client.RelayRemotePushNotificationPayload(callInfo);
+                var aps = payload["aps"] as NSDictionary;
+                var alert = aps["alert"] as NSDictionary; 
+                var callType = alert["loc-key"].ToString();
 
-                CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
+                if (callType == "SIN_INCOMING_CALL")
+                {
+                    var callInfo = payload["sin"].ToString();
+
+                    if (!string.IsNullOrEmpty(callInfo))
+                    {
+                        var caller = Client.RelayRemotePushNotificationPayload(callInfo);
+                        CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
+                    }
+                }
             }
         }
 
