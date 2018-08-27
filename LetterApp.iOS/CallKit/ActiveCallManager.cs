@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using CallKit;
 using Foundation;
-using SinchSdk;
-using UIKit;
 
 namespace LetterApp.iOS.CallKit
 {

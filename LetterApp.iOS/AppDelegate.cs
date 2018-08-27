@@ -1,13 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using CoreFoundation;
+﻿using System.Diagnostics;
 using Foundation;
 using LetterApp.Core;
 using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Views.Base;
-using ObjCRuntime;
 using PushKit;
-using SinchSdk;
+using SinchBinding;
 using UIKit;
 
 namespace LetterApp.iOS
@@ -44,7 +41,7 @@ namespace LetterApp.iOS
             Window.MakeKeyAndVisible();
             Setup.Initialize();
 
-            Push = SinchSdk.Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
+            Push = SinchBinding.Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
             Push.WeakDelegate = this;
             Push.SetDesiredPushTypeAutomatically();
             Push.RegisterUserNotificationSettings();
@@ -90,7 +87,7 @@ namespace LetterApp.iOS
 
         private void InitSinchClientWithUserId(string userId)
         {
-            Client = SinchSdk.Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
+            Client = SinchBinding.Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
             Client.WeakDelegate = this;
             Client.SetSupportCalling(true);
             Client.EnableManagedPushNotifications();
@@ -119,7 +116,7 @@ namespace LetterApp.iOS
 
         public void ClientDidStart(ISINClient client)
         {
-           Debug.WriteLine($"Sinch client started successfully)");
+            Debug.WriteLine($"Sinch client started successfully)");
         }
 
         public void ClientDidFail(ISINClient client, NSError error)

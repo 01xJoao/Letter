@@ -1,6 +1,5 @@
-﻿using System;
-using Foundation;
-using SinchSdk;
+﻿using Foundation;
+using SinchBinding;
 
 namespace LetterApp.iOS.CallKit
 {

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DT.Xamarin.Agora;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;

@@ -9,7 +9,7 @@ using LetterApp.Core;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
 using LetterApp.iOS.Views.Call;
-using SinchSdk;
+using SinchBinding;
 using UIKit;
 
 namespace LetterApp.iOS.CallKit
@@ -224,41 +224,41 @@ namespace LetterApp.iOS.CallKit
 
         #region SINClientDelegate Methods
 
-        //[Export("client:willReceiveIncomingCall:")]
-        //void ClientWillReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
-        //{
-        //    if (CallManager.Calls.LastOrDefault() != null)
-        //    {
-        //        xcall.Hangup();
-        //        return;
-        //    }
-
-        //    SINCall = xcall;
-        //}
-
-        [Export("client:didReceiveIncomingCall:")]
-        void ClientDidReceiveIncomingCall(ISINClient xclient, ISINCall xcall)
+        [Export("client:willReceiveIncomingCall:")]
+        public void WillReceiveIncomingCall(ISINCallClient client, ISINCall call)
         {
             if (CallManager.Calls.LastOrDefault() != null)
             {
-                xcall.Hangup();
+                call.Hangup();
                 return;
             }
-            
-            SINCall = xcall;
+
+            SINCall = call;
+        }
+
+        [Export("client:didReceiveIncomingCall:")]
+        public void DidReceiveIncomingCall(ISINCallClient client, ISINCall call)
+        {
+            if (CallManager.Calls.LastOrDefault() != null)
+            {
+                call.Hangup();
+                return;
+            }
+
+            SINCall = call;
         }
 
         [Export("callDidEnd:")]
-        public void CallDidEnd(ISINCall xcall)
-        {         
-            var call = CallManager.Calls.LastOrDefault();
+        public void CallDidEnd(ISINCall call)
+        {
+            var xcall = CallManager.Calls.LastOrDefault();
 
-            if(call != null)
+            if (xcall != null)
             {
-                call.EndCall();
+                xcall.EndCall();
 
-                if (call.IsConnected == false)
-                    CallManager.EndCall(call);
+                if (xcall.IsConnected == false)
+                    CallManager.EndCall(xcall);
             }
 
             _sinCall = null;
