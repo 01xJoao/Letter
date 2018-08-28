@@ -18,7 +18,7 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private IUserService _userService;
-        private ILogoutService _logoutService;
+        private ISettingsService _settingsService;
 
         private UserModel _user;
 
@@ -48,9 +48,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _changeNumberCommand;
         public XPCommand<string> ChangeNumberCommand => _changeNumberCommand ?? (_changeNumberCommand = new XPCommand<string>(async (value) => await ChangePhoneNumber(value), CanExecute));
 
-        public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService, ILogoutService logoutService)
+        public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService, ISettingsService settingsService)
         {
-            _logoutService = logoutService;
+            _settingsService = settingsService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
             _userService = userService;
@@ -311,7 +311,7 @@ namespace LetterApp.Core.ViewModels
         private void Logout()
         {
             AppSettings.Logout();
-            _logoutService.Logout();
+            _settingsService.Logout();
         }
 
         private bool CanExecute() => !IsBusy;

@@ -15,7 +15,7 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private IOrganizationService _organizationService;
-        private ILogoutService _logoutService;
+        private ISettingsService _settingsService;
 
         private int _organizationId;
         public bool NewUser { get; set; }
@@ -46,12 +46,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
-        public SelectDivisionViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService, ILogoutService logoutService)
+        public SelectDivisionViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
             _organizationService = organizationService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
-            _logoutService = logoutService;
+            _settingsService = settingsService;
 
             SetL10NResources();
         }
@@ -173,7 +173,7 @@ namespace LetterApp.Core.ViewModels
                 if (result)
                 {
                     AppSettings.Logout();
-                    _logoutService.Logout();
+                    _settingsService.Logout();
                     await NavigationService.NavigateAsync<LoginViewModel, object>(null);
                     await NavigationService.PopToRoot(true);
                 }

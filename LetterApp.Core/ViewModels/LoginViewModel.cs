@@ -20,7 +20,7 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
-        private ILogoutService _logoutService;
+        private ISettingsService _settingsService;
 
         public string UserEmail
         {
@@ -51,12 +51,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _forgotPassCommand;
         public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPassword(email), CanExecute));
 
-        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ILogoutService logoutService)
+        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
             _authService = authService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
-            _logoutService = logoutService;
+            _settingsService = settingsService;
         }
 
         private async Task SignIn(Tuple<string,string> value)
@@ -153,7 +153,7 @@ namespace LetterApp.Core.ViewModels
         private void Logout()
         {
             AppSettings.Logout();
-            _logoutService.Logout();
+            _settingsService.Logout();
         }
 
         private bool CanLogin(Tuple<string, string> value) => !IsBusy && !string.IsNullOrEmpty(value.Item1) && !string.IsNullOrEmpty(value.Item2);

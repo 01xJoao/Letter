@@ -23,11 +23,11 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
-        private ILogoutService _logoutService;
+        private ISettingsService _settingsService;
 
-        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ILogoutService logoutService)
+        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
-            _logoutService = logoutService;
+            _settingsService = settingsService;
             _authService = authService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
@@ -132,7 +132,7 @@ namespace LetterApp.Core.ViewModels
         private async Task Logout()
         {
             AppSettings.Logout();
-            _logoutService.Logout();
+            _settingsService.Logout();
             await NavigationService.NavigateAsync<LoginViewModel, object>(null);
         }
     }

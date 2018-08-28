@@ -1,7 +1,7 @@
 ﻿using System;
 namespace LetterApp.Core.Services.Interfaces
 {
-    public interface ILogoutService
+    public interface ISettingsService
     {
         void Logout();
     }

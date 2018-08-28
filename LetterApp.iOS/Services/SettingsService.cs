@@ -4,7 +4,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Services
 {
-    public class LogoutService : ILogoutService
+    public class SettingsService : ISettingsService
     {
         public void Logout()
         {
