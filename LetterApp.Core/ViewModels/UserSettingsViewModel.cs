@@ -18,6 +18,7 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private IUserService _userService;
+        private ILogoutService _logoutService;
 
         private UserModel _user;
 
@@ -47,8 +48,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _changeNumberCommand;
         public XPCommand<string> ChangeNumberCommand => _changeNumberCommand ?? (_changeNumberCommand = new XPCommand<string>(async (value) => await ChangePhoneNumber(value), CanExecute));
 
-        public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService)
+        public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService, ILogoutService logoutService)
         {
+            _logoutService = logoutService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
             _userService = userService;
@@ -163,7 +165,7 @@ namespace LetterApp.Core.ViewModels
                     if(res.StatusCode == 205)
                     {
                         await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
-                        AppSettings.Logout();
+                        Logout();
                         await NavigationService.Close(this);
                         Realm.Write(() => Realm.RemoveAll());
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
@@ -230,7 +232,7 @@ namespace LetterApp.Core.ViewModels
                 if(result)
                 {
                     await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
-                    AppSettings.Logout();
+                    Logout();
                     await NavigationService.Close(this);
                     Realm.Write(() => Realm.RemoveAll());
                 }
@@ -304,6 +306,12 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             await NavigationService.Close(this);
+        }
+
+        private void Logout()
+        {
+            AppSettings.Logout();
+            _logoutService.Logout();
         }
 
         private bool CanExecute() => !IsBusy;

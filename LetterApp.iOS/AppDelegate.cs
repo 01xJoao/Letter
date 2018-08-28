@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using AVFoundation;
 using Foundation;
 using LetterApp.Core;
 using LetterApp.iOS.CallKit;
@@ -44,9 +45,18 @@ namespace LetterApp.iOS
             Push = SinchBinding.Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
             Push.WeakDelegate = this;
             Push.SetDesiredPushTypeAutomatically();
-            Push.RegisterUserNotificationSettings();
 
-            RegisterRemotePushNotifications(application);
+            using(var audio = AVAudioSession.SharedInstance())
+            {
+                if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
+                {
+                    audio.RequestRecordPermission((granted) => {
+                        Push.RegisterUserNotificationSettings();
+                    });
+                }
+            }
+
+            //RegisterRemotePushNotifications(application);
 
             NSNotificationCenter.DefaultCenter.AddObserver("UserDidLoginNotification", null, null, (obj) => {
                 InitSinchClientWithUserId(obj.UserInfo["userId"].ToString());
@@ -70,13 +80,13 @@ namespace LetterApp.iOS
             return true;
         }
 
-        static void RegisterRemotePushNotifications(UIApplication app)
-        {
-            UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
-            var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
-            app.RegisterUserNotificationSettings(pushSettings);
-            app.RegisterForRemoteNotifications();
-        }
+        //static void RegisterRemotePushNotifications(UIApplication app)
+        //{
+        //    UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
+        //    var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
+        //    app.RegisterUserNotificationSettings(pushSettings);
+        //    app.RegisterForRemoteNotifications();
+        //}
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
@@ -117,7 +127,14 @@ namespace LetterApp.iOS
 
         public void DidUpdatePushCredentials(PKPushRegistry registry, PKPushCredentials credentials, string type)
         {
+            UnregisterTokens();
             Client.RegisterPushNotificationData(credentials.Token);
+        }
+
+        public void UnregisterTokens()
+        {
+            Client?.UnregisterPushNotificationDeviceToken();
+            Client?.UnregisterPushNotificationData();
         }
 
         public void ClientDidStart(ISINClient client)

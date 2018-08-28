@@ -782,6 +782,7 @@
     <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.designer.cs">
       <DependentUpon>CallHistoryCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\LogoutService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

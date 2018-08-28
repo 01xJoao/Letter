@@ -17,9 +17,10 @@ namespace LetterApp.Core.ViewModels
 {
     public class RegisterViewModel : XViewModel
     {
-        IAuthenticationService _authService;
-        IDialogService _dialogService;
-        IStatusCodeService _statusService;
+        private IAuthenticationService _authService;
+        private IDialogService _dialogService;
+        private IStatusCodeService _statusService;
+        private ILogoutService _logoutService;
 
         private bool _userAgreed;
         public List<FormModel> FormModelList { get; set; }
@@ -33,11 +34,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<bool> _openRegisterViewCommand;
         public XPCommand<bool> AgreementToogleCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand<bool>((agreed) => AgreementToogle(agreed)));
 
-        public RegisterViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusService)
+        public RegisterViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusService, ILogoutService logoutService)
         {
             _authService = authService;
             _dialogService = dialogService;
             _statusService = statusService;
+            _logoutService = logoutService;
         }
 
         private void AgreementToogle(bool agreed) => _userAgreed = agreed;
@@ -85,6 +87,7 @@ namespace LetterApp.Core.ViewModels
                 if (result.StatusCode == 207)
                 {
                     AppSettings.Logout();
+                    _logoutService.Logout();
                     AppSettings.UserEmail = user.Email;
                     await SecureStorage.SetAsync("password", user.Password); 
 

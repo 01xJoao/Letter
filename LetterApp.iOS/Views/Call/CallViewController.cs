@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AVFoundation;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
@@ -245,6 +246,17 @@ namespace LetterApp.iOS.Views.Call
             }
 
             return null;
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            using (var audio = AVAudioSession.SharedInstance())
+            {
+                if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
+                    UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+            }
         }
 
         public void StopTimer()
