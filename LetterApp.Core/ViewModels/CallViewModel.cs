@@ -14,8 +14,9 @@ namespace LetterApp.Core.ViewModels
     {
         private IDialogService _dialogService;
         private IMemberService _memberService;
+        private ISettingsService _settingsService;
 
-        public int OpenSettings { get; private set; }
+        public bool EndCallForSettings { get; set; }
         public int CallerId { get; set; }
         public bool StartedCall { get; set; }
         public int UserId => AppSettings.UserId;
@@ -56,10 +57,11 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _inCall, value);
         }
 
-        public CallViewModel(IMemberService memberService, IDialogService dialogService)
+        public CallViewModel(IMemberService memberService, IDialogService dialogService, ISettingsService settingsService)
         {
             _dialogService = dialogService;
             _memberService = memberService;
+            _settingsService = settingsService;
         }
 
         protected override void Prepare(Tuple<int, bool> call)
@@ -124,10 +126,16 @@ namespace LetterApp.Core.ViewModels
 
         private async Task MicrophoneAlert()
         {
+            if (_settingsService.CheckMicrophonePermissions())
+                return;
+
             try
             {
+                RaisePropertyChanged(nameof(EndCallForSettings));
                 var result = await _dialogService.ShowQuestion(MicrophoneLabel, OpenSettingsLabel, QuestionType.Bad);
-                RaisePropertyChanged(nameof(OpenSettings));
+
+                if(result)
+                    _settingsService.OpenSettings();
             }
             catch (Exception ex)
             {

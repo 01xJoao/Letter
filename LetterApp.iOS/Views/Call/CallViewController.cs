@@ -72,8 +72,9 @@ namespace LetterApp.iOS.Views.Call
                     if (_activeCall == null)
                         SetupView();
                     break;
-                case nameof(ViewModel.OpenSettings):
-                    UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+
+                case nameof(ViewModel.EndCallForSettings):
+                    EndCall();
                     break;
                 default:
                     break;
@@ -259,14 +260,7 @@ namespace LetterApp.iOS.Views.Call
         {
             base.ViewDidAppear(animated);
 
-            using (var audio = AVAudioSession.SharedInstance())
-            {
-                if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
-                {
-                    EndCall();
-                    ViewModel.MicrophoneAlertCommand.Execute();
-                }
-            }
+            ViewModel.MicrophoneAlertCommand.Execute();
         }
 
         public void StopTimer()

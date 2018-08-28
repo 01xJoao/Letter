@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -19,7 +20,7 @@ namespace LetterApp.iOS.Views.UserSettings
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
-            SetupTableView();
+            UIApplication.Notifications.ObserveWillEnterForeground(UpdateSettingsHandler);
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -64,14 +65,17 @@ namespace LetterApp.iOS.Views.UserSettings
             ViewModel.CloseViewCommand.Execute();
         }
 
+        void UpdateSettingsHandler(object sender, NSNotificationEventArgs e)
+        {
+            ViewModel.UpdateSettingsCommand.Execute();
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
 
             if(this.IsMovingFromParentViewController)
-            {
                 this.NavigationController.SetNavigationBarHidden(true, true);
-            }
         }
 
         public override void ViewDidDisappear(bool animated)

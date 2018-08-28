@@ -36,11 +36,13 @@ namespace LetterApp.Core.ViewModels
         public List<DescriptionTypeEventModel> TypeModelInformation { get; set; }
         public List<DescriptionTypeEventModel> TypeModelDanger { get; set; }
 
-
         public List<DescriptionAndBoolEventModel> SwitchModel { get; set; }
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+
+        private XPCommand _updateSettingsCommand;
+        public XPCommand UpdateSettingsCommand => _updateSettingsCommand ?? (_updateSettingsCommand = new XPCommand(async () => await Appearing()));
 
         private XPCommand<bool> _allowCallsCommand;
         public XPCommand<bool> AllowCallsCommand => _allowCallsCommand ?? (_allowCallsCommand = new XPCommand<bool>(async (value) => await SetAllowCalls(value), CanExecute));
@@ -58,8 +60,21 @@ namespace LetterApp.Core.ViewModels
             SetL10NResources();
         }
 
-        public override async Task InitializeAsync()
+        public override async Task Appearing()
         {
+            bool resultNotifications;
+
+            try
+            {
+                resultNotifications = await _settingsService.CheckNotificationPermissions();
+            }
+            catch (Exception ex)
+            {
+                resultNotifications = false;
+            }
+
+            AppSettings.MessageNotifications = resultNotifications;
+
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
             PhoneModel = new SettingsPhoneModel(PhoneLabel, _user.ContactNumber, ChangeNumberCommand);
@@ -94,11 +109,13 @@ namespace LetterApp.Core.ViewModels
             var notificationTypes = new[] { messageNotifications, callNotifications, groupNotifications };
             SwitchModel = new List<DescriptionAndBoolEventModel>();
             SwitchModel.AddRange(notificationTypes);
+
+            RaisePropertyChanged(nameof(UpdateView));
         }
 
         private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
         private void CallNotificationEvent(object sender, bool value) => AppSettings.CallNotifications = value;
-        private void MessageNotificationEvent(object sender, bool value) => AppSettings.MessageNotifications = value;
+        private void MessageNotificationEvent(object sender, bool value) => _settingsService.OpenSettings();
 
         private void GenericMethodType(object sender, CellType type)
         {
