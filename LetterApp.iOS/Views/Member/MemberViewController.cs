@@ -86,7 +86,7 @@ namespace LetterApp.iOS.Views.Member
 
         private void OnCallButton_TouchUpInside(object sender, EventArgs e)
         {
-
+            ViewModel.CallCommand.Execute();
         }
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)

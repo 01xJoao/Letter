@@ -44,7 +44,7 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
         {
             _tableView.Source = new UserProfileSource(_tableView, ViewModel.ProfileDetails, ViewModel.ProfileDivision);
 
-            if(_tableView.TableHeaderView == null)
+            if(_tableView.TableHeaderView == null || ViewModel.PictureUpdated)
             {
                 _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, LocalConstants.Profile_TableHeaderHeight));
                 var tableHeader = ProfileHeaderView.Create();

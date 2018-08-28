@@ -52,6 +52,8 @@ namespace LetterApp.Core.ViewModels
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
             _userService = userService;
+
+            SetL10NResources();
         }
 
         public override async Task InitializeAsync()
@@ -90,8 +92,6 @@ namespace LetterApp.Core.ViewModels
             var notificationTypes = new[] { messageNotifications, callNotifications, groupNotifications };
             SwitchModel = new List<DescriptionAndBoolEventModel>();
             SwitchModel.AddRange(notificationTypes);
-
-            SetL10NResources();
         }
 
         private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;

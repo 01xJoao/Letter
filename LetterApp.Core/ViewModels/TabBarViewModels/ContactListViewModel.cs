@@ -84,6 +84,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             _authenticationService = authenticationService;
             _contactsService = contactsService;
             _dialogService = dialogService;
+            SetL10NResources();
         }
 
         protected override void Prepare(bool isPresentView = false)
@@ -112,7 +113,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
 
             SetContactList(_usersInDivision);
-            SetL10NResources();
         }
 
         public override async Task Appearing()

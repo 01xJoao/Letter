@@ -50,6 +50,8 @@ namespace LetterApp.Core.ViewModels
             _organizationService = organizationService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
+
+            SetL10NResources();
         }
 
         protected override void Prepare(Tuple<int, bool> data)
@@ -60,8 +62,6 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task InitializeAsync()
         {
-            SetL10NResources();
-
             IsBusy = true;
 
             try
