@@ -102,12 +102,12 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
 
         private void OnSource_OpenCallerProfileEvent(object sender, int callerId)
         {
-            //Viewmodel.OpenCallerProfile.Execute(callerId)
+            ViewModel.OpenCallerProfileCommand.Execute(callerId);
         }
 
         private void OnSource_CallEvent(object sender, int callerId)
         {
-            //ViewModel.CallCommand.Execute(callerId)
+            ViewModel.CallCommand.Execute(callerId);
         }
 
         private void OpenContacts(object sender, EventArgs e)

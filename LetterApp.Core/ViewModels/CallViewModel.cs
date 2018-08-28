@@ -12,8 +12,10 @@ namespace LetterApp.Core.ViewModels
 {
     public class CallViewModel : XViewModel<Tuple<int, bool>>
     {
+        private IDialogService _dialogService;
         private IMemberService _memberService;
 
+        public int OpenSettings { get; private set; }
         public int CallerId { get; set; }
         public bool StartedCall { get; set; }
         public int UserId => AppSettings.UserId;
@@ -44,6 +46,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _endCallCommand;
         public XPCommand EndCallCommand => _endCallCommand ?? (_endCallCommand = new XPCommand(async () => await EndCall(), CanExecute));
 
+        private XPCommand _microphoneAlertCommand;
+        public XPCommand MicrophoneAlertCommand => _microphoneAlertCommand ?? (_microphoneAlertCommand = new XPCommand(async () => await MicrophoneAlert()));
+
         private bool _inCall;
         public bool InCall
         {
@@ -51,8 +56,9 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _inCall, value);
         }
 
-        public CallViewModel(IMemberService memberService)
+        public CallViewModel(IMemberService memberService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _memberService = memberService;
         }
 
@@ -116,6 +122,19 @@ namespace LetterApp.Core.ViewModels
             _mutedOn = value;
         }
 
+        private async Task MicrophoneAlert()
+        {
+            try
+            {
+                var result = await _dialogService.ShowQuestion(MicrophoneLabel, OpenSettingsLabel, QuestionType.Bad);
+                RaisePropertyChanged(nameof(OpenSettings));
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
         private async Task EndCall()
         {
             IsBusy = true;
@@ -125,6 +144,9 @@ namespace LetterApp.Core.ViewModels
         private bool CanExecute() => !IsBusy;
 
         #region Resources
+
+        private string MicrophoneLabel => L10N.Localize("Call_MicAlert");
+        private string OpenSettingsLabel => L10N.Localize("Call_OpenSettingsAlert");
 
         public string LetterLabel       => L10N.Localize("Call_Letter");
         public string CallingLabel      => L10N.Localize("Call_Calling");

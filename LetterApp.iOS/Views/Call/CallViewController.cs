@@ -72,6 +72,9 @@ namespace LetterApp.iOS.Views.Call
                     if (_activeCall == null)
                         SetupView();
                     break;
+                case nameof(ViewModel.OpenSettings):
+                    UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+                    break;
                 default:
                     break;
             }
@@ -170,6 +173,11 @@ namespace LetterApp.iOS.Views.Call
 
         private void OnEndCallButton_TouchUpInside(object sender, EventArgs e)
         {
+            EndCall();
+        }
+
+        private void EndCall()
+        {
             CallProvider.CallManager.EndCall(_activeCall);
             _activeCall = null;
         }
@@ -238,8 +246,7 @@ namespace LetterApp.iOS.Views.Call
             {
                 _callDetailLabel.Text = TimeSpan.FromSeconds(_callTime++).ToString();
 
-                try
-                {
+                try {
                     await Task.Delay(1000, token);
                 }
                 catch (Exception) {}
@@ -255,7 +262,10 @@ namespace LetterApp.iOS.Views.Call
             using (var audio = AVAudioSession.SharedInstance())
             {
                 if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
-                    UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+                {
+                    EndCall();
+                    ViewModel.MicrophoneAlertCommand.Execute();
+                }
             }
         }
 

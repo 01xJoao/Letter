@@ -374,9 +374,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 divion.Add(user);
                         }
                         else 
-                        {
                             divion.Add(user);
-                        }
 
                         if (!isSearching)
                             _unfilteredUsers.Add(user);

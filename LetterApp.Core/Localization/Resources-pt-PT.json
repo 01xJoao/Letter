@@ -732,6 +732,14 @@
     "translated": "Desconhecido"
   },
   {
+    "key": "Call_MicAlert",
+    "translated": "Permissões de microfone são necessárias."
+  },
+  {
+    "key": "Call_OpenSettingsAlert",
+    "translated": "Abrir Definições"
+  },
+  {
     "key": "ContactDialog_Title",
     "translated": "Faça uma chamada"
   },

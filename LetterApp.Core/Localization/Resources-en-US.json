@@ -732,6 +732,14 @@
     "translated": "Unknown Caller"
   },
   {
+    "key": "Call_MicAlert",
+    "translated": "Microphone permissions are required."
+  },
+  {
+    "key": "Call_OpenSettingsAlert",
+    "translated": "Open settings"
+  },
+  {
     "key": "ContactDialog_Title",
     "translated": "Make a call"
   },

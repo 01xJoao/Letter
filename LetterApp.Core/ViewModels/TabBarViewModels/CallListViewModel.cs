@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
@@ -9,6 +10,7 @@ using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -29,6 +31,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             get => _callHistory;
             set => SetProperty(ref _callHistory, value);
         }
+
+        private XPCommand<int> _callCommand;
+        public XPCommand<int> CallCommand => _callCommand ?? (_callCommand = new XPCommand<int>(async (callerId) => await Call(callerId)));
+
+        private XPCommand<int> _openCallerProfileCommand;
+        public XPCommand<int> OpenCallerProfileCommand => _openCallerProfileCommand ?? (_openCallerProfileCommand = new XPCommand<int>(OpenCallerProfile));
 
         private XPCommand _openContactList;
         public XPCommand OpenCallListCommand => _openContactList ?? (_openContactList = new XPCommand(OpenContactList));
@@ -139,6 +147,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             if (_callHistory.ElementAtOrDefault(index) != null)
                 _callHistory.RemoveAt(index);
+            else
+                _callHistory.Remove(_callHistory.LastOrDefault());
 
             if(_callHistory.Count == 0)
                 RaisePropertyChanged(nameof(NoCalls));
@@ -147,6 +157,41 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private void OpenContactList()
         {
             NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
+        }
+
+        private void OpenCallerProfile(int user)
+        {
+            NavigationService.NavigateAsync<MemberViewModel, int>(user);
+        }
+
+        private async Task Call(int userId)
+        {
+            var user = _users.FirstOrDefault(x => x.UserId == userId);
+
+            if (user == null)
+                return;
+
+            try
+            {
+                var callType = await _dialogService.ShowContactOptions(LocationResources, user.ShowNumber);
+
+                switch (callType)
+                {
+                    case CallingType.Letter:
+                        if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(user.UserId, true));
+                        break;
+                    case CallingType.Cellphone:
+                        CallUtils.Call(user.ContactNumber);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
         #region Resources
