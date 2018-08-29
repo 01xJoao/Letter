@@ -58,7 +58,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public override async Task Appearing()
         {
             //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
-                //return;
+            //return;
 
             _callHistory = new List<CallHistoryModel>();
 
@@ -79,22 +79,22 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     //if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
                     //{
-                        lastCall.CallDateText = DateUtils.CallsDateString(date);
-                        lastCall.CallStack.Add(call.CallId);
-                        lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
-                            call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
+                    lastCall.CallDateText = DateUtils.CallsDateString(date);
+                    lastCall.CallStack.Add(call.CallId);
+                    lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
+                        call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
 
-                        //new (remove this to back to original)
-                        lastCall.HasSuccess = call.Success;
-                        lastCall.CallDate = date;
-                        lastCall.CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming;
-                        lastCall.ShouldAlert = call.IsNew && !call.Success && call.CallType == 1;
+                    //new (remove this to back to original)
+                    lastCall.HasSuccess = call.Success;
+                    lastCall.CallDate = date;
+                    lastCall.CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming;
+                    lastCall.ShouldAlert = call.IsNew && !call.Success && call.CallType == 1;
 
-                        continue;
-                   // }
+                    continue;
+                    // }
 
                     //if(lastCall.CallType == CallType.Incoming)
-                        //lastCall.ShouldAlert = false;
+                    //lastCall.ShouldAlert = false;
                 }
 
                 var callHistory = new CallHistoryModel
@@ -119,11 +119,20 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             _callHistory = _callHistory.OrderByDescending(x => x.CallDate).ToList();
 
-            if(_callHistory.Count > 0)
+            if (_callHistory.Count > 0)
                 RaisePropertyChanged(nameof(CallHistory));
-                
-            if(_calls.Any(x => x.IsNew == true))
-                Realm.Write(() => { _calls.All(x => x.IsNew = false); });
+
+            Realm.Write(() =>
+            {
+                foreach (var call in _calls)
+                {
+                    if (call.IsNew)
+                    {
+                        call.IsNew = false;
+                        Realm.Add(call, true);
+                    }
+                }
+            });
         }
 
         private void DeleteCall(int index)
