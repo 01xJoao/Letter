@@ -62,8 +62,8 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             else
             {
                 UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewCallTitle, Colors.Black, 17f, UIFontWeight.Semibold);
+                UIButtonExtensions.SetupButtonAppearance(_cancelButton, _cancelButton.TintColor, 17f, ViewModel.Cancel);
 
-                _cancelButton.SetTitle(ViewModel.Cancel, UIControlState.Normal);
                 _cancelButton.TitleLabel.Lines = 1;
                 _cancelButton.TitleLabel.AdjustsFontSizeToFitWidth = true;
                 _cancelButton.TitleLabel.LineBreakMode = UILineBreakMode.Clip;
