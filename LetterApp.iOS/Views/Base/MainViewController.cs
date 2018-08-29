@@ -6,6 +6,7 @@ using LetterApp.iOS.Views.TabBar.ChatListViewController;
 using LetterApp.iOS.Views.TabBar.ContactListViewController;
 using LetterApp.iOS.Views.TabBar.UserProfileViewController;
 using LetterApp.iOS.Helpers;
+using LetterApp.Core;
 
 namespace LetterApp.iOS.Views.Base
 {
@@ -53,6 +54,12 @@ namespace LetterApp.iOS.Views.Base
             vc.TabBarItem.SetTitleTextAttributes(new UITextAttributes { TextColor = Colors.MainBlue }, UIControlState.Selected);
             vc.TabBarItem.ImageInsets = new UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0);
             vc.TabBarItem.TitlePositionAdjustment = new UIOffset(0, -2);
+
+            if (position == 0 && AppSettings.BadgeForChat > 0)
+                vc.TabBarItem.BadgeValue = AppSettings.BadgeForChat.ToString();
+
+            if (position == 1 && AppSettings.BadgeForCalls > 0)
+                vc.TabBarItem.BadgeValue = AppSettings.BadgeForCalls.ToString();
         }
 
         public override void ViewWillAppear(bool animated)

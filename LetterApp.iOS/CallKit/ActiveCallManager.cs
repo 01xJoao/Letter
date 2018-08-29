@@ -30,13 +30,9 @@ namespace LetterApp.iOS.CallKit
             CallController.RequestTransaction(transaction, (error) => 
             {
                 if (error == null)
-                {
                     Console.WriteLine("Transaction request sent successfully.");
-                }
                 else
-                {
                     Console.WriteLine("Error requesting transaction: {0}", error);
-                }
             });
         }
         #endregion

@@ -9,6 +9,7 @@ using LetterApp.Core;
 using LetterApp.Core.AgoraIO;
 using LetterApp.Core.Helpers;
 using LetterApp.Core.Models;
+using LetterApp.iOS.Views.Base;
 using LetterApp.iOS.Views.Call;
 using Realms;
 using SinchBinding;
@@ -291,8 +292,25 @@ namespace LetterApp.iOS.CallKit
             {
                 xcall.EndCall();
 
-                if (xcall.IsConnected == false)
+                if (!xcall.IsConnected)
+                {
                     CallManager.EndCall(xcall);
+
+                    if (!xcall.IsOutgoing)
+                    {
+                        var badge = AppSettings.BadgeForCalls++;
+
+                        using(var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
+                        {
+                            if (appDelegate.RootController?.CurrentViewController is MainViewController)
+                            {
+                                var view = appDelegate.RootController.CurrentViewController as MainViewController;
+                                if(view.TabBar.Items.Any())
+                                    view.TabBar.Items[1].BadgeValue = badge.ToString();
+                            }
+                        }
+                    }
+                }
             }
 
             _comesFromBackground = false;
