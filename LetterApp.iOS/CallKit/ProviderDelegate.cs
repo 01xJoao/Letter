@@ -298,7 +298,7 @@ namespace LetterApp.iOS.CallKit
 
                     if (!xcall.IsOutgoing)
                     {
-                        var badge = AppSettings.BadgeForCalls++;
+                        AppSettings.BadgeForCalls++;
 
                         using(var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                         {
@@ -306,7 +306,7 @@ namespace LetterApp.iOS.CallKit
                             {
                                 var view = appDelegate.RootController.CurrentViewController as MainViewController;
                                 if(view.TabBar.Items.Any())
-                                    view.TabBar.Items[1].BadgeValue = badge.ToString();
+                                    view.TabBar.Items[1].BadgeValue = AppSettings.BadgeForCalls.ToString();
                             }
                         }
                     }

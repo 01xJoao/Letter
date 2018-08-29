@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using CoreGraphics;
+using LetterApp.Core;
 using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -113,6 +115,30 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
         private void OpenContacts(object sender, EventArgs e)
         {
             ViewModel.OpenCallListCommand.Execute();
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+
+            if (AppSettings.BadgeForCalls > 0)
+            {
+                AppSettings.BadgeForCalls = 0;
+
+                using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
+                {
+                    if (appDelegate.RootController?.CurrentViewController is MainViewController)
+                    {
+                        //var view = appDelegate.RootController.CurrentViewController as MainViewController;
+
+                        using (var view = appDelegate.RootController.CurrentViewController as MainViewController)
+                        {
+                            if (view.TabBar.Items.Any())
+                                view.TabBar.Items[1].BadgeValue = null;
+                        }
+                    }
+                }
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
