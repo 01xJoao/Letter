@@ -162,12 +162,6 @@
     <Reference Include="Tavis.UriTemplates">
       <HintPath>..\packages\Tavis.UriTemplates.1.1.1\lib\netstandard1.0\Tavis.UriTemplates.dll</HintPath>
     </Reference>
-    <Reference Include="Sinch.WebApiClient">
-      <HintPath>..\packages\Sinch.WebApiClient.1.1.0\lib\netstandard1.3\Sinch.WebApiClient.dll</HintPath>
-    </Reference>
-    <Reference Include="Sinch.ServerSdk">
-      <HintPath>..\packages\Sinch.ServerSdk.1.3.0-beta1\lib\netstandard1.3\Sinch.ServerSdk.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.4.3.1\lib\netstandard1.5\Castle.Core.dll</HintPath>
     </Reference>

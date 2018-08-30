@@ -42,7 +42,7 @@ namespace LetterApp.iOS
             Window.MakeKeyAndVisible();
             Setup.Initialize();
 
-            Push = SinchBinding.Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
+            Push = Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
             Push.WeakDelegate = this;
             Push.SetDesiredPushTypeAutomatically();
 
@@ -88,16 +88,16 @@ namespace LetterApp.iOS
         //    app.RegisterForRemoteNotifications();
         //}
 
-        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
-        {
-            DeviceToken = deviceToken;
-            Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
-            byte[] deviceTokenBytes = deviceToken.ToArray();
-        }
+        //public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+        //{
+        //    DeviceToken = deviceToken;
+        //    Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
+        //    byte[] deviceTokenBytes = deviceToken.ToArray();
+        //}
 
         private void InitSinchClientWithUserId(string userId)
         {
-            Client = SinchBinding.Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
+            Client = Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
             Client.WeakDelegate = this;
             Client.SetSupportCalling(true);
             Client.EnableManagedPushNotifications();

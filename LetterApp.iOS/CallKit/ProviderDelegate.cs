@@ -11,7 +11,6 @@ using LetterApp.Core.Helpers;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Views.Base;
 using LetterApp.iOS.Views.Call;
-using Realms;
 using SinchBinding;
 using UIKit;
 
