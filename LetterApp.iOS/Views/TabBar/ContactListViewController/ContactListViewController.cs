@@ -249,7 +249,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight;
 
             if(!ViewModel.IsPresentViewForCalls)
-                _barView.Frame = new CGRect(0, _isSearchActive ? _heightForAnimationTab + _tabScrollView.Frame.Height - 2 :  _tabScrollView.Frame.Height - 2, sizeForTab, 2);
+                _barView.Frame = new CGRect(0, _isSearchActive ? _heightForAnimationTab + _tabScrollView.Frame.Height - 2 : _tabBarViewHeightConstraint.Constant - 2, sizeForTab, 2);
             else
                 _barView.Frame = new CGRect(0, _presentViewHeightConstraint.Constant + _tabScrollView.Frame.Height - 2, sizeForTab, 2);
 

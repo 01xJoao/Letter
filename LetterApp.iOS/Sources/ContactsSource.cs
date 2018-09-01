@@ -44,7 +44,7 @@ namespace LetterApp.iOS.Sources
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            if (_contacts[indexPath.Row] == null)
+            if (_contacts.ElementAtOrDefault(indexPath.Row) == null)
                 return new UITableViewCell();
 
             var contactCell = tableView.DequeueReusableCell(ContactsCell.Key) as ContactsCell;
