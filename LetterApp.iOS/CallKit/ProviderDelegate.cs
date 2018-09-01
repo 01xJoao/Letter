@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AVFoundation;
 using CallKit;
 using DT.Xamarin.Agora;
 using Foundation;
@@ -52,15 +51,6 @@ namespace LetterApp.iOS.CallKit
             }
         }
 
-        private ISINAudioController AudioController
-        {
-            get
-            {
-                var appDelegate = (AppDelegate)UIApplication.SharedApplication.WeakDelegate;
-                return appDelegate.Client.AudioController;
-            }
-        }
-
         #region Constructors
 
         public ProviderDelegate(ActiveCallManager callManager)
@@ -96,8 +86,6 @@ namespace LetterApp.iOS.CallKit
             if (activeCall == null)
                 return;
 
-            AudioController.StartPlayingSoundFile(PathForSound("ringback.wav"), true);
-
             SINCall = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString());
             activeCall.SINCall = SINCall;
             activeCall.StartCall();
@@ -108,8 +96,6 @@ namespace LetterApp.iOS.CallKit
 
         public override void PerformAnswerCallAction(CXProvider provider, CXAnswerCallAction action)
         {
-            AudioController?.StopPlayingSoundFile();
-
             var call = CallManager.FindCall(action.CallUuid);
 
             if (call == null)
@@ -118,7 +104,7 @@ namespace LetterApp.iOS.CallKit
                 return;
             }
 
-            if(!call.IsOutgoing)
+            if (!call.IsOutgoing)
                 App.StartCall(call.CallerId);
 
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
@@ -127,9 +113,6 @@ namespace LetterApp.iOS.CallKit
 
         public override void PerformEndCallAction(CXProvider provider, CXEndCallAction action)
         {
-            AudioController?.StopPlayingSoundFile();
-            AudioController.StartPlayingSoundFile(PathForSound("EndCallSound.wav"), false);
-
             var call = CallManager.FindCall(action.CallUuid);
 
             if (call == null)
@@ -151,7 +134,7 @@ namespace LetterApp.iOS.CallKit
             };
 
             RealmUtils.AddCallToHistory(callHistory);
-          
+
             CallManager.Calls.Remove(call);
 
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
@@ -173,21 +156,7 @@ namespace LetterApp.iOS.CallKit
             action.Fulfill();
         }
 
-        public override void TimedOutPerformingAction(CXProvider provider, CXAction action)
-        {
-            action.Fulfill();
-        }
-
-        public override void DidActivateAudioSession(CXProvider provider, AVAudioSession audioSession)
-        {
-            //audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
-            //audioSession.SetActive(true);
-        }
-
-        public override void DidDeactivateAudioSession(CXProvider provider, AVAudioSession audioSession)
-        {
-            //audioSession.SetActive(false);
-        }
+        public override void TimedOutPerformingAction(CXProvider provider, CXAction action) => action.Fulfill();
 
         public override void PerformSetMutedCallAction(CXProvider provider, CXSetMutedCallAction action)
         {
@@ -195,7 +164,7 @@ namespace LetterApp.iOS.CallKit
             action.Fulfill();
         }
 
-        public override void PerformSetGroupCallAction(CXProvider provider, CXSetGroupCallAction action) {}
+        public override void PerformSetGroupCallAction(CXProvider provider, CXSetGroupCallAction action) { }
 
 
         #endregion
@@ -211,7 +180,7 @@ namespace LetterApp.iOS.CallKit
         {
             if (CallManager.Calls.LastOrDefault() != null)
                 return;
-                
+
             var callerId = Int32.Parse(handle.RemoteUserId);
             var callerName = RealmUtils.GetCallerName(callerId);
 
@@ -226,9 +195,7 @@ namespace LetterApp.iOS.CallKit
             Provider.ReportNewIncomingCall(uuid, update, (error) =>
             {
                 if (error == null)
-                {
                     CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, SINCall, true));
-                }
                 else
                 {
                     Console.WriteLine("Error: {0}", error);
@@ -299,12 +266,12 @@ namespace LetterApp.iOS.CallKit
                     {
                         AppSettings.BadgeForCalls++;
 
-                        using(var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
+                        using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                         {
                             if (appDelegate.RootController?.CurrentViewController is MainViewController)
                             {
                                 var view = appDelegate.RootController.CurrentViewController as MainViewController;
-                                if(view.TabBar.Items.Any())
+                                if (view.TabBar.Items.Any())
                                     view.TabBar.Items[1].BadgeValue = AppSettings.BadgeForCalls.ToString();
                             }
                         }
@@ -329,7 +296,7 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.SetChannelProfile(ChannelProfile.Communication);
             _agoraKit.SetEnableSpeakerphone(speaker);
             _agoraKit.MuteLocalAudioStream(muted);
-            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, null);
+            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, _callViewController.JoinCompleted);
         }
 
         public void AgoraCallStarted()
@@ -338,7 +305,7 @@ namespace LetterApp.iOS.CallKit
 
             if (call == null)
                 return;
-                
+
             call.AnswerCall();
 
             if (call.IsOutgoing)
@@ -369,7 +336,7 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraSetMute(bool mutedOn, bool fromView = false)
         {
-            if(fromView)
+            if (fromView)
             {
                 CallManager.MuteCall(CallManager.Calls.LastOrDefault(), mutedOn);
             }

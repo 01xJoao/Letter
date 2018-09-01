@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ using LetterApp.iOS.AgoraIO;
 using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.Base;
+using SinchBinding;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Call
@@ -107,16 +110,14 @@ namespace LetterApp.iOS.Views.Call
             else
             {
                 _pictureImage.Image?.Dispose();
-                ImageService.Instance.LoadStream((token) =>
-                {
+                ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
                 }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_pictureImage);
 
                 _backgroundImg = string.Copy(ViewModel.MemberProfileModel.Picture);
 
                 _backgroundImage.Image?.Dispose();
-                ImageService.Instance.LoadStream((token) =>
-                {
+                ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, _backgroundImg);
                 }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new BlurredTransformation(14f)).Into(_backgroundImage);
             }
@@ -194,8 +195,16 @@ namespace LetterApp.iOS.Views.Call
                 ViewModel.EndCallCommand.Execute();
         }
 
+        public void JoinCompleted(NSString arg1, nuint arg2, nint arg3)
+        {
+            PlayAudio("ringback.wav", 100);
+        }
+
         public void DidEnterRoom()
         {
+            if (ViewModel.StartedCall)
+                players.LastOrDefault()?.Stop();
+
             CallProvider.AgoraCallStarted();
             StartTimer();
         }
@@ -213,6 +222,9 @@ namespace LetterApp.iOS.Views.Call
 
         public override void ViewWillDisappear(bool animated)
         {
+            players.LastOrDefault()?.Stop();
+            PlayAudio("EndCallSound.wav", 0);
+
             StopTimer();
             AgoraDelegate = null;
             _backgroundImg = null;
@@ -220,6 +232,13 @@ namespace LetterApp.iOS.Views.Call
 
             UIDevice.CurrentDevice.ProximityMonitoringEnabled = false;
             base.ViewWillDisappear(animated);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            ViewModel.MicrophoneAlertCommand.Execute();
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -256,17 +275,35 @@ namespace LetterApp.iOS.Views.Call
             return null;
         }
 
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
-            ViewModel.MicrophoneAlertCommand.Execute();
-        }
-
         public void StopTimer()
         {
             _timerCTS?.Cancel();
             _timerCTS = null;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        Queue<AVAudioPlayer> players = new Queue<AVAudioPlayer>(1);
+
+        void PlayAudio(string fileName, int loops)
+        {
+            NSUrl url = NSUrl.FromFilename(fileName);
+            AVAudioPlayer player = AVAudioPlayer.FromUrl(url);
+            player.NumberOfLoops = loops;
+            player.Volume = 1;
+
+            if (players.Count == 1)
+                players.Dequeue().Dispose();
+
+            players.Enqueue(player);
+            player.Play();
+        }
+
+        string PathForSound(string soundName)
+        {
+            return Path.Combine(NSBundle.MainBundle.ResourcePath, soundName);
         }
 
         #endregion
