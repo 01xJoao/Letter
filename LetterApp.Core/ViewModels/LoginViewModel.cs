@@ -20,6 +20,7 @@ namespace LetterApp.Core.ViewModels
         private IAuthenticationService _authService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
+        private ISettingsService _settingsService;
 
         public string UserEmail
         {
@@ -50,11 +51,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _forgotPassCommand;
         public XPCommand<string> ForgotPassCommand => _forgotPassCommand ?? (_forgotPassCommand = new XPCommand<string>(async (email) => await ForgotPassword(email), CanExecute));
 
-        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService)
+        public LoginViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
             _authService = authService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
+            _settingsService = settingsService;
         }
 
         private async Task SignIn(Tuple<string,string> value)
@@ -77,7 +79,7 @@ namespace LetterApp.Core.ViewModels
 
                 if(currentUser.StatusCode == 200)
                 {
-                    AppSettings.Logout();
+                    Logout();
                     AppSettings.IsUserLogged = true;
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
@@ -86,7 +88,7 @@ namespace LetterApp.Core.ViewModels
                 }
                 else if (currentUser.StatusCode == 102)
                 {
-                    AppSettings.Logout();
+                    Logout();
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
 
@@ -146,6 +148,12 @@ namespace LetterApp.Core.ViewModels
             {
                 _dialogService.StopLoading();
             }
+        }
+
+        private void Logout()
+        {
+            AppSettings.Logout();
+            _settingsService.Logout();
         }
 
         private bool CanLogin(Tuple<string, string> value) => !IsBusy && !string.IsNullOrEmpty(value.Item1) && !string.IsNullOrEmpty(value.Item2);

@@ -6,7 +6,6 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.CustomViews.TabBarView
 {
-    [Register("TabBarView")]
     public partial class TabBarView : UIView
     {
         public ContactTabModel Division;

@@ -660,6 +660,10 @@
     "translated": "Contactos"
   },
   {
+    "key": "Contacts_NewCall",
+    "translated": "Nova Chamada"
+  },
+  {
     "key": "Contacts_DialogTitle",
     "translated": "Filtrar Contactos"
   },
@@ -690,5 +694,157 @@
   {
     "key": "Member_Chat",
     "translated": "Conversar"
+  },
+  {
+    "key": "Call_Letter",
+    "translated": "Áudio Letter"
+  },
+  {
+    "key": "Call_Calling",
+    "translated": "A ligar..."
+  },
+  {
+    "key": "Call_IsCalling",
+    "translated": "A conectar..."
+  },
+  {
+    "key": "Call_Speaker",
+    "translated": "Altifalante"
+  },
+  {
+    "key": "Call_Mute",
+    "translated": "Sem som"
+  },
+  {
+    "key": "Call_Accept",
+    "translated": "Aceitar"
+  },
+  {
+    "key": "Call_Decline",
+    "translated": "Recusar"
+  },
+  {
+    "key": "Call_Connecting",
+    "translated": "A Connectar..."
+  },
+  {
+    "key": "Call_Anonym",
+    "translated": "Desconhecido"
+  },
+  {
+    "key": "Call_MicAlert",
+    "translated": "Permissões de microfone são necessárias."
+  },
+  {
+    "key": "Call_OpenSettingsAlert",
+    "translated": "Abrir Definições"
+  },
+  {
+    "key": "ContactDialog_Title",
+    "translated": "Faça uma chamada"
+  },
+  {
+    "key": "ContactDialog_TitleLetter",
+    "translated": "Chamada via letter"
+  },
+  {
+    "key": "ContactDialog_DescriptionLetter",
+    "translated": "É gratuíto, necessário conexão à internet"
+  },
+  {
+    "key": "ContactDialog_TitlePhone",
+    "translated": "Chamada via telefone"
+  },
+  {
+    "key": "ContactDialog_DescriptionPhone",
+    "translated": "Taxas de chamadas podem ser aplicadas"
+  },
+  {
+    "key": "date_Monday",
+    "translated": "Segunda"
+  },
+  {
+    "key": "date_Tuesday",
+    "translated": "Terça"
+  },
+  {
+    "key": "date_Wednesday",
+    "translated": "Quarta"
+  },
+  {
+    "key": "date_Thursday",
+    "translated": "Quinta"
+  },
+  {
+    "key": "date_Friday",
+    "translated": "Sexta"
+  },
+  {
+    "key": "date_Saturday",
+    "translated": "Sábado"
+  },
+  {
+    "key": "date_Sunday",
+    "translated": "Domingo"
+  },
+  {
+    "key": "date_Seconds",
+    "translated": " segundos atrás"
+  },
+  {
+    "key": "date_Minute",
+    "translated": "1 minuto atrás"
+  },
+  {
+    "key": "date_Minutes",
+    "translated": " minutos atrás"
+  },
+  {
+    "key": "date_Hour",
+    "translated": "1 hora atrás"
+  },
+  {
+    "key": "date_Hours",
+    "translated": " horas atrás"
+  },
+  {
+    "key": "date_Today",
+    "translated": "Hoje"
+  },
+  {
+    "key": "date_Yesterday",
+    "translated": "Ontem"
+  },
+  {
+    "key": "Call_Incoming",
+    "translated": "Recebida"
+  },
+  {
+    "key": "Call_Outgoing",
+    "translated": "Efetuada"
+  },
+  {
+    "key": "Call_Missed",
+    "translated": "Perdida"
+  },
+  {
+    "key": "Delete",
+    "translated": "Eliminar"
+  },
+  {
+    "key": "Cancel",
+    "translated": "Cancelar"
+  },
+  {
+    "key": "Calls_NoRecentCalls",
+    "translated": "Sem chamadas recentes"
+  },
+  {
+    "key": "Contacts_NoContacts",
+    "translated": "Sem Contactos"
+  },
+  {
+    "key": "Contacts_NoResults",
+    "translated": "Sem Resultados"
   }
 ]

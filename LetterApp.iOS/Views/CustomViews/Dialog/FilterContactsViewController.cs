@@ -44,7 +44,9 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             UIButtonExtensions.SetupButtonAppearance(_button, Colors.White, 17f, _buttonText);
 
             _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
+            _closeButton.ContentMode = UIViewContentMode.ScaleAspectFit;
             _closeButton.TintColor = Colors.Black;
+
 
             _switch.On = _isActive;
 

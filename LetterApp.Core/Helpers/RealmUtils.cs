@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using LetterApp.Core.Localization;
+using LetterApp.Core.Models;
+using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Models.DTO.ReceivedModels;
 using Realms;
 
@@ -26,8 +29,9 @@ namespace LetterApp.Core.Helpers
 
             foreach (var divion in userCheck?.Divisions)
                 user.Divisions.Add(divion);
-            
-            realm.Write(() => {
+
+            realm.Write(() =>
+            {
                 realm.Add(user, true);
             });
 
@@ -62,11 +66,44 @@ namespace LetterApp.Core.Helpers
                 organization.Divisions.Add(divion);
             }
 
-            realm.Write(() => {
+            realm.Write(() =>
+            {
                 realm.Add(organization, true);
             });
 
             return organization;
+        }
+
+        public static string GetCallerName(int callerId)
+        {
+            #if DEBUG
+                var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #else
+                var realm = Realm.GetInstance();
+            #endif
+
+            var members = realm.All<GetUsersInDivisionModel>();
+            var caller = members.Where(x => x.UserId == callerId)?.FirstOrDefault();
+
+            string fullname = string.Empty;
+
+            if (caller != null)
+                fullname = $"{caller?.FirstName} {caller?.LastName}";
+            else
+                fullname = L10N.Localize("Call_Anonym");
+
+            return fullname;
+        }
+
+        public static void AddCallToHistory(CallModel call)
+        {
+            #if DEBUG
+                var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #else
+                var realm = Realm.GetInstance();
+            #endif
+
+            realm.Write(() => realm.Add(call));
         }
     }
 }

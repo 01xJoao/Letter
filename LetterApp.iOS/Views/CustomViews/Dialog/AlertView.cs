@@ -7,7 +7,6 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.CustomViews.Dialog
 {
-    [Register("AlertView")]
     public partial class AlertView : UIView
     {
         private float _duration;

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using CoreGraphics;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
@@ -25,7 +21,7 @@ namespace LetterApp.iOS.Views.SelectDivision.Cells
 
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, division.Picture);
-            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+            }).ErrorPlaceholder("division_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
             CustomUIExtensions.RoundShadow(_imageView);
             CustomUIExtensions.LabelShadow(_titleLabel);

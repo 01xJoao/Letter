@@ -10,7 +10,6 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 {
-    [Register("ProfileHeaderView")]
     public partial class ProfileHeaderView : UIView
     {
         private ProfileHeaderModel _profile;
@@ -33,7 +32,9 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             _descriptionField.ShouldReturn -= (field) => TextFieldShouldReturn(field);
             _descriptionField.ShouldReturn += (field) => TextFieldShouldReturn(field);
 
-            _settingsImage.Image = UIImage.FromBundle("settings");
+            _settingsButton.SetImage(UIImage.FromBundle("settings"), UIControlState.Normal);
+            _settingsButton.ContentMode = UIViewContentMode.ScaleAspectFit;
+            _settingsButton.TintColor = Colors.White;
 
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
@@ -49,6 +50,12 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
                 _descriptionField.Font = UIFont.ItalicSystemFontOfSize(14f);
 
             _descriptionField.ShouldChangeCharacters = OnDescriptionField_ShouldChangeCharacters;
+
+            if(PhoneModelExtensions.IsIphoneX())
+            {
+                _settingsHeightConstraint.Constant = 27;
+                _settingsWidthConstraint.Constant = 10;
+            }
 
             _descriptionField.EditingDidBegin -= OnDescriptionField_EditingDidBegin;
             _descriptionField.EditingDidBegin += OnDescriptionField_EditingDidBegin;

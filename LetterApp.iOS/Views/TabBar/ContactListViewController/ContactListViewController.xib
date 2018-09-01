@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -11,33 +11,62 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactListViewController">
             <connections>
+                <outlet property="_cancelButton" destination="hHi-bd-fcM" id="5GN-5k-Ufy"/>
                 <outlet property="_pageView" destination="Gza-RA-A1b" id="5b6-cx-S5J"/>
+                <outlet property="_presentView" destination="IOl-pf-52O" id="oOk-55-CyS"/>
+                <outlet property="_presentViewHeightConstraint" destination="6oK-xL-qPT" id="nyM-6z-Pof"/>
                 <outlet property="_scrollBarTopConstraint" destination="JQJ-02-Ojp" id="Qeo-sl-HjT"/>
                 <outlet property="_separatorView" destination="TT6-kG-etB" id="hrt-JX-u0n"/>
                 <outlet property="_tabBarView" destination="NKE-P0-USa" id="El4-bj-04C"/>
                 <outlet property="_tabBarViewHeightConstraint" destination="bbE-js-PdX" id="TaX-1E-IxI"/>
-                <outlet property="_tabScrollTopConstraint" destination="tMf-LY-QDc" id="tin-u3-pIj"/>
+                <outlet property="_tabScrollTopConstraint" destination="NQa-Fk-dSC" id="6kp-0h-z86"/>
                 <outlet property="_tabScrollView" destination="cK9-mk-Ffb" id="eRE-PQ-XIS"/>
+                <outlet property="_titleLabel" destination="yyg-C0-SQ0" id="id9-dg-yWc"/>
+                <outlet property="_titleLabelHeightConstraint" destination="QMh-SB-St6" id="UXR-nh-dDC"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="2">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gza-RA-A1b">
-                    <rect key="frame" x="0.0" y="45" width="375" height="622"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IOl-pf-52O">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yyg-C0-SQ0">
+                            <rect key="frame" x="87.5" y="33.5" width="145" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="145" id="7zZ-vR-Osw"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hHi-bd-fcM">
+                            <rect key="frame" x="242.5" y="27.5" width="62.5" height="32"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" title="button"/>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="hHi-bd-fcM" firstAttribute="leading" secondItem="yyg-C0-SQ0" secondAttribute="trailing" constant="10" id="4x9-Lm-M2l"/>
+                        <constraint firstAttribute="height" constant="66" id="6oK-xL-qPT"/>
+                        <constraint firstItem="yyg-C0-SQ0" firstAttribute="centerY" secondItem="IOl-pf-52O" secondAttribute="centerY" constant="11" id="QMh-SB-St6"/>
+                        <constraint firstItem="yyg-C0-SQ0" firstAttribute="centerX" secondItem="IOl-pf-52O" secondAttribute="centerX" id="QlI-AR-yfy"/>
+                        <constraint firstAttribute="trailing" secondItem="hHi-bd-fcM" secondAttribute="trailing" constant="15" id="Rrr-8k-zip"/>
+                        <constraint firstItem="hHi-bd-fcM" firstAttribute="centerY" secondItem="yyg-C0-SQ0" secondAttribute="centerY" id="auO-hX-iXg"/>
+                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKE-P0-USa">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
+                    <rect key="frame" x="0.0" y="66" width="320" height="45"/>
                     <subviews>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cK9-mk-Ffb">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
                         </scrollView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TT6-kG-etB">
-                            <rect key="frame" x="0.0" y="44" width="375" height="1"/>
+                            <rect key="frame" x="0.0" y="44" width="320" height="1"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="msn-0N-bhU"/>
@@ -56,15 +85,22 @@
                         <constraint firstAttribute="trailing" secondItem="TT6-kG-etB" secondAttribute="trailing" id="rta-9y-z7w"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gza-RA-A1b">
+                    <rect key="frame" x="0.0" y="111" width="320" height="457"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="Gza-RA-A1b" secondAttribute="bottom" id="2bW-vL-wLf"/>
                 <constraint firstItem="Gza-RA-A1b" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="DcB-Cm-Ze5"/>
                 <constraint firstAttribute="trailing" secondItem="Gza-RA-A1b" secondAttribute="trailing" id="FhP-35-tjO"/>
+                <constraint firstAttribute="trailing" secondItem="IOl-pf-52O" secondAttribute="trailing" id="Lud-Mh-DV3"/>
+                <constraint firstItem="NKE-P0-USa" firstAttribute="top" secondItem="IOl-pf-52O" secondAttribute="bottom" id="NQa-Fk-dSC"/>
+                <constraint firstItem="IOl-pf-52O" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="YPF-bR-dyU"/>
                 <constraint firstItem="NKE-P0-USa" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="cLw-DI-mWW"/>
+                <constraint firstItem="IOl-pf-52O" firstAttribute="top" secondItem="2" secondAttribute="top" id="fWt-rp-rsP"/>
                 <constraint firstItem="Gza-RA-A1b" firstAttribute="top" secondItem="cK9-mk-Ffb" secondAttribute="bottom" id="jp1-E4-tdu"/>
-                <constraint firstItem="NKE-P0-USa" firstAttribute="top" secondItem="2" secondAttribute="top" id="tMf-LY-QDc"/>
                 <constraint firstAttribute="trailing" secondItem="NKE-P0-USa" secondAttribute="trailing" id="vzu-3u-7FO"/>
             </constraints>
             <point key="canvasLocation" x="24.5" y="51.5"/>

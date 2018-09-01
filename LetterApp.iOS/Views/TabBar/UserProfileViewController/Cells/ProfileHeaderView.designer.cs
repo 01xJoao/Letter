@@ -10,6 +10,7 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 {
+    [Register ("ProfileHeaderView")]
     partial class ProfileHeaderView
     {
         [Outlet]
@@ -33,7 +34,11 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
 
         [Outlet]
-        UIKit.UIImageView _settingsImage { get; set; }
+        UIKit.NSLayoutConstraint _settingsHeightConstraint { get; set; }
+
+
+        [Outlet]
+        UIKit.NSLayoutConstraint _settingsWidthConstraint { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -62,9 +67,14 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
                 _settingsButton = null;
             }
 
-            if (_settingsImage != null) {
-                _settingsImage.Dispose ();
-                _settingsImage = null;
+            if (_settingsHeightConstraint != null) {
+                _settingsHeightConstraint.Dispose ();
+                _settingsHeightConstraint = null;
+            }
+
+            if (_settingsWidthConstraint != null) {
+                _settingsWidthConstraint.Dispose ();
+                _settingsWidthConstraint = null;
             }
         }
     }

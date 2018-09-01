@@ -16,6 +16,7 @@ namespace LetterApp.Core.ViewModels
         private IOrganizationService _organizationService;
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
+        private ISettingsService _settingsService;
 
         private XPCommand<string> _accessOrgCommand;
         public XPCommand<string> AccessOrgCommand => _accessOrgCommand ?? (_accessOrgCommand = new XPCommand<string>(async (orgName) => await AccessOrganization(orgName), CanExecute));
@@ -25,11 +26,12 @@ namespace LetterApp.Core.ViewModels
 
         public string EmailDomain { get; private set; }
 
-        public SelectOrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService)
+        public SelectOrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
             _organizationService = organizationService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
+            _settingsService = settingsService;
         }
 
         protected override void Prepare(string email)
@@ -89,6 +91,7 @@ namespace LetterApp.Core.ViewModels
             if(result)
             {
                 AppSettings.Logout();
+                _settingsService.Logout();
                 await NavigationService.NavigateAsync<LoginViewModel, object>(null);
             }
         }

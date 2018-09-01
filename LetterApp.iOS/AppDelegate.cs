@@ -1,5 +1,11 @@
-﻿using Foundation;
+﻿using System.Diagnostics;
+using AVFoundation;
+using Foundation;
+using LetterApp.Core;
+using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Views.Base;
+using PushKit;
+using SinchBinding;
 using UIKit;
 
 namespace LetterApp.iOS
@@ -7,16 +13,26 @@ namespace LetterApp.iOS
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : UIApplicationDelegate
+    public class AppDelegate : UIApplicationDelegate, ISINClientDelegate, ISINCallClientDelegate, ISINManagedPushDelegate
     {
         // class-level declarations
         public override UIWindow Window { get; set; }
         public UINavigationController NavigationController;
         public RootViewController RootController;
 
+        public static NSData DeviceToken;
+        public ActiveCallManager CallManager;
+        public ProviderDelegate CallProviderDelegate { get; set; }
+
+        public ISINClient Client { get; set; }
+        public ISINManagedPush Push { get; set; }
+
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
+
+            CallManager = new ActiveCallManager();
+            CallProviderDelegate = new ProviderDelegate(CallManager);
 
             NavigationController = new UINavigationController();
             RootController = new RootViewController();
@@ -26,39 +42,122 @@ namespace LetterApp.iOS
             Window.MakeKeyAndVisible();
             Setup.Initialize();
 
+            Push = Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
+            Push.WeakDelegate = this;
+            Push.SetDesiredPushTypeAutomatically();
+
+            using(var audio = AVAudioSession.SharedInstance())
+            {
+                if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
+                {
+                    audio.RequestRecordPermission((granted) => {
+                        Push.RegisterUserNotificationSettings();
+                    });
+                }
+            }
+
+            //RegisterRemotePushNotifications(application);
+
+            NSNotificationCenter.DefaultCenter.AddObserver("UserDidLoginNotification", null, null, (obj) => {
+                InitSinchClientWithUserId(obj.UserInfo["userId"].ToString());
+            });
+
+            if(AppSettings.UserId != 0)
+                InitSinchClientWithUserId(AppSettings.UserId.ToString());
+            
             return true;
         }
 
-        public override void OnResignActivation(UIApplication application)
+        //TODO This might need to be changed when implementing chat
+        [Export("application:continueUserActivity:restorationHandler:")]
+        public bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
         {
-            // Invoked when the application is about to move from active to inactive state.
-            // This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) 
-            // or when the user quits the application and it begins the transition to the background state.
-            // Games should use this method to pause the game.
+            if (RootController?.CurrentViewController is MainViewController)
+            {
+                var viewC = RootController.CurrentViewController as MainViewController;
+                viewC.SetVisibleView(1);
+            }
+            return true;
         }
 
-        public override void DidEnterBackground(UIApplication application)
+        //static void RegisterRemotePushNotifications(UIApplication app)
+        //{
+        //    UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
+        //    var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
+        //    app.RegisterUserNotificationSettings(pushSettings);
+        //    app.RegisterForRemoteNotifications();
+        //}
+
+        //public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+        //{
+        //    DeviceToken = deviceToken;
+        //    Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
+        //    byte[] deviceTokenBytes = deviceToken.ToArray();
+        //}
+
+        private void InitSinchClientWithUserId(string userId)
         {
-            // Use this method to release shared resources, save user data, invalidate timers and store the application state.
-            // If your application supports background exection this method is called instead of WillTerminate when the user quits.
+            Client = Sinch.ClientWithApplicationKey("b56256a4-f651-4b4a-a602-69e350b9010e", "1OnpOBkW0k6KL3zAgAaWtA==", "clientapi.sinch.com", userId);
+            Client.WeakDelegate = this;
+            Client.SetSupportCalling(true);
+            Client.EnableManagedPushNotifications();
+            Client.SetSupportPushNotifications(true);
+            Client.Start();
+            Client.StartListeningOnActiveConnection();
+
+            CallProviderDelegate.StartCallClientDelegate();
         }
 
-        public override void WillEnterForeground(UIApplication application)
+        public void DidReceiveIncomingPushWithPayload(ISINManagedPush managedPush, NSDictionary payload, string pushType)
         {
-            // Called as part of the transiton from background to active state.
-            // Here you can undo many of the changes made on entering the background.
+            if (pushType == "PKPushTypeVoIP" && AppSettings.CallNotifications)
+            {
+                var aps = payload["aps"] as NSDictionary;
+                var alert = aps["alert"] as NSDictionary; 
+                var callType = alert["loc-key"].ToString();
+
+                if (callType == "SIN_INCOMING_CALL")
+                {
+                    var callInfo = payload["sin"].ToString();
+                    var caller = Client.RelayRemotePushNotificationPayload(callInfo);
+                    CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
+                }
+            }
         }
 
-        public override void OnActivated(UIApplication application)
+        public void DidUpdatePushCredentials(PKPushRegistry registry, PKPushCredentials credentials, string type)
         {
-            // Restart any tasks that were paused (or not yet started) while the application was inactive. 
-            // If the application was previously in the background, optionally refresh the user interface.
+            UnregisterTokens();
+            Client.RegisterPushNotificationData(credentials.Token);
         }
 
-        public override void WillTerminate(UIApplication application)
+        public void UnregisterTokens()
         {
-            // Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
+            Client?.UnregisterPushNotificationDeviceToken();
+            Client?.UnregisterPushNotificationData();
         }
+
+        public void ClientDidStart(ISINClient client)
+        {
+            Debug.WriteLine($"Sinch client started successfully)");
+        }
+
+        public void ClientDidFail(ISINClient client, NSError error)
+        {
+            Debug.WriteLine($"Sinch client error: {error.LocalizedDescription}");
+        }
+
+        [Export("client:logMessage:area:severity:timestamp:")]
+        void client(ISINClient client, string message, string area, SINLogSeverity severity, NSDate timestamp)
+        {
+            //Debug.WriteLine(message);
+        }
+
+        public override void OnResignActivation(UIApplication application) {}
+        public override void DidEnterBackground(UIApplication application) {}
+        public override void WillEnterForeground(UIApplication application) {}
+        public override void OnActivated(UIApplication application) {}
+        public override void WillTerminate(UIApplication application) {}
     }
 }
 

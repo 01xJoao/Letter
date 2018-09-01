@@ -17,6 +17,9 @@ namespace LetterApp.iOS.Views.UserSettings.Cells
 
         public void Configure(SettingsPhoneModel phone)
         {
+            if (phone == null)
+                return;
+
             _changeNumberCommand = phone.ChangeNumber;
 
             UILabelExtensions.SetupLabelAppearance(_label, phone.PhoneDescription, Colors.Black, 15f);

@@ -8,6 +8,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
     public class MainViewModel : XViewModel
     {
+        private XPCommand<string> _callCommand;
+        public XPCommand<string> CallCommand => _callCommand ?? (_callCommand = new XPCommand<string>(async (userId) => await Call(userId)));
+
+        private async Task Call(string userId)
+        {
+            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(Int32.Parse(userId), false));
+        }
+
         public MainViewModel() {}
 
         #region resources
