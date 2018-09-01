@@ -15,7 +15,6 @@ using LetterApp.iOS.AgoraIO;
 using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.Base;
-using SinchBinding;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Call

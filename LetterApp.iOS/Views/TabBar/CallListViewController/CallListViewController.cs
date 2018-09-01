@@ -55,8 +55,11 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
             base.ViewDidLayoutSubviews();
 
             _noRecentCallsImage.ContentMode = UIViewContentMode.ScaleAspectFit;
-            _noRecentCallsImage.Center = _tableView.Center;
-            _noRecentCallsImage.Frame = new CGRect(_noRecentCallsImage.Frame.X + 10, _noRecentCallsImage.Frame.Y - 40, 130, 130);
+            _noRecentCallsImage.SizeThatFits(_noRecentCallsImage.Image.Size);
+            var imageViewCenter = _noRecentCallsImage.Center;
+            imageViewCenter.X = _tableView.Bounds.GetMidX();
+            imageViewCenter.Y = _tableView.Bounds.GetMidY() - 40;
+            _noRecentCallsImage.Center = imageViewCenter;
 
             _noRecentCallsLabel.Center = this.View.Center;
             var labelY = _noRecentCallsImage.Frame.Y + _noRecentCallsImage.Frame.Height + 40;

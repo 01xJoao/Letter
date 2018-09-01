@@ -41,8 +41,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
             base.ViewDidLayoutSubviews();
 
             _noContactsImage.ContentMode = UIViewContentMode.ScaleAspectFit;
-            _noContactsImage.Center = _tableView.Center;
-            _noContactsImage.Frame = new CGRect(_noContactsImage.Frame.X + 10, _noContactsImage.Frame.Y - 40, 130, 130);
+            _noContactsImage.SizeThatFits(_noContactsImage.Image.Size);
+            var imageViewCenter = _noContactsImage.Center;
+            imageViewCenter.X = _tableView.Bounds.GetMidX();
+            imageViewCenter.Y = _tableView.Bounds.GetMidY() - 40;
+            _noContactsImage.Center = imageViewCenter;
 
             _noContactsLabel.Center = this.View.Center;
             var labelY = _noContactsImage.Frame.Y + _noContactsImage.Frame.Height + 40;
