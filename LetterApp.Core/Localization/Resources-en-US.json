@@ -664,8 +664,12 @@
     "translated": "Filter Contacts"
   },
   {
+    "key": "Contacts_NewCall",
+    "translated": "New Call"
+  },
+  {
     "key": "Contacts_DialogSwitchLabel",
-    "translated": "Filter members by main division"
+    "translated": "Filter users by main division"
   },
   {
     "key": "Contacts_DialogDescription",
@@ -690,5 +694,157 @@
   {
     "key": "Member_Chat",
     "translated": "Chat"
+  },
+  {
+    "key": "Call_Letter",
+    "translated": "Letter Audio"
+  },
+  {
+    "key": "Call_Calling",
+    "translated": "Ringing..."
+  },
+  {
+    "key": "Call_IsCalling",
+    "translated": "is calling..."
+  },
+  {
+    "key": "Call_Speaker",
+    "translated": "Speaker"     
+  },
+  {
+    "key": "Call_Mute",
+    "translated": "Mute"
+  },
+  {
+    "key": "Call_Accept",
+    "translated": "Accept"
+  },
+  {
+    "key": "Call_Decline",
+    "translated": "Decline"
+  },
+  {
+    "key": "Call_Connecting",
+    "translated": "Connecting..."
+  },
+  {
+    "key": "Call_Anonym",
+    "translated": "Unknown Caller"
+  },
+  {
+    "key": "Call_MicAlert",
+    "translated": "Microphone permissions are required."
+  },
+  {
+    "key": "Call_OpenSettingsAlert",
+    "translated": "Open settings"
+  },
+  {
+    "key": "ContactDialog_Title",
+    "translated": "Make a call"
+  },
+  {
+    "key": "ContactDialog_TitleLetter",
+    "translated": "Letter call"
+  },
+  {
+    "key": "ContactDialog_DescriptionLetter",
+    "translated": "It's free, internet connection is necessary"
+  },
+  {
+    "key": "ContactDialog_TitlePhone",
+    "translated": "Phone call"
+  },
+  {
+    "key": "ContactDialog_DescriptionPhone",
+    "translated": "Call charges may apply"
+  },
+  {
+    "key": "date_Monday",
+    "translated": "Monday"
+  },
+  {
+    "key": "date_Tuesday",
+    "translated": "Tuesday"
+  },
+  {
+    "key": "date_Wednesday",
+    "translated": "Wednesday"
+  },
+  {
+    "key": "date_Thursday",
+    "translated": "Thursday"
+  },
+  {
+    "key": "date_Friday",
+    "translated": "Friday"
+  },
+  {
+    "key": "date_Saturday",
+    "translated": "Saturday"
+  },
+  {
+    "key": "date_Sunday",
+    "translated": "Sunday"
+  },
+  {
+    "key": "date_Seconds",
+    "translated": " seconds ago"
+  },
+  {
+    "key": "date_Minute",
+    "translated": "1 minute ago"
+  },
+  {
+    "key": "date_Minutes",
+    "translated": " minutes ago"
+  },
+  {
+    "key": "date_Hour",
+    "translated": "1 hour ago"
+  },
+  {
+    "key": "date_Hours",
+    "translated": " hours ago"
+  },
+  {
+    "key": "date_Today",
+    "translated": "Today"
+  },
+  {
+    "key": "date_Yesterday",
+    "translated": "Yesterday"
+  },
+  {
+    "key": "Call_Incoming",
+    "translated": "Incoming"
+  },
+  {
+    "key": "Call_Outgoing",
+    "translated": "Outgoing"
+  },
+  {
+    "key": "Call_Missed",
+    "translated": "Missed"
+  },
+  {
+    "key": "Delete",
+    "translated": "Delete"
+  },
+  {
+    "key": "Cancel",
+    "translated": "Cancel"
+  },
+  {
+    "key": "Calls_NoRecentCalls",
+    "translated": "No recent calls"
+  },
+  {
+    "key": "Contacts_NoContacts",
+    "translated": "No Contacts"
+  },
+  {
+    "key": "Contacts_NoResults",
+    "translated": "No Results"
   }
 ]

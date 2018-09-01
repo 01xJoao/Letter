@@ -21,7 +21,6 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
             this.View.BackgroundColor = Colors.MainBlue;
             _statusView.BackgroundColor = Colors.MainBlue;
 
-            _tableView.SetContentOffset(new CGPoint(0, 0), false);
             _tableView.BackgroundColor = Colors.White;
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
@@ -45,11 +44,14 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
         {
             _tableView.Source = new UserProfileSource(_tableView, ViewModel.ProfileDetails, ViewModel.ProfileDivision);
 
-            _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, LocalConstants.Profile_TableHeaderHeight));
-            var tableHeader = ProfileHeaderView.Create();
-            tableHeader.Configure(ViewModel.ProfileHeader);
-            tableHeader.Frame = _tableView.TableHeaderView.Frame;
-            _tableView.TableHeaderView.AddSubview(tableHeader);
+            if(_tableView.TableHeaderView == null || ViewModel.PictureUpdated)
+            {
+                _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, LocalConstants.Profile_TableHeaderHeight));
+                var tableHeader = ProfileHeaderView.Create();
+                tableHeader.Configure(ViewModel.ProfileHeader);
+                tableHeader.Frame = _tableView.TableHeaderView.Frame;
+                _tableView.TableHeaderView.AddSubview(tableHeader);
+            }
 
             _tableView.ReloadData();
         }

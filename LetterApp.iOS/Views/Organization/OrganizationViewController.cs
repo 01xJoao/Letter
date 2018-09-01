@@ -60,7 +60,7 @@ namespace LetterApp.iOS.Views.Organization
             _imageView.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, ViewModel.Organization.Picture);
-            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+            }).ErrorPlaceholder("organization_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
 
             _tableView.Source = new OrganizationSource(_tableView, ViewModel.ProfileOrganization, ViewModel.ProfileDetails);
             _tableView.ReloadData();

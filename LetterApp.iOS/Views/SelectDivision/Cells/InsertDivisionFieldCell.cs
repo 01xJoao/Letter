@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Foundation;
 using LetterApp.iOS.Helpers;
 using UIKit;

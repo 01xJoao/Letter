@@ -18,6 +18,7 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private IUserService _userService;
+        private ISettingsService _settingsService;
 
         private UserModel _user;
 
@@ -35,11 +36,13 @@ namespace LetterApp.Core.ViewModels
         public List<DescriptionTypeEventModel> TypeModelInformation { get; set; }
         public List<DescriptionTypeEventModel> TypeModelDanger { get; set; }
 
-
         public List<DescriptionAndBoolEventModel> SwitchModel { get; set; }
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+
+        private XPCommand _updateSettingsCommand;
+        public XPCommand UpdateSettingsCommand => _updateSettingsCommand ?? (_updateSettingsCommand = new XPCommand(async () => await Appearing()));
 
         private XPCommand<bool> _allowCallsCommand;
         public XPCommand<bool> AllowCallsCommand => _allowCallsCommand ?? (_allowCallsCommand = new XPCommand<bool>(async (value) => await SetAllowCalls(value), CanExecute));
@@ -47,15 +50,31 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<string> _changeNumberCommand;
         public XPCommand<string> ChangeNumberCommand => _changeNumberCommand ?? (_changeNumberCommand = new XPCommand<string>(async (value) => await ChangePhoneNumber(value), CanExecute));
 
-        public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService)
+        public UserSettingsViewModel(IDialogService dialogService, IStatusCodeService statusCodeService, IUserService userService, ISettingsService settingsService)
         {
+            _settingsService = settingsService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
             _userService = userService;
+
+            SetL10NResources();
         }
 
-        public override async Task InitializeAsync()
+        public override async Task Appearing()
         {
+            bool resultNotifications;
+
+            try
+            {
+                resultNotifications = await _settingsService.CheckNotificationPermissions();
+            }
+            catch (Exception ex)
+            {
+                resultNotifications = false;
+            }
+
+            AppSettings.MessageNotifications = resultNotifications;
+
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
             PhoneModel = new SettingsPhoneModel(PhoneLabel, _user.ContactNumber, ChangeNumberCommand);
@@ -91,12 +110,12 @@ namespace LetterApp.Core.ViewModels
             SwitchModel = new List<DescriptionAndBoolEventModel>();
             SwitchModel.AddRange(notificationTypes);
 
-            SetL10NResources();
+            RaisePropertyChanged(nameof(UpdateView));
         }
 
         private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
         private void CallNotificationEvent(object sender, bool value) => AppSettings.CallNotifications = value;
-        private void MessageNotificationEvent(object sender, bool value) => AppSettings.MessageNotifications = value;
+        private void MessageNotificationEvent(object sender, bool value) => _settingsService.OpenSettings();
 
         private void GenericMethodType(object sender, CellType type)
         {
@@ -163,7 +182,7 @@ namespace LetterApp.Core.ViewModels
                     if(res.StatusCode == 205)
                     {
                         await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
-                        AppSettings.Logout();
+                        Logout();
                         await NavigationService.Close(this);
                         Realm.Write(() => Realm.RemoveAll());
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
@@ -230,7 +249,7 @@ namespace LetterApp.Core.ViewModels
                 if(result)
                 {
                     await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
-                    AppSettings.Logout();
+                    Logout();
                     await NavigationService.Close(this);
                     Realm.Write(() => Realm.RemoveAll());
                 }
@@ -304,6 +323,12 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             await NavigationService.Close(this);
+        }
+
+        private void Logout()
+        {
+            AppSettings.Logout();
+            _settingsService.Logout();
         }
 
         private bool CanExecute() => !IsBusy;

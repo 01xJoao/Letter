@@ -51,6 +51,8 @@ namespace LetterApp.Core.ViewModels
         {
             IsBusy = true;
 
+            Divisions.Remove(division);
+
             try
             {
                 var res = await _userService.LeaveDivision(division.DivisionID);
@@ -61,7 +63,7 @@ namespace LetterApp.Core.ViewModels
 
                     var userDivisions = _user.Divisions.Any(x => x.IsDivisonActive == true && (x.IsUserInDivisionActive == true || x.IsUnderReview == true));
 
-                    if(!userDivisions)
+                    if (!userDivisions)
                         await NavigationService.NavigateAsync<SelectDivisionViewModel, Tuple<int, bool>>(new Tuple<int, bool>((int)_user.OrganizationID, true));
                 }
                 else

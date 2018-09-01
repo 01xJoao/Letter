@@ -82,5 +82,20 @@ namespace LetterApp.Core.Helpers
             // the normalization to FormD splits accented letters in accents+letters
             // the rest removes those accents (and other non-spacing characters)
         }
+
+        public static string LegalCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()+,-:;<=.>?@[]^_`{|}~";
+
+        public static string UpdateToLegalMediaString(string value)
+        {
+            string result = string.Empty;
+            foreach (var character in value)
+            {
+                if (LegalCharacters.IndexOf(character) >= 0)
+                {
+                    result = $"{result}{character}";
+                }
+            }
+            return result;
+        }
     }
 }

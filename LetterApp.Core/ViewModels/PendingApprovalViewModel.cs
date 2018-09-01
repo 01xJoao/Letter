@@ -36,6 +36,7 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IAuthenticationService _authenticationService;
         private IStatusCodeService _statusCodeService;
+        private ISettingsService _settingsService;
 
         private XPCommand _navigateToMainCommand;
         public XPCommand NavigateToMainCommand => _navigateToMainCommand ?? (_navigateToMainCommand = new XPCommand(async () => await NavigateToMain(), CanExecute));
@@ -52,12 +53,14 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _leaveDivisionCommand;
         public XPCommand LeaveDivisionCommand => _leaveDivisionCommand ?? (_leaveDivisionCommand = new XPCommand(async () => await LeaveDivision(), CanExecute));
 
-        public PendingApprovalViewModel(IStatusCodeService statusCodeService, IDialogService dialogService, IOrganizationService organizationService, IAuthenticationService authenticationService)
+        public PendingApprovalViewModel(IStatusCodeService statusCodeService, IDialogService dialogService, IOrganizationService organizationService, 
+                                        IAuthenticationService authenticationService, ISettingsService settingsService)
         {
             _organizationService = organizationService;
             _dialogService = dialogService;
             _authenticationService = authenticationService;
             _statusCodeService = statusCodeService;
+            _settingsService = settingsService;
         }
 
         protected override void Prepare(int tabIndex)
@@ -147,6 +150,7 @@ namespace LetterApp.Core.ViewModels
         private async Task Logout()
         {
             AppSettings.Logout();
+            _settingsService.Logout();
             await NavigationService.NavigateAsync<LoginViewModel, object>(null);
         }
 

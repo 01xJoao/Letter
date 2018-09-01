@@ -1,9 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using CallKit;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
+using Foundation;
 using LetterApp.Core.ViewModels;
+using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
@@ -39,6 +42,8 @@ namespace LetterApp.iOS.Views.Member
 
         private void SetupView()
         {
+            _backHeightConstraint.Constant = _backHeightConstraint.Constant + (PhoneModelExtensions.IsIphoneX() ? 20 : 0); 
+
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             _headerView.BackgroundColor = Colors.MainBlue;
@@ -50,12 +55,6 @@ namespace LetterApp.iOS.Views.Member
             UIButtonExtensions.SetupButtonAppearance(_chatButton, Colors.MainBlue, 15f, ViewModel.ChatLabel);
             UIButtonExtensions.SetupButtonAppearance(_callButton, Colors.MainBlue, 15f, ViewModel.CallLabel);
 
-            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
-            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
-
-            _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
-            _callButton.TouchUpInside += OnCallButton_TouchUpInside;   
-
             _backButton.TouchUpInside -= OnBackButton_TouchUpInside;
             _backButton.TouchUpInside += OnBackButton_TouchUpInside;
         }
@@ -65,7 +64,7 @@ namespace LetterApp.iOS.Views.Member
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, ViewModel.MemberProfileModel.Picture);
-            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            }).ErrorPlaceholder("profile_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
 
             UILabelExtensions.SetupLabelAppearance(_nameLabel, $"{ViewModel.MemberProfileModel.FirstName} {ViewModel.MemberProfileModel.LastName}", Colors.White, 22f);
@@ -77,11 +76,17 @@ namespace LetterApp.iOS.Views.Member
 
             _tableView.Source = new MemberSource(_tableView, ViewModel.MemberDetails);
             _tableView.ReloadData();
+
+            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
+            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+
+            _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
+            _callButton.TouchUpInside += OnCallButton_TouchUpInside;   
         }
 
         private void OnCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            
+            ViewModel.CallCommand.Execute();
         }
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)

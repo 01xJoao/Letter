@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
 using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -27,6 +29,9 @@ namespace LetterApp.Core.ViewModels
 
         public ProfileDetailsModel MemberDetails { get; private set; }
 
+        private XPCommand _callCommand;
+        public XPCommand CallCommand => _callCommand ?? (_callCommand = new XPCommand(async () => await Call()));
+
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
@@ -34,6 +39,8 @@ namespace LetterApp.Core.ViewModels
         {
             _dialogService = dialogService;
             _memberService = memberService;
+
+            SetL10NResources();
         }
 
         protected override void Prepare(int userId)
@@ -45,7 +52,6 @@ namespace LetterApp.Core.ViewModels
         {
             _memberProfileModel = Realm.Find<MembersProfileModel>(_userId);
             SetupModels(_memberProfileModel);
-
             try
             {
                 var result = await _memberService.GetMemberProfile(_userId);
@@ -117,6 +123,31 @@ namespace LetterApp.Core.ViewModels
             MemberProfileModel = memberProfileModel;
         }
 
+        private async Task Call()
+        {
+            try
+            {
+                var callType = await _dialogService.ShowContactOptions(LocationResources, _memberProfileModel.ShowContactNumber);
+
+                switch (callType)
+                {
+                    case CallingType.Letter:
+                        if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(_memberProfileModel.UserID, true));
+                        break;
+                    case CallingType.Cellphone:
+                        CallUtils.Call(_memberProfileModel.ContactNumber);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
         private async Task CloseView()
         {
             await NavigationService.Close(this);
@@ -134,6 +165,22 @@ namespace LetterApp.Core.ViewModels
         private string Email => L10N.Localize("UserProfile_Email");
         private string Mobile => L10N.Localize("UserProfile_Mobile");
         private string DivisionsLabel => L10N.Localize("UserProfile_Divisions");
+
+        private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
+        private string TitleDialog => L10N.Localize("ContactDialog_Title");
+        private string LetterDialog => L10N.Localize("ContactDialog_TitleLetter");
+        private string LetterDescriptionDialog => L10N.Localize("ContactDialog_DescriptionLetter");
+        private string PhoneDialog => L10N.Localize("ContactDialog_TitlePhone");
+        private string PhoneDescriptionDialog => L10N.Localize("ContactDialog_DescriptionPhone");
+
+        private void SetL10NResources()
+        {
+            LocationResources.Add("Title", TitleDialog);
+            LocationResources.Add("TitleLetter", LetterDialog);
+            LocationResources.Add("DescriptionLetter", LetterDescriptionDialog);
+            LocationResources.Add("TitlePhone", PhoneDialog);
+            LocationResources.Add("DescriptionPhone", PhoneDescriptionDialog);
+        }
         #endregion
     }
 }

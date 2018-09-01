@@ -62,7 +62,7 @@ namespace LetterApp.iOS.Views.Division
             _profileImage.Image?.Dispose();
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, ViewModel.Division.Picture);
-            }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
+            }).ErrorPlaceholder("division_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
 
             _buttonView1.BackgroundColor = Colors.ConnectViewButton1;

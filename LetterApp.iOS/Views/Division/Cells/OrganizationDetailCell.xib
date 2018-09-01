@@ -32,14 +32,14 @@
                             <constraint firstAttribute="width" constant="70" id="oNO-gh-g4a"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEV-dQ-Jul">
-                        <rect key="frame" x="34" y="122" width="42" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEV-dQ-Jul">
+                        <rect key="frame" x="20" y="122" width="70" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="isu-fK-p6r">
-                        <rect key="frame" x="20" y="44" width="70" height="99"/>
+                        <rect key="frame" x="20" y="44" width="70" height="98.5"/>
                     </button>
                 </subviews>
                 <constraints>
@@ -47,12 +47,14 @@
                     <constraint firstItem="isu-fK-p6r" firstAttribute="bottom" secondItem="DEV-dQ-Jul" secondAttribute="bottom" id="CTH-DW-Sw9"/>
                     <constraint firstItem="DEV-dQ-Jul" firstAttribute="top" secondItem="wd3-tt-gwo" secondAttribute="bottom" constant="8" id="OMg-vv-nUW"/>
                     <constraint firstItem="isu-fK-p6r" firstAttribute="top" secondItem="wd3-tt-gwo" secondAttribute="top" id="OZ8-M3-VMe"/>
+                    <constraint firstItem="DEV-dQ-Jul" firstAttribute="trailing" secondItem="wd3-tt-gwo" secondAttribute="trailing" id="QcR-an-MHC"/>
                     <constraint firstItem="isu-fK-p6r" firstAttribute="leading" secondItem="wd3-tt-gwo" secondAttribute="leading" id="Vrb-XC-SSd"/>
                     <constraint firstItem="isu-fK-p6r" firstAttribute="trailing" secondItem="wd3-tt-gwo" secondAttribute="trailing" id="b7b-Ru-oZf"/>
                     <constraint firstItem="wd3-tt-gwo" firstAttribute="leading" secondItem="FjT-Eq-TQw" secondAttribute="leading" id="fnC-TZ-3Aj"/>
                     <constraint firstItem="DEV-dQ-Jul" firstAttribute="centerX" secondItem="wd3-tt-gwo" secondAttribute="centerX" id="gWG-yG-RG9"/>
                     <constraint firstItem="FjT-Eq-TQw" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="20" id="sK9-9c-teZ"/>
                     <constraint firstItem="wd3-tt-gwo" firstAttribute="top" secondItem="FjT-Eq-TQw" secondAttribute="bottom" constant="8" id="vcd-dv-dpW"/>
+                    <constraint firstItem="DEV-dQ-Jul" firstAttribute="leading" secondItem="wd3-tt-gwo" secondAttribute="leading" id="zJv-If-5Wk"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

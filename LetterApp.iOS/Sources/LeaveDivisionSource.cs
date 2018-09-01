@@ -39,11 +39,9 @@ namespace LetterApp.iOS.Sources
         {
             _tableView.BeginUpdates();
             _tableView.DeleteRows(new NSIndexPath[] { division.Item1 }, UITableViewRowAnimation.Bottom);
-            _divisions.RemoveAt(division.Item1.Row);
+            LeaveDivisionEvent?.Invoke(sender, division.Item2);
             _tableView.EndUpdates();
             _tableView.ReloadData();
-
-            LeaveDivisionEvent?.Invoke(sender, division.Item2);
         }
     }
 }

@@ -19,37 +19,49 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
         public static readonly UINib Nib = UINib.FromName("ContactsCell", NSBundle.MainBundle);
         protected ContactsCell(IntPtr handle) : base(handle) {}
 
-        public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler)
+        public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler, bool showOnlyCalls)
         {
+            _imageView.Image?.Dispose();
+            _chatImage.Image?.Dispose();
+            _callImage.Image?.Dispose();
+
             _userId = user.UserId;
             _contactEventHandler = contactEventHandler;
 
             UILabelExtensions.SetupLabelAppearance(_nameLabel, $"{user.FirstName} {user.LastName}", Colors.ProfileGray, 14f, UIFontWeight.Semibold);
             UILabelExtensions.SetupLabelAppearance(_roleLabel, user.Position, Colors.Black, 13f);
 
-            _imageView.Image?.Dispose();
-
-            if(!string.IsNullOrEmpty(user?.Picture))
+            if (!string.IsNullOrEmpty(user?.Picture))
             {
                 _picture = string.Copy(user.Picture); 
 
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, _picture);
-                }).ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Retry(3, 200).Finish(CleanString).Transform(new CircleTransformation()).Into(_imageView);
+                }).ErrorPlaceholder("profile_noimage", ImageSource.CompiledResource).Retry(3, 200).Finish(CleanString).Transform(new CircleTransformation()).Into(_imageView);
             }
             else
             {
-                _imageView.Image = UIImage.FromBundle("warning_image");
+                _imageView.Image = UIImage.FromBundle("profile_noimage");
+                CustomUIExtensions.RoundView(_imageView);
             }
 
-            _chatImage.Image = UIImage.FromBundle("user_chat");
             _callImage.Image = UIImage.FromBundle("tabbar_call_selected");
 
             _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
             _callButton.TouchUpInside += OnCallButton_TouchUpInside;
 
-            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
-            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+            if(!showOnlyCalls)
+            {
+                _chatImage.Image = UIImage.FromBundle("user_chat");
+
+                _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
+                _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+            }
+            else
+            {
+                _chatImage.Hidden = true;
+                _chatButton.Hidden = true;
+            }
 
         }
 

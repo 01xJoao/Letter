@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -8,12 +8,14 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MemberViewController">
             <connections>
                 <outlet property="_backButton" destination="YXJ-Fm-oUY" id="Gbr-BL-tP2"/>
+                <outlet property="_backHeightConstraint" destination="dsm-yr-OIl" id="iXR-3h-age"/>
                 <outlet property="_backImage" destination="Y9d-gF-26d" id="y8C-S6-Y7C"/>
                 <outlet property="_callButton" destination="uVa-f8-oCl" id="sjq-B5-Un9"/>
                 <outlet property="_callView" destination="f3C-uo-KFG" id="P8H-XG-9Wg"/>
@@ -44,7 +46,7 @@
                             </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YXJ-Fm-oUY">
-                            <rect key="frame" x="17" y="27" width="30" height="30"/>
+                            <rect key="frame" x="15" y="25" width="34" height="34"/>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Gw-TQ-qhd">
                             <rect key="frame" x="123.5" y="40" width="127" height="127"/>
@@ -70,10 +72,10 @@
                     <constraints>
                         <constraint firstItem="MPy-WW-KLV" firstAttribute="leading" secondItem="GH5-zq-zby" secondAttribute="leading" id="08v-m8-9Go"/>
                         <constraint firstItem="5Gw-TQ-qhd" firstAttribute="centerX" secondItem="Qxy-8T-vpq" secondAttribute="centerX" id="67B-Ue-PNz"/>
-                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="height" secondItem="Y9d-gF-26d" secondAttribute="height" constant="12" id="6pu-zI-7Gb"/>
+                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="height" secondItem="Y9d-gF-26d" secondAttribute="height" constant="16" id="6pu-zI-7Gb"/>
                         <constraint firstItem="GH5-zq-zby" firstAttribute="leading" secondItem="Qxy-8T-vpq" secondAttribute="leading" constant="30" id="EMd-2D-a4x"/>
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="centerX" secondItem="Y9d-gF-26d" secondAttribute="centerX" id="FUB-r6-YMv"/>
-                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="width" secondItem="Y9d-gF-26d" secondAttribute="width" constant="12" id="K9d-iw-Lvg"/>
+                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="width" secondItem="Y9d-gF-26d" secondAttribute="width" constant="16" id="K9d-iw-Lvg"/>
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="centerY" secondItem="Y9d-gF-26d" secondAttribute="centerY" id="QLW-cp-kPK"/>
                         <constraint firstItem="5Gw-TQ-qhd" firstAttribute="top" secondItem="Qxy-8T-vpq" secondAttribute="top" constant="40" id="Tes-Id-iik"/>
                         <constraint firstItem="Y9d-gF-26d" firstAttribute="leading" secondItem="Qxy-8T-vpq" secondAttribute="leading" constant="23" id="YAL-um-AbT"/>
@@ -151,6 +153,7 @@
                 <constraint firstItem="R49-Ed-9So" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="ng0-cc-VKJ"/>
                 <constraint firstItem="R49-Ed-9So" firstAttribute="top" secondItem="gdc-wP-sCc" secondAttribute="bottom" id="t6c-3c-hX2"/>
             </constraints>
+            <viewLayoutGuide key="safeArea" id="LTV-qb-p8I"/>
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>

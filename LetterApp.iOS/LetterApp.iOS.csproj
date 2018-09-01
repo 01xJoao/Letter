@@ -22,7 +22,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <IOSDebuggerPort>61746</IOSDebuggerPort>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
@@ -31,6 +31,7 @@
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <LangVersion>Latest</LangVersion>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchSdkVersion>11.4</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -77,7 +78,6 @@
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-    <MtouchFastDev>true</MtouchFastDev>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <IOSDebuggerPort>13666</IOSDebuggerPort>
@@ -85,8 +85,8 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -141,9 +141,6 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Media">
-      <HintPath>..\packages\Xam.Plugin.Media.4.0.1.1\lib\xamarinios10\Plugin.Media.dll</HintPath>
-    </Reference>
     <Reference Include="FFImageLoading">
       <HintPath>..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.dll</HintPath>
     </Reference>
@@ -153,14 +150,29 @@
     <Reference Include="FFImageLoading.Transformations">
       <HintPath>..\packages\Xamarin.FFImageLoading.Transformations.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.Transformations.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Essentials">
-      <HintPath>..\packages\Xamarin.Essentials.0.8.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
-    </Reference>
     <Reference Include="Realm">
       <HintPath>..\packages\Realm.Database.3.1.0\lib\netstandard1.4\Realm.dll</HintPath>
     </Reference>
     <Reference Include="Realm.Sync">
       <HintPath>..\packages\Realm.3.1.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Agora.Full.iOS">
+      <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.2.3\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Tavis.UriTemplates">
+      <HintPath>..\packages\Tavis.UriTemplates.1.1.1\lib\netstandard1.0\Tavis.UriTemplates.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.4.3.1\lib\netstandard1.5\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media">
+      <HintPath>..\packages\Xam.Plugin.Media.4.0.1.5\lib\xamarinios10\Plugin.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.0.10.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="SinchBinding">
+      <HintPath>..\packages\JoaoPalma.Sinch.iOS.3.12.5\lib\xamarinios10\SinchBinding.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +317,36 @@
     <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter.png" />
     <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\end_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\end_call.imageset\endcall.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\decline_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\decline_call.imageset\decline.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\accept_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\accept_call.imageset\accept.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_on.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_on.imageset\speaker_on.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_off.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_off.imageset\speaker_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\micro_on.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\micro_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\telephone-symbol-button.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\organization_noimage.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\division_noimage.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\profile_noimage2.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\no_calls.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\no_contacts.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -392,6 +434,24 @@
     <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
     <Folder Include="Resources\Assets.xcassets\contacts_filter.imageset\" />
     <Folder Include="Views\Member\" />
+    <Folder Include="Resources\Assets.xcassets\new_call.imageset\" />
+    <Folder Include="Views\TabBar\CallListViewController\Cells\" />
+    <Folder Include="AgoraIO\" />
+    <Folder Include="Views\Call\" />
+    <Folder Include="Resources\Assets.xcassets\end_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\decline_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\accept_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\speaker_on.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\speaker_off.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\micro_on.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\micro_off.imageset\" />
+    <Folder Include="CallKit\" />
+    <Folder Include="Resources\Assets.xcassets\call_cellular.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\profile_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\division_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\organization_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\recent_calls.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\no_contacts.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -446,6 +506,9 @@
     <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
     <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
+    <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -696,6 +759,24 @@
       <DependentUpon>MemberViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\MemberSource.cs" />
+    <Compile Include="Sources\CallSource.cs" />
+    <Compile Include="AgoraIO\AgoraRtcDelegate.cs" />
+    <Compile Include="Views\Call\CallViewController.cs" />
+    <Compile Include="Views\Call\CallViewController.designer.cs">
+      <DependentUpon>CallViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CallKit\ActiveCall.cs" />
+    <Compile Include="CallKit\ActiveCallManager.cs" />
+    <Compile Include="CallKit\ProviderDelegate.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ContactViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ContactViewController.designer.cs">
+      <DependentUpon>ContactViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.cs" />
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.designer.cs">
+      <DependentUpon>CallHistoryCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\SettingsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -707,10 +788,14 @@
     <BundleResource Include="Resources\loading.json" />
     <BundleResource Include="Resources\loading_white.json" />
     <BundleResource Include="Resources\en.Iproj\InfoPList.strings" />
+    <BundleResource Include="Resources\iphone_call.mp3" />
+    <BundleResource Include="Resources\waiting_call.aiff" />
+    <BundleResource Include="Resources\ringback.wav" />
+    <BundleResource Include="Resources\EndCallSound.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Fody.3.0.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.3\build\Fody.targets')" />
   <Import Project="..\packages\Realm.Database.3.1.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.1.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.1.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.1.0\build\Realm.targets')" />
+  <Import Project="..\packages\Fody.3.1.7\build\Fody.targets" Condition="Exists('..\packages\Fody.3.1.7\build\Fody.targets')" />
 </Project>

@@ -29,20 +29,20 @@
                     <rect key="frame" x="-0.5" y="-0.5" width="375" height="667"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUb-vR-rWm">
-                            <rect key="frame" x="23" y="40" width="20" height="20"/>
+                            <rect key="frame" x="23" y="45" width="20" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="20" id="Oeb-67-oFX"/>
                                 <constraint firstAttribute="height" constant="20" id="pT3-dD-NY4"/>
                             </constraints>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9Z-el-Bgp">
-                            <rect key="frame" x="23" y="90" width="42" height="21"/>
+                            <rect key="frame" x="23" y="91" width="42" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bVz-ac-Me7">
-                            <rect key="frame" x="0.0" y="131" width="375" height="536"/>
+                            <rect key="frame" x="0.0" y="132" width="375" height="535"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                     </subviews>
@@ -54,8 +54,8 @@
                         <constraint firstItem="bVz-ac-Me7" firstAttribute="top" secondItem="f9Z-el-Bgp" secondAttribute="bottom" constant="20" id="eX0-8i-zEq"/>
                         <constraint firstAttribute="trailing" secondItem="bVz-ac-Me7" secondAttribute="trailing" id="gI5-Xw-Z75"/>
                         <constraint firstItem="f9Z-el-Bgp" firstAttribute="leading" secondItem="DUb-vR-rWm" secondAttribute="leading" id="s8j-fQ-PWx"/>
-                        <constraint firstItem="f9Z-el-Bgp" firstAttribute="top" secondItem="DUb-vR-rWm" secondAttribute="bottom" constant="30" id="uA4-f8-agT"/>
-                        <constraint firstItem="DUb-vR-rWm" firstAttribute="top" secondItem="V9S-fS-VMu" secondAttribute="top" constant="40" id="w8d-ed-AGQ"/>
+                        <constraint firstItem="f9Z-el-Bgp" firstAttribute="top" secondItem="DUb-vR-rWm" secondAttribute="bottom" constant="26" id="uA4-f8-agT"/>
+                        <constraint firstItem="DUb-vR-rWm" firstAttribute="top" secondItem="V9S-fS-VMu" secondAttribute="top" constant="45" id="w8d-ed-AGQ"/>
                     </constraints>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rtj-fr-mvn">

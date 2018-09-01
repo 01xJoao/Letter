@@ -13,7 +13,16 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 	partial class ContactListViewController
 	{
 		[Outlet]
+		UIKit.UIButton _cancelButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView _pageView { get; set; }
+
+		[Outlet]
+		UIKit.UIView _presentView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _presentViewHeightConstraint { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint _scrollBarTopConstraint { get; set; }
@@ -32,12 +41,38 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
 		[Outlet]
 		UIKit.UIScrollView _tabScrollView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _titleLabel { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _titleLabelHeightConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_cancelButton != null) {
+				_cancelButton.Dispose ();
+				_cancelButton = null;
+			}
+
 			if (_pageView != null) {
 				_pageView.Dispose ();
 				_pageView = null;
+			}
+
+			if (_presentView != null) {
+				_presentView.Dispose ();
+				_presentView = null;
+			}
+
+			if (_presentViewHeightConstraint != null) {
+				_presentViewHeightConstraint.Dispose ();
+				_presentViewHeightConstraint = null;
+			}
+
+			if (_scrollBarTopConstraint != null) {
+				_scrollBarTopConstraint.Dispose ();
+				_scrollBarTopConstraint = null;
 			}
 
 			if (_separatorView != null) {
@@ -55,19 +90,24 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 				_tabBarViewHeightConstraint = null;
 			}
 
-			if (_tabScrollView != null) {
-				_tabScrollView.Dispose ();
-				_tabScrollView = null;
-			}
-
 			if (_tabScrollTopConstraint != null) {
 				_tabScrollTopConstraint.Dispose ();
 				_tabScrollTopConstraint = null;
 			}
 
-			if (_scrollBarTopConstraint != null) {
-				_scrollBarTopConstraint.Dispose ();
-				_scrollBarTopConstraint = null;
+			if (_tabScrollView != null) {
+				_tabScrollView.Dispose ();
+				_tabScrollView = null;
+			}
+
+			if (_titleLabel != null) {
+				_titleLabel.Dispose ();
+				_titleLabel = null;
+			}
+
+			if (_titleLabelHeightConstraint != null) {
+				_titleLabelHeightConstraint.Dispose ();
+				_titleLabelHeightConstraint = null;
 			}
 		}
 	}

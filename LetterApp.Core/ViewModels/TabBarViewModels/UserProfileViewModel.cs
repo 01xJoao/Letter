@@ -28,6 +28,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             set => SetProperty(ref _updateView, value);
         }
 
+        public bool PictureUpdated { get; private set; }
+
         public ProfileHeaderModel ProfileHeader { get; private set; }
         public ProfileDetailsModel ProfileDetails { get; private set; }
         public ProfileDivisionModel ProfileDivision { get; private set; }
@@ -149,14 +151,16 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 if(result != null)
                 {
-                    _dialogService.ShowAlert(SettingImageAlert, AlertType.Info);
+                    _dialogService.ShowAlert(SettingImageAlert, AlertType.Info, 2f);
 
                     var res = await _userService.UpdateUserPicture(result);
 
                     if(res.StatusCode == 204)
                     {
                         IsBusy = false;
+                        PictureUpdated = true;
                         await Appearing();
+                        PictureUpdated = false;
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success, 2f);
                     }
                     else
