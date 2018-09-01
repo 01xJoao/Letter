@@ -196,7 +196,8 @@ namespace LetterApp.iOS.Views.Call
 
         public void JoinCompleted(NSString arg1, nuint arg2, nint arg3)
         {
-            PlayAudio("ringback.wav", 100);
+            if(ViewModel.StartedCall)
+                PlayAudio("ringback.wav", 100);
         }
 
         public void DidEnterRoom()

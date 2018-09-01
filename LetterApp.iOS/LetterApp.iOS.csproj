@@ -27,7 +27,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignProvision>iOS Team Provisioning Profile: com.LetterMessenger.Letter</CodesignProvision>
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <LangVersion>Latest</LangVersion>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
@@ -86,7 +86,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
     <LangVersion>Latest</LangVersion>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignProvision>iOS Team Provisioning Profile: com.LetterMessenger.Letter</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
