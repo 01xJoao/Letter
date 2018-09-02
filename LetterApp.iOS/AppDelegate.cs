@@ -70,7 +70,7 @@ namespace LetterApp.iOS
 
         //TODO This might need to be changed when implementing chat
         [Export("application:continueUserActivity:restorationHandler:")]
-        public bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
         {
             if (RootController?.CurrentViewController is MainViewController)
             {
@@ -139,12 +139,12 @@ namespace LetterApp.iOS
 
         public void ClientDidStart(ISINClient client)
         {
-            Debug.WriteLine($"Sinch client started successfully)");
+           // Debug.WriteLine($"Sinch client started successfully)");
         }
 
         public void ClientDidFail(ISINClient client, NSError error)
         {
-            Debug.WriteLine($"Sinch client error: {error.LocalizedDescription}");
+           // Debug.WriteLine($"Sinch client error: {error.LocalizedDescription}");
         }
 
         [Export("client:logMessage:area:severity:timestamp:")]
