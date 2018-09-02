@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Foundation;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Models;

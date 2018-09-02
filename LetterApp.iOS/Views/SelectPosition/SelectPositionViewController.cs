@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using CoreGraphics;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Models;

@@ -1,7 +1,5 @@
 ﻿using System;
-
 using Foundation;
-using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
 using UIKit;
 

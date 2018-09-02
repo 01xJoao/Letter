@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
-using LetterApp.iOS.Interfaces;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using LetterApp.Models.DTO.ReceivedModels;
