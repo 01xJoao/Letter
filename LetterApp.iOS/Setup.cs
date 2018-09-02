@@ -51,7 +51,9 @@ namespace LetterApp.iOS
         {
             UINavigationBar.Appearance.BarTintColor = Colors.BlueSetup;
             UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes() { TextColor = Colors.White });
-            UINavigationBar.Appearance.LargeTitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White, Shadow = CustomUIExtensions.TextShadow() };
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                UINavigationBar.Appearance.LargeTitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White, Shadow = CustomUIExtensions.TextShadow() };
         }
 
         private static void RegisterPlatformServices()

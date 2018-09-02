@@ -52,8 +52,12 @@ namespace LetterApp.iOS.Views.Base
             vc.TabBarItem.SelectedImage = UIImage.FromBundle($"{imageName}_selected").ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
             vc.TabBarItem.SetTitleTextAttributes(new UITextAttributes { TextColor = Colors.TabBarNotSelected }, UIControlState.Normal);
             vc.TabBarItem.SetTitleTextAttributes(new UITextAttributes { TextColor = Colors.MainBlue }, UIControlState.Selected);
-            vc.TabBarItem.ImageInsets = new UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0);
-            vc.TabBarItem.TitlePositionAdjustment = new UIOffset(0, -2);
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                vc.TabBarItem.ImageInsets = new UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0);
+                vc.TabBarItem.TitlePositionAdjustment = new UIOffset(0, -2);
+            }
 
             if (position == 0 && AppSettings.BadgeForChat > 0)
                 vc.TabBarItem.BadgeValue = AppSettings.BadgeForChat.ToString();

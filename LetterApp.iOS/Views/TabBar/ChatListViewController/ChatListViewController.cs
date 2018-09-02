@@ -1,7 +1,4 @@
-﻿using System;
-using LetterApp.Core.ViewModels.TabBarViewModels;
-using LetterApp.iOS.Helpers;
-using LetterApp.iOS.Interfaces;
+﻿using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 
@@ -21,7 +18,9 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
         private void ConfigureView()
         {
             this.Title = "Chats";
-            this.NavigationController.NavigationBar.PrefersLargeTitles = true;
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                this.NavigationController.NavigationBar.PrefersLargeTitles = true;
         }
 
         public override void ViewWillDisappear(bool animated)

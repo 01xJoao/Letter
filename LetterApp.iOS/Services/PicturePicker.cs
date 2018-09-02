@@ -22,7 +22,9 @@ namespace LetterApp.iOS.Services
                 MediaTypes = UIImagePickerController.AvailableMediaTypes(UIImagePickerControllerSourceType.PhotoLibrary)
             };
 
-            imagePicker.NavigationBar.PrefersLargeTitles = true;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                imagePicker.NavigationBar.PrefersLargeTitles = true;
+
             imagePicker.NavigationBar.TintColor = Colors.White;
 
             // Set event handlers

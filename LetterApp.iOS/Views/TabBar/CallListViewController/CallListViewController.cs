@@ -45,7 +45,8 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
         private void ConfigureView()
         {
             this.Title = ViewModel.Title;
-            this.NavigationController.NavigationBar.PrefersLargeTitles = true;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                this.NavigationController.NavigationBar.PrefersLargeTitles = true;
             this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "new_call", OpenContacts);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
         }
