@@ -63,7 +63,7 @@ namespace LetterApp.iOS.CallKit
                 MaximumCallGroups = 1,
                 MaximumCallsPerCallGroup = 1,
                 SupportedHandleTypes = new NSSet<NSNumber>((NSNumber)(int)CXHandleType.Generic),
-                IconTemplateImageData = UIImage.FromBundle("letter_logo").AsPNG()
+                IconTemplateImageData = UIImage.FromBundle("letter_voip").AsPNG()
             };
 
             Provider = new CXProvider(Configuration);

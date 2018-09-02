@@ -347,6 +347,8 @@
     <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\no_calls.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\no_contacts.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\call.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -452,6 +454,8 @@
     <Folder Include="Resources\Assets.xcassets\organization_noimage.imageset\" />
     <Folder Include="Resources\Assets.xcassets\recent_calls.imageset\" />
     <Folder Include="Resources\Assets.xcassets\no_contacts.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_voip.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -797,5 +801,5 @@
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Import Project="..\packages\Realm.Database.3.1.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.1.0\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.1.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.1.0\build\Realm.targets')" />
-  <Import Project="..\packages\Fody.3.1.7\build\Fody.targets" Condition="Exists('..\packages\Fody.3.1.7\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.3.2.0\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.0\build\Fody.targets')" />
 </Project>
