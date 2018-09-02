@@ -127,7 +127,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 _search.HidesNavigationBarDuringPresentation = false;
                 _search.SearchBar.BarStyle = UIBarStyle.Default;
 
-                if(_tableViews.Count > 0)
+                if(_tableViews?.Count > 0)
                     _tableViews.FirstOrDefault().TableHeaderView = _search.SearchBar;
             }
 

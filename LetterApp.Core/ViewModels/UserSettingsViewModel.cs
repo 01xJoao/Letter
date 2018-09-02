@@ -218,8 +218,9 @@ namespace LetterApp.Core.ViewModels
 
                     if(res.StatusCode == 208)
                     {
-                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
                         await NavigationService.Close(this);
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
+                        await Task.Delay(TimeSpan.FromSeconds(0.3f));
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
                     }
                     else
