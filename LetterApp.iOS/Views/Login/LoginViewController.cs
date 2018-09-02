@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Airbnb.Lottie;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -124,10 +123,7 @@ namespace LetterApp.iOS.Views.Login
         {
             var viewsInScreen = UIApplication.SharedApplication.KeyWindow.Subviews;
 
-            if ((viewsInScreen.Length == 1 || viewsInScreen.Last().Frame != this.View.Frame) && ViewIsVisible)
-                return true;
-
-            return false;
+            return (viewsInScreen.Length == 1 || viewsInScreen.Last().Frame != this.View.Frame) && ViewIsVisible;
         }
 
         public override void ViewWillAppear(bool animated)
