@@ -24,7 +24,7 @@ namespace LetterApp.iOS
 
             Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-   }
+        }
 
         private static void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
