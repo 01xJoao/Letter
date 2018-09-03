@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LetterApp.Core.Models;
 
 namespace LetterApp.Core.Services.Interfaces
 {
@@ -11,7 +12,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options);
         Task<bool> ShowInformation(string title = "", string text1 = "", string text2 = "",string text3 = "", string confirmButtonText = "");
         Task<bool> ShowQuestion(string title = "", string buttonText = "", QuestionType questionType = QuestionType.Normal);
-        Task<bool> ShowFilter(string title = "", string switchText = "", string descriptionText = "", string buttonText = "", bool isActive = false);
+        Task<Tuple<bool,bool>> ShowFilter(string title = "", List<ContactDialogFilter> filters = null, string buttonText = "");
         Task<CallingType> ShowContactOptions(Dictionary<string, string> locationResources, bool showPhoneOption = true);
         void StartLoading();
         void StopLoading();

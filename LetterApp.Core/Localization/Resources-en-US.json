@@ -684,6 +684,14 @@
     "translated": "Search by name, email, role..."
   },
   {
+    "key": "Contacts_DialogFilterByName",
+    "translated": "Filter users by name"
+  },
+  {
+    "key": "Contacts_DialogFilterByNameDescription",
+    "translated": "When off, users are grouped by role."
+  },
+  {
     "key": "Member_NoDescription",
     "translated": "The user doesn't have any description."
   },

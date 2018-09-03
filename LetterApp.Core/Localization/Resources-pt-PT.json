@@ -684,6 +684,14 @@
     "translated": "Procurar por nome, email, posição..."
   },
   {
+    "key": "Contacts_DialogFilterByName",
+    "translated": "Filtrar utilizadores por nome"
+  },
+  {
+    "key": "Contacts_DialogFilterByNameDescription",
+    "translated": "Se desligado, os utilizadores são agrupados por posição."
+  },
+  {
     "key": "Member_NoDescription",
     "translated": "O utilizador não tem nenhuma descrição."
   },

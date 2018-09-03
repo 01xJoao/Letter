@@ -18,16 +18,18 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
         private UILabel _noContactsLabel = new UILabel();
         private bool _showOnlyCalls;
         private int _index;
+        private bool _filterByName;
         private EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> _contactEvent;
         private List<GetUsersInDivisionModel> _contactPage;
 
-        public ContactPageViewController(int index, List<GetUsersInDivisionModel> contactPage, EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> contactEvent, bool showOnlyCalls) 
+        public ContactPageViewController(int index, List<GetUsersInDivisionModel> contactPage, EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> contactEvent, bool showOnlyCalls, bool filterByName) 
             : base(index, "ContactPageViewController", null)
         {
             _index = index;
             _contactPage = contactPage;
             _contactEvent = contactEvent;
             _showOnlyCalls = showOnlyCalls;
+            _filterByName = filterByName;
         }
 
         public override void ViewDidLoad()
@@ -67,7 +69,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
                 _noContactsLabel.Hidden = true;
                 _noContactsImage.Hidden = true;
 
-                var source = new ContactsSource(_tableView, contact, _showOnlyCalls);
+                var source = new ContactsSource(_tableView, contact, _showOnlyCalls, _filterByName);
 
                 source.ContactEvent -= OnSource_ContactEvent;
                 source.ContactEvent += OnSource_ContactEvent;

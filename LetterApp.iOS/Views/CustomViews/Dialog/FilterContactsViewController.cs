@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using LetterApp.Core;
+using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
 using UIKit;
 
@@ -7,19 +9,16 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 {
     public partial class FilterContactsViewController : UIViewController
     {
-        private bool _isActive;
         private string _title;
-        private string _switchText;
         private string _descriptionText;
         private string _buttonText;
-        private Action<bool> _buttonEvent;
+        private List<ContactDialogFilter> _filters;
+        private Action<Tuple<bool,bool>> _buttonEvent;
 
-        public FilterContactsViewController(string title, string switchText, string descriptionText, string buttonText, bool isActive , Action<bool> button) : base("FilterContactsViewController", null)
+        public FilterContactsViewController(string title, List<ContactDialogFilter> filters, string buttonText, Action<Tuple<bool,bool>> button) : base("FilterContactsViewController", null)
         {
-            _isActive = isActive;
             _title = title;
-            _switchText = switchText;
-            _descriptionText = descriptionText;
+            _filters = filters;
             _buttonText = buttonText;
             _buttonEvent = button;
         }
@@ -36,8 +35,12 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             CustomUIExtensions.ViewShadow(_backGroundView);
 
             UILabelExtensions.SetupLabelAppearance(_titleLabel, _title, Colors.Black, 24f, UIFontWeight.Medium);
-            UILabelExtensions.SetupLabelAppearance(_switchLabel, _switchText, Colors.Black, 14f);
-            UILabelExtensions.SetupLabelAppearance(_descriptionLabel, _descriptionText, Colors.GrayLabel, 12f);
+
+            UILabelExtensions.SetupLabelAppearance(_filterByNameLabel, _filters[0].Title, Colors.Black, 14f);
+            UILabelExtensions.SetupLabelAppearance(_filterByNameDescription, _filters[0].Description, Colors.GrayLabel, 12f);
+
+            UILabelExtensions.SetupLabelAppearance(_switchLabel, _filters[1].Title, Colors.Black, 14f);
+            UILabelExtensions.SetupLabelAppearance(_descriptionLabel, _filters[1].Description, Colors.GrayLabel, 12f);
 
             _buttonColorBig.BackgroundColor = Colors.MainBlue;
             _buttonColorSmall.BackgroundColor = Colors.MainBlue;
@@ -47,8 +50,8 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             _closeButton.ContentMode = UIViewContentMode.ScaleAspectFit;
             _closeButton.TintColor = Colors.Black;
 
-
-            _switch.On = _isActive;
+            _filterByNameSwitch.On = _filters[0].IsActive;
+            _switch.On = _filters[1].IsActive;
 
             _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
             _closeButton.TouchUpInside += OnCloseButton_TouchUpInside;
@@ -59,13 +62,13 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
         private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
         {
-            _buttonEvent?.Invoke(_switch.On);
+            _buttonEvent?.Invoke(new Tuple<bool, bool>(_filterByNameSwitch.On, _switch.On));
             Dismiss();
         }
 
         private void OnCloseButton_TouchUpInside(object sender, EventArgs e)
         {
-            _buttonEvent?.Invoke(_isActive);
+            _buttonEvent?.Invoke(new Tuple<bool, bool>(_filters[0].IsActive, _filters[1].IsActive));
             Dismiss();
         }
 

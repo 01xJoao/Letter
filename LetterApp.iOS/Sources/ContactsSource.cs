@@ -14,24 +14,40 @@ namespace LetterApp.iOS.Sources
     {
         public event EventHandler<Tuple<ContactEventType, int>> ContactEvent;
         private List<GetUsersInDivisionModel> _contacts;
-        private IGrouping<char, GetUsersInDivisionModel>[] _grouping;
+        private IGrouping<string, GetUsersInDivisionModel>[] _grouping;
         private List<string> _indices = new List<string>();
         private bool _showOnlyCalls;
 
-        public ContactsSource(UITableView tableView, List<GetUsersInDivisionModel> contacts, bool showOnlyCalls)
+        public ContactsSource(UITableView tableView, List<GetUsersInDivisionModel> contacts, bool showOnlyCalls, bool filterByName)
         {
             _contacts = contacts;
             tableView.RegisterNibForCellReuse(ContactsCell.Nib, ContactsCell.Key);
 
-            _grouping = (from c in contacts
-                         orderby c.FirstName[0] ascending
-                         group c by c.FirstName[0] into g
-                         select g).ToArray();
 
-            _indices = (from c in contacts
-                        orderby c.FirstName ascending
-                        group c by c.FirstName[0] into i
-                        select i.Key.ToString()).ToList();
+            if (filterByName)
+            {
+                _grouping = (from c in contacts
+                             orderby c.FirstName[0] ascending
+                             group c by c.FirstName[0].ToString() into g
+                             select g).ToArray();
+
+                _indices = (from c in contacts
+                            orderby c.FirstName ascending
+                            group c by c.FirstName[0] into i
+                            select i.Key.ToString()).ToList();
+            }
+            else
+            {
+                _grouping = (from c in contacts
+                             orderby c.Position[0] ascending
+                             group c by c.Position into g
+                             select g).ToArray();
+
+                _indices = (from c in contacts
+                            orderby c.Position ascending
+                            group c by c.Position[0] into i
+                            select i.Key.ToString()).ToList();
+            }
 
             _indices.Insert(0, UITableView.IndexSearch);
 

@@ -191,7 +191,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             int divisionView = 0;
             foreach (var divisionList in ViewModel.ContactLists.Contacts)
             {
-                var division = new ContactPageViewController(divisionView, divisionList, ContactEvent, ViewModel.IsPresentViewForCalls);
+                var division = new ContactPageViewController(divisionView, divisionList, ContactEvent, ViewModel.IsPresentViewForCalls, ViewModel.IsFilteredByName);
                 _viewControllers.Add(division);
                 divisionView++;
             }

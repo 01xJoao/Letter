@@ -20,7 +20,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private IContactsService _contactsService;
         private IDialogService _dialogService;
 
-        public bool IsPresentViewForCalls { get; set; }
+        public bool IsPresentViewForCalls { get; private set; }
+        public bool IsFilteredByName { get; private set; }
 
         private bool _isFilterActive;
         private DateTime _lastContactsUpdate;
@@ -94,8 +95,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task InitializeAsync()
         {
+            IsFilteredByName = AppSettings.FilterByName;
+
             _lastContactsUpdate = default(DateTime);
-            _isFilterActive = AppSettings.FilteredMembers;
+            _isFilterActive = AppSettings.FilterByMainDivision;
             _user = Realm.Find<UserModel>(AppSettings.UserId);
 
             SetDivisionTabs(_user);
@@ -311,19 +314,31 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task Filter()
         {
+            List<ContactDialogFilter> filterList = new List<ContactDialogFilter>()
+            {
+                new ContactDialogFilter(DialogFilterName, IsFilteredByName, DialogFilterNameDescription),
+                new ContactDialogFilter(DialogSwitchLabel, _isFilterActive, DialogDescription)
+            };
+
             try
             {
-                var result = await _dialogService.ShowFilter(DialogTitle, DialogSwitchLabel, DialogDescription, DialogButton, _isFilterActive);
+                var result = await _dialogService.ShowFilter(DialogTitle, filterList, DialogButton);
 
-                if (result == _isFilterActive)
-                    return;
-                else
+                if (result.Item1 != IsFilteredByName)
                 {
-                    AppSettings.FilteredMembers = result;
-                    _isFilterActive = result;
+                    AppSettings.FilterByName = result.Item1;
+                    IsFilteredByName = result.Item1;
+                    RaisePropertyChanged(nameof(ConfigureView));
+                }
+
+                if (result.Item2 != _isFilterActive)
+                {
+                    AppSettings.FilterByMainDivision = result.Item2;
+                    _isFilterActive = result.Item2;
                     SetContactList(_unfilteredUsers);
                     RaisePropertyChanged(nameof(IsSearching));
                 }
+
             }
             catch (Exception ex)
             {
@@ -417,8 +432,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public string Cancel => L10N.Localize("Cancel");
 
         private string DialogTitle => L10N.Localize("Contacts_DialogTitle");
+
         private string DialogSwitchLabel => L10N.Localize("Contacts_DialogSwitchLabel");
         private string DialogDescription => L10N.Localize("Contacts_DialogDescription");
+
+        private string DialogFilterName => L10N.Localize("Contacts_DialogFilterByName");
+        private string DialogFilterNameDescription => L10N.Localize("Contacts_DialogFilterByNameDescription");
+
         private string DialogButton => L10N.Localize("Contacts_DialogButton");
 
         private Dictionary<string, string> LocationResources = new Dictionary<string, string>();

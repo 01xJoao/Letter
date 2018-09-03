@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Airbnb.Lottie;
 using CoreGraphics;
+using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Views.CustomViews.Dialog;
 using UIKit;
@@ -55,11 +56,11 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<bool> ShowFilter(string title = "", string switchText = "", string descriptionText = "", string buttonText = "", bool isActive = true)
+        public Task<Tuple<bool,bool>> ShowFilter(string title = "", List<ContactDialogFilter> filters = null, string buttonText = "")
         {
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<Tuple<bool, bool>>();
 
-            var filterView = new FilterContactsViewController(title, switchText, descriptionText, buttonText, isActive, val => tcs.TrySetResult(val));
+            var filterView = new FilterContactsViewController(title, filters, buttonText, val => tcs.TrySetResult(val));
             filterView.Show();
 
             return tcs.Task;
