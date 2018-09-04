@@ -54,12 +54,12 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
             if (PhoneModelExtensions.IsIphoneX())
             {
-                _settingsHeightConstraint.Constant = 27;
-                _settingsWidthConstraint.Constant = 10;
+                _settingsHeightConstraint.Constant = 25;
+                _settingsWidthConstraint.Constant = 8;
             }
             else if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
-                _settingsHeightConstraint.Constant = 27;
+                _settingsHeightConstraint.Constant = 23;
             }
 
             _descriptionField.EditingDidBegin -= OnDescriptionField_EditingDidBegin;
