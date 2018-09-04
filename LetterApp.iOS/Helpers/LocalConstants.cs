@@ -3,6 +3,8 @@ namespace LetterApp.iOS.Helpers
 {
     public static class LocalConstants
     {
+        public static nfloat IphoneXNotchHeight = 18;
+
         public static nfloat MainButton => 50;
         public static nfloat AlertDialogSize => 45;
 
@@ -49,7 +51,7 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Contacts_CellHeight = 75;
 
         public static nfloat Contacts_TitleHeight = 23;
-
         public static nfloat CallHistory_Height = 65;
+
     }
 }

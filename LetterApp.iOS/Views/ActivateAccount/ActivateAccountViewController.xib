@@ -16,6 +16,7 @@
                 <outlet property="_button" destination="gdF-sk-PVS" id="gaP-Lf-0IX"/>
                 <outlet property="_buttonView" destination="KIW-sF-QKK" id="XcW-Xx-8fL"/>
                 <outlet property="_closeButon" destination="9Jy-aT-QGk" id="j7W-mN-Dli"/>
+                <outlet property="_navigationTopConstraint" destination="COT-z6-WoQ" id="lSK-gs-QiC"/>
                 <outlet property="_requestCodeButton" destination="NYO-rt-EoU" id="wFf-Q6-Wcg"/>
                 <outlet property="_textField" destination="0YD-1g-gg7" id="hvY-1N-cbA"/>
                 <outlet property="_titleLabel" destination="DRJ-vt-1yf" id="CiT-JU-ujp"/>

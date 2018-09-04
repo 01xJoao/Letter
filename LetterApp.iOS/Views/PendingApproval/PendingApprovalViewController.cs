@@ -16,6 +16,9 @@ namespace LetterApp.iOS.Views.PendingApproval
         {
             base.ViewDidLoad();
 
+            if (PhoneModelExtensions.IsIphoneX())
+                _navBarTopConstraint.Constant = LocalConstants.IphoneXNotchHeight;
+
             _backgroundView.BackgroundColor = Colors.WhiteBlue;
             _imageView.Image = UIImage.FromBundle("letter_curved");
             _reloadImage.Image = UIImage.FromBundle("update");

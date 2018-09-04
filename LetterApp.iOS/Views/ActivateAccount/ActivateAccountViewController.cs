@@ -38,6 +38,9 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _navigationTopConstraint.Constant = LocalConstants.IphoneXNotchHeight;
+
             UIButtonExtensions.SetupButtonAppearance(_button, Colors.White, 16f, ViewModel.SubmitButton);
             UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 15f, ViewModel.ResendCodeButton);
             UILabelExtensions.SetupLabelAppearance(_activateLabel, ViewModel.ActivateLabel, Colors.GrayDivider, 14f);

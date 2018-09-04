@@ -133,8 +133,6 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
                 {
                     if (appDelegate.RootController?.CurrentViewController is MainViewController)
                     {
-                        //var view = appDelegate.RootController.CurrentViewController as MainViewController;
-
                         using (var view = appDelegate.RootController.CurrentViewController as MainViewController)
                         {
                             if (view.TabBar.Items.Any())
