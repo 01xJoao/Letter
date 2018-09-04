@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -31,10 +31,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Jy-aT-QGk">
-                            <rect key="frame" x="15" y="34" width="20" height="20"/>
+                            <rect key="frame" x="15" y="24" width="40" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="20" id="9sA-Df-rcp"/>
-                                <constraint firstAttribute="width" constant="20" id="cwp-8A-p7g"/>
+                                <constraint firstAttribute="height" constant="40" id="9sA-Df-rcp"/>
+                                <constraint firstAttribute="width" constant="40" id="cwp-8A-p7g"/>
                             </constraints>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DRJ-vt-1yf">

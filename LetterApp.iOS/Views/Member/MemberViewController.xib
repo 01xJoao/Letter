@@ -46,7 +46,7 @@
                             </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YXJ-Fm-oUY">
-                            <rect key="frame" x="15" y="25" width="34" height="34"/>
+                            <rect key="frame" x="13" y="23" width="38" height="38"/>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Gw-TQ-qhd">
                             <rect key="frame" x="123.5" y="40" width="127" height="127"/>
@@ -72,10 +72,10 @@
                     <constraints>
                         <constraint firstItem="MPy-WW-KLV" firstAttribute="leading" secondItem="GH5-zq-zby" secondAttribute="leading" id="08v-m8-9Go"/>
                         <constraint firstItem="5Gw-TQ-qhd" firstAttribute="centerX" secondItem="Qxy-8T-vpq" secondAttribute="centerX" id="67B-Ue-PNz"/>
-                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="height" secondItem="Y9d-gF-26d" secondAttribute="height" constant="16" id="6pu-zI-7Gb"/>
+                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="height" secondItem="Y9d-gF-26d" secondAttribute="height" constant="20" id="6pu-zI-7Gb"/>
                         <constraint firstItem="GH5-zq-zby" firstAttribute="leading" secondItem="Qxy-8T-vpq" secondAttribute="leading" constant="30" id="EMd-2D-a4x"/>
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="centerX" secondItem="Y9d-gF-26d" secondAttribute="centerX" id="FUB-r6-YMv"/>
-                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="width" secondItem="Y9d-gF-26d" secondAttribute="width" constant="16" id="K9d-iw-Lvg"/>
+                        <constraint firstItem="YXJ-Fm-oUY" firstAttribute="width" secondItem="Y9d-gF-26d" secondAttribute="width" constant="20" id="K9d-iw-Lvg"/>
                         <constraint firstItem="YXJ-Fm-oUY" firstAttribute="centerY" secondItem="Y9d-gF-26d" secondAttribute="centerY" id="QLW-cp-kPK"/>
                         <constraint firstItem="5Gw-TQ-qhd" firstAttribute="top" secondItem="Qxy-8T-vpq" secondAttribute="top" constant="40" id="Tes-Id-iik"/>
                         <constraint firstItem="Y9d-gF-26d" firstAttribute="leading" secondItem="Qxy-8T-vpq" secondAttribute="leading" constant="23" id="YAL-um-AbT"/>

@@ -55,14 +55,14 @@
                                     </constraints>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gHe-hd-Bej">
-                                    <rect key="frame" x="323" y="25.5" width="34" height="34"/>
+                                    <rect key="frame" x="320" y="22.5" width="40" height="40"/>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="gHe-hd-Bej" firstAttribute="width" secondItem="RJp-N3-lAQ" secondAttribute="width" constant="10" id="1nJ-3V-xBe"/>
+                                <constraint firstItem="gHe-hd-Bej" firstAttribute="width" secondItem="RJp-N3-lAQ" secondAttribute="width" constant="16" id="1nJ-3V-xBe"/>
                                 <constraint firstItem="Bat-qQ-fGl" firstAttribute="centerX" secondItem="wMU-Y9-6L0" secondAttribute="centerX" id="EW5-Sd-sYE"/>
-                                <constraint firstItem="gHe-hd-Bej" firstAttribute="height" secondItem="RJp-N3-lAQ" secondAttribute="height" constant="10" id="IS9-WD-Qez"/>
+                                <constraint firstItem="gHe-hd-Bej" firstAttribute="height" secondItem="RJp-N3-lAQ" secondAttribute="height" constant="16" id="IS9-WD-Qez"/>
                                 <constraint firstAttribute="trailing" secondItem="RJp-N3-lAQ" secondAttribute="trailing" constant="23" id="Tbe-0w-6ad"/>
                                 <constraint firstItem="Bat-qQ-fGl" firstAttribute="centerY" secondItem="wMU-Y9-6L0" secondAttribute="centerY" constant="10" id="Zfh-YT-Yut"/>
                                 <constraint firstItem="gHe-hd-Bej" firstAttribute="centerX" secondItem="RJp-N3-lAQ" secondAttribute="centerX" id="bmK-r1-uAC"/>
