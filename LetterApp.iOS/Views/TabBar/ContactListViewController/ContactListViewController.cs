@@ -59,7 +59,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                     this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
                 }
 
-                this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "contacts_filter", OpenFilter);
+                this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "contacts_filter", OpenFilter, false);
 
                 _presentView.Hidden = true;
                 _presentViewHeightConstraint.Constant = 0;
@@ -353,6 +353,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void SetGestureRecognizer(bool shouldRemove = false)
         {
+            if (_tableViews == null)
+                return;
+
             var alreadyHasGesture = false;
             foreach (var ges in _tableViews[_currentPageViewIndex].GestureRecognizers)
             {

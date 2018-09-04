@@ -50,7 +50,6 @@ namespace LetterApp.iOS.Services
         {
             if (viewController is IRootView)
             {
-
                 if (viewController is MainViewController)
                 {
                     var xVC = viewController as IXiOSView;

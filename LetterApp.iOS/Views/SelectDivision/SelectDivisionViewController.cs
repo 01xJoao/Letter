@@ -111,6 +111,17 @@ namespace LetterApp.iOS.Views.SelectDivision
         {
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
         }
 
         public override void ViewDidDisappear(bool animated)

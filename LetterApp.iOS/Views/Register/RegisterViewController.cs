@@ -99,9 +99,8 @@ namespace LetterApp.iOS.Views.Register
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
-            NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
-
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "back_black", CloseView);
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);
@@ -114,10 +113,18 @@ namespace LetterApp.iOS.Views.Register
                 ViewModel.CloseViewCommand.Execute();
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            this.NavigationController.SetNavigationBarHidden(true, true);
+            this.NavigationController?.SetNavigationBarHidden(true, true);
         }
 
         public override void ViewDidDisappear(bool animated)

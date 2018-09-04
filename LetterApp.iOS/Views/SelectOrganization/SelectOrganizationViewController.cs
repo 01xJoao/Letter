@@ -95,6 +95,14 @@ namespace LetterApp.iOS.Views.SelectOrganization
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+        }
     }
 }
 

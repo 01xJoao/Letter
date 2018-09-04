@@ -38,8 +38,8 @@ namespace LetterApp.iOS.Views.UserSettings
         private void SetupTableView()
         {
             _tableView.BackgroundColor = Colors.MainBlue4;
-            _tableView.Source = new UserSettingsSource(_tableView, ViewModel.PhoneModel, ViewModel.AllowCallsModel, ViewModel.TypeModelPassword, ViewModel.SwitchModel, ViewModel.TypeModelInformation,
-                                                       ViewModel.TypeModelDanger, ViewModel.LocationResources);
+            _tableView.Source = new UserSettingsSource(_tableView, ViewModel.PhoneModel, ViewModel.AllowCallsModel, ViewModel.TypeModelPassword, 
+                                                       ViewModel.SwitchModel, ViewModel.TypeModelInformation, ViewModel.TypeModelDanger, ViewModel.LocationResources);
             _tableView.ReloadData();
         }
 
@@ -50,10 +50,8 @@ namespace LetterApp.iOS.Views.UserSettings
             this.Title = ViewModel.SettingsTitle;
             NavigationController.NavigationBar.TintColor = Colors.White;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
-
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
-            NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
-
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "back_black", CloseView);
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);

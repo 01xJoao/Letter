@@ -132,9 +132,18 @@ namespace LetterApp.iOS.Views.Login
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+
             _passwordLabel.Alpha = 0;
             _passwordTextField.Text = string.Empty;
         }
