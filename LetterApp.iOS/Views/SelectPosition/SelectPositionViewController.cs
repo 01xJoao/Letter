@@ -11,12 +11,17 @@ namespace LetterApp.iOS.Views.SelectPosition
 {
     public partial class SelectPositionViewController : XViewController<SelectPositionViewModel>
     {
+        private PositionModel _selectedPosition;
+
         public SelectPositionViewController() : base("SelectPositionViewController", null) {}
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             SetupView();
+
+            _backgroundView.AddGestureRecognizer(new UITapGestureRecognizer(HidePickerAction));
+            _backgroundView.UserInteractionEnabled = true;
 
             _picker.Hidden = true;
 
@@ -30,8 +35,25 @@ namespace LetterApp.iOS.Views.SelectPosition
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
+        void HidePickerAction()
+        {
+            if (_picker.Hidden)
+                return;
+
+            var postionSelected = 0;
+
+            if (_selectedPosition != null)
+                postionSelected = ViewModel.Positions.FindIndex(x => x.PositionID == _selectedPosition.PositionID);
+
+            _picker.Select(postionSelected, 0, true);
+            SelectedPosition(null, _selectedPosition ?? ViewModel.Positions[0]);
+        }
+
         private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
         {
+            if (!_picker.Hidden)
+                HidePickerAction();
+
             if (ViewModel.SetUserCommand.CanExecute())
                 ViewModel.SetUserCommand.Execute();
         }
@@ -56,6 +78,7 @@ namespace LetterApp.iOS.Views.SelectPosition
 
         private void SelectedPosition(object sender, PositionModel position)
         {
+            _selectedPosition = position;
             ViewModel.SetPositionCommand.Execute(position.PositionID);
             UILabelExtensions.SetupLabelAppearance(_pickerLabel, position.Name, Colors.Black, 18f);
             AnimatePicker(false);
@@ -78,11 +101,9 @@ namespace LetterApp.iOS.Views.SelectPosition
             }
             else
             {
-                UIView.Animate(0.3, () => _picker.Alpha = 0, HidePicker);
+                UIView.Animate(0.3, () => _picker.Alpha = 0, () => _picker.Hidden = true);
             }
         }
-
-        private void HidePicker() => _picker.Hidden = true;
 
         private void SetupView()
         {
@@ -103,6 +124,7 @@ namespace LetterApp.iOS.Views.SelectPosition
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
 
             if(NavigationController?.InteractivePopGestureRecognizer != null)
