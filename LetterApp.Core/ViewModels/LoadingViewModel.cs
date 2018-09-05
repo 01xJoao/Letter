@@ -64,12 +64,14 @@ namespace LetterApp.Core.ViewModels
                         return;
                     }
 
-                    bool updateSinch = AppSettings.UserId == 0;
+                    bool updateSinch = (AppSettings.UserId == 0 || AppSettings.OrganizationId == 0);
 
                     AppSettings.UserId = userCheck.UserID;
+                    AppSettings.OrganizationId = (int)userCheck.OrganizationID;
+
                     var user = RealmUtils.UpdateUser(Realm, userCheck);
 
-                    if (updateSinch)
+                    if (updateSinch && user.OrganizationID != 0)
                         UpdateSinchClient = true;
 
                     bool userIsActiveInDivision = false;

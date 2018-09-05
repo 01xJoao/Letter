@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AVFoundation;
 using Foundation;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
 using UIKit;
 using UserNotifications;
@@ -40,6 +41,8 @@ namespace LetterApp.iOS.Services
 
         public void Logout()
         {
+            RealmUtils.CleanContactsAndCalls();
+
             using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
             {
                 appDelegate.UnregisterTokens();

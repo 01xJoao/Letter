@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Foundation;
+using LetterApp.Core;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -35,6 +36,10 @@ namespace LetterApp.iOS.Views.SelectOrganization
             {
                 case nameof(ViewModel.IsBusy):
                     Loading();
+                    break;
+                case nameof(ViewModel.RegisterUser):
+                    var userInfo = new NSDictionary("userId", $"{AppSettings.UserId}-{AppSettings.OrganizationId}");
+                    NSNotificationCenter.DefaultCenter.PostNotificationName("UserDidLoginNotification", null, userInfo);
                     break;
                 default:
                     break;

@@ -26,6 +26,8 @@ namespace LetterApp.Core.ViewModels
 
         public string EmailDomain { get; private set; }
 
+        public bool RegisterUser { get; private set; }
+
         public SelectOrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
             _organizationService = organizationService;
@@ -50,7 +52,11 @@ namespace LetterApp.Core.ViewModels
                 if(organization?.StatusCode == 200)
                 {
                     if (!organization.RequiresAccessCode)
+                    {
+                        AppSettings.OrganizationId = organization.OrganizationID;
+                        RaisePropertyChanged(nameof(RegisterUser));
                         await NavigationService.NavigateAsync<SelectPositionViewModel, int>(organization.OrganizationID);
+                    }
                     else
                     {
                         IsBusy = false;

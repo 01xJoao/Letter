@@ -218,6 +218,8 @@ namespace LetterApp.Core.ViewModels
 
                     if(res.StatusCode == 208)
                     {
+                        AppSettings.OrganizationId = 0;
+                        _settingsService.Logout();
                         await NavigationService.Close(this);
                         await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
                         await Task.Delay(TimeSpan.FromSeconds(0.3f));

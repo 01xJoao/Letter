@@ -41,6 +41,12 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(UserId), value);
         }
 
+        public static int OrganizationId
+        {
+            get => Preferences.Get(nameof(OrganizationId), 0);
+            set => Preferences.Set(nameof(OrganizationId), value);
+        }
+
         public static string UserEmail
         {
             get => Preferences.Get(nameof(UserEmail), string.Empty);
@@ -116,6 +122,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(UserNoInternetNotified));
             Preferences.Remove(nameof(FilterByMainDivision));
             Preferences.Remove(nameof(FilterByName));
+            Preferences.Remove(nameof(OrganizationId));
 
             Preferences.Remove(nameof(BadgeForChat));
             Preferences.Remove(nameof(BadgeForCalls));

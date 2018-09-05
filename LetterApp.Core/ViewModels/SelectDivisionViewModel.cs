@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
@@ -145,6 +146,8 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 208)
                 {
+                    AppSettings.OrganizationId = 0;
+                    _settingsService.Logout();
                     await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
                     await NavigationService.PopToRoot(true);
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
