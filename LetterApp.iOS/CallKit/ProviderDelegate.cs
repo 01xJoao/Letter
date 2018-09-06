@@ -86,7 +86,7 @@ namespace LetterApp.iOS.CallKit
             if (activeCall == null)
                 return;
 
-            SINCall = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString());
+            SINCall = Client.CallClient.CallUserWithId($"{activeCall.CallerId.ToString()}-{AppSettings.OrganizationId}");
             activeCall.SINCall = SINCall;
             activeCall.StartCall();
 

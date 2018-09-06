@@ -22,15 +22,15 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private ISettingsService _settingsService;
-        private ISendBirdService _sendBirdService;
+        private IMessengerService _mesengersService;
 
-        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService, ISendBirdService sendBirdService)
+        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService, IMessengerService mesengersService)
         {
             _settingsService = settingsService;
             _authService = authService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
-            _sendBirdService = sendBirdService;
+            _mesengersService = mesengersService;
         }
 
         public override async Task InitializeAsync()
@@ -72,8 +72,8 @@ namespace LetterApp.Core.ViewModels
                         AppSettings.OrganizationId = (int)user.OrganizationID;
                         UpdateSinchClient = true;
 
-                        _sendBirdService.InitializeSendBird();
-                        _sendBirdService.ConnectToSendBird();
+                        _mesengersService.InitializeMessenger();
+                        _mesengersService.ConnectMessenger();
                     }
 
                     bool userIsActiveInDivision = false;

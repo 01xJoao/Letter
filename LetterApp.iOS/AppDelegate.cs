@@ -20,7 +20,7 @@ namespace LetterApp.iOS
         public UINavigationController NavigationController;
         public RootViewController RootController;
 
-        public static NSData DeviceToken;
+        public static string DeviceToken;
         public ActiveCallManager CallManager;
         public ProviderDelegate CallProviderDelegate { get; set; }
 
@@ -51,20 +51,21 @@ namespace LetterApp.iOS
                 if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
                 {
                     audio.RequestRecordPermission((granted) => {
-                        Push.RegisterUserNotificationSettings();
+                        RegisterRemotePushNotifications(application);
+                        //Push.RegisterUserNotificationSettings();
                     });
                 }
+                else
+                {
+                    RegisterRemotePushNotifications(application);
+                    //Push.RegisterUserNotificationSettings();
+                }
             }
-
-            //RegisterRemotePushNotifications(application);
 
             NSNotificationCenter.DefaultCenter.AddObserver("UserDidLoginNotification", null, null, (obj) => {
                 InitSinchClientWithUserId(obj.UserInfo["userId"].ToString());
             });
 
-            //if(AppSettings.UserId != 0 && AppSettings.OrganizationId != 0)
-                //InitSinchClientWithUserId($"{AppSettings.UserId}-{AppSettings.OrganizationId}");
-            
             return true;
         }
 
@@ -80,20 +81,20 @@ namespace LetterApp.iOS
             return true;
         }
 
-        //static void RegisterRemotePushNotifications(UIApplication app)
-        //{
-        //    UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
-        //    var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
-        //    app.RegisterUserNotificationSettings(pushSettings);
-        //    app.RegisterForRemoteNotifications();
-        //}
+        static void RegisterRemotePushNotifications(UIApplication app)
+        {
+            UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
+            var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
+            app.RegisterUserNotificationSettings(pushSettings);
+            app.RegisterForRemoteNotifications();
+        }
 
-        //public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
-        //{
-        //    DeviceToken = deviceToken;
-        //    Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
-        //    byte[] deviceTokenBytes = deviceToken.ToArray();
-        //}
+        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+        {
+            DeviceToken = deviceToken.Description.TrimStart('<').TrimEnd('>');
+            //Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
+            //byte[] deviceTokenBytes = deviceToken.ToArray();
+        }
 
         private void InitSinchClientWithUserId(string userId)
         {
@@ -127,6 +128,7 @@ namespace LetterApp.iOS
 
         public void DidUpdatePushCredentials(PKPushRegistry registry, PKPushCredentials credentials, string type)
         {
+            var a = credentials.Token;
             UnregisterTokens();
             Client.RegisterPushNotificationData(credentials.Token);
         }

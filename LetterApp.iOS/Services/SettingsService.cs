@@ -41,6 +41,13 @@ namespace LetterApp.iOS.Services
 
         public void Logout()
         {
+            SendBird.SendBirdClient.UnregisterPushTokenAllForCurrentUser((SendBird.SendBirdException e) => {
+                if (e != null)
+                    return;
+
+                SendBird.SendBirdClient.Disconnect(null);
+            });
+
             RealmUtils.CleanContactsAndCalls();
 
             using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)

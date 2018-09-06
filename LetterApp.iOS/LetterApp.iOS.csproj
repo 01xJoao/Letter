@@ -174,6 +174,9 @@
     <Reference Include="SinchBinding">
       <HintPath>..\packages\JoaoPalma.Sinch.iOS.3.12.5\lib\xamarinios10\SinchBinding.dll</HintPath>
     </Reference>
+    <Reference Include="SendBird">
+      <HintPath>..\Tools\SendBird.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -781,6 +784,7 @@
       <DependentUpon>CallHistoryCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\MessengerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

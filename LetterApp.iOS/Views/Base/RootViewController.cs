@@ -21,7 +21,7 @@ namespace LetterApp.iOS.Views.Base
             if (CurrentViewController != null)
             {
                 CurrentViewController.RemoveFromParentViewController();
-                CurrentViewController.View.RemoveFromSuperview();
+                CurrentViewController?.View?.RemoveFromSuperview();
                 MemoryUtility.ReleaseUIViewWithChildren(CurrentViewController.View);
                 CurrentViewController = null;
             }
