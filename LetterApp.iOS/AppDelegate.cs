@@ -62,8 +62,8 @@ namespace LetterApp.iOS
                 InitSinchClientWithUserId(obj.UserInfo["userId"].ToString());
             });
 
-            if(AppSettings.UserId != 0 && AppSettings.OrganizationId != 0)
-                InitSinchClientWithUserId($"{AppSettings.UserId}-{AppSettings.OrganizationId}");
+            //if(AppSettings.UserId != 0 && AppSettings.OrganizationId != 0)
+                //InitSinchClientWithUserId($"{AppSettings.UserId}-{AppSettings.OrganizationId}");
             
             return true;
         }

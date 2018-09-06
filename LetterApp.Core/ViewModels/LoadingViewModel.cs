@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
@@ -7,7 +6,6 @@ using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
-using LetterApp.Models.DTO.ReceivedModels;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -24,13 +22,15 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private ISettingsService _settingsService;
+        private ISendBirdService _sendBirdService;
 
-        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
+        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService, ISendBirdService sendBirdService)
         {
             _settingsService = settingsService;
             _authService = authService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
+            _sendBirdService = sendBirdService;
         }
 
         public override async Task InitializeAsync()
@@ -63,16 +63,18 @@ namespace LetterApp.Core.ViewModels
                         await Logout();
                         return;
                     }
-
-                    bool updateSinch = (AppSettings.UserId == 0 || AppSettings.OrganizationId == 0);
-
                     AppSettings.UserId = userCheck.UserID;
-                    AppSettings.OrganizationId = (int)userCheck.OrganizationID;
 
                     var user = RealmUtils.UpdateUser(Realm, userCheck);
 
-                    if (updateSinch && user.OrganizationID != 0)
+                    if (user?.OrganizationID > 0)
+                    {
+                        AppSettings.OrganizationId = (int)user.OrganizationID;
                         UpdateSinchClient = true;
+
+                        _sendBirdService.InitializeSendBird();
+                        _sendBirdService.ConnectToSendBird();
+                    }
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;
