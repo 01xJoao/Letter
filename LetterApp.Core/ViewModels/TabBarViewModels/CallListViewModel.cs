@@ -102,7 +102,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     CallCountAndType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
                     HasSuccess = call.Success,
                     ShouldAlert = call.IsNew && !call.Success && call.CallType == 1,
-                    CallerInfo = $"{user.FirstName} {user.LastName} · {user.Position}",
+                    CallerInfo = $"{user.FirstName} {user.LastName} - {user.Position}",
                     CallerPicture = user.Picture
                 };
 
