@@ -49,16 +49,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             _dialogService = dialogService;
             SetL10NResources();
         }
-
-        public override async Task InitializeAsync()
-        {
-            _users = Realm.All<GetUsersInDivisionModel>().ToList();
-        }
-
         public override async Task Appearing()
         {
             //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
             //return;
+            _users = Realm.All<GetUsersInDivisionModel>().ToList();
 
             _callHistory = new List<CallHistoryModel>();
 
