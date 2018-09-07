@@ -53,7 +53,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
             //return;
-            _users = Realm.All<GetUsersInDivisionModel>().ToList();
+            if(_users == null || _users.Count == 0)
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
 
             _callHistory = new List<CallHistoryModel>();
 
