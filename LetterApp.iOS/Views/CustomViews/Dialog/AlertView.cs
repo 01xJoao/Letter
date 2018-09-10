@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.Services.Interfaces;
@@ -56,7 +57,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         public void Dismiss(float delay)
         {
             if (this != null)
-                Animations.SlideVerticaly(this, false, true, onFinished: () => CleanFromMemory(), delay: delay);
+                Animations.SlideVerticaly(this, false, true, onFinished: CleanFromMemory, delay: delay);
         }
 
         private void CleanFromMemory()

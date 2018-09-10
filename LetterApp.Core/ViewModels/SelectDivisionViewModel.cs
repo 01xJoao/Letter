@@ -84,6 +84,9 @@ namespace LetterApp.Core.ViewModels
 
         private async Task VerifyDivisionCode(string code)
         {
+            if (string.IsNullOrEmpty(code))
+                return;
+
             IsBusy = true;
 
             try

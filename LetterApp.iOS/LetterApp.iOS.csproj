@@ -259,9 +259,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%403x.png" />
@@ -269,9 +266,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle.png" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%402x.png" />
@@ -352,6 +346,12 @@
     <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\no_contacts.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\call.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-33.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-66.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-99.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-99-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-33-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-66-white.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

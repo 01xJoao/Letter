@@ -49,13 +49,13 @@
                             </constraints>
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7Jw-jb-PAr">
-                            <rect key="frame" x="0.0" y="49" width="321" height="332"/>
+                            <rect key="frame" x="0.0" y="49" width="321" height="328.5"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </tableView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="7Jw-jb-PAr" secondAttribute="bottom" id="0jr-mD-7hl"/>
+                        <constraint firstAttribute="bottom" secondItem="7Jw-jb-PAr" secondAttribute="bottom" constant="4" id="0jr-mD-7hl"/>
                         <constraint firstAttribute="trailing" secondItem="7Jw-jb-PAr" secondAttribute="trailing" id="Hoa-1R-xfH"/>
                         <constraint firstItem="Ifx-Zj-WzZ" firstAttribute="top" secondItem="JEA-Ro-Arn" secondAttribute="bottom" constant="5" id="KgO-C3-l7E"/>
                         <constraint firstItem="7Jw-jb-PAr" firstAttribute="top" secondItem="Ifx-Zj-WzZ" secondAttribute="bottom" id="RMm-dZ-0LF"/>
