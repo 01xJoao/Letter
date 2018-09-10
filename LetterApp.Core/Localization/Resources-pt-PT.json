@@ -744,6 +744,14 @@
     "translated": "Permissões de microfone são necessárias."
   },
   {
+    "key": "Calls_CallActionInfo",
+    "translated": "Info"
+  },
+  {
+    "key": "Calls_CallStackTitle",
+    "translated": "Chamadas"
+  },
+  {
     "key": "Call_OpenSettingsAlert",
     "translated": "Abrir Definições"
   },

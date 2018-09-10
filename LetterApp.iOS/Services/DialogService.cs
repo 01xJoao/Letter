@@ -76,6 +76,12 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
+        public void ShowCallStack(string title, List<CallStackModel> calls)
+        {
+            var callStackView = new CallStackViewController(title, calls);
+            callStackView.Show();
+        }
+
         public void StartLoading()
         {
             StopLoading();

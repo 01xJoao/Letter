@@ -44,6 +44,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<int> _deleteCallCommand;
         public XPCommand<int> DeleteCallCommand => _deleteCallCommand ?? (_deleteCallCommand = new XPCommand<int>(DeleteCall));
 
+        private XPCommand<int> _callStackCommand;
+        public XPCommand<int> CallStackCommand => _callStackCommand ?? (_callStackCommand = new XPCommand<int>(ShowCallStack));
+
         public CallListViewModel(IDialogService dialogService) 
         {
             _dialogService = dialogService;
@@ -159,6 +162,33 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 RaisePropertyChanged(nameof(NoCalls));
         }
 
+        private void ShowCallStack(int callId)
+        {
+            var listCallStack = new List<CallStackModel>();
+            List<string> callStackIds = new List<string>(); 
+
+            foreach (string callID in _callHistory[callId]?.CallStack)
+            {
+                var call = _calls.Find(x => x.CallId == callID);
+
+                if (call != null)
+                {
+                    var callStack = new CallStackModel
+                    {
+                        CallType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
+                        Date = new DateTime(call.CallDate).ToShortTimeString(),
+                        Successful = call.Success
+                    };
+
+                    listCallStack.Add(callStack);
+                }
+            }
+
+            listCallStack.Reverse();
+
+            _dialogService.ShowCallStack(_callHistory[callId]?.CallDate.ToLongDateString(), listCallStack);
+        }
+
         private void OpenContactList()
         {
             NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
@@ -204,6 +234,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public string Title => L10N.Localize("MainViewModel_CallTab");
         public string Delete => L10N.Localize("Delete");
         public string NoRecentCalls => L10N.Localize("Calls_NoRecentCalls");
+
+        public string CallActionInfo => L10N.Localize("Calls_CallActionInfo");
+        //public string CallStackTitle => L10N.Localize("Calls_CallStackTitle");
 
         private string Call_Incoming => L10N.Localize("Call_Incoming");
         private string Call_Outgoing => L10N.Localize("Call_Outgoing");

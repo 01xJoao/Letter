@@ -1,5 +1,4 @@
-﻿using System;
-using UIKit;
+﻿using UIKit;
 
 namespace LetterApp.iOS.Helpers
 {
@@ -34,5 +33,6 @@ namespace LetterApp.iOS.Helpers
         public static UIColor GrayDividerContacts => UIColor.FromRGB(225, 225, 225);    
         public static UIColor CallDetail => UIColor.FromRGB(148, 148, 148);
         public static UIColor DescriptionCall => UIColor.FromRGB(143, 143, 143);
+        public static UIColor AlertDividerColor => UIColor.FromRGB(230, 230, 230);
     }
 }

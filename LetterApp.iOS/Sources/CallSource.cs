@@ -9,16 +9,19 @@ using UIKit;
 namespace LetterApp.iOS.Sources
 {
     public class CallSource : UITableViewSource
-    {       
+    {
+        private string _info;
         private string _delete;
         private List<CallHistoryModel> _calls;
 
         public event EventHandler<int> OpenCallerProfileEvent;
         public event EventHandler<int> CallEvent;
         public event EventHandler<int> DeleteCallEvent;
-       
-        public CallSource(UITableView tableView, List<CallHistoryModel> calls, string delete)
+        public event EventHandler<int> CallStackEvent;
+
+        public CallSource(UITableView tableView, List<CallHistoryModel> calls, string delete, string info)
         {
+            _info = info;
             _delete = delete;
             _calls = calls;
             tableView.RegisterNibForCellReuse(CallHistoryCell.Nib, CallHistoryCell.Key);
@@ -52,7 +55,16 @@ namespace LetterApp.iOS.Sources
 
             deleteButton.BackgroundColor = Colors.Red;
 
-            return new UITableViewRowAction[] { deleteButton };
+            UITableViewRowAction infoButton = UITableViewRowAction.Create(
+                UITableViewRowActionStyle.Normal,
+                _info,
+                delegate {
+                    CallStackEvent?.Invoke(this, indexPath.Row);
+                });
+
+            infoButton.BackgroundColor = Colors.Orange;
+
+            return new UITableViewRowAction[] { deleteButton, infoButton };
         }
               
         public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)

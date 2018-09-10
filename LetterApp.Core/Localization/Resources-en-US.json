@@ -748,6 +748,14 @@
     "translated": "Open settings"
   },
   {
+    "key": "Calls_CallActionInfo",
+    "translated": "Info"
+  },
+  {
+    "key": "Calls_CallStackTitle",
+    "translated": "Calls"
+  },
+  {
     "key": "ContactDialog_Title",
     "translated": "Make a call"
   },

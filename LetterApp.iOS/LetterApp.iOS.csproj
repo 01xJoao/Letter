@@ -516,6 +516,7 @@
     <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\CallStackViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -785,6 +786,11 @@
     </Compile>
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\MessengerService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\CallStackViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\CallStackViewController.designer.cs">
+      <DependentUpon>CallStackViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\CallStackSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

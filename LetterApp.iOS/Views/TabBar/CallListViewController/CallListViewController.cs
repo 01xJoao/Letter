@@ -78,7 +78,7 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
         {
             HasHistoryCalls(true);
 
-            var source = new CallSource(_tableView, ViewModel.CallHistory, ViewModel.Delete);
+            var source = new CallSource(_tableView, ViewModel.CallHistory, ViewModel.Delete, ViewModel.CallActionInfo);
 
             _tableView.Source = source;
 
@@ -91,7 +91,15 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
             source.DeleteCallEvent -= OnSource_DeleteCallEvent;
             source.DeleteCallEvent += OnSource_DeleteCallEvent;
 
+            source.CallStackEvent -= OnSource_CallStackEvent;
+            source.CallStackEvent += OnSource_CallStackEvent;
+
             _tableView.ReloadData();
+        }
+
+        private void OnSource_CallStackEvent(object sender, int call)
+        {
+            ViewModel.CallStackCommand.Execute(call);
         }
 
         public void HasHistoryCalls(bool value)

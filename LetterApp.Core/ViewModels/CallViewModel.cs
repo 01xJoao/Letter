@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
-using LetterApp.Core.Models;
 using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;

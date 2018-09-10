@@ -43,6 +43,8 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             _closeButton.ContentMode = UIViewContentMode.ScaleAspectFit;
             _closeButton.TintColor = Colors.Black;
 
+            _separatorView.BackgroundColor = Colors.AlertDividerColor;
+
             _button1.TouchUpInside -= OnButton1_TouchUpInside;
             _button1.TouchUpInside += OnButton1_TouchUpInside;
 
