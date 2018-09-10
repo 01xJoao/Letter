@@ -54,6 +54,7 @@ namespace LetterApp.Core.ViewModels
                     if (!organization.RequiresAccessCode)
                     {
                         AppSettings.OrganizationId = organization.OrganizationID;
+                        AppSettings.UserAndOrganizationIds = $"{AppSettings.UserId}-{AppSettings.OrganizationId}";
                         RaisePropertyChanged(nameof(RegisterUser));
                         await NavigationService.NavigateAsync<SelectPositionViewModel, int>(organization.OrganizationID);
                     }

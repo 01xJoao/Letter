@@ -150,6 +150,7 @@ namespace LetterApp.Core.ViewModels
                 if (result.StatusCode == 208)
                 {
                     AppSettings.OrganizationId = 0;
+                    AppSettings.UserAndOrganizationIds = string.Empty;
                     _settingsService.Logout();
                     await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
                     await NavigationService.PopToRoot(true);

@@ -38,7 +38,7 @@ namespace LetterApp.iOS.Views.SelectOrganization
                     Loading();
                     break;
                 case nameof(ViewModel.RegisterUser):
-                    var userInfo = new NSDictionary("userId", $"{AppSettings.UserId}-{AppSettings.OrganizationId}");
+                    var userInfo = new NSDictionary("userId", AppSettings.UserAndOrganizationIds);
                     NSNotificationCenter.DefaultCenter.PostNotificationName("UserDidLoginNotification", null, userInfo);
                     break;
                 default:

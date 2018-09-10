@@ -128,7 +128,6 @@ namespace LetterApp.iOS
 
         public void DidUpdatePushCredentials(PKPushRegistry registry, PKPushCredentials credentials, string type)
         {
-            var a = credentials.Token;
             UnregisterTokens();
             Client.RegisterPushNotificationData(credentials.Token);
         }
@@ -141,18 +140,18 @@ namespace LetterApp.iOS
 
         public void ClientDidStart(ISINClient client)
         {
-           // Debug.WriteLine($"Sinch client started successfully)");
+            Debug.WriteLine($"Sinch client started successfully)");
         }
 
         public void ClientDidFail(ISINClient client, NSError error)
         {
-           // Debug.WriteLine($"Sinch client error: {error.LocalizedDescription}");
+            Debug.WriteLine($"Sinch client error: {error.LocalizedDescription}");
         }
 
         [Export("client:logMessage:area:severity:timestamp:")]
         void client(ISINClient client, string message, string area, SINLogSeverity severity, NSDate timestamp)
         {
-            //Debug.WriteLine(message);
+            Debug.WriteLine(message);
         }
 
         public override void OnResignActivation(UIApplication application) {}

@@ -16,6 +16,6 @@ namespace LetterApp.Core.Services.Interfaces
         Task<List<GroupChannel>> GetChannels(List<string> users);
         Task<List<GroupChannel>> GetAllChannels();
         Task<GroupChannel> GetCurrentChannel(string userId);
-        Task<UserMessage> SendMessage(Tuple<GroupChannel, string> message);
+        Task<UserMessage> SendMessage(GroupChannel channel, string message);
     }
 }

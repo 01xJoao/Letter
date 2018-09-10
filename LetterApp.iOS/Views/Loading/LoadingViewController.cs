@@ -22,7 +22,7 @@ namespace LetterApp.iOS.Views.Loading
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var userInfo = new NSDictionary("userId", $"{AppSettings.UserId}-{AppSettings.OrganizationId}");
+            var userInfo = new NSDictionary("userId", AppSettings.UserAndOrganizationIds);
             NSNotificationCenter.DefaultCenter.PostNotificationName("UserDidLoginNotification", null, userInfo);
         }
     }

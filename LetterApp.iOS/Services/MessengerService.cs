@@ -18,6 +18,11 @@ namespace LetterApp.iOS.Services
             SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
             SendBirdClient.ConnectionHandler cnh = new SendBirdClient.ConnectionHandler();
 
+
+            ch.OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) => {
+                var msg = baseMessage;
+            };
+
             //Handlers
 
             SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
@@ -29,7 +34,7 @@ namespace LetterApp.iOS.Services
 
         public void ConnectMessenger()
         {
-            SendBirdClient.Connect($"{AppSettings.UserId}-{AppSettings.OrganizationId}", (User user, SendBirdException e) => {
+            SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) => {
                 if (e != null)
                     return;
 
@@ -44,6 +49,8 @@ namespace LetterApp.iOS.Services
 
         public void RegisterMessengerToken()
         {
+            var a = SendBirdClient.GetPendingPushToken();
+
             SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppDelegate.DeviceToken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
                 if (e != null)
                     return;
@@ -76,6 +83,8 @@ namespace LetterApp.iOS.Services
             GroupChannel.CreateChannelWithUserIds(users, true, (channel, e) => {
                 if (e != null)
                     tcs.TrySetCanceled();
+
+                channel.SetPushPreference(true, (error) => {});
 
                 tcs.TrySetResult(channel);
             });
@@ -136,12 +145,9 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<UserMessage> SendMessage(Tuple<GroupChannel,string> data)
+        public Task<UserMessage> SendMessage(GroupChannel channel, string message)
         {
             var tcs = new TaskCompletionSource<UserMessage>();
-
-            var channel = data.Item1;
-            var message = data.Item2;
 
             channel.SendUserMessage(message, (msg, e) =>
             {

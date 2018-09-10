@@ -41,6 +41,7 @@ namespace LetterApp.iOS.Services
 
         public void Logout()
         {
+            SendBird.SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
             SendBird.SendBirdClient.UnregisterPushTokenAllForCurrentUser((SendBird.SendBirdException e) => {
                 if (e != null)
                     return;

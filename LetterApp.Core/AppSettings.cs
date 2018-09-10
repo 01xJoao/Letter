@@ -47,6 +47,12 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(OrganizationId), value);
         }
 
+        public static string UserAndOrganizationIds
+        {
+            get => Preferences.Get(nameof(UserAndOrganizationIds), string.Empty);
+            set => Preferences.Set(nameof(UserAndOrganizationIds), value);
+        }
+
         public static string UserEmail
         {
             get => Preferences.Get(nameof(UserEmail), string.Empty);
@@ -123,6 +129,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(FilterByMainDivision));
             Preferences.Remove(nameof(FilterByName));
             Preferences.Remove(nameof(OrganizationId));
+            Preferences.Remove(nameof(UserAndOrganizationIds));
 
             Preferences.Remove(nameof(BadgeForChat));
             Preferences.Remove(nameof(BadgeForCalls));
