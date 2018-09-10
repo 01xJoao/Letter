@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LetterApp.Core.Services.Interfaces
+﻿namespace LetterApp.Core.Services.Interfaces
 {
     public interface IMessengerService
     {

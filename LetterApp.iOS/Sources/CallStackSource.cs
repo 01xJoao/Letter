@@ -29,6 +29,8 @@ namespace LetterApp.iOS.Sources
             UILabelExtensions.SetupLabelAppearance(cell.TextLabel, call.CallType, call.Successful ? Colors.Green : Colors.Red, 13f, UIFontWeight.Regular);
             UILabelExtensions.SetupLabelAppearance(cell.DetailTextLabel, call.Date, Colors.ProfileGray, 11f, UIFontWeight.Regular);
 
+            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+
             return cell;
         }
 
