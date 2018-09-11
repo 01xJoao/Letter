@@ -83,10 +83,11 @@ namespace LetterApp.iOS.Services
             GroupChannel.CreateChannelWithUserIds(users, true, (channel, e) => {
                 if (e != null)
                     tcs.TrySetCanceled();
-
-                channel.SetPushPreference(true, (error) => {});
-
-                tcs.TrySetResult(channel);
+                else
+                {
+                    channel.SetPushPreference(true, (error) => {});
+                    tcs.TrySetResult(channel);
+                }
             });
 
             return tcs.Task;

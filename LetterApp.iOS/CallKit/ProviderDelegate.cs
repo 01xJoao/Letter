@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CallKit;
@@ -304,7 +305,10 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.SetChannelProfile(ChannelProfile.Communication);
             _agoraKit.SetEnableSpeakerphone(speaker);
             _agoraKit.MuteLocalAudioStream(muted);
-            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, _callViewController.JoinCompleted);
+            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0,(arg1, arg2, arg3) => {
+                _callViewController.JoinCompleted();
+                
+            });
         }
 
         public void AgoraCallStarted()
@@ -317,10 +321,9 @@ namespace LetterApp.iOS.CallKit
             call.AnswerCall();
 
             if (call.IsOutgoing)
-            {
                 CallManager.AnswerCall(call);
+            else
                 call?.SINCall?.Hangup();
-            }
         }
 
         public void AgoraCallEnded()

@@ -7,6 +7,7 @@ using LetterApp.iOS.Views.Base;
 using PushKit;
 using SinchBinding;
 using UIKit;
+using UserNotifications;
 
 namespace LetterApp.iOS
 {
@@ -81,12 +82,14 @@ namespace LetterApp.iOS
             return true;
         }
 
-        static void RegisterRemotePushNotifications(UIApplication app)
+        void RegisterRemotePushNotifications(UIApplication app)
         {
-            UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
-            var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
-            app.RegisterUserNotificationSettings(pushSettings);
-            app.RegisterForRemoteNotifications();
+            InvokeOnMainThread(() =>  {
+                UIUserNotificationType notificationType = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound;
+                var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(notificationType, new NSSet());
+                app.RegisterUserNotificationSettings(pushSettings);
+                app.RegisterForRemoteNotifications();
+            });
         }
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
@@ -151,7 +154,7 @@ namespace LetterApp.iOS
         [Export("client:logMessage:area:severity:timestamp:")]
         void client(ISINClient client, string message, string area, SINLogSeverity severity, NSDate timestamp)
         {
-            Debug.WriteLine(message);
+            //Debug.WriteLine(message);
         }
 
         public override void OnResignActivation(UIApplication application) {}

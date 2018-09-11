@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using AVFoundation;
 using FFImageLoading;
@@ -197,7 +198,7 @@ namespace LetterApp.iOS.Views.Call
                 ViewModel.EndCallCommand.Execute();
         }
 
-        public void JoinCompleted(NSString arg1, nuint arg2, nint arg3)
+        public void JoinCompleted()
         {
             if(ViewModel.StartedCall)
                 PlayAudio("ringback.wav", 100);
@@ -208,8 +209,8 @@ namespace LetterApp.iOS.Views.Call
             if (ViewModel.StartedCall)
                 players.LastOrDefault()?.Stop();
 
-            CallProvider.AgoraCallStarted();
             _callTimer.Start();
+            CallProvider.AgoraCallStarted();
         }
 
         #region Views
