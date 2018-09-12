@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core;
@@ -49,9 +48,7 @@ namespace LetterApp.iOS.Services
 
         public void RegisterMessengerToken()
         {
-            var a = SendBirdClient.GetPendingPushToken();
-
-            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppDelegate.DeviceToken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
+            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppSettings.UserAndOrganizationIds, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
                 if (e != null)
                     return;
 

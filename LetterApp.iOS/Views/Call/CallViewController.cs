@@ -204,12 +204,16 @@ namespace LetterApp.iOS.Views.Call
                 PlayAudio("ringback.wav", 100);
         }
 
-        public void DidEnterRoom()
+        public async Task DidEnterRoom()
         {
             if (ViewModel.StartedCall)
                 players.LastOrDefault()?.Stop();
 
             _callTimer.Start();
+
+            if (!ViewModel.StartedCall)
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
             CallProvider.AgoraCallStarted();
         }
 

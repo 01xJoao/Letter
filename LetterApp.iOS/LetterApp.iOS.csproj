@@ -22,7 +22,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <IOSDebuggerPort>61746</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
@@ -81,7 +81,7 @@
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <IOSDebuggerPort>13666</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
@@ -162,12 +162,6 @@
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.0.10.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
-    <Reference Include="SinchBinding">
-      <HintPath>..\packages\JoaoPalma.Sinch.iOS.3.12.5\lib\xamarinios10\SinchBinding.dll</HintPath>
-    </Reference>
-    <Reference Include="SendBird">
-      <HintPath>..\Tools\SendBird.dll</HintPath>
-    </Reference>
     <Reference Include="Realm">
       <HintPath>..\packages\Realm.Database.3.2.0\lib\netstandard1.4\Realm.dll</HintPath>
     </Reference>
@@ -176,6 +170,15 @@
     </Reference>
     <Reference Include="Xamarin.Agora.Full.iOS">
       <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.3.0\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="SinchBinding">
+      <HintPath>..\packages\JoaoPalma.Sinch.Voice.iOS.3.12.5.3\lib\xamarinios10\SinchBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="SendBird">
+      <HintPath>..\Tools\SendBird.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\Tools\websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

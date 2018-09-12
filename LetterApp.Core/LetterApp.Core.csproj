@@ -39,11 +39,11 @@
     <EmbeddedResource Include="Localization\Resources-pt-PT.json" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="SendBird">
-      <HintPath>..\Tools\SendBird.dll</HintPath>
-    </Reference>
     <Reference Include="websocket-sharp">
       <HintPath>..\Tools\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SendBird">
+      <HintPath>..\Tools\SendBird.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
