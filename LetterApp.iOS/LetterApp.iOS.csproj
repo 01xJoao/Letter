@@ -462,6 +462,7 @@
     <Folder Include="Resources\Assets.xcassets\no_contacts.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_call.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_voip.imageset\" />
+    <Folder Include="Views\TabBar\ChatListViewController\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -520,6 +521,7 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\CallStackViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -794,6 +796,10 @@
       <DependentUpon>CallStackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\CallStackSource.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.designer.cs">
+      <DependentUpon>ChatCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
