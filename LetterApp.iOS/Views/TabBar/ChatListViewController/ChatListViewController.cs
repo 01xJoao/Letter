@@ -86,13 +86,21 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 _tableView.TableHeaderView = _search.SearchBar;
             }
 
+            _search.SearchBar.CancelButtonClicked -= OnSearchBar_CancelButtonClicked;
+            _search.SearchBar.CancelButtonClicked += OnSearchBar_CancelButtonClicked;
+
         }
 
         private void SetupTableView()
         {
             HasChats(true);
-            _tableView.Source = new ChatListSource(_tableView, ViewModel.ChatList);
+
+            var source = new ChatListSource(_tableView, ViewModel.ChatList);
+
+            _tableView.Source = source;
             _tableView.ReloadData();
+
+            source
         }
 
         public override void ViewDidLayoutSubviews()
@@ -116,7 +124,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             this.View.AddSubview(_noRecenChatLabel);
 
             //TODO Check for chats here
-            HasChats(false);
+            HasChats(true);
         }
 
         public void HasChats(bool value)
@@ -159,6 +167,10 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
         }
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
+        {
+        }
+
+        private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
         {
         }
     }

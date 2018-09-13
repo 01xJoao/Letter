@@ -12,5 +12,6 @@ namespace LetterApp.Core.Models
         public string LastMessageDate { get; set; }
         public bool ShouldAlert { get; set; }
         public string LastMessageDateTimeTicks { get; set; }
+        public bool IsMemeberMuted { get; set; }
     }
 }
