@@ -862,5 +862,13 @@
   {
     "key": "Contacts_NoResults",
     "translated": "Sem Resultados"
+  },
+  {
+    "key": "ChatList_Title",
+    "translated": "Conversas"
+  },
+  {
+    "key": "ChatList_NoChats",
+    "translated": "Começa uma nova conversa"
   }
 ]

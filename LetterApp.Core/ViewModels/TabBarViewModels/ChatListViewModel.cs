@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 
@@ -11,12 +12,21 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     {
         private readonly IMessengerService _messagerService;
 
-        public ChatListViewModel(IMessengerService messagerService) 
+        public bool NoChats { get; set; }
+
+        public object _chatList;
+        public object ChatList
+        {
+            get => _chatList;
+            set => SetProperty(ref _chatList, value);
+        }
+
+        public ChatListViewModel(IMessengerService messagerService)
         {
             _messagerService = messagerService;
 
             //Tests
-            CreateChannel();
+            //CreateChannel();
         }
 
         private async Task CreateChannel()
@@ -27,7 +37,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 var channel = await _messagerService.CreateChannel(new List<string> { "85-33" });
 
-                if(channel != null)
+                if (channel != null)
                     await _messagerService.SendMessage(channel, "Hello World!");
 
             }
@@ -36,5 +46,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 Ui.Handle(ex as dynamic);
             }
         }
+
+        #region Resources
+
+        public string Title => L10N.Localize("ChatList_Title");
+        public string NoRecentChat => L10N.Localize("ChatList_NoChats");
+
+        #endregion
     }
 }

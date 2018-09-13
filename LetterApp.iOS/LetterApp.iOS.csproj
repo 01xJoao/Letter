@@ -355,6 +355,12 @@
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-99-white.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-33-white.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-66-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\norecentchats.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -463,6 +469,8 @@
     <Folder Include="Resources\Assets.xcassets\letter_call.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_voip.imageset\" />
     <Folder Include="Views\TabBar\ChatListViewController\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\nochats.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\newchat.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -800,6 +808,7 @@
     <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.designer.cs">
       <DependentUpon>ChatCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sources\ChatListSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
