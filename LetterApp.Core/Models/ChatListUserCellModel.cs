@@ -4,9 +4,10 @@ namespace LetterApp.Core.Models
 {
     public class ChatListUserCellModel
     {
-        public ChatListUserCellModel(string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlert, 
+        public ChatListUserCellModel(int memberId, string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlert, 
                                      EventHandler<int> openMemberProfile, EventHandler<int> openChat, DateTime lastMessageDateTime, MemberPresence memberPresence = MemberPresence.Offline)
         {
+            MemberId = memberId;
             MemberName = memberName;
             MemberPhoto = memberPhoto;
             MemberPresence = memberPresence;
@@ -18,6 +19,7 @@ namespace LetterApp.Core.Models
             LastMessageDateTime = lastMessageDateTime;
         }
 
+        public int MemberId { get; set; }
         public string MemberName { get; set; }
         public string MemberPhoto { get; set; }
         public MemberPresence MemberPresence { get; set; }

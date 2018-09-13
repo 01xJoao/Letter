@@ -1,10 +1,12 @@
 ﻿using System;
+
 namespace LetterApp.Core.Models
 {
     public class ChatListUserModel : Realms.RealmObject
     {
-        public ChatListUserModel(string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlert, string lastMessageDateTimeTicks)
+        public ChatListUserModel(int memberId, string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlert, string lastMessageDateTimeTicks)
         {
+            MemberId = memberId;
             MemberName = memberName;
             MemberPhoto = memberPhoto;
             LastMessage = lastMessage;
@@ -13,6 +15,8 @@ namespace LetterApp.Core.Models
             LastMessageDateTimeTicks = lastMessageDateTimeTicks;
         }
 
+        [Realms.PrimaryKey]
+        public int MemberId { get; set; }
         public string MemberName { get; set; }
         public string MemberPhoto { get; set; }
         public string LastMessage { get; set; }
