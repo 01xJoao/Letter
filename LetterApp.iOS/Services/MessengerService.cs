@@ -111,7 +111,7 @@ namespace LetterApp.iOS.Services
             var tcs = new TaskCompletionSource<List<GroupChannel>>();
 
             GroupChannelListQuery mQuery = GroupChannel.CreateMyGroupChannelListQuery();
-
+            mQuery.IncludeEmpty = false;
             mQuery.Next((List<GroupChannel> list, SendBirdException e) =>
             {
                 if (e != null)
@@ -128,6 +128,7 @@ namespace LetterApp.iOS.Services
             var tcs = new TaskCompletionSource<List<GroupChannel>>();
 
             GroupChannelListQuery filteredQuery = GroupChannel.CreateMyGroupChannelListQuery();
+            filteredQuery.IncludeEmpty = false;
             filteredQuery.SetUserIdsIncludeFilter(users, GroupChannelListQuery.QueryType.OR);
             filteredQuery.Next((List<GroupChannel> queryResult, SendBirdException e) =>
             {
