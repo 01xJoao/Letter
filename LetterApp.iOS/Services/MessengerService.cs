@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core;
@@ -14,26 +15,38 @@ namespace LetterApp.iOS.Services
 
         public void InitializeMessenger()
         {
-            SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
-            SendBirdClient.ConnectionHandler cnh = new SendBirdClient.ConnectionHandler();
+            SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
+        }
 
+        public Task<Tuple<BaseChannel, BaseMessage>> InitializeHandlers()
+        {
+            var tcs = new TaskCompletionSource<Tuple<BaseChannel, BaseMessage>>();
 
-            ch.OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) => {
-                var msg = baseMessage;
+            SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
+            {
+                OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) =>
+                {
+                    tcs.TrySetResult(new Tuple<BaseChannel, BaseMessage>(baseChannel, baseMessage));
+                }
+
+                //OnReadReceiptUpdated = (GroupChannel groupChannel) =>
+                //{
+                //},
+
+                //OnTypingStatusUpdated = (GroupChannel groupChannel) =>
+                //{
+                //}
             };
 
-            //Handlers
-
-            SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
             SendBirdClient.AddChannelHandler(_handlerId, ch);
-            SendBirdClient.AddConnectionHandler(_handlerId, cnh);
 
-            //TODO Remove handlers?
+            return tcs.Task;
         }
 
         public void ConnectMessenger()
         {
-            SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) => {
+            SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
+            {
                 if (e != null)
                     return;
 
@@ -48,7 +61,9 @@ namespace LetterApp.iOS.Services
 
         public void RegisterMessengerToken()
         {
-            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppSettings.UserAndOrganizationIds, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
+            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppSettings.UserAndOrganizationIds, 
+                                       (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) =>
+            {
                 if (e != null)
                     return;
 
@@ -61,7 +76,7 @@ namespace LetterApp.iOS.Services
         {
             Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-         
+
         }
 
         private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -77,12 +92,13 @@ namespace LetterApp.iOS.Services
         {
             var tcs = new TaskCompletionSource<GroupChannel>();
 
-            GroupChannel.CreateChannelWithUserIds(users, true, (channel, e) => {
+            GroupChannel.CreateChannelWithUserIds(users, true, (channel, e) =>
+            {
                 if (e != null)
                     tcs.TrySetCanceled();
                 else
                 {
-                    channel.SetPushPreference(true, (error) => {});
+                    channel.SetPushPreference(true, (error) => { });
                     tcs.TrySetResult(channel);
                 }
             });
@@ -96,7 +112,7 @@ namespace LetterApp.iOS.Services
 
             GroupChannelListQuery mQuery = GroupChannel.CreateMyGroupChannelListQuery();
 
-            mQuery.Next((List<GroupChannel> list, SendBirdException e) => 
+            mQuery.Next((List<GroupChannel> list, SendBirdException e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
@@ -113,8 +129,7 @@ namespace LetterApp.iOS.Services
 
             GroupChannelListQuery filteredQuery = GroupChannel.CreateMyGroupChannelListQuery();
             filteredQuery.SetUserIdsIncludeFilter(users, GroupChannelListQuery.QueryType.OR);
-
-            filteredQuery.Next((List<GroupChannel> queryResult, SendBirdException e) => 
+            filteredQuery.Next((List<GroupChannel> queryResult, SendBirdException e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
@@ -131,13 +146,27 @@ namespace LetterApp.iOS.Services
 
             GroupChannelListQuery filteredQuery = GroupChannel.CreateMyGroupChannelListQuery();
             filteredQuery.SetUserIdsExactFilter(new List<string> { userId });
-
             filteredQuery.Next((List<GroupChannel> queryResult, SendBirdException e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
 
                 tcs.TrySetResult(queryResult.FirstOrDefault());
+            });
+
+            return tcs.Task;
+        }
+
+        public Task<List<User>> CheckUsersInGroupPresence(GroupChannel channel)
+        {
+            var tcs = new TaskCompletionSource<List<User>>();
+
+            channel.Refresh((e) =>
+            {
+                if (e != null)
+                    tcs.TrySetCanceled();
+
+                tcs.TrySetResult(channel.Members);
             });
 
             return tcs.Task;
@@ -151,11 +180,26 @@ namespace LetterApp.iOS.Services
             {
                 if (e != null)
                     tcs.TrySetCanceled();
-                   
+
                 tcs.TrySetResult(msg);
             });
 
             return tcs.Task;
+        }
+
+        public void TypingMessage(GroupChannel channel)
+        {
+            channel.StartTyping();
+        }
+
+        public void TypingMessageEnded(GroupChannel channel)
+        {
+            channel.EndTyping();
+        }
+
+        public void MarkMessageAsRead(GroupChannel channel)
+        {
+            channel.MarkAsRead();
         }
     }
 }

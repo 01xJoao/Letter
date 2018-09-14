@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 
@@ -14,9 +15,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private readonly IMessengerService _messagerService;
 
         public bool NoChats { get; set; }
+        public string[] Actions;
 
-        public object _chatList;
-        public object ChatList
+        public List<ChatListUserCellModel> _chatList;
+        public List<ChatListUserCellModel> ChatList
         {
             get => _chatList;
             set => SetProperty(ref _chatList, value);
@@ -31,9 +33,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand _closeSearchCommand;
         public XPCommand CloseSearchCommand => _closeSearchCommand ?? (_closeSearchCommand = new XPCommand(CloseSearch));
 
+        private XPCommand<Tuple<ChatEventType, int>> _rowActionCommand;
+        public XPCommand<Tuple<ChatEventType, int>> RowActionCommand => _rowActionCommand ?? (_rowActionCommand = new XPCommand<Tuple<ChatEventType, int>>(RowAction));
+
         public ChatListViewModel(IMessengerService messagerService)
         {
             _messagerService = messagerService;
+
+            Actions = new string[] { DeleteAction, MuteAction, UnMuteAction };
 
             //Tests
             //CreateChannel();
@@ -61,6 +68,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
         }
 
+        private void RowAction(Tuple<ChatEventType, int> action)
+        {
+        }
+
         private void SearchChat(string search)
         {
         }
@@ -74,6 +85,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public string Title => L10N.Localize("ChatList_Title");
         public string NoRecentChat => L10N.Localize("ChatList_NoChats");
+
+        public string DeleteAction => L10N.Localize("ChatList_Delete");
+        public string MuteAction => L10N.Localize("ChatList_Mute");
+        public string UnMuteAction => L10N.Localize("ChatList_UnMute");
 
         public enum ChatEventType
         {

@@ -54,6 +54,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 this.NavigationController.NavigationBar.PrefersLargeTitles = true;
                 this.NavigationItem.HidesSearchBarWhenScrolling = true;
             }
+
             this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "newchat", OpenContacts, false);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
@@ -69,7 +70,6 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
-                //_textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
                 _textFieldInsideSearchBar.Subviews[0].Alpha = 0.5f;
 
                 _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
@@ -95,12 +95,13 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
         {
             HasChats(true);
 
-            var source = new ChatListSource(_tableView, ViewModel.ChatList);
+            var source = new ChatListSource(_tableView, ViewModel.ChatList, ViewModel.Actions);
 
             _tableView.Source = source;
             _tableView.ReloadData();
 
-            source
+            source.ChatListActionsEvent -= OnSource_ChatListActionsEvent;
+            source.ChatListActionsEvent += OnSource_ChatListActionsEvent;
         }
 
         public override void ViewDidLayoutSubviews()
@@ -123,8 +124,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             this.View.AddSubview(_noRecentChatImage);
             this.View.AddSubview(_noRecenChatLabel);
 
-            //TODO Check for chats here
-            HasChats(true);
+            HasChats(ViewModel?.ChatList.Count > 0);
         }
 
         public void HasChats(bool value)
@@ -134,8 +134,24 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             _noRecenChatLabel.Hidden = value;
         }
 
+        private void OnSource_ChatListActionsEvent(object sender, Tuple<ChatListViewModel.ChatEventType, int> action)
+        {
+            ViewModel.RowActionCommand.Execute(action);
+        }
+
         private void OpenContacts(object sender, EventArgs e)
         {
+            ViewModel.OpenContactsCommand.Execute();
+        }
+
+        public void UpdateSearchResultsForSearchController(UISearchController searchController)
+        {
+            ViewModel.SearchChatCommand.Execute(searchController.SearchBar.Text);
+        }
+
+        private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
+        {
+            ViewModel.CloseSearchCommand.Execute();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -164,14 +180,6 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
-        }
-
-        public void UpdateSearchResultsForSearchController(UISearchController searchController)
-        {
-        }
-
-        private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
-        {
         }
     }
 }
