@@ -78,7 +78,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     //if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
                     //{
-                    lastCall.CallDateText = DateUtils.CallsDateString(date);
+                    lastCall.CallDateText = DateUtils.TimePassed(date);
                     lastCall.CallStack.Add(call.CallId);
                     lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
                         call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
@@ -100,7 +100,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     CallerId = call.CallerId,
                     CallDate = date,
-                    CallDateText = DateUtils.CallsDateString(date),
+                    CallDateText = DateUtils.TimePassed(date),
                     CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming,
                     CallCountAndType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
                     HasSuccess = call.Success,

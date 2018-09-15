@@ -8,16 +8,17 @@ namespace LetterApp.Core.Services.Interfaces
     public interface IMessengerService
     {
         void InitializeMessenger();
-        void ConnectMessenger();
+        Task<bool> ConnectMessenger();
         void DisconnectMessenger();
         void RegisterMessengerToken();
 
-        Task<Tuple<BaseChannel, BaseMessage>> InitializeHandlers();
+        Task<GroupChannel> GetUsersInChannel(string channelUrl);
+        Task<BaseMessage> InitializeHandlers();
         Task<GroupChannel> CreateChannel(List<string> users);
         Task<List<GroupChannel>> GetChannels(List<string> users);
         Task<List<GroupChannel>> GetAllChannels();
         Task<GroupChannel> GetCurrentChannel(string userId);
-        Task<UserMessage> SendMessage(GroupChannel channel, string message);
+        Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTimeTicks);
         Task<List<User>> CheckUsersInGroupPresence(GroupChannel channel);
         void TypingMessage(GroupChannel channel);
         void TypingMessageEnded(GroupChannel channel);

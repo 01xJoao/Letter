@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core;
@@ -16,17 +17,20 @@ namespace LetterApp.iOS.Services
         public void InitializeMessenger()
         {
             SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
+
+            Debug.WriteLine("SendBirdClient Initialized");
         }
 
-        public Task<Tuple<BaseChannel, BaseMessage>> InitializeHandlers()
+        public Task<BaseMessage> InitializeHandlers()
         {
-            var tcs = new TaskCompletionSource<Tuple<BaseChannel, BaseMessage>>();
+            var tcs = new TaskCompletionSource<BaseMessage>();
 
             SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
             {
                 OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) =>
                 {
-                    tcs.TrySetResult(new Tuple<BaseChannel, BaseMessage>(baseChannel, baseMessage));
+                    Debug.WriteLine("SendBird Message Received");
+                    tcs.TrySetResult(baseMessage);
                 }
 
                 //OnReadReceiptUpdated = (GroupChannel groupChannel) =>
@@ -40,18 +44,28 @@ namespace LetterApp.iOS.Services
 
             SendBirdClient.AddChannelHandler(_handlerId, ch);
 
+            Debug.WriteLine("SendBird Handlers Initialized");
+
             return tcs.Task;
         }
 
-        public void ConnectMessenger()
+        public Task<bool> ConnectMessenger()
         {
+            var tcs = new TaskCompletionSource<bool>();
+
             SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
             {
                 if (e != null)
-                    return;
-
-                RegisterMessengerToken();
+                    tcs.TrySetCanceled();
+                else
+                {
+                    Debug.WriteLine("Connected to Sendbird Services");
+                    tcs.TrySetResult(true);
+                    RegisterMessengerToken();
+                }
             });
+
+            return tcs.Task;
         }
 
         public void DisconnectMessenger()
@@ -70,6 +84,8 @@ namespace LetterApp.iOS.Services
                 if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
                     CheckConnection();
             });
+
+            Debug.WriteLine("Connected to SendBird and Registered for Token");
         }
 
         private void CheckConnection()
@@ -111,14 +127,24 @@ namespace LetterApp.iOS.Services
             var tcs = new TaskCompletionSource<List<GroupChannel>>();
 
             GroupChannelListQuery mQuery = GroupChannel.CreateMyGroupChannelListQuery();
+
+            if (mQuery == null)
+            {
+                tcs.TrySetCanceled();
+                return tcs.Task;
+            }
+
             mQuery.IncludeEmpty = false;
+            mQuery.Order = GroupChannelListQuery.ChannelListOrder.LATEST_LAST_MESSAGE;
             mQuery.Next((List<GroupChannel> list, SendBirdException e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
-
-                tcs.TrySetResult(list);
+                else
+                    tcs.TrySetResult(list);
             });
+
+            Debug.WriteLine("Getting Sendbird ALL Channels");
 
             return tcs.Task;
         }
@@ -134,9 +160,11 @@ namespace LetterApp.iOS.Services
             {
                 if (e != null)
                     tcs.TrySetCanceled();
-
-                tcs.TrySetResult(queryResult);
+                else
+                    tcs.TrySetResult(queryResult);
             });
+
+            Debug.WriteLine("Getting Channels with users");
 
             return tcs.Task;
         }
@@ -151,9 +179,26 @@ namespace LetterApp.iOS.Services
             {
                 if (e != null)
                     tcs.TrySetCanceled();
-
-                tcs.TrySetResult(queryResult.FirstOrDefault());
+                else
+                    tcs.TrySetResult(queryResult.FirstOrDefault());
             });
+
+            return tcs.Task;
+        }
+
+        public Task<GroupChannel> GetUsersInChannel(string channelUrl)
+        {
+            var tcs = new TaskCompletionSource<GroupChannel>();
+
+            GroupChannel.GetChannel(channelUrl, (channel, e) => 
+            { 
+                if (e != null)
+                    tcs.TrySetCanceled();
+                else
+                    tcs.TrySetResult(channel);
+            });
+
+            Debug.WriteLine("Getting users in Channels");
 
             return tcs.Task;
         }
@@ -166,23 +211,25 @@ namespace LetterApp.iOS.Services
             {
                 if (e != null)
                     tcs.TrySetCanceled();
-
-                tcs.TrySetResult(channel.Members);
+                else
+                    tcs.TrySetResult(channel.Members);
             });
+
+            Debug.WriteLine("UpdateUsers Presence");
 
             return tcs.Task;
         }
 
-        public Task<UserMessage> SendMessage(GroupChannel channel, string message)
+        public Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTimeTicks)
         {
             var tcs = new TaskCompletionSource<UserMessage>();
 
-            channel.SendUserMessage(message, (msg, e) =>
+            channel.SendUserMessage(message, dateTimeTicks, (msg, e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
-
-                tcs.TrySetResult(msg);
+                else
+                    tcs.TrySetResult(msg);
             });
 
             return tcs.Task;

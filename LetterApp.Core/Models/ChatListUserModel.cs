@@ -15,5 +15,6 @@ namespace LetterApp.Core.Models
         public bool IsMemeberMuted { get; set; }
         public int MemberPresence { get; set; }
         public long MemberPresenceConnectionDate { get; set; }
+        public long LastTimeChatWasOpen { get; set; }
     }
 }

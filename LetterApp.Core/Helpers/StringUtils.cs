@@ -97,5 +97,15 @@ namespace LetterApp.Core.Helpers
             }
             return result;
         }
+
+        public static int GetUserId(string user)
+        {
+            int index = user.IndexOf("-");
+
+            if (index > 0)
+                return Int32.Parse(user.Substring(0, index));
+            else
+                return Int32.Parse(user);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using CoreGraphics;
 using Foundation;
@@ -34,7 +35,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
         {
             switch (e.PropertyName)
             {
-                case nameof(ViewModel.ChatList):
+                case nameof(ViewModel.UpdateTableView):
+                    Debug.WriteLine("PropertyChanged: ViewController");
                     SetupTableView();
                     break;
                 case nameof(ViewModel.NoChats):
@@ -93,6 +95,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
         private void SetupTableView()
         {
+            Debug.WriteLine("PropertyChanged: ChatListCountINTableView: " + ViewModel.ChatList.Count);
+
             HasChats(true);
 
             var source = new ChatListSource(_tableView, ViewModel.ChatList, ViewModel.Actions);
@@ -123,8 +127,6 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
             this.View.AddSubview(_noRecentChatImage);
             this.View.AddSubview(_noRecenChatLabel);
-
-            HasChats(ViewModel?.ChatList.Count > 0);
         }
 
         public void HasChats(bool value)
@@ -174,6 +176,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                     }
                 }
             }
+
+            HasChats(ViewModel?.ChatList.Count > 0);
         }
 
         public override void ViewWillDisappear(bool animated)

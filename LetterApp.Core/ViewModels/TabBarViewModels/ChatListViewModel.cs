@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -16,6 +18,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     public class ChatListViewModel : XViewModel
     {
         private readonly IMessengerService _messagerService;
+
+        private int _thisUserId => AppSettings.UserId;
+        private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
 
         public bool UpdateTableView { get; set; }
         public bool NoChats { get; set; }
@@ -47,20 +52,80 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public ChatListViewModel(IMessengerService messagerService)
         {
             _messagerService = messagerService;
-
             Actions = new string[] { DeleteAction, MuteAction, UnMuteAction };
-
-            //Tests
-            //CreateChannel();
+            CheckForMessagesHandler();
         }
 
         public override async Task Appearing()
         {
-            if (_users == null || _users.Count == 0)
-                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+            Debug.WriteLine("Appearing");
 
-            UpdateChatList();
-            UpdateMessengerService();
+
+            if (_users == null || _users.Count == 0)
+            {
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+                UpdateChatList();
+            }
+
+            if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+            {
+                try
+                {
+                    var result = await _messagerService.ConnectMessenger();
+
+                    if(result) 
+                        UpdateMessengerService();
+
+                    CreateChannel();
+                }
+                catch (Exception ex)
+                {
+                    Ui.Handle(ex as dynamic);
+                }
+            }
+            else
+                UpdateMessengerService();
+                
+        }
+
+        private async Task CheckForMessagesHandler()
+        {
+            try
+            {
+                var message = await _messagerService.InitializeHandlers();
+                var channel = await _messagerService.GetUsersInChannel(message.ChannelUrl);
+
+                if (channel?.Members.FirstOrDefault()?.UserId == null)
+                    return;
+                   
+                var user = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(channel.Members.FirstOrDefault(y => y.UserId != _thisUserFinalId).UserId));
+
+                var msg = message as UserMessage;
+
+                Realm.Write(() =>
+                {
+                    user.LastMessage = msg.Message;
+                    user.LastMessageDate = DateUtils.TimePassed(new DateTime(msg.CreatedAt));
+                    user.LastMessageDateTimeTicks = msg.CreatedAt;
+                    user.ShouldAlert = true;
+                });
+
+                var member = _chatList.Find(x => x.MemberId == user.MemberId);
+                member.LastMessage = user.LastMessage;
+                member.LastMessageDate = user.LastMessageDate;
+                member.LastMessageDateTime = new DateTime(user.LastMessageDateTimeTicks);
+                member.ShouldAlert = user.ShouldAlert;
+
+                Debug.WriteLine("New Message! " + msg.Message);
+
+                RaisePropertyChanged(nameof(UpdateTableView));
+
+                CheckForMessagesHandler();
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
         private void UpdateChatList()
@@ -83,7 +148,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 _chatList.Add(cht);
             }
 
-            RaisePropertyChanged(nameof(UpdateTableView));
+            if (_chatList.Count > 0)
+            {
+                Debug.WriteLine("going to updateve from viewmode the TableView with chats count: " + _chatList.Count);
+
+                RaisePropertyChanged(nameof(UpdateTableView));
+            }
         }
 
         private async Task UpdateMessengerService()
@@ -91,8 +161,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             if (_users.Count == 0)
                 return;
 
-            if (DateTime.Now > _updateFrequence)
+            if (DateTime.Now >= _updateFrequence)
             {
+                var newChatList = new List<ChatListUserModel>();
+
                 try
                 {
                     var allChannels = await _messagerService.GetAllChannels();
@@ -100,31 +172,48 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     foreach(var channel in allChannels)
                     {
                         var users = await _messagerService.CheckUsersInGroupPresence(channel);
-
-                        foreach(var user in users)
+                       
+                        foreach (var user in users)
                         {
-                            var userId = Int32.Parse(user.UserId);
-
+                            var userId = StringUtils.GetUserId(user.UserId);
                             var userInDB = _users.Find(x => x.UserId == userId);
                             var userInModel = _chatUserModel?.Find(x => x?.MemberId == userId);
+
+                            if (userInDB == null || userId == _thisUserId)
+                                continue;
+
+                            var lastMessage = channel.LastMessage as UserMessage;
+
+                            DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? new DateTime(Int32.Parse(lastMessage.Data)) : DateTime.Now;
 
                             var usr = new ChatListUserModel
                             {
                                 MemberId = userInDB.UserId,
                                 MemberName = $"{userInDB.FirstName} {userInDB.LastName} - {userInDB.Position}",
                                 MemberPhoto = userInDB.Picture,
-                                IsMemeberMuted = (bool)userInModel?.IsMemeberMuted,
+                                IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = user.LastSeenAt,
-                                ShouldAlert = (bool)userInModel?.ShouldAlert,
-                                LastMessage = userInModel?.LastMessage,
-                                LastMessageDate = userInModel?.LastMessageDate,
-                                LastMessageDateTimeTicks = (long)userInModel?.LastMessageDateTimeTicks
-
+                                ShouldAlert = userInModel == null || channel.LastMessage.CreatedAt > userInModel.LastTimeChatWasOpen,
+                                LastMessage = lastMessage.Message,
+                                LastMessageDate = DateUtils.TimePassed(lastMessageDate),
+                                LastMessageDateTimeTicks = lastMessageDate.Ticks
                             };
+
+                            newChatList.Add(usr);
                         }
                     }
-                    
+
+                    Realm.Write(() => {
+                        foreach(var chat in newChatList)
+                        {
+                            Realm.Add(chat, true);
+                        }
+                    });
+
+                    Debug.WriteLine("UpdateMessengerService with chats count: " + newChatList.Count);
+
+                    UpdateChatList();
                 }
                 catch (Exception ex)
                 {
@@ -146,7 +235,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var channel = await _messagerService.CreateChannel(new List<string> { "85-33" });
 
                 if (channel != null)
-                    await _messagerService.SendMessage(channel, "Hello World!");
+                    await _messagerService.SendMessage(channel, "Hello World! - Test", DateTime.Now.Ticks.ToString());
 
             }
             catch (Exception ex)

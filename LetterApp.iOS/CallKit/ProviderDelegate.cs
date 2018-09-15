@@ -181,14 +181,10 @@ namespace LetterApp.iOS.CallKit
         {
             if(CallManager.Calls.LastOrDefault() != null)
                 return null;
+                
+            var callerId = StringUtils.GetUserId(handle.RemoteUserId);
 
-            int callerId;
-
-            int index = handle.RemoteUserId.IndexOf("-");
-
-            if (index > 0)
-                callerId = Int32.Parse(handle.RemoteUserId.Substring(0, index));
-            else
+            if (callerId == 0)
                 return null;
 
             var callerName = RealmUtils.GetCallerName(callerId);

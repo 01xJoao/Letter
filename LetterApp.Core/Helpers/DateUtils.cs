@@ -17,7 +17,7 @@ namespace LetterApp.Core.Helpers
         }
 
         //https://stackoverflow.com/questions/11/calculate-relative-time-in-c-sharp
-        public static string CallsDateString(DateTime date)
+        public static string TimePassed(DateTime date)
         {
             var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
             double delta = Math.Abs(ts.TotalSeconds);

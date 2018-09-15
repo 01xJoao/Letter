@@ -23,19 +23,19 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
         {
             _chatUser = chatUser;
 
-            UILabelExtensions.SetupLabelAppearance(_dateLabel, chatUser.LastMessageDate, Colors.ProfileGrayDarker, 11f, chatUser.ShouldAlert ? UIFontWeight.Medium : UIFontWeight.Regular);
-            UILabelExtensions.SetupLabelAppearance(_messageLabel, chatUser.LastMessage, Colors.MessageTextColor, 13f, chatUser.ShouldAlert ? UIFontWeight.Medium : UIFontWeight.Regular);
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, chatUser.LastMessageDate, Colors.ProfileGrayDarker, 11f, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular);
+            UILabelExtensions.SetupLabelAppearance(_messageLabel, chatUser.LastMessage, Colors.MessageTextColor, 13f, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular);
 
             var nameAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.BlackChatName,
-                Font = UIFont.SystemFontOfSize(15, chatUser.ShouldAlert ? UIFontWeight.Medium : UIFontWeight.Regular)
+                Font = UIFont.SystemFontOfSize(15, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
             var RoleAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.BlackChatName,
-                Font = UIFont.SystemFontOfSize(13, chatUser.ShouldAlert ? UIFontWeight.Medium : UIFontWeight.Regular)
+                Font = UIFont.SystemFontOfSize(13, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
             var letterCount = chatUser.MemberName.IndexOf("-");
@@ -43,6 +43,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
             var customString = new NSMutableAttributedString(chatUser.MemberName);
             customString.SetAttributes(nameAttr.Dictionary, new NSRange(0, letterCount));
             customString.SetAttributes(RoleAttr.Dictionary, new NSRange(letterCount + 1, chatUser.MemberName.Length - (letterCount + 1)));
+
+            _memberNameLabel.AttributedText = customString;
 
             _separatorLineView.BackgroundColor = Colors.ChatDivider;
 

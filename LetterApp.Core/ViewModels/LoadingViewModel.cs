@@ -74,7 +74,7 @@ namespace LetterApp.Core.ViewModels
                         UpdateSinchClient = true;
 
                         _mesengersService.InitializeMessenger();
-                        _mesengersService.ConnectMessenger();
+                        //_mesengersService.ConnectMessenger();
                     }
 
                     bool userIsActiveInDivision = false;
