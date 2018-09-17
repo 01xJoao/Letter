@@ -870,5 +870,21 @@
   {
     "key": "ChatList_NoChats",
     "translated": "Start a new chat"
+  },
+  {
+    "key": "ChatList_Delete",
+    "translated": "Delete"
+  },
+  {
+    "key": "ChatList_Mute",
+    "translated": "Mute"
+  },
+  {
+    "key": "ChatList_UnMute",
+    "translated": "Unmute"
+  },
+  {
+    "key": "ChatList_You",
+    "Translated": "You:"
   }
 ]

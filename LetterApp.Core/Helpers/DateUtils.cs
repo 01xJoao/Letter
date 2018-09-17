@@ -48,5 +48,27 @@ namespace LetterApp.Core.Helpers
                 
             return date.Date.ToShortDateString();
         }
+
+        public static string TimeForChat(DateTime date)
+        {
+            var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
+            double delta = Math.Abs(ts.TotalSeconds);
+
+            if (date.Year != DateTime.Now.Year)
+                return date.Date.ToShortDateString();
+
+            if (date.Day == DateTime.Now.Day)
+                return date.ToString("HH:mm");
+
+            if(date.Date.AddDays(1) == DateTime.Now.Date)
+                return L10N.Localize("date_Yesterday");
+
+            if (delta > 48 * HOUR && delta < 144 * HOUR || date.Date.AddDays(2) == DateTime.Now.Date)
+                return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
+
+            string month = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(date.Month);
+
+            return L10N.Locale() == "en-US" ? $"{month} {date.Day}" : $"{date.Day} {month}";
+        }
     }
 }

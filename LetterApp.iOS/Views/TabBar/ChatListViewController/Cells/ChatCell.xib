@@ -51,11 +51,11 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="id2-FS-2aM">
-                        <rect key="frame" x="51" y="49.5" width="15" height="15"/>
+                        <rect key="frame" x="52" y="50.5" width="17" height="17"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="8x9-3t-ChB"/>
-                            <constraint firstAttribute="width" constant="15" id="mRj-CY-dp0"/>
+                            <constraint firstAttribute="height" constant="17" id="8x9-3t-ChB"/>
+                            <constraint firstAttribute="width" constant="17" id="mRj-CY-dp0"/>
                         </constraints>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7pu-J1-1SS">
@@ -67,7 +67,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="7pu-J1-1SS" firstAttribute="width" secondItem="DJe-ag-dRX" secondAttribute="width" id="0ly-FA-iog"/>
-                    <constraint firstItem="id2-FS-2aM" firstAttribute="trailing" secondItem="DJe-ag-dRX" secondAttribute="trailing" constant="-3" id="1Z5-yA-L3K"/>
+                    <constraint firstItem="id2-FS-2aM" firstAttribute="trailing" secondItem="DJe-ag-dRX" secondAttribute="trailing" id="1Z5-yA-L3K"/>
                     <constraint firstItem="sUU-1n-xxF" firstAttribute="trailing" secondItem="47y-Ai-qxD" secondAttribute="trailing" id="3Os-wA-gXj"/>
                     <constraint firstAttribute="trailing" secondItem="XXs-ug-n0j" secondAttribute="trailing" id="4VD-Fc-mfz"/>
                     <constraint firstItem="47y-Ai-qxD" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="10" id="73W-US-gHv"/>
@@ -80,7 +80,7 @@
                     <constraint firstItem="47y-Ai-qxD" firstAttribute="leading" secondItem="xyP-om-lIH" secondAttribute="trailing" constant="15" id="Ti5-dV-yqH"/>
                     <constraint firstItem="DJe-ag-dRX" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="Y2W-nW-NX3"/>
                     <constraint firstItem="sUU-1n-xxF" firstAttribute="top" secondItem="xyP-om-lIH" secondAttribute="bottom" constant="5" id="aFn-BX-11O"/>
-                    <constraint firstItem="id2-FS-2aM" firstAttribute="bottom" secondItem="DJe-ag-dRX" secondAttribute="bottom" constant="-3" id="gBS-Ku-yTa"/>
+                    <constraint firstItem="id2-FS-2aM" firstAttribute="bottom" secondItem="DJe-ag-dRX" secondAttribute="bottom" id="gBS-Ku-yTa"/>
                     <constraint firstAttribute="trailing" secondItem="SMn-lJ-sDE" secondAttribute="trailing" id="huL-DO-fEm"/>
                     <constraint firstItem="7pu-J1-1SS" firstAttribute="centerY" secondItem="DJe-ag-dRX" secondAttribute="centerY" id="jz3-Du-FFf"/>
                     <constraint firstItem="XXs-ug-n0j" firstAttribute="leading" secondItem="SMn-lJ-sDE" secondAttribute="leading" id="kzs-VE-mIH"/>

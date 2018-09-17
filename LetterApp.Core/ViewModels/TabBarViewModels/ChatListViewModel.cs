@@ -60,12 +60,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             Debug.WriteLine("Appearing");
 
-
             if (_users == null || _users.Count == 0)
-            {
                 _users = Realm.All<GetUsersInDivisionModel>().ToList();
-                UpdateChatList();
-            }
+
+            UpdateChatList();
 
             if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
             {
@@ -93,34 +91,31 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             try
             {
                 var message = await _messagerService.InitializeHandlers();
-                var channel = await _messagerService.GetUsersInChannel(message.ChannelUrl);
-
-                if (channel?.Members.FirstOrDefault()?.UserId == null)
-                    return;
-                   
-                var user = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(channel.Members.FirstOrDefault(y => y.UserId != _thisUserFinalId).UserId));
 
                 var msg = message as UserMessage;
 
-                Realm.Write(() =>
-                {
-                    user.LastMessage = msg.Message;
-                    user.LastMessageDate = DateUtils.TimePassed(new DateTime(msg.CreatedAt));
-                    user.LastMessageDateTimeTicks = msg.CreatedAt;
-                    user.ShouldAlert = true;
+                DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data) : DateTime.Now;
+
+                var userChatModel = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(msg.Sender.UserId));
+
+                Realm.Write(() => {
+                    userChatModel.MemberPresence = 0;
+                    userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
+                    userChatModel.LastMessage = msg.Message;
+                    userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
+                    userChatModel.ShouldAlert = true;
                 });
 
-                var member = _chatList.Find(x => x.MemberId == user.MemberId);
-                member.LastMessage = user.LastMessage;
-                member.LastMessageDate = user.LastMessageDate;
-                member.LastMessageDateTime = new DateTime(user.LastMessageDateTimeTicks);
-                member.ShouldAlert = user.ShouldAlert;
-
-                Debug.WriteLine("New Message! " + msg.Message);
-
-                RaisePropertyChanged(nameof(UpdateTableView));
+                var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
+                member.LastMessage = userChatModel.LastMessage;
+                member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
+                member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
+                member.MemberPresence = MemberPresence.Online;
+                member.ShouldAlert = userChatModel.ShouldAlert;
 
                 CheckForMessagesHandler();
+
+                RaisePropertyChanged(nameof(UpdateTableView));
             }
             catch (Exception ex)
             {
@@ -135,15 +130,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             foreach (var chat in _chatUserModel)
             {
+                var date = new DateTime(chat.LastMessageDateTimeTicks);
+
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
-                                                    chat.LastMessageDate, chat.ShouldAlert, chat.IsMemeberMuted,
-                                                    OpenUserProfileEvent, OpenUserChat, new DateTime(chat.LastMessageDateTimeTicks));
+                                                    DateUtils.TimeForChat(date), chat.ShouldAlert, chat.IsMemeberMuted,
+                                                    OpenUserProfileEvent, OpenUserChat, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));
 
-                cht.MemberPresence = chat.MemberPresence == 0 && timeDifference.TotalMinutes < 5
+                cht.MemberPresence = chat.MemberPresence == 0 && timeDifference.TotalMinutes < 5.0f
                     ? MemberPresence.Online
-                    : timeDifference.TotalMinutes < 60 ? MemberPresence.Recent : MemberPresence.Offline;
+                    : timeDifference.TotalMinutes < 60.0f ? MemberPresence.Recent : MemberPresence.Offline;
 
                 _chatList.Add(cht);
             }
@@ -184,7 +181,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                             var lastMessage = channel.LastMessage as UserMessage;
 
-                            DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? new DateTime(Int32.Parse(lastMessage.Data)) : DateTime.Now;
+                            DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data) : DateTime.Now;
 
                             var usr = new ChatListUserModel
                             {
@@ -193,10 +190,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberPhoto = userInDB.Picture,
                                 IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
-                                MemberPresenceConnectionDate = user.LastSeenAt,
+                                MemberPresenceConnectionDate = user.LastSeenAt != 0 ? user.LastSeenAt : lastMessageDate.Ticks,
                                 ShouldAlert = userInModel == null || channel.LastMessage.CreatedAt > userInModel.LastTimeChatWasOpen,
-                                LastMessage = lastMessage.Message,
-                                LastMessageDate = DateUtils.TimePassed(lastMessageDate),
+                                LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks
                             };
 
@@ -221,7 +217,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 finally
                 {
-                    _updateFrequence = DateTime.Now.AddMinutes(2);
+                    _updateFrequence = DateTime.Now.AddMinutes(4);
                 }
             }
         }
@@ -235,8 +231,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var channel = await _messagerService.CreateChannel(new List<string> { "85-33" });
 
                 if (channel != null)
-                    await _messagerService.SendMessage(channel, "Hello World! - Test", DateTime.Now.Ticks.ToString());
-
+                    await _messagerService.SendMessage(channel, "Hello World! - Test", DateTime.Now.ToString());
             }
             catch (Exception ex)
             {
@@ -269,6 +264,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public string Title => L10N.Localize("ChatList_Title");
         public string NoRecentChat => L10N.Localize("ChatList_NoChats");
+        private string YouChatLabel => L10N.Localize("ChatList_You");
 
         public string DeleteAction => L10N.Localize("ChatList_Delete");
         public string MuteAction => L10N.Localize("ChatList_Mute");

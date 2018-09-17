@@ -82,10 +82,17 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
                     break;
             }
 
-            CustomUIExtensions.RoundView(_presenceView);
-            _presenceView.Layer.BorderWidth = 2f;
-            _presenceView.Layer.BorderColor = Colors.White.CGColor;
+            //CustomUIExtensions.RoundView(_presenceView);
+            //_presenceView.Layer.BorderWidth = 2f;
+            //_presenceView.Layer.BorderColor = Colors.White.CGColor;
 
+            float offset = 1f;
+            _presenceView.Layer.CornerRadius = _presenceView.Frame.Height / 2 + offset;
+            _presenceView.Layer.BorderColor = Colors.White.CGColor;
+            _presenceView.Layer.BorderWidth = 2 + offset;
+            _presenceView.Layer.MasksToBounds = true;
+            _presenceView.Layer.Bounds = new CoreGraphics.CGRect(-offset, -offset, _presenceView.Frame.Width + offset * 2f, _presenceView.Frame.Height + offset * 2);
+ 
             _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
             _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
 

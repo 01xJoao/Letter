@@ -36,7 +36,6 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             switch (e.PropertyName)
             {
                 case nameof(ViewModel.UpdateTableView):
-                    Debug.WriteLine("PropertyChanged: ViewController");
                     SetupTableView();
                     break;
                 case nameof(ViewModel.NoChats):

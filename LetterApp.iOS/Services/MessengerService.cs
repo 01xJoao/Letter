@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +29,7 @@ namespace LetterApp.iOS.Services
                 OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) =>
                 {
                     Debug.WriteLine("SendBird Message Received");
+
                     tcs.TrySetResult(baseMessage);
                 }
 
@@ -220,11 +220,11 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTimeTicks)
+        public Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTime)
         {
             var tcs = new TaskCompletionSource<UserMessage>();
 
-            channel.SendUserMessage(message, dateTimeTicks, (msg, e) =>
+            channel.SendUserMessage(message, dateTime, (msg, e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
