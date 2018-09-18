@@ -235,7 +235,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 cht.MemberPresence = (chat.MemberPresence == 0 && updated == true) || (chat.MemberPresence == 0 && timeDifference.TotalMinutes < 5.0f)
                     ? MemberPresence.Online
-                    : timeDifference.TotalMinutes < 60.0f ? MemberPresence.Recent : MemberPresence.Offline;
+                    : timeDifference.TotalMinutes < 30.0f ? MemberPresence.Recent : MemberPresence.Offline;
 
                 _chatList.Add(cht);
             }
@@ -278,6 +278,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                             DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data) : DateTime.Now;
 
+                            long lastSeenTime = userInModel.MemberPresenceConnectionDate >= user.LastSeenAt && userInModel.MemberPresenceConnectionDate <= lastMessageDate.Ticks
+                                ? lastMessageDate.Ticks
+                                : userInModel.MemberPresenceConnectionDate >= user.LastSeenAt ? userInModel.MemberPresenceConnectionDate : user.LastSeenAt;
+
+                            var userLastSeen = user.ConnectionStatus == User.UserConnectionStatus.ONLINE || user.LastSeenAt == 0 ? DateTime.Now.Ticks : lastSeenTime;
+
                             var usr = new ChatListUserModel
                             {
                                 MemberId = userInDB.UserId,
@@ -285,7 +291,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberPhoto = userInDB.Picture,
                                 IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
-                                MemberPresenceConnectionDate = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? DateTime.Now.Ticks : user.LastSeenAt != 0 ? user.LastSeenAt : lastMessageDate.Ticks,
+                                MemberPresenceConnectionDate = userLastSeen,
                                 ShouldAlert = userInModel == null || channel.LastMessage.CreatedAt > userInModel.LastTimeChatWasOpen,
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
