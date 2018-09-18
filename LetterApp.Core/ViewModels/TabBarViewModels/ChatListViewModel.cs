@@ -165,7 +165,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             MemberName = $"{result.FirstName} {result.LastName} - {result.Position}",
                             MemberPhoto = result.Picture,
                             IsMemeberMuted = false,
-                            LastTimeChatWasOpen = default(DateTime).Ticks,
                         };
 
                         Realm.Write(() => Realm.Add(userChatModel));
@@ -291,11 +290,20 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                             DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data) : DateTime.Now;
 
-                            long lastSeenTime = userInModel.MemberPresenceConnectionDate >= user.LastSeenAt && userInModel.MemberPresenceConnectionDate <= lastMessageDate.Ticks
-                                ? lastMessageDate.Ticks
-                                : userInModel.MemberPresenceConnectionDate >= user.LastSeenAt ? userInModel.MemberPresenceConnectionDate : user.LastSeenAt;
+                            long lastSeenTime;
+
+                            if (userInModel != null)
+                            {
+                                lastSeenTime = userInModel.MemberPresenceConnectionDate >= user.LastSeenAt && userInModel.MemberPresenceConnectionDate <= lastMessageDate.Ticks
+                                    ? lastMessageDate.Ticks
+                                    : userInModel.MemberPresenceConnectionDate >= user.LastSeenAt ? userInModel.MemberPresenceConnectionDate : user.LastSeenAt;
+                            }
+                            else
+                                lastSeenTime = default(DateTime).Ticks;
 
                             var userLastSeen = user.ConnectionStatus == User.UserConnectionStatus.ONLINE || user.LastSeenAt == 0 ? DateTime.Now.Ticks : lastSeenTime;
+
+                            var shouldAlertMsg = !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
 
                             var usr = new ChatListUserModel
                             {
@@ -303,12 +311,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberName = $"{userInDB.FirstName} {userInDB.LastName} - {userInDB.Position}",
                                 MemberPhoto = userInDB.Picture,
                                 IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
-                                ShouldAlertNewMessage = userInModel != null && lastMessageDate.Ticks > userInModel.LastTimeChatWasOpen,
+                                ShouldAlertNewMessage = shouldAlertMsg,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = userLastSeen,
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
-                                IsArchived = userInModel == null || (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
+                                IsArchived = userInModel != null && (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
                                 ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0
                             };
 

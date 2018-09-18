@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
@@ -14,6 +15,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         private string _picture;
         private string _name;
         private string _message;
+        private bool _dismissing;
         private Action<bool> _openChatAction;
 
         public ChatAlertViewController(string picture, string name, string message, Action<bool> openChatAction) : base("ChatAlertViewController", null)
@@ -54,20 +56,29 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             _openChatButton.TouchUpInside -= OnOpenChatButton_TouchUpInside;
             _openChatButton.TouchUpInside += OnOpenChatButton_TouchUpInside;
 
+            //Add Vibration
+
             gesture.AddTarget(() => HandleDrag(gesture));
             this.View.AddGestureRecognizer(gesture);
         }
 
         private void HandleDrag(UIPanGestureRecognizer gesture)
         {
-            Dismiss(0);
-            _openChatAction.Invoke(false);
+            if (!_dismissing)
+            {
+                this.View.RemoveGestureRecognizer(gesture);
+                Dismiss();
+                _openChatAction.Invoke(false);
+            }
         }
 
         private void OnOpenChatButton_TouchUpInside(object sender, EventArgs e)
         {
-            Dismiss(0);
-            _openChatAction.Invoke(true);
+            if (!_dismissing)
+            {
+                Dismiss();
+                _openChatAction.Invoke(true);
+            }
         }
 
         private void CleanString(IScheduledWork obj)
@@ -80,17 +91,27 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             this.View.Frame = new CoreGraphics.CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 92);
             UIApplication.SharedApplication.KeyWindow.AddSubview(this.View);
             UIView.Animate(0.3f, () => View.Alpha = 1);
-            Animations.SlideVerticaly(this.View, true, true, onFinished: () => Dismiss(5));
+            Animations.SlideVerticaly(this.View, true, true, onFinished: () => DismissCountDown());
         }
 
-        public void Dismiss(float delay)
+        private async Task DismissCountDown()
         {
-            if (this != null)
-                Animations.SlideVerticaly(this.View, false, true, onFinished: CleanFromMemory, delay: delay);
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            Dismiss();
+        }
+
+        public void Dismiss()
+        {
+            if (!_dismissing && this.View != null)
+            {
+                _dismissing = true;
+                this.View.SlideVerticaly(false, true, onFinished: CleanFromMemory, delay: 0);
+            }
         }
 
         private void CleanFromMemory()
         {
+            _dismissing = false;
             _openChatAction = null;
             _picture = _name = _message = null;
             _openChatButton.TouchUpInside -= OnOpenChatButton_TouchUpInside;

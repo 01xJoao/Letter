@@ -16,6 +16,5 @@ namespace LetterApp.Core.Models
         public long ArchivedTime { get; set; }
         public int MemberPresence { get; set; }
         public long MemberPresenceConnectionDate { get; set; }
-        public long LastTimeChatWasOpen { get; set; }
     }
 }
