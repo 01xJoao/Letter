@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
@@ -20,7 +19,11 @@ namespace LetterApp.Core.Exceptions
         public static void Handle(TaskCanceledException e)
         {
             RavenService.Raven.Capture(new SentryEvent(e));
-            DialogService.ShowAlert(e.ToString(), AlertType.Error);
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            else
+                Handle(new NoInternetException());
         }
 
         public static void Handle(WrongCredentialsException e)

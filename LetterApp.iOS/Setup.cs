@@ -20,6 +20,7 @@ namespace LetterApp.iOS
             InitializePlatformServices();
             App.Start();
 
+            AppSettings.UserNoInternetNotified = false;
             StatusBarColor(Connectivity.NetworkAccess == NetworkAccess.Internet);
 
             Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
