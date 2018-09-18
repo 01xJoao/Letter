@@ -872,8 +872,8 @@
     "translated": "Start a new chat"
   },
   {
-    "key": "ChatList_Delete",
-    "translated": "Delete"
+    "key": "ChatList_Archive",
+    "translated": "Archive"
   },
   {
     "key": "ChatList_Mute",

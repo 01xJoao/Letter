@@ -35,27 +35,33 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
 
 		[Outlet]
 		UIKit.UIView _separatorLineView { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView _silentImage { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _silentImageWidthConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (_profileImage != null) {
-				_profileImage.Dispose ();
-				_profileImage = null;
+			if (_silentImageWidthConstraint != null) {
+				_silentImageWidthConstraint.Dispose ();
+				_silentImageWidthConstraint = null;
 			}
 
-			if (_separatorLineView != null) {
-				_separatorLineView.Dispose ();
-				_separatorLineView = null;
-			}
-
-			if (_memberNameLabel != null) {
-				_memberNameLabel.Dispose ();
-				_memberNameLabel = null;
+			if (_chatButton != null) {
+				_chatButton.Dispose ();
+				_chatButton = null;
 			}
 
 			if (_dateLabel != null) {
 				_dateLabel.Dispose ();
 				_dateLabel = null;
+			}
+
+			if (_memberNameLabel != null) {
+				_memberNameLabel.Dispose ();
+				_memberNameLabel = null;
 			}
 
 			if (_messageLabel != null) {
@@ -68,14 +74,24 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
 				_presenceView = null;
 			}
 
+			if (_profileImage != null) {
+				_profileImage.Dispose ();
+				_profileImage = null;
+			}
+
 			if (_profileImageButton != null) {
 				_profileImageButton.Dispose ();
 				_profileImageButton = null;
 			}
 
-			if (_chatButton != null) {
-				_chatButton.Dispose ();
-				_chatButton = null;
+			if (_separatorLineView != null) {
+				_separatorLineView.Dispose ();
+				_separatorLineView = null;
+			}
+
+			if (_silentImage != null) {
+				_silentImage.Dispose ();
+				_silentImage = null;
 			}
 		}
 	}

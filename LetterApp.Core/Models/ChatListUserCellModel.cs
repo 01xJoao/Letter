@@ -4,7 +4,9 @@ namespace LetterApp.Core.Models
 {
     public class ChatListUserCellModel
     {
-        public ChatListUserCellModel(int memberId, string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlert, bool isMemberMuted, 
+        public ChatListUserCellModel() {}
+
+        public ChatListUserCellModel(int memberId, string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlert, bool isMemberMuted,
                                      EventHandler<int> openMemberProfile, EventHandler<int> openChat, DateTime lastMessageDateTime, MemberPresence memberPresence = MemberPresence.Offline)
         {
             MemberId = memberId;

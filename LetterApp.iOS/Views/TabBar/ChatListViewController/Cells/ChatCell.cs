@@ -23,8 +23,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
         {
             _chatUser = chatUser;
 
-            UILabelExtensions.SetupLabelAppearance(_dateLabel, chatUser.LastMessageDate, Colors.ProfileGrayDarker, 11f, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular);
-            UILabelExtensions.SetupLabelAppearance(_messageLabel, chatUser.LastMessage, Colors.MessageTextColor, 13f, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular);
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, chatUser.LastMessageDate, chatUser.ShouldAlert ? Colors.Black : Colors.ProfileGrayDarker, 11f, chatUser.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular);
+            UILabelExtensions.SetupLabelAppearance(_messageLabel, chatUser.LastMessage, Colors.MessageTextColor, 13f, chatUser.ShouldAlert ? UIFontWeight.Medium : UIFontWeight.Regular);
 
             var nameAttr = new UIStringAttributes
             {
@@ -86,13 +86,14 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
             _presenceView.Layer.BorderWidth = 2f;
             _presenceView.Layer.BorderColor = Colors.White.CGColor;
 
-            //float offset = 1f;
-            //_presenceView.Layer.CornerRadius = _presenceView.Frame.Height / 2 + offset;
-            //_presenceView.Layer.BorderColor = Colors.White.CGColor;
-            //_presenceView.Layer.BorderWidth = 2 + offset;
-            //_presenceView.Layer.MasksToBounds = true;
-            //_presenceView.Layer.Bounds = new CoreGraphics.CGRect(-offset, -offset, _presenceView.Frame.Width + offset * 2f, _presenceView.Frame.Height + offset * 2);
- 
+            _silentImage.Image?.Dispose();
+
+            _silentImage.Hidden = !chatUser.IsMemberMuted;
+            _silentImage.Image = UIImage.FromBundle("silent").ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            _silentImage.TintColor = Colors.ProfileGrayDarker;
+
+            _silentImageWidthConstraint.Constant = chatUser.IsMemberMuted ? _silentImageWidthConstraint.Constant : 0;
+
             _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
             _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
 

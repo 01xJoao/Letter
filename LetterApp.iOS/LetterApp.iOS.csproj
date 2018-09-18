@@ -361,6 +361,8 @@
     <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\norecentchats.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\volume_off.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -471,6 +473,7 @@
     <Folder Include="Views\TabBar\ChatListViewController\Cells\" />
     <Folder Include="Resources\Assets.xcassets\nochats.imageset\" />
     <Folder Include="Resources\Assets.xcassets\newchat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\silent.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />

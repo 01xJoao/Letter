@@ -33,29 +33,33 @@ namespace LetterApp.iOS.Sources
 
         public override UITableViewRowAction[] EditActionsForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            UITableViewRowAction deleteButton = UITableViewRowAction.Create(
+            UITableViewRowAction archiveButton = UITableViewRowAction.Create(
                 UITableViewRowActionStyle.Destructive,
                 _textResources[0],
                 delegate {
                     tableView.BeginUpdates();
                     tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Bottom);
-                    ChatListActionsEvent?.Invoke(this, new Tuple<ChatEventType, int> (ChatEventType.Delete, indexPath.Row));
+                    ChatListActionsEvent?.Invoke(this, new Tuple<ChatEventType, int> (ChatEventType.Archive, _chats[indexPath.Row].MemberId));
+                    _chats.RemoveAt(indexPath.Row);
                     tableView.EndUpdates();
                     tableView.ReloadData();
                 });
 
-            deleteButton.BackgroundColor = Colors.Red;
+            archiveButton.BackgroundColor = Colors.GrayIndicator;
 
             UITableViewRowAction infoButton = UITableViewRowAction.Create(
                 UITableViewRowActionStyle.Normal,
                 _chats[indexPath.Row].IsMemberMuted ? _textResources[2] : _textResources[1],
                 delegate {
-                    ChatListActionsEvent?.Invoke(this, new Tuple<ChatEventType, int>(ChatEventType.Mute, indexPath.Row));
+                    tableView.BeginUpdates();
+                    ChatListActionsEvent?.Invoke(this, new Tuple<ChatEventType, int>(ChatEventType.Mute, _chats[indexPath.Row].MemberId));
+                    tableView.ReloadRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Right);
+                    tableView.EndUpdates();
                 });
 
             infoButton.BackgroundColor = Colors.Orange;
 
-            return new UITableViewRowAction[] { deleteButton, infoButton };
+            return new UITableViewRowAction[] { archiveButton, infoButton };
         }
 
         public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)

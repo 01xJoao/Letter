@@ -872,8 +872,8 @@
     "translated": "Começa uma nova conversa"
   },
   {
-    "key": "ChatList_Delete",
-    "translated": "Eliminar"
+    "key": "ChatList_Archive",
+    "translated": "Arquivar"
   },
   {
     "key": "ChatList_Mute",
@@ -881,7 +881,7 @@
   },
   {
     "key": "ChatList_UnMute",
-    "translated": "Silêncio"
+    "translated": "Alertar"
   },
   {
     "key": "ChatList_You",

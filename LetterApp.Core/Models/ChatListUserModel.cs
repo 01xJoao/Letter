@@ -12,6 +12,8 @@ namespace LetterApp.Core.Models
         public long LastMessageDateTimeTicks { get; set; }
         public bool ShouldAlert { get; set; }
         public bool IsMemeberMuted { get; set; }
+        public bool IsArchived { get; set; }
+        public long ArchivedTime { get; set; }
         public int MemberPresence { get; set; }
         public long MemberPresenceConnectionDate { get; set; }
         public long LastTimeChatWasOpen { get; set; }

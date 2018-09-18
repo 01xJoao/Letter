@@ -18,9 +18,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     public class ChatListViewModel : XViewModel
     {
         private readonly IMessengerService _messagerService;
+        private readonly IContactsService _contactsService;
 
         private int _thisUserId => AppSettings.UserId;
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
+        private bool _isSearching;
 
         public bool UpdateTableView { get; set; }
         public bool NoChats { get; set; }
@@ -29,12 +31,22 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private DateTime _updateFrequence = DateTime.Now;
         private List<GetUsersInDivisionModel> _users;
         private List<ChatListUserModel> _chatUserModel;
-
-        public List<ChatListUserCellModel> _chatList;
+        
+        private List<ChatListUserCellModel> _chatListSearch;
+        private List<ChatListUserCellModel> _chatList;
         public List<ChatListUserCellModel> ChatList
         {
-            get => _chatList;
-            set => SetProperty(ref _chatList, value);
+            get
+            {
+                return _isSearching
+                    ? _chatListSearch?.OrderByDescending(x => x.LastMessageDateTime).ToList()
+                    : _chatList?.OrderByDescending(x => x.LastMessageDateTime).ToList();
+            }
+            set 
+            {
+                SetProperty(ref _chatList, value);
+                _chatListSearch = value;
+            }
         }
 
         private XPCommand _openContactsCommand;
@@ -49,10 +61,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<Tuple<ChatEventType, int>> _rowActionCommand;
         public XPCommand<Tuple<ChatEventType, int>> RowActionCommand => _rowActionCommand ?? (_rowActionCommand = new XPCommand<Tuple<ChatEventType, int>>(RowAction));
 
-        public ChatListViewModel(IMessengerService messagerService)
+        public ChatListViewModel(IContactsService contactsService, IMessengerService messagerService)
         {
+            _contactsService = contactsService;
             _messagerService = messagerService;
-            Actions = new string[] { DeleteAction, MuteAction, UnMuteAction };
+            Actions = new string[] { ArchiveAction, MuteAction, UnMuteAction };
             CheckForMessagesHandler();
         }
 
@@ -61,7 +74,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             Debug.WriteLine("Appearing");
 
             if (_users == null || _users.Count == 0)
-                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+                await GetUsers();
 
             UpdateChatList();
 
@@ -86,36 +99,32 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 
         }
 
-        private async Task CheckForMessagesHandler()
+        private async Task GetUsers()
         {
             try
             {
-                var message = await _messagerService.InitializeHandlers();
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
 
-                var msg = message as UserMessage;
+                if (_users.Count == 0)
+                {
+                    var result = await _contactsService.GetUsersFromAllDivisions();
 
-                DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data) : DateTime.Now;
+                    if (result == null && result.Count == 0)
+                        return;
 
-                var userChatModel = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(msg.Sender.UserId));
+                    foreach (var res in result)
+                    {
+                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                        var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                        string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+                        stringSearch = StringUtils.NormalizeString(stringSearch);
+                        res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
 
-                Realm.Write(() => {
-                    userChatModel.MemberPresence = 0;
-                    userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
-                    userChatModel.LastMessage = msg.Message;
-                    userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
-                    userChatModel.ShouldAlert = true;
-                });
+                        Realm.Write(() => { Realm.Add(res, true); });
+                    }
 
-                var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
-                member.LastMessage = userChatModel.LastMessage;
-                member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
-                member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
-                member.MemberPresence = MemberPresence.Online;
-                member.ShouldAlert = userChatModel.ShouldAlert;
-
-                CheckForMessagesHandler();
-
-                RaisePropertyChanged(nameof(UpdateTableView));
+                    _users = Realm.All<GetUsersInDivisionModel>().ToList();
+                }
             }
             catch (Exception ex)
             {
@@ -123,22 +132,108 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
         }
 
-        private void UpdateChatList()
+        private async Task CheckForMessagesHandler()
+        {
+            try
+            {
+                var message = await _messagerService.InitializeHandlers();
+
+                if (!(message is UserMessage msg))
+                {
+                    CheckForMessagesHandler();
+                    return;
+                }
+
+                DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data) : DateTime.Now;
+
+                var userChatModel = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(msg.Sender.UserId));
+
+                if(userChatModel == null)
+                {
+                    var res = _users.Find(x => x.UserId == StringUtils.GetUserId(msg.Sender.UserId));
+
+                    if (res == null)
+                    {
+                        await GetUsers();
+                        var result = _users.Find(x => x.UserId == StringUtils.GetUserId(msg.Sender.UserId));
+
+                        userChatModel = new ChatListUserModel
+                        {
+                            MemberId = result.UserId,
+                            MemberName = $"{result.FirstName} {result.LastName} - {result.Position}",
+                            MemberPhoto = result.Picture,
+                            IsMemeberMuted = false,
+                            LastTimeChatWasOpen = default(DateTime).Ticks
+                        };
+
+                        Realm.Write(() => Realm.Add(userChatModel));
+                    }
+                }
+
+                Realm.Write(() => {
+                    userChatModel.MemberPresence = 0;
+                    userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
+                    userChatModel.LastMessage = msg.Message;
+                    userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
+                    userChatModel.ShouldAlert = true;
+                    userChatModel.IsArchived = false;
+                });
+
+                var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
+
+                if(member == null)
+                {
+                    member = new ChatListUserCellModel
+                    { 
+                        MemberId = userChatModel.MemberId,
+                        MemberName = userChatModel.MemberName,
+                        MemberPhoto = userChatModel.MemberPhoto,
+                        OpenChat = OpenUserChatEvent,
+                        OpenMemberProfile = OpenUserProfileEvent,
+                        IsMemberMuted = false
+                    };
+
+                    _chatList.Add(member);
+                }
+
+                member.LastMessage = userChatModel.LastMessage;
+                member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
+                member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
+                member.MemberPresence = MemberPresence.Online;
+                member.ShouldAlert = userChatModel.ShouldAlert;
+
+                if(!_isSearching)
+                    RaisePropertyChanged(nameof(UpdateTableView));
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                CheckForMessagesHandler();
+            }
+        }
+
+        private void UpdateChatList(bool updated = false)
         {
             _chatList = new List<ChatListUserCellModel>();
             _chatUserModel = Realm.All<ChatListUserModel>().ToList();
 
             foreach (var chat in _chatUserModel)
             {
+                if (chat.IsArchived)
+                    continue;
+
                 var date = new DateTime(chat.LastMessageDateTimeTicks);
 
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
                                                     DateUtils.TimeForChat(date), chat.ShouldAlert, chat.IsMemeberMuted,
-                                                    OpenUserProfileEvent, OpenUserChat, date);
+                                                    OpenUserProfileEvent, OpenUserChatEvent, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));
 
-                cht.MemberPresence = chat.MemberPresence == 0 && timeDifference.TotalMinutes < 5.0f
+                cht.MemberPresence = (chat.MemberPresence == 0 && updated == true) || (chat.MemberPresence == 0 && timeDifference.TotalMinutes < 5.0f)
                     ? MemberPresence.Online
                     : timeDifference.TotalMinutes < 60.0f ? MemberPresence.Recent : MemberPresence.Offline;
 
@@ -149,7 +244,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 Debug.WriteLine("going to updateve from viewmode the TableView with chats count: " + _chatList.Count);
 
-                RaisePropertyChanged(nameof(UpdateTableView));
+                RaisePropertyChanged(nameof(ChatList));
             }
         }
 
@@ -190,10 +285,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberPhoto = userInDB.Picture,
                                 IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
-                                MemberPresenceConnectionDate = user.LastSeenAt != 0 ? user.LastSeenAt : lastMessageDate.Ticks,
+                                MemberPresenceConnectionDate = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? DateTime.Now.Ticks : user.LastSeenAt != 0 ? user.LastSeenAt : lastMessageDate.Ticks,
                                 ShouldAlert = userInModel == null || channel.LastMessage.CreatedAt > userInModel.LastTimeChatWasOpen,
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
-                                LastMessageDateTimeTicks = lastMessageDate.Ticks
+                                LastMessageDateTimeTicks = lastMessageDate.Ticks,
+                                IsArchived = userInModel == null || (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
+                                ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0
                             };
 
                             newChatList.Add(usr);
@@ -209,7 +306,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                     Debug.WriteLine("UpdateMessengerService with chats count: " + newChatList.Count);
 
-                    UpdateChatList();
+                    if(!_isSearching)
+                        UpdateChatList(true);
                 }
                 catch (Exception ex)
                 {
@@ -224,14 +322,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task CreateChannel()
         {
-            await Task.Delay(TimeSpan.FromSeconds(3));
-
             try
             {
-                var channel = await _messagerService.CreateChannel(new List<string> { "85-33" });
+                var channel = await _messagerService.CreateChannel(new List<string> { "59-33" });
 
                 if (channel != null)
-                    await _messagerService.SendMessage(channel, "Hello World! - Test", DateTime.Now.ToString());
+                    await _messagerService.SendMessage(channel, "This is a text message to check how it works in two lines label, thank you.", DateTime.Now.ToString());
             }
             catch (Exception ex)
             {
@@ -241,21 +337,53 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task OpenContacts()
         {
+            UpdateChatList();
         }
 
         private void RowAction(Tuple<ChatEventType, int> action)
         {
+            var userId = action.Item2;
+            var _chatUser = _chatUserModel.FindLast(x => x.MemberId == userId);
+
+            switch (action.Item1)
+            {
+                case ChatEventType.Archive:
+                    Realm.Write(() =>
+                    {
+                        _chatUser.IsArchived = true;
+                        _chatUser.ArchivedTime = DateTime.Now.Ticks;
+                    });
+                    _chatList.Remove(_chatList.FindLast(x => x.MemberId == userId));
+
+                    if (_chatList.Count == 0)
+                        RaisePropertyChanged(nameof(NoChats));
+
+                    break;
+
+                case ChatEventType.Mute:
+                    Realm.Write(() => _chatUser.IsMemeberMuted = !_chatUser.IsMemeberMuted);
+                    _chatList.FindLast(x => x.MemberId == userId).IsMemberMuted = _chatUser.IsMemeberMuted;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         private void SearchChat(string search)
         {
+            _isSearching = true;
+            _chatListSearch = _chatList.FindAll(x => x.MemberName.ToLower().Contains(search));
+            RaisePropertyChanged(nameof(ChatList));
         }
 
         private void CloseSearch()
         {
+            _isSearching = false;
+            RaisePropertyChanged(nameof(ChatList));
         }
 
-        private void OpenUserChat(object sender, int userId) => NavigateToUserChat(userId);
+        private void OpenUserChatEvent(object sender, int userId) => NavigateToUserChat(userId);
         private void OpenUserProfileEvent(object sender, int userId) => NavigateToUserProfile(userId);
         private async Task NavigateToUserChat(int userId) => await NavigationService.NavigateAsync<ChatViewModel, int>(userId);
         private async Task NavigateToUserProfile(int userId) => await NavigationService.NavigateAsync<MemberViewModel, int>(userId);
@@ -266,14 +394,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public string NoRecentChat => L10N.Localize("ChatList_NoChats");
         private string YouChatLabel => L10N.Localize("ChatList_You");
 
-        public string DeleteAction => L10N.Localize("ChatList_Delete");
-        public string MuteAction => L10N.Localize("ChatList_Mute");
-        public string UnMuteAction => L10N.Localize("ChatList_UnMute");
+        private string ArchiveAction => L10N.Localize("ChatList_Archive");
+        private string MuteAction => L10N.Localize("ChatList_Mute");
+        private string UnMuteAction => L10N.Localize("ChatList_UnMute");
 
         public enum ChatEventType
         {
             Mute,
-            Delete
+            Archive
         }
 
         #endregion

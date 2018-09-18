@@ -14,12 +14,20 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 	{
 		[Outlet]
 		UIKit.UITableView _tableView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _tableViewTopConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
 			if (_tableView != null) {
 				_tableView.Dispose ();
 				_tableView = null;
+			}
+
+			if (_tableViewTopConstraint != null) {
+				_tableViewTopConstraint.Dispose ();
+				_tableViewTopConstraint = null;
 			}
 		}
 	}

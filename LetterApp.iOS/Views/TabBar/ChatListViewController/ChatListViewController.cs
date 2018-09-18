@@ -35,8 +35,12 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
         {
             switch (e.PropertyName)
             {
-                case nameof(ViewModel.UpdateTableView):
+                case nameof(ViewModel.ChatList):
                     SetupTableView();
+                    break;
+                case nameof(ViewModel.UpdateTableView):
+                    if(this.ViewIfLoaded?.Window != null)
+                        SetupTableView();
                     break;
                 case nameof(ViewModel.NoChats):
                     HasChats(false);
@@ -87,9 +91,11 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 _tableView.TableHeaderView = _search.SearchBar;
             }
 
+            _search.SearchBar.OnEditingStarted -= OnSearchBar_OnEditingStarted;
+            _search.SearchBar.OnEditingStarted += OnSearchBar_OnEditingStarted;
+
             _search.SearchBar.CancelButtonClicked -= OnSearchBar_CancelButtonClicked;
             _search.SearchBar.CancelButtonClicked += OnSearchBar_CancelButtonClicked;
-
         }
 
         private void SetupTableView()
@@ -145,6 +151,17 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             ViewModel.OpenContactsCommand.Execute();
         }
 
+        private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
+        {
+            UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
+                () => {
+                    _tableViewTopConstraint.Constant = -30;
+                    this.View.LayoutIfNeeded();
+                },
+                null
+            );
+        }
+
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
             ViewModel.SearchChatCommand.Execute(searchController.SearchBar.Text);
@@ -152,6 +169,14 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
         private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
         {
+            UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
+                () => {
+                    _tableViewTopConstraint.Constant = 0;
+                    this.View.LayoutIfNeeded();
+                },
+                null
+            );
+
             ViewModel.CloseSearchCommand.Execute();
         }
 
@@ -176,7 +201,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 }
             }
 
-            HasChats(ViewModel?.ChatList.Count > 0);
+            HasChats(ViewModel?.ChatList?.Count > 0);
         }
 
         public override void ViewWillDisappear(bool animated)

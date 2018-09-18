@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatListViewController">
             <connections>
                 <outlet property="_tableView" destination="BRe-4j-naV" id="Ao6-nC-f4m"/>
+                <outlet property="_tableViewTopConstraint" destination="GEm-hw-oUy" id="qwI-Gl-RBh"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -27,10 +28,10 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="BRe-4j-naV" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="FaM-qr-buE"/>
+                <constraint firstItem="BRe-4j-naV" firstAttribute="top" secondItem="2" secondAttribute="top" id="GEm-hw-oUy"/>
                 <constraint firstItem="BRe-4j-naV" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="GNg-WA-ykd"/>
-                <constraint firstItem="BRe-4j-naV" firstAttribute="height" secondItem="2" secondAttribute="height" id="HmI-BV-aFe"/>
                 <constraint firstItem="BRe-4j-naV" firstAttribute="width" secondItem="2" secondAttribute="width" id="cwW-uG-YZo"/>
+                <constraint firstAttribute="bottom" secondItem="BRe-4j-naV" secondAttribute="bottom" id="yzh-xM-fyj"/>
             </constraints>
         </view>
     </objects>

@@ -17,6 +17,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     public class CallListViewModel : XViewModel
     {
         private readonly IDialogService _dialogService;
+        private readonly IContactsService _contactsService;
 
         public bool NoCalls { get; private set; }
 
@@ -47,8 +48,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<int> _callStackCommand;
         public XPCommand<int> CallStackCommand => _callStackCommand ?? (_callStackCommand = new XPCommand<int>(ShowCallStack));
 
-        public CallListViewModel(IDialogService dialogService) 
+        public CallListViewModel(IContactsService contactsService, IDialogService dialogService) 
         {
+            _contactsService = contactsService;
             _dialogService = dialogService;
             SetL10NResources();
         }
@@ -56,8 +58,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
             //return;
-            if(_users == null || _users.Count == 0)
-                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+            if (_users == null || _users.Count == 0)
+                await GetUsers();
 
             _callHistory = new List<CallHistoryModel>();
 
@@ -132,6 +134,39 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     }
                 }
             });
+        }
+
+        private async Task GetUsers()
+        {
+            try
+            {
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+
+                if (_users.Count == 0)
+                {
+                    var result = await _contactsService.GetUsersFromAllDivisions();
+
+                    if (result == null && result.Count == 0)
+                        return;
+
+                    foreach (var res in result)
+                    {
+                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                        var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                        string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+                        stringSearch = StringUtils.NormalizeString(stringSearch);
+                        res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
+
+                        Realm.Write(() => { Realm.Add(res, true); });
+                    }
+
+                    _users = Realm.All<GetUsersInDivisionModel>().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
         private void DeleteCall(int index)
