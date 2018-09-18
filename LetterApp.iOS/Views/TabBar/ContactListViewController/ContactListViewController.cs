@@ -113,7 +113,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             if(UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
                 _textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
-                _textFieldInsideSearchBar.Subviews[0].Alpha = 0f;
+                _textFieldInsideSearchBar.Subviews[0].Alpha = 0.07f;
 
                 _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
                 _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("clear"), UISearchBarIcon.Clear, UIControlState.Normal);
