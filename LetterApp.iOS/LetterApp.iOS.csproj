@@ -533,6 +533,7 @@
     <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\CallStackViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -812,6 +813,10 @@
       <DependentUpon>ChatCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\ChatListSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.designer.cs">
+      <DependentUpon>ChatAlertViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

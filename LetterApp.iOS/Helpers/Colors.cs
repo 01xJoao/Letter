@@ -39,5 +39,6 @@ namespace LetterApp.iOS.Helpers
         public static UIColor ChatDivider => UIColor.FromRGB(226, 225, 228);
         public static UIColor UserOnline => UIColor.FromRGB(66, 179, 26);
         public static UIColor UserRecent => UIColor.FromRGB(255, 171, 29);
+        public static UIColor ChatPopUp => UIColor.FromRGB(250, 250, 251);
     }
 }
