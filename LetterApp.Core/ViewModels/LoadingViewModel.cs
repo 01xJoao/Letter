@@ -73,7 +73,7 @@ namespace LetterApp.Core.ViewModels
                         AppSettings.UserAndOrganizationIds = $"{AppSettings.UserId}-{AppSettings.OrganizationId}";
                         UpdateSinchClient = true;
 
-                        _mesengersService.InitializeMessenger();
+                        //_mesengersService.InitializeMessenger();
                         //_mesengersService.ConnectMessenger();
                     }
 

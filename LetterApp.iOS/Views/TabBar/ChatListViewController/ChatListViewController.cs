@@ -15,6 +15,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 {
     public partial class ChatListViewController : XViewController<ChatListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating
     {
+        private UIView _loadingView = new UIView();
         private UIImageView _noRecentChatImage = new UIImageView(UIImage.FromBundle("nochats"));
         private UILabel _noRecenChatLabel = new UILabel();
         private UISearchController _search; 
@@ -45,9 +46,17 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 case nameof(ViewModel.NoChats):
                     HasChats(false);
                     break;
+                case nameof(ViewModel.IsLoading):
+                    LoadingAnimation(ViewModel.IsLoading);
+                    break;
                 default:
                     break;
             }
+        }
+        
+        private void LoadingAnimation(bool isLoading)
+        {
+            UIViewAnimationExtensions.LottieMadeSimple("loading", _loadingView, isLoading);
         }
 
         private void ConfigureView()
@@ -100,9 +109,6 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
         private void SetupTableView()
         {
-            //var popup = new ChatAlertViewController("", "João Palma - Programmador", "Teste teste...", (obj) => {});
-            //popup.Show();
-
             Debug.WriteLine("PropertyChanged: ChatListCountINTableView: " + ViewModel.ChatList.Count);
 
             HasChats(true);
@@ -133,6 +139,14 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             UILabelExtensions.SetupLabelAppearance(_noRecenChatLabel, ViewModel.NoRecentChat, Colors.GrayDivider, 17f, UIFontWeight.Medium);
             _noRecenChatLabel.TextAlignment = UITextAlignment.Center;
 
+            _loadingView.Hidden = true;
+            _loadingView.Frame = new CGRect(0, 0, 35, 35);
+            var imageLoadingCenter = _noRecentChatImage.Center;
+            imageLoadingCenter.X = _tableView.Bounds.GetMidX();
+            imageLoadingCenter.Y = _tableView.Bounds.Height - 40;
+            _loadingView.Center = imageLoadingCenter;
+
+            this.View.AddSubview(_loadingView);
             this.View.AddSubview(_noRecentChatImage);
             this.View.AddSubview(_noRecenChatLabel);
         }

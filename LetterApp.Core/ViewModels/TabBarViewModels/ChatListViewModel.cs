@@ -25,11 +25,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
 
+        public bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+
         public bool UpdateTableView { get; set; }
         public bool NoChats { get; set; }
         public string[] Actions;
 
-        private DateTime _updateFrequence = DateTime.Now;
+        private DateTime _updateFrequence = default(DateTime);
         private List<GetUsersInDivisionModel> _users;
         private List<ChatListUserModel> _chatUserModel;
         
@@ -267,6 +275,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             if (DateTime.Now >= _updateFrequence)
             {
+                if (_updateFrequence == default(DateTime))
+                    IsLoading = true;
+
                 var newChatList = new List<ChatListUserModel>();
 
                 try
@@ -333,7 +344,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                     Debug.WriteLine("UpdateMessengerService with chats count: " + newChatList.Count);
 
-                    if(!_isSearching)
+                    if (!_isSearching)
                         UpdateChatList(true);
                 }
                 catch (Exception ex)
@@ -342,6 +353,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 finally
                 {
+                    if (_updateFrequence == default(DateTime))
+                        IsLoading = false;
+
                     _updateFrequence = DateTime.Now.AddMinutes(4);
                 }
             }

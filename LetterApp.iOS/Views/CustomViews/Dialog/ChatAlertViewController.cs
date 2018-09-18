@@ -56,7 +56,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             _openChatButton.TouchUpInside -= OnOpenChatButton_TouchUpInside;
             _openChatButton.TouchUpInside += OnOpenChatButton_TouchUpInside;
 
-            //Add Vibration
+            Xamarin.Essentials.Vibration.Vibrate(TimeSpan.FromMilliseconds(500));
 
             gesture.AddTarget(() => HandleDrag(gesture));
             this.View.AddGestureRecognizer(gesture);

@@ -66,7 +66,34 @@ namespace LetterApp.iOS.Helpers
             }
         }
 
-        public static void AnimateBackgroundView(UIView view, nfloat animationHeight, bool shouldAnimate)
+        public static void LottieMadeSimple(string animationName, UIView view, bool shouldAnimate)
+        {
+            if (shouldAnimate)
+            {
+                view.Hidden = false;
+                _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
+                _lottieAnimation.Frame = new CGRect(-view.Frame.Width, -view.Frame.Height, 100, 100);
+                view.AddSubview(_lottieAnimation);
+                _lottieAnimation.LoopAnimation = true;
+                _lottieAnimation.Hidden = false;
+                _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.Play();
+            }
+            else
+            {
+                view.Hidden = true;
+
+                if (_lottieAnimation != null)
+                {
+                    _lottieAnimation.Hidden = true;
+                    _lottieAnimation.Pause();
+                    _lottieAnimation?.Dispose();
+                    _lottieAnimation = null;
+                }
+            }
+        }
+
+            public static void AnimateBackgroundView(UIView view, nfloat animationHeight, bool shouldAnimate)
         {
             if (shouldAnimate)
                 Animations.AnimateBackground(view, animationHeight);

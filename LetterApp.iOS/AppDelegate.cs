@@ -45,10 +45,12 @@ namespace LetterApp.iOS
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-             Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
             CallManager = new ActiveCallManager();
             CallProviderDelegate = new ProviderDelegate(CallManager);
+
+            SendBird.SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
 
             Push = Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
             Push.WeakDelegate = this;
