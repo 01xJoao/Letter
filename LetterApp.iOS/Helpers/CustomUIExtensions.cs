@@ -30,6 +30,16 @@ namespace LetterApp.iOS.Helpers
             view.Layer.ShadowRadius = 6f;
         }
 
+        public static void ViewShadowForChatPupUp(UIView view)
+        {
+            view.ClipsToBounds = false;
+            view.Layer.ShadowColor = Colors.Black.ColorWithAlpha(0.2f).CGColor;
+            view.Layer.ShadowOpacity = 2f;
+            view.Layer.ShadowOffset = new CGSize(0.5f, 0.5f);
+            view.Layer.ShadowRadius = 2f;
+            view.Layer.CornerRadius = 4f;
+        }
+
         public static void ImageShadow(UIView view)
         {
             view.ClipsToBounds = false;

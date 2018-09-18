@@ -10,7 +10,7 @@ namespace LetterApp.Core.Models
         public string MemberPhoto { get; set; }
         public string LastMessage { get; set; }
         public long LastMessageDateTimeTicks { get; set; }
-        public bool ShouldAlert { get; set; }
+        public bool ShouldAlertNewMessage { get; set; }
         public bool IsMemeberMuted { get; set; }
         public bool IsArchived { get; set; }
         public long ArchivedTime { get; set; }

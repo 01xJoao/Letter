@@ -52,7 +52,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sUU-1n-xxF">
-                        <rect key="frame" x="83" y="35" width="251" height="17"/>
+                        <rect key="frame" x="83" y="32" width="251" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -88,7 +88,7 @@
                     <constraint firstItem="47y-Ai-qxD" firstAttribute="leading" secondItem="xyP-om-lIH" secondAttribute="trailing" constant="15" id="Ti5-dV-yqH"/>
                     <constraint firstItem="0Y1-gE-VCs" firstAttribute="top" secondItem="47y-Ai-qxD" secondAttribute="bottom" constant="7" id="Uoq-57-DYo"/>
                     <constraint firstItem="DJe-ag-dRX" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="Y2W-nW-NX3"/>
-                    <constraint firstItem="sUU-1n-xxF" firstAttribute="top" secondItem="xyP-om-lIH" secondAttribute="bottom" constant="5" id="aFn-BX-11O"/>
+                    <constraint firstItem="sUU-1n-xxF" firstAttribute="top" secondItem="xyP-om-lIH" secondAttribute="bottom" constant="2" id="aFn-BX-11O"/>
                     <constraint firstItem="id2-FS-2aM" firstAttribute="bottom" secondItem="DJe-ag-dRX" secondAttribute="bottom" constant="1" id="gBS-Ku-yTa"/>
                     <constraint firstAttribute="trailing" secondItem="SMn-lJ-sDE" secondAttribute="trailing" id="huL-DO-fEm"/>
                     <constraint firstItem="7pu-J1-1SS" firstAttribute="centerY" secondItem="DJe-ag-dRX" secondAttribute="centerY" id="jz3-Du-FFf"/>

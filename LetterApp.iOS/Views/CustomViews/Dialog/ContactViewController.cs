@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Helpers;
 using UIKit;

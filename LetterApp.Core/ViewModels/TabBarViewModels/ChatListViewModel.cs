@@ -18,6 +18,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     public class ChatListViewModel : XViewModel
     {
         private readonly IMessengerService _messagerService;
+        private readonly IDialogService _dialogService;
         private readonly IContactsService _contactsService;
 
         private int _thisUserId => AppSettings.UserId;
@@ -61,8 +62,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<Tuple<ChatEventType, int>> _rowActionCommand;
         public XPCommand<Tuple<ChatEventType, int>> RowActionCommand => _rowActionCommand ?? (_rowActionCommand = new XPCommand<Tuple<ChatEventType, int>>(RowAction));
 
-        public ChatListViewModel(IContactsService contactsService, IMessengerService messagerService)
+        public ChatListViewModel(IContactsService contactsService, IMessengerService messagerService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _contactsService = contactsService;
             _messagerService = messagerService;
             Actions = new string[] { ArchiveAction, MuteAction, UnMuteAction };
@@ -163,7 +165,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             MemberName = $"{result.FirstName} {result.LastName} - {result.Position}",
                             MemberPhoto = result.Picture,
                             IsMemeberMuted = false,
-                            LastTimeChatWasOpen = default(DateTime).Ticks
+                            LastTimeChatWasOpen = default(DateTime).Ticks,
                         };
 
                         Realm.Write(() => Realm.Add(userChatModel));
@@ -175,8 +177,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
                     userChatModel.LastMessage = msg.Message;
                     userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
-                    userChatModel.ShouldAlert = true;
                     userChatModel.IsArchived = false;
+                    userChatModel.ShouldAlertNewMessage = true;
                 });
 
                 var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
@@ -188,19 +190,22 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                         MemberId = userChatModel.MemberId,
                         MemberName = userChatModel.MemberName,
                         MemberPhoto = userChatModel.MemberPhoto,
+                        IsMemberMuted = userChatModel.IsMemeberMuted,
                         OpenChat = OpenUserChatEvent,
-                        OpenMemberProfile = OpenUserProfileEvent,
-                        IsMemberMuted = false
+                        OpenMemberProfile = OpenUserProfileEvent
                     };
 
                     _chatList.Add(member);
                 }
 
+                member.ShouldAlertNewMessage = userChatModel.ShouldAlertNewMessage;
                 member.LastMessage = userChatModel.LastMessage;
                 member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
                 member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
                 member.MemberPresence = MemberPresence.Online;
-                member.ShouldAlert = userChatModel.ShouldAlert;
+
+                if(!member.IsMemberMuted)
+                    AlertUser(member);
 
                 if(!_isSearching)
                     RaisePropertyChanged(nameof(UpdateTableView));
@@ -213,6 +218,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 CheckForMessagesHandler();
             }
+        }
+
+        private async Task AlertUser(ChatListUserCellModel member)
+        {
+            var result = await _dialogService.ShowMessageAlert(member.MemberPhoto, member.MemberName, member.LastMessage);
+
+            if (result)
+                await NavigationService.NavigateAsync<ChatViewModel, int>(member.MemberId);
         }
 
         private void UpdateChatList(bool updated = false)
@@ -228,7 +241,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var date = new DateTime(chat.LastMessageDateTimeTicks);
 
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
-                                                    DateUtils.TimeForChat(date), chat.ShouldAlert, chat.IsMemeberMuted,
+                                                    DateUtils.TimeForChat(date), chat.ShouldAlertNewMessage, chat.IsMemeberMuted,
                                                     OpenUserProfileEvent, OpenUserChatEvent, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));
@@ -290,9 +303,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberName = $"{userInDB.FirstName} {userInDB.LastName} - {userInDB.Position}",
                                 MemberPhoto = userInDB.Picture,
                                 IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
+                                ShouldAlertNewMessage = userInModel != null && lastMessageDate.Ticks > userInModel.LastTimeChatWasOpen,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = userLastSeen,
-                                ShouldAlert = userInModel == null || channel.LastMessage.CreatedAt > userInModel.LastTimeChatWasOpen,
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
                                 IsArchived = userInModel == null || (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),

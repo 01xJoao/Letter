@@ -33,7 +33,18 @@ namespace LetterApp.iOS.Services
 
         public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
         {
-            throw new NotImplementedException();
+            //TODO What is this for?
+            return null;
+        }
+
+        public Task<bool> ShowMessageAlert(string photo = "", string name = "", string message = "")
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var messageAlertView = new ChatAlertViewController(photo, name, message, val => tcs.TrySetResult(val));
+            messageAlertView.Show();
+
+            return tcs.Task;
         }
 
         public Task<bool> ShowInformation(string title = "", string text1 = "", string text2 = "", string text3 = "", string confirmButtonText = "")

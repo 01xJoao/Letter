@@ -100,6 +100,9 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
         private void SetupTableView()
         {
+            //var popup = new ChatAlertViewController("", "João Palma - Programmador", "Teste teste...", (obj) => {});
+            //popup.Show();
+
             Debug.WriteLine("PropertyChanged: ChatListCountINTableView: " + ViewModel.ChatList.Count);
 
             HasChats(true);

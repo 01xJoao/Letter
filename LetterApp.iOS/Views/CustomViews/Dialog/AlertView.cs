@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.Services.Interfaces;
@@ -11,7 +10,6 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
     public partial class AlertView : UIView
     {
         private float _duration;
-
         public static readonly UINib Nib = UINib.FromName("AlertView", NSBundle.MainBundle);
         public AlertView(IntPtr handle) : base(handle) {}
         public static AlertView Create() => Nib.Instantiate(null, null)[0] as AlertView;
