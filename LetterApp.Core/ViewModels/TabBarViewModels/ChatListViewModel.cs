@@ -101,6 +101,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 catch (Exception ex)
                 {
+                    //TODO Add Check and Handle for reconnection
                     Ui.Handle(ex as dynamic);
                 }
             }
