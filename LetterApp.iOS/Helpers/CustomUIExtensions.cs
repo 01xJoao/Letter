@@ -79,5 +79,56 @@ namespace LetterApp.iOS.Helpers
             view.Layer.BorderColor = Colors.MainBlue.CGColor;
             view.Layer.BorderWidth = 1f;
         }
+
+        public static UIView SetupNavigationBarWithSubtitle(string title, string subtitle, nfloat maxSize)
+        {
+            var titleLabel = new UILabel(new CGRect(0, 2, 0, 0))
+            {
+                BackgroundColor = UIColor.Clear,
+                TextColor = Colors.White,
+                Font = UIFont.BoldSystemFontOfSize(17),
+                Text = title,
+                LineBreakMode = UILineBreakMode.MiddleTruncation
+            };
+
+            titleLabel.SizeToFit();
+
+            var subtitleLabel = new UILabel(new CGRect(0, 26, 0, 0))
+            {
+                BackgroundColor = UIColor.Clear,
+                TextColor = Colors.White,
+                Font = UIFont.SystemFontOfSize(12),
+                Text = subtitle,
+                LineBreakMode = UILineBreakMode.MiddleTruncation
+            };
+
+            subtitleLabel.SizeToFit();
+
+            if(titleLabel.Frame.Width > maxSize)
+                titleLabel.Frame = new CGRect(titleLabel.Frame.X, titleLabel.Frame.Y, maxSize, titleLabel.Frame.Height);
+
+            if (subtitleLabel.Frame.Width > maxSize)
+                subtitleLabel.Frame = new CGRect(subtitleLabel.Frame.X, subtitleLabel.Frame.Y, maxSize, subtitleLabel.Frame.Height);
+
+            var titleView = new UIView(new CGRect(0, 0, Math.Max(titleLabel.Frame.Size.Width, subtitleLabel.Frame.Size.Width), 30));
+
+            titleView.AddSubview(titleLabel);
+            titleView.AddSubview(subtitleLabel);
+
+            var widthDiff = subtitleLabel.Frame.Size.Width - titleLabel.Frame.Size.Width;
+
+            if(widthDiff < 0)
+            {
+                var newX = widthDiff / 2;
+                subtitleLabel.Frame = new CGRect(Math.Abs(newX), subtitleLabel.Frame.Y, subtitleLabel.Frame.Width, subtitleLabel.Frame.Height);
+            }
+            else
+            {
+                var newX = widthDiff / 2;
+                titleLabel.Frame = new CGRect(Math.Abs(newX), titleLabel.Frame.Y, titleLabel.Frame.Width, titleLabel.Frame.Height);
+            }
+
+            return titleView;
+        }
     }
 }

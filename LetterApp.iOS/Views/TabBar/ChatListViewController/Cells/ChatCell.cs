@@ -95,7 +95,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
             //_unreadCountWidthConstraint.Constant = chatUser.UnreadMessagesCount > 0 ? _unreadCountWidthConstraint.Constant : 0;
             //_unreadCountHeightConstraint.Constant = chatUser.UnreadMessagesCount > 0 ? _unreadCountWidthConstraint.Constant : 0;
 
-            UILabelExtensions.SetupLabelAppearance(_unreadCountLabel, chatUser.UnreadMessagesCount.ToString(), Colors.White, 10f, UIFontWeight.Semibold);
+            UILabelExtensions.SetupLabelAppearance(_unreadCountLabel, chatUser.UnreadMessagesCount.ToString(), Colors.White, 10f, UIFontWeight.Medium);
             _unreadCountLabel.Hidden = _unreadCountView.Hidden = chatUser.UnreadMessagesCount == 0;
             _unreadCountView.BackgroundColor = Colors.UnreadCount;
             CustomUIExtensions.RoundView(_unreadCountView);

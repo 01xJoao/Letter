@@ -363,6 +363,22 @@
     <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\norecentchats.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\volume_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -475,6 +491,10 @@
     <Folder Include="Resources\Assets.xcassets\newchat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\silent.imageset\" />
     <Folder Include="Views\Chat\" />
+    <Folder Include="Resources\Assets.xcassets\call_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\call_white_small.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\call_white_medium.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\options.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
