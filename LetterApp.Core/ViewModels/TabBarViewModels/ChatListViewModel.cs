@@ -12,6 +12,7 @@ using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
 using SendBird;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -94,14 +95,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     var result = await _messagerService.ConnectMessenger();
 
-                    if(result) 
+                    if (result)
                         UpdateMessengerService();
 
+                    //TODO Remove This.
                     CreateChannel();
                 }
                 catch (Exception ex)
                 {
-                    //TODO Add Check and Handle for reconnection
+                    CheckConnection();
                     Ui.Handle(ex as dynamic);
                 }
             }
@@ -423,6 +425,24 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             _isSearching = false;
             RaisePropertyChanged(nameof(ChatList));
+        }
+
+        private void CheckConnection()
+        {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+                Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            }
+        }
+
+        private void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess == NetworkAccess.Internet)
+            {
+                Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+                Appearing();
+            }
         }
 
         private void OpenUserChatEvent(object sender, int userId) => NavigateToUserChat(userId);

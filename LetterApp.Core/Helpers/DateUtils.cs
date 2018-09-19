@@ -59,10 +59,7 @@ namespace LetterApp.Core.Helpers
 
             if (date.Date == DateTime.Now.Date || delta <= 18 * HOUR)
                 return date.ToString("HH:mm");
-
-            //if(date.Date.AddDays(1) == DateTime.Now.Date)
-                //return L10N.Localize("date_Yesterday");
-
+               
             if (delta > 48 * HOUR && delta < 144 * HOUR || date.Date.AddDays(1) == DateTime.Now.Date)
                 return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
 
