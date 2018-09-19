@@ -33,7 +33,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
-
         public bool UpdateTableView { get; set; }
         public bool NoChats { get; set; }
         public string[] Actions;
@@ -97,7 +96,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     if (result) UpdateMessengerService();
 
                     //TODO Remove This.
-                    CreateChannel();
+                    //SendMessage();
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +154,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     return;
                 }
 
-                DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data) : DateTime.Now;
+                DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data).ToLocalTime() : DateTime.Now;
 
                 var userChatModel = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(msg.Sender.UserId));
 
@@ -187,6 +186,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
                     userChatModel.IsArchived = false;
                     userChatModel.ShouldAlertNewMessage = true;
+                    userChatModel.UnreadMessagesCount += 1; 
                 });
 
                 var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
@@ -206,6 +206,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     _chatList.Add(member);
                 }
 
+                member.UnreadMessagesCount = userChatModel.UnreadMessagesCount;
                 member.ShouldAlertNewMessage = userChatModel.ShouldAlertNewMessage;
                 member.LastMessage = userChatModel.LastMessage;
                 member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
@@ -249,7 +250,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var date = new DateTime(chat.LastMessageDateTimeTicks);
 
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
-                                                    DateUtils.TimeForChat(date), chat.ShouldAlertNewMessage, chat.IsMemeberMuted,
+                                                    DateUtils.TimeForChat(date), chat.ShouldAlertNewMessage, chat.IsMemeberMuted, chat.UnreadMessagesCount,
                                                     OpenUserProfileEvent, OpenUserChatEvent, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));
@@ -299,23 +300,20 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 continue;
 
                             var lastMessage = channel.LastMessage as UserMessage;
-
-                            DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data) : DateTime.Now;
-
-                            long lastSeenTime;
-
-                            if (userInModel != null)
-                            {
-                                lastSeenTime = userInModel.MemberPresenceConnectionDate >= user.LastSeenAt && userInModel.MemberPresenceConnectionDate <= lastMessageDate.Ticks
-                                    ? lastMessageDate.Ticks
-                                    : userInModel.MemberPresenceConnectionDate >= user.LastSeenAt ? userInModel.MemberPresenceConnectionDate : user.LastSeenAt;
-                            }
-                            else
-                                lastSeenTime = default(DateTime).Ticks;
-
-                            var userLastSeen = user.ConnectionStatus == User.UserConnectionStatus.ONLINE || user.LastSeenAt == 0 ? DateTime.Now.Ticks : lastSeenTime;
-
+                            DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data).ToLocalTime() : DateTime.Now;
+                            long userLastSeen = DateTime.Now.AddMilliseconds(-user.LastSeenAt).Ticks;
                             var shouldAlertMsg = !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
+
+                            //if (userInModel != null)
+                            //{
+                            //    lastSeenTime = userInModel.MemberPresenceConnectionDate >= user.LastSeenAt && userInModel.MemberPresenceConnectionDate <= lastMessageDate.Ticks
+                            //        ? lastMessageDate.Ticks
+                            //        : userInModel.MemberPresenceConnectionDate >= user.LastSeenAt ? userInModel.MemberPresenceConnectionDate : user.LastSeenAt;
+                            //}
+                            //else
+                            //lastSeenTime = default(DateTime).Ticks;
+
+                            //var userLastSeen = user.ConnectionStatus == User.UserConnectionStatus.ONLINE || user.LastSeenAt == 0 ? DateTime.Now.Ticks : lastSeenTime;
 
                             var usr = new ChatListUserModel
                             {
@@ -329,7 +327,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
                                 IsArchived = userInModel != null && (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
-                                ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0
+                                ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0,
+                                UnreadMessagesCount = channel.UnreadMessageCount
                             };
 
                             newChatList.Add(usr);
@@ -362,24 +361,24 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
         }
 
-        private async Task CreateChannel()
-        {
-            try
-            {
-                var channel = await _messagerService.CreateChannel(new List<string> { "59-33" });
+        //private async Task SendMessage()
+        //{
+        //    try
+        //    {
+        //        var channel = await _messagerService.CreateChannel(new List<string> { "59-33" });
 
-                if (channel != null)
-                    await _messagerService.SendMessage(channel, "This is a text message to check how it works in two lines label, thank you.", DateTime.Now.ToString());
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-        }
+        //        if (channel != null)
+        //            await _messagerService.SendMessage(channel, "This is a text message to check how it works in two lines label, thank you.", DateTime.UtcNow.ToString());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Ui.Handle(ex as dynamic);
+        //    }
+        //}
 
         private async Task OpenContacts()
         {
-            UpdateChatList();
+            await NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
         }
 
         private void RowAction(Tuple<ChatEventType, int> action)
@@ -425,20 +424,20 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             RaisePropertyChanged(nameof(ChatList));
         }
 
-        private void CheckConnection()
+        private async Task CheckConnection()
         {
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
-                Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
-                Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+                Connectivity.ConnectivityChanged -= ConnectivityChanged;
+                Connectivity.ConnectivityChanged += ConnectivityChanged;
             }
         }
 
-        private void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
+        private void ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             if (e.NetworkAccess == NetworkAccess.Internet)
             {
-                Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+                Connectivity.ConnectivityChanged -= ConnectivityChanged;
                 Appearing();
             }
         }

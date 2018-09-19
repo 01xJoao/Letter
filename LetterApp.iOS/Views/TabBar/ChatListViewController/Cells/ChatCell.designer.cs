@@ -25,6 +25,9 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
 		UIKit.UILabel _messageLabel { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _messageTrailConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView _presenceView { get; set; }
 
 		[Outlet]
@@ -41,14 +44,21 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
 
 		[Outlet]
 		UIKit.NSLayoutConstraint _silentImageWidthConstraint { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _unreadCountHeightConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _unreadCountLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView _unreadCountView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _unreadCountWidthConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (_silentImageWidthConstraint != null) {
-				_silentImageWidthConstraint.Dispose ();
-				_silentImageWidthConstraint = null;
-			}
-
 			if (_chatButton != null) {
 				_chatButton.Dispose ();
 				_chatButton = null;
@@ -92,6 +102,36 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
 			if (_silentImage != null) {
 				_silentImage.Dispose ();
 				_silentImage = null;
+			}
+
+			if (_silentImageWidthConstraint != null) {
+				_silentImageWidthConstraint.Dispose ();
+				_silentImageWidthConstraint = null;
+			}
+
+			if (_unreadCountHeightConstraint != null) {
+				_unreadCountHeightConstraint.Dispose ();
+				_unreadCountHeightConstraint = null;
+			}
+
+			if (_unreadCountLabel != null) {
+				_unreadCountLabel.Dispose ();
+				_unreadCountLabel = null;
+			}
+
+			if (_unreadCountView != null) {
+				_unreadCountView.Dispose ();
+				_unreadCountView = null;
+			}
+
+			if (_unreadCountWidthConstraint != null) {
+				_unreadCountWidthConstraint.Dispose ();
+				_unreadCountWidthConstraint = null;
+			}
+
+			if (_messageTrailConstraint != null) {
+				_messageTrailConstraint.Dispose ();
+				_messageTrailConstraint = null;
 			}
 		}
 	}
