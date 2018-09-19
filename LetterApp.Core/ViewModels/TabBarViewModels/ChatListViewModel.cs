@@ -38,7 +38,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public bool NoChats { get; set; }
         public string[] Actions;
 
-        private DateTime _updateFrequence = default(DateTime);
+        private DateTime _updateFrequence;
         private List<GetUsersInDivisionModel> _users;
         private List<ChatListUserModel> _chatUserModel;
         
@@ -94,9 +94,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 try
                 {
                     var result = await _messagerService.ConnectMessenger();
-
-                    if (result)
-                        UpdateMessengerService();
+                    if (result) UpdateMessengerService();
 
                     //TODO Remove This.
                     CreateChannel();
