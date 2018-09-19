@@ -11,16 +11,17 @@ using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
 using Xamarin.Essentials;
+using static LetterApp.Core.ViewModels.TabBarViewModels.ContactListViewModel;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
-    public class ContactListViewModel : XViewModel<bool>
+    public class ContactListViewModel : XViewModel<ContactsType>
     {
         private IAuthenticationService _authenticationService;
         private IContactsService _contactsService;
         private IDialogService _dialogService;
 
-        public bool IsPresentViewForCalls { get; private set; }
+        public ContactsType IsPresentingCustomView { get; private set; }
         public bool IsFilteredByName { get; private set; }
 
         private bool _isFilterActive;
@@ -88,9 +89,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             SetL10NResources();
         }
 
-        protected override void Prepare(bool isPresentView = false)
+        protected override void Prepare(ContactsType contactsType = ContactsType.All)
         {
-            IsPresentViewForCalls = isPresentView;
+            IsPresentingCustomView = contactsType;
         }
 
         public override async Task InitializeAsync()
@@ -261,13 +262,18 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             switch (user.Item1)
             {
                 case ContactEventType.OpenProfile:
-                    if(!IsPresentViewForCalls)
+                    if (IsPresentingCustomView == ContactsType.All)
                         await NavigationService.NavigateAsync<MemberViewModel, int>(user.Item2);
-                    else
+                    else if (IsPresentingCustomView == ContactsType.Call)
                         ShowContactDialog(user.Item2);
+                    else
+                        OpenChatView(user.Item2);
                     break;
                 case ContactEventType.Call:
                     ShowContactDialog(user.Item2);
+                    break;
+                case ContactEventType.Chat:
+                    OpenChatView(user.Item2);
                     break;
                 default:
                     break;
@@ -290,7 +296,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     case CallingType.Letter:
                         if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                         {
-                            if (IsPresentViewForCalls)
+                            if (IsPresentingCustomView == ContactsType.Call)
                                 await CloseView();
 
                             await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(user.UserId, true));
@@ -299,7 +305,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     case CallingType.Cellphone:
                         CallUtils.Call(user.ContactNumber);
 
-                        if (IsPresentViewForCalls)
+                        if (IsPresentingCustomView == ContactsType.Call)
                             await CloseView();
                         break;
                     default:
@@ -310,6 +316,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 Ui.Handle(ex as dynamic);
             }
+        }
+
+        private async Task OpenChatView(int userId)
+        {
+            await NavigationService.NavigateAsync<ChatViewModel, int>(userId);
+
+            if (IsPresentingCustomView == ContactsType.Chat)
+                await CloseView();
         }
 
         private async Task Filter()
@@ -429,6 +443,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public string Title => L10N.Localize("Contacts_Title");
         public string SearchLabel => L10N.Localize("Contacts_Search");
         public string NewCallTitle => L10N.Localize("Contacts_NewCall");
+        public string NewChatTitle => L10N.Localize("Contacts_NewChat");
         public string Cancel => L10N.Localize("Cancel");
 
         private string DialogTitle => L10N.Localize("Contacts_DialogTitle");
@@ -455,6 +470,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             LocationResources.Add("DescriptionLetter", LetterDescriptionDialog);
             LocationResources.Add("TitlePhone", PhoneDialog);
             LocationResources.Add("DescriptionPhone", PhoneDescriptionDialog);
+        }
+
+        public enum ContactsType
+        {
+            All,
+            Chat,
+            Call
         }
 
         #endregion

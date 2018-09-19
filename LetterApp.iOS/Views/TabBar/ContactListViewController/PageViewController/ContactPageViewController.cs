@@ -8,6 +8,7 @@ using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using LetterApp.Models.DTO.ReceivedModels;
 using UIKit;
+using static LetterApp.Core.ViewModels.TabBarViewModels.ContactListViewModel;
 
 namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewController
 {
@@ -16,19 +17,19 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
         private string NoResults => L10N.Localize("Contacts_NoResults");
         private UIImageView _noContactsImage = new UIImageView(UIImage.FromBundle("no_contacts"));
         private UILabel _noContactsLabel = new UILabel();
-        private bool _showOnlyCalls;
+        private ContactsType _showContactType;
         private int _index;
         private bool _filterByName;
         private EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> _contactEvent;
         private List<GetUsersInDivisionModel> _contactPage;
 
-        public ContactPageViewController(int index, List<GetUsersInDivisionModel> contactPage, EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> contactEvent, bool showOnlyCalls, bool filterByName) 
+        public ContactPageViewController(int index, List<GetUsersInDivisionModel> contactPage, EventHandler<Tuple<ContactListViewModel.ContactEventType, int>> contactEvent, ContactsType contactType, bool filterByName) 
             : base(index, "ContactPageViewController", null)
         {
             _index = index;
             _contactPage = contactPage;
             _contactEvent = contactEvent;
-            _showOnlyCalls = showOnlyCalls;
+            _showContactType = contactType;
             _filterByName = filterByName;
         }
 
@@ -69,7 +70,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.PageViewControlle
                 _noContactsLabel.Hidden = true;
                 _noContactsImage.Hidden = true;
 
-                var source = new ContactsSource(_tableView, contact, _showOnlyCalls, _filterByName);
+                var source = new ContactsSource(_tableView, contact, _showContactType, _filterByName);
 
                 source.ContactEvent -= OnSource_ContactEvent;
                 source.ContactEvent += OnSource_ContactEvent;

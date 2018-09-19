@@ -13,6 +13,7 @@ using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
 using SendBird;
 using Xamarin.Essentials;
+using static LetterApp.Core.ViewModels.TabBarViewModels.ContactListViewModel;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -378,7 +379,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task OpenContacts()
         {
-            await NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
+            await NavigationService.NavigateAsync<ContactListViewModel, ContactsType>(ContactsType.Chat);
         }
 
         private void RowAction(Tuple<ChatEventType, int> action)

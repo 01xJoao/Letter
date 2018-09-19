@@ -11,6 +11,7 @@ using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
 using Xamarin.Essentials;
+using static LetterApp.Core.ViewModels.TabBarViewModels.ContactListViewModel;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -226,7 +227,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private void OpenContactList()
         {
-            NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
+            NavigationService.NavigateAsync<ContactListViewModel, ContactsType>(ContactsType.Call);
         }
 
         private void OpenCallerProfile(int user)

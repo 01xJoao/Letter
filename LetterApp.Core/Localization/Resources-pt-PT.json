@@ -664,6 +664,10 @@
     "translated": "Nova Chamada"
   },
   {
+    "key": "Contacts_NewChat",
+    "translated": "Nova Conversa"
+  },
+  {
     "key": "Contacts_DialogTitle",
     "translated": "Filtrar Contactos"
   },

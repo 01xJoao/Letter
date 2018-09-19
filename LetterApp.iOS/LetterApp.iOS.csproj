@@ -474,6 +474,7 @@
     <Folder Include="Resources\Assets.xcassets\nochats.imageset\" />
     <Folder Include="Resources\Assets.xcassets\newchat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\silent.imageset\" />
+    <Folder Include="Views\Chat\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -534,6 +535,7 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\CallStackViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
+    <InterfaceDefinition Include="Views\Chat\ChatViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -816,6 +818,10 @@
     <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.cs" />
     <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.designer.cs">
       <DependentUpon>ChatAlertViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\ChatViewController.cs" />
+    <Compile Include="Views\Chat\ChatViewController.designer.cs">
+      <DependentUpon>ChatViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

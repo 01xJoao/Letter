@@ -16,9 +16,9 @@ namespace LetterApp.iOS.Sources
         private List<GetUsersInDivisionModel> _contacts;
         private IGrouping<string, GetUsersInDivisionModel>[] _grouping;
         private List<string> _indices = new List<string>();
-        private bool _showOnlyCalls;
+        private ContactsType _showContactType;
 
-        public ContactsSource(UITableView tableView, List<GetUsersInDivisionModel> contacts, bool showOnlyCalls, bool filterByName)
+        public ContactsSource(UITableView tableView, List<GetUsersInDivisionModel> contacts, ContactsType showContactType, bool filterByName)
         {
             _contacts = contacts;
             tableView.RegisterNibForCellReuse(ContactsCell.Nib, ContactsCell.Key);
@@ -51,7 +51,7 @@ namespace LetterApp.iOS.Sources
 
             _indices.Insert(0, UITableView.IndexSearch);
 
-            _showOnlyCalls = showOnlyCalls;
+            _showContactType = showContactType;
         }
 
         public override string TitleForHeader(UITableView tableView, nint section) => _grouping[section].Key.ToString();
@@ -64,7 +64,7 @@ namespace LetterApp.iOS.Sources
                 return new UITableViewCell();
 
             var contactCell = tableView.DequeueReusableCell(ContactsCell.Key) as ContactsCell;
-            contactCell.Configure(_grouping[indexPath.Section].ElementAt(indexPath.Row), ContactEvent, _showOnlyCalls);
+            contactCell.Configure(_grouping[indexPath.Section].ElementAt(indexPath.Row), ContactEvent, _showContactType);
 
 
             return contactCell;

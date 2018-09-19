@@ -49,7 +49,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _separatorView.BackgroundColor = Colors.GrayDividerContacts;
             _separatorView.Hidden = true;
 
-            if (!ViewModel.IsPresentViewForCalls)
+            if (ViewModel.IsPresentingCustomView == ContactListViewModel.ContactsType.All)
             {
                 this.Title = ViewModel.Title;
 
@@ -66,7 +66,8 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             }
             else
             {
-                UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewCallTitle, Colors.Black, 17f, UIFontWeight.Semibold);
+                UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.IsPresentingCustomView == ContactListViewModel.ContactsType.Call ? ViewModel.NewCallTitle : ViewModel.NewChatTitle,
+                                                       Colors.Black, 17f, UIFontWeight.Semibold);
                 UIButtonExtensions.SetupButtonAppearance(_cancelButton, _cancelButton.TintColor, 17f, ViewModel.Cancel);
 
                 _cancelButton.TitleLabel.Lines = 1;
@@ -191,7 +192,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             int divisionView = 0;
             foreach (var divisionList in ViewModel.ContactLists.Contacts)
             {
-                var division = new ContactPageViewController(divisionView, divisionList, ContactEvent, ViewModel.IsPresentViewForCalls, ViewModel.IsFilteredByName);
+                var division = new ContactPageViewController(divisionView, divisionList, ContactEvent, ViewModel.IsPresentingCustomView, ViewModel.IsFilteredByName);
                 _viewControllers.Add(division);
                 divisionView++;
             }
@@ -261,7 +262,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight;
 
-            if(!ViewModel.IsPresentViewForCalls)
+            if(ViewModel.IsPresentingCustomView == ContactListViewModel.ContactsType.All)
                 _barView.Frame = new CGRect(0, _isSearchActive ? _heightForAnimationTab + _tabScrollView.Frame.Height - 2 : _tabBarViewHeightConstraint.Constant - 2, sizeForTab, 2);
             else
                 _barView.Frame = new CGRect(0, _presentViewHeightConstraint.Constant + _tabScrollView.Frame.Height - 2, sizeForTab, 2);
@@ -473,7 +474,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 NavigationItem.HidesSearchBarWhenScrolling = false;
 
-            if (ViewModel.IsPresentViewForCalls)
+            if (ViewModel.IsPresentingCustomView != ContactListViewModel.ContactsType.All)
                 UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
         }
 
@@ -488,7 +489,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 this.NavigationItem.SearchController.SearchBar.EndEditing(true);
             }
 
-            if (this.IsMovingFromParentViewController && ViewModel.IsPresentViewForCalls)
+            if (this.IsMovingFromParentViewController && ViewModel.IsPresentingCustomView != ContactListViewModel.ContactsType.All)
             {
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
