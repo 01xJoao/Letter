@@ -70,8 +70,8 @@ namespace LetterApp.iOS.Views.Base
         {
             if(shouldRegister)
             {
-                _keyboardWillShow = UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(true));
-                _keyboardWillHide = UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(false));
+                _keyboardWillShow = UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(e, true));
+                _keyboardWillHide = UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(e, false));
             }
             else
             {
@@ -80,9 +80,9 @@ namespace LetterApp.iOS.Views.Base
             }
         }
 
-        public virtual void OnKeyboardNotification(bool changeKeyboardState) 
+        public virtual void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
         {
-            KeyboardIsVisible = changeKeyboardState;
+            KeyboardIsVisible = keyboardState;
         }
 
         protected void DismissKeyboardOnBackgroundTap()

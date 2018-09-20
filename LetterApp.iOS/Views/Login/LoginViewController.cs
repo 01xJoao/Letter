@@ -110,12 +110,12 @@ namespace LetterApp.iOS.Views.Login
             _emailLineView.BackgroundColor = Colors.Red;  
         } 
 
-        public override void OnKeyboardNotification(bool changeKeyboardState)
+        public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool changeKeyboardState)
         {
             if (ShouldAnimateView() && keyboardViewState != changeKeyboardState)
             {
                 keyboardViewState = changeKeyboardState;
-                UIViewAnimationExtensions.AnimateBackgroundView(this.View, LocalConstants.Login_HeightAnimation, keyboardViewState);
+                UIViewAnimationExtensions.AnimateView(this.View, LocalConstants.Login_HeightAnimation, keyboardViewState);
             }
         }
 

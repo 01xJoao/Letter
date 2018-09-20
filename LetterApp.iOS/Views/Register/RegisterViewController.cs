@@ -78,7 +78,7 @@ namespace LetterApp.iOS.Views.Register
             UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsBusy);
         }
 
-        public override void OnKeyboardNotification(bool changeKeyboardState)
+        public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool changeKeyboardState)
         {
             if (_keyboardViewState != changeKeyboardState && ViewIsVisible)
             {

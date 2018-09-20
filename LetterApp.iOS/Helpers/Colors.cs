@@ -41,5 +41,6 @@ namespace LetterApp.iOS.Helpers
         public static UIColor UserRecent => UIColor.FromRGB(255, 171, 29);
         public static UIColor ChatPopUp => UIColor.FromRGB(250, 250, 251);
         public static UIColor UnreadCount => UIColor.FromRGB(12, 94, 162);
+        public static UIColor KeyboardView => UIColor.FromRGB(246, 246, 246);
     }
 }

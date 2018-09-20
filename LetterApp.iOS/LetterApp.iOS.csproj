@@ -379,6 +379,22 @@
     <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options.png" />
     <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -495,6 +511,10 @@
     <Folder Include="Resources\Assets.xcassets\call_white_small.imageset\" />
     <Folder Include="Resources\Assets.xcassets\call_white_medium.imageset\" />
     <Folder Include="Resources\Assets.xcassets\options.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\keyboard.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\keyboard_active.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\files.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\photo_picker.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
