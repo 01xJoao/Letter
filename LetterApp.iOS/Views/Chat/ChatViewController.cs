@@ -175,7 +175,10 @@ namespace LetterApp.iOS.Views.Chat
             base.ViewDidDisappear(animated);
 
             if (this.IsMovingFromParentViewController)
+            {
+                tableViewGesture = null;
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            }
         }
 
         private void HandleTableDragGesture(UIPanGestureRecognizer tableViewGesture)
