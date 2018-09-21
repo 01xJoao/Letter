@@ -117,7 +117,7 @@ namespace LetterApp.iOS.Helpers
             if (subtitleLabel.Frame.Width > maxSize)
                 subtitleLabel.Frame = new CGRect(subtitleLabel.Frame.X, subtitleLabel.Frame.Y, maxSize, subtitleLabel.Frame.Height);
 
-            var titleView = new UIView(new CGRect(0, 0, Math.Max(titleLabel.Frame.Size.Width, subtitleLabel.Frame.Size.Width), 30));
+            var titleView = new UIView(new CGRect(0, 0, Math.Max(titleLabel.Frame.Size.Width, subtitleLabel.Frame.Size.Width), 32));
 
             titleView.AddSubview(titleLabel);
             titleView.AddSubview(subtitleLabel);

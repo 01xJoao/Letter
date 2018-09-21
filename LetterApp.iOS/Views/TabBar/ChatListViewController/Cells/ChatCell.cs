@@ -29,13 +29,13 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
             var nameAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.BlackChatName,
-                Font = UIFont.SystemFontOfSize(15, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
+                Font = UIFont.SystemFontOfSize(15f, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
             var RoleAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.BlackChatName,
-                Font = UIFont.SystemFontOfSize(13, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
+                Font = UIFont.SystemFontOfSize(13f, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
             var letterCount = chatUser.MemberName.IndexOf("-");

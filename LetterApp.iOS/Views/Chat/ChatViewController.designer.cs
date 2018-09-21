@@ -37,6 +37,9 @@ namespace LetterApp.iOS.Views.Chat
 		UIKit.NSLayoutConstraint _keyBoardAreaViewHeightConstraint { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _keyboardViewBottomConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView _navBarView { get; set; }
 
 		[Outlet]
@@ -91,6 +94,11 @@ namespace LetterApp.iOS.Views.Chat
 				_keyboardAreaView = null;
 			}
 
+			if (_keyBoardAreaViewHeightConstraint != null) {
+				_keyBoardAreaViewHeightConstraint.Dispose ();
+				_keyBoardAreaViewHeightConstraint = null;
+			}
+
 			if (_navBarView != null) {
 				_navBarView.Dispose ();
 				_navBarView = null;
@@ -121,9 +129,9 @@ namespace LetterApp.iOS.Views.Chat
 				_textViewHeightConstraint = null;
 			}
 
-			if (_keyBoardAreaViewHeightConstraint != null) {
-				_keyBoardAreaViewHeightConstraint.Dispose ();
-				_keyBoardAreaViewHeightConstraint = null;
+			if (_keyboardViewBottomConstraint != null) {
+				_keyboardViewBottomConstraint.Dispose ();
+				_keyboardViewBottomConstraint = null;
 			}
 		}
 	}

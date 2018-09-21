@@ -5,6 +5,8 @@ namespace LetterApp.iOS.Helpers
     {
         public static nfloat IphoneXNotchHeight = 18;
 
+        public static nfloat TabBarIconSize = 44;
+
         public static nfloat MainButton => 50;
         public static nfloat AlertDialogSize => 45;
 
@@ -55,5 +57,9 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Contacts_TitleHeight = 23;
         public static nfloat CallHistory_Height = 65;
 
+        public static nfloat Chat_KeyboardHeight = 89;
+        public static nfloat Chat_KeyboardBottom = 20;
+        public static nfloat Chat_TextViewHeight = 45;
+        public static nfloat Chat_TotalIconsWidth = 165;
     }
 }

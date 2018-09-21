@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
@@ -46,8 +45,6 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ConfigureView()
         {
-            //_tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
-
             _imageView1.Image?.Dispose();
             _imageView2.Image?.Dispose();
             _imageView3.Image?.Dispose();
@@ -62,8 +59,8 @@ namespace LetterApp.iOS.Views.Chat
 
             _textView.Text = "Type something...";
             _textView.TextColor = Colors.ProfileGrayDarker;
-            _textViewHeightConstraint.Constant = 45;
-            _keyBoardAreaViewHeightConstraint.Constant = 89;
+            _textViewHeightConstraint.Constant = LocalConstants.Chat_TextViewHeight;
+            _keyBoardAreaViewHeightConstraint.Constant = LocalConstants.Chat_KeyboardHeight;
             _textView.Font = UIFont.SystemFontOfSize(14f);
             CustomUIExtensions.CornerView(_sendView, 2);
 
@@ -84,8 +81,9 @@ namespace LetterApp.iOS.Views.Chat
             _sendButton.TouchUpInside += OnSendButton_TouchUpInside;
         }
 
-        private void OnSendButton_TouchUpInside(object sender, EventArgs e)
+        private void ConfigureTableView()
         {
+            //Configure TableView
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -104,6 +102,12 @@ namespace LetterApp.iOS.Views.Chat
 
                 OnKeyboardChanged(keyboardState, _keyboardHeight);
             }
+        }
+
+        private void HandleTableDragGesture(UIPanGestureRecognizer tableViewGesture)
+        {
+            _textView.ResignFirstResponder();
+            _tableView.RemoveGestureRecognizer(tableViewGesture);
         }
 
         [Export("textViewShouldBeginEditing:")]
@@ -193,34 +197,8 @@ namespace LetterApp.iOS.Views.Chat
         {
         }
 
-        private void ConfigureTableView()
+        private void OnSendButton_TouchUpInside(object sender, EventArgs e)
         {
-        }
-
-        public override void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);
-
-            var titleViewMaxSize = UIScreen.MainScreen.Bounds.Width - 165; //165 is the size and icons space
-
-            this.NavigationItem.TitleView = CustomUIExtensions.SetupNavigationBarWithSubtitle("João Palma", "ESTG - Aluno ECGM", titleViewMaxSize);
-            this.NavigationController.NavigationBar.TintColor = Colors.MainBlue;
-            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White };
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "back_white", CloseView);
-
-            this.NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {
-                UIButtonExtensions.SetupBarWithTwoButtons(44, "options", Options),
-                UIButtonExtensions.SetupBarWithTwoButtons(44, "call_white_medium", CallUser)
-            };
-
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
-            this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
-            this.NavigationController.NavigationBar.Translucent = false;
-            this.NavigationController.SetNavigationBarHidden(false, true);
-            this.NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            this.NavigationController.NavigationBar.ShadowImage = new UIImage();
-            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
-            _navBarView.BackgroundColor = Colors.MainBlue;
         }
 
         private void Options(object sender, EventArgs e)
@@ -234,6 +212,32 @@ namespace LetterApp.iOS.Views.Chat
         private void CloseView(object sender, EventArgs e)
         {
             ViewModel.CloseViewCommand.Execute();
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+
+            var titleViewMaxSize = UIScreen.MainScreen.Bounds.Width - LocalConstants.Chat_TotalIconsWidth;
+
+            this.NavigationItem.TitleView = CustomUIExtensions.SetupNavigationBarWithSubtitle("João Palma", "ESTG - Aluno", titleViewMaxSize);
+            this.NavigationController.NavigationBar.TintColor = Colors.MainBlue;
+            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White };
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "back_white", CloseView);
+
+            this.NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {
+                UIButtonExtensions.SetupBarWithTwoButtons(LocalConstants.TabBarIconSize, "options", Options),
+                UIButtonExtensions.SetupBarWithTwoButtons(LocalConstants.TabBarIconSize, "call_white_medium", CallUser)
+            };
+
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
+            this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
+            this.NavigationController.NavigationBar.Translucent = false;
+            this.NavigationController.SetNavigationBarHidden(false, true);
+            this.NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
+            this.NavigationController.NavigationBar.ShadowImage = new UIImage();
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+            _navBarView.BackgroundColor = Colors.MainBlue;
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -254,13 +258,6 @@ namespace LetterApp.iOS.Views.Chat
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }
-
-        private void HandleTableDragGesture(UIPanGestureRecognizer tableViewGesture)
-        {
-            _textView.ResignFirstResponder();
-            _tableView.RemoveGestureRecognizer(tableViewGesture);
-        }
-
 
         #region ScrollView
 

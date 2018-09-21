@@ -59,7 +59,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                     this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
                 }
 
-                this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "contacts_filter", OpenFilter, false);
+                this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "contacts_filter", OpenFilter, false);
 
                 _presentView.Hidden = true;
                 _presentViewHeightConstraint.Constant = 0;

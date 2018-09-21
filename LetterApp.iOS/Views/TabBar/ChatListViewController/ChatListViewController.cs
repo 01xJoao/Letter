@@ -69,7 +69,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 this.NavigationItem.HidesSearchBarWhenScrolling = true;
             }
 
-            this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "newchat", OpenContacts, false);
+            this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "newchat", OpenContacts, false);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             _search = new UISearchController(searchResultsController: null) { DimsBackgroundDuringPresentation = false };

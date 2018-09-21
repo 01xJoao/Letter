@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,6 +20,7 @@
                 <outlet property="_imageView3" destination="fXo-Bc-Nnj" id="x1Y-ju-KFY"/>
                 <outlet property="_keyBoardAreaViewHeightConstraint" destination="R0J-VE-Zob" id="hCT-FK-CkO"/>
                 <outlet property="_keyboardAreaView" destination="j8W-8D-snE" id="kDv-Xq-Bsg"/>
+                <outlet property="_keyboardViewBottomConstraint" destination="nrF-86-OQ5" id="wW7-KL-Gb7"/>
                 <outlet property="_navBarView" destination="Uyp-M0-Pt9" id="f91-OU-JZF"/>
                 <outlet property="_sendButton" destination="dmc-iW-KRi" id="WfT-De-zWT"/>
                 <outlet property="_sendView" destination="h3R-6F-9jh" id="Nle-ME-LVd"/>
@@ -130,6 +132,7 @@
                         <constraint firstItem="n1U-74-bJm" firstAttribute="centerX" secondItem="fXo-Bc-Nnj" secondAttribute="centerX" id="ukQ-fn-w46"/>
                         <constraint firstItem="fXo-Bc-Nnj" firstAttribute="bottom" secondItem="dad-Qr-hoN" secondAttribute="bottom" id="wiU-G5-eMI"/>
                     </constraints>
+                    <viewLayoutGuide key="safeArea" id="vlf-aQ-kPK"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -145,6 +148,7 @@
                 <constraint firstItem="GCC-y4-T5W" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="mof-mh-xyc"/>
                 <constraint firstAttribute="bottom" secondItem="j8W-8D-snE" secondAttribute="bottom" id="nrF-86-OQ5"/>
             </constraints>
+            <viewLayoutGuide key="safeArea" id="Z8c-Xt-coS"/>
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>

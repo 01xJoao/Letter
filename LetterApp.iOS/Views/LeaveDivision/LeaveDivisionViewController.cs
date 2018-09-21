@@ -59,7 +59,7 @@ namespace LetterApp.iOS.Views.LeaveDivision
             NavigationController.NavigationBar.TintColor = Colors.White;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "back_black", CloseView);
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "back_black", CloseView);
             NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
 
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
