@@ -37,9 +37,6 @@ namespace LetterApp.iOS.Views.PendingApproval
 		UIKit.UIButton _leaveDivisionButton { get; set; }
 
 		[Outlet]
-		UIKit.UIView _loadingView { get; set; }
-
-		[Outlet]
 		UIKit.UIButton _logoutButton { get; set; }
 
 		[Outlet]
@@ -102,14 +99,14 @@ namespace LetterApp.iOS.Views.PendingApproval
 				_leaveDivisionButton = null;
 			}
 
-			if (_loadingView != null) {
-				_loadingView.Dispose ();
-				_loadingView = null;
-			}
-
 			if (_logoutButton != null) {
 				_logoutButton.Dispose ();
 				_logoutButton = null;
+			}
+
+			if (_navBarTopConstraint != null) {
+				_navBarTopConstraint.Dispose ();
+				_navBarTopConstraint = null;
 			}
 
 			if (_navTitleLabel != null) {
@@ -135,11 +132,6 @@ namespace LetterApp.iOS.Views.PendingApproval
 			if (_subtitleLabel != null) {
 				_subtitleLabel.Dispose ();
 				_subtitleLabel = null;
-			}
-
-			if (_navBarTopConstraint != null) {
-				_navBarTopConstraint.Dispose ();
-				_navBarTopConstraint = null;
 			}
 		}
 	}

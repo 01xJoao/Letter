@@ -18,13 +18,6 @@ namespace LetterApp.Core.ViewModels
         private int _tabIndex;
         public DivisionModel Division { get; set; }
 
-        private bool _isLoading = true;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
-        }
-
         private bool _canContinue;
         public bool CanContinue
         {
@@ -68,11 +61,13 @@ namespace LetterApp.Core.ViewModels
             _tabIndex = tabIndex;
         }
 
-        public override async Task Appearing() => await CheckUser();
+        public override async Task Appearing() => await CheckUser(false);
 
-        private async Task CheckUser(bool isUpdating = false)
+        private async Task CheckUser(bool isUpdating)
         {
-            IsLoading = isUpdating;
+            if (!isUpdating)
+                _dialogService.StartLoading();
+
             IsBusy = true;
 
             try
@@ -127,11 +122,7 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
-                if (isUpdating)
-                    IsLoading = false;
-                else
-                    RaisePropertyChanged(nameof(IsLoading));
-                
+                _dialogService.StopLoading();
                 IsBusy = false;
             }
         }

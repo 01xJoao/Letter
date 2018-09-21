@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
-using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
@@ -26,13 +25,6 @@ namespace LetterApp.Core.ViewModels
         {
             get => _divisions;
             set => SetProperty(ref _divisions, value);
-        }
-
-        private bool _isLoading = true;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
         }
 
         private XPCommand<DivisionModel> _showDivisionInformationCommand;
@@ -69,6 +61,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
+                _dialogService.StartLoading(LoadingColor.White);
                 Divisions = await _organizationService.GetDivisions(_organizationId);
             }
             catch (Exception ex)
@@ -78,7 +71,7 @@ namespace LetterApp.Core.ViewModels
             finally
             {
                 IsBusy = false;
-                IsLoading = false;
+                _dialogService.StopLoading();
             }
         }
 

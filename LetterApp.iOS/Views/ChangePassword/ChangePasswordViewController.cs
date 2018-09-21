@@ -47,7 +47,7 @@ namespace LetterApp.iOS.Views.ChangePassword
             if(ViewModel.IsBusy)
                 this.View.EndEditing(true);
             
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.ChangePassword, ViewModel.IsBusy);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _submitButton, ViewModel.ChangePassword, ViewModel.IsBusy);
         }
 
         private void SetupView()

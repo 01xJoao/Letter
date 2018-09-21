@@ -55,6 +55,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
+                _dialogService.StartLoading(LoadingColor.White);
                 Positions = await _organizationService.GetPositions(_organizationId);
             }
             catch (Exception ex)
@@ -63,6 +64,7 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
+                _dialogService.StopLoading();
                 IsBusy = false;
             }
         }
@@ -80,6 +82,8 @@ namespace LetterApp.Core.ViewModels
                 
             try
             {
+                _dialogService.StartLoading(LoadingColor.White);
+
                 var result = await _organizationService.UpdatePosition((int)_positionId);
 
                 if (result.StatusCode == 200)
@@ -108,6 +112,7 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
+                _dialogService.StopLoading();
                 IsBusy = false;
             }
         }

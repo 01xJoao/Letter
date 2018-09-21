@@ -18,6 +18,7 @@ namespace LetterApp.iOS.Views.SelectPosition
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             SetupView();
 
             _backgroundView.AddGestureRecognizer(new UITapGestureRecognizer(HidePickerAction));
@@ -65,15 +66,7 @@ namespace LetterApp.iOS.Views.SelectPosition
                 case nameof(ViewModel.Positions):
                     _picker.Model = new PositionsPickerModel(ViewModel.Positions, SelectedPosition);
                     break;
-                case nameof(ViewModel.IsBusy):
-                    Loading();
-                    break;
             }
-        }
-
-        private void Loading()
-        {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading_white", this.View, _loadingView, ViewModel.IsBusy);
         }
 
         private void SelectedPosition(object sender, PositionModel position)

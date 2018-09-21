@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Airbnb.Lottie;
 using CoreGraphics;
 using UIKit;
@@ -39,40 +38,13 @@ namespace LetterApp.iOS.Helpers
             }
         }
 
-        public static void CustomViewLoadingAnimation(string animation, UIView mainView, UIView view, bool shouldAnimate = false)
-        {
-            if (shouldAnimate)
-            {
-                var center = UIScreen.MainScreen.Bounds.Width / 2;
-                _lottieAnimation = LOTAnimationView.AnimationNamed(animation);
-                _lottieAnimation.Frame = view.Frame;
-                mainView.AddSubview(_lottieAnimation);
-                _lottieAnimation.LoopAnimation = true;
-                _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
-                _lottieAnimation.Hidden = false;
-                _lottieAnimation.AnimationProgress = 0;
-                _lottieAnimation.Center = new CGPoint(center, mainView.Center.Y);
-                _lottieAnimation.Play();
-            }
-            else
-            {
-                if (_lottieAnimation != null)
-                {
-                    _lottieAnimation.Hidden = true;
-                    _lottieAnimation.Pause();
-                    _lottieAnimation?.Dispose();
-                    _lottieAnimation = null;
-                }
-            }
-        }
-
-        public static void LottieMadeSimple(string animationName, UIView view, bool shouldAnimate)
+        public static void LoadingInView(string animationName, UIView view, bool shouldAnimate)
         {
             if (shouldAnimate)
             {
                 view.Hidden = false;
                 _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
-                _lottieAnimation.Frame = new CGRect(-view.Frame.Width, -view.Frame.Height, 100, 100);
+                _lottieAnimation.Frame = new CGRect(0, 0, 50, 50);
                 view.AddSubview(_lottieAnimation);
                 _lottieAnimation.LoopAnimation = true;
                 _lottieAnimation.Hidden = false;
@@ -93,7 +65,35 @@ namespace LetterApp.iOS.Helpers
             }
         }
 
-            public static void AnimateBackgroundView(UIView view, nfloat animationHeight, bool shouldAnimate)
+        public static void LoadingInChat(UIView view, bool shouldAnimate)
+        {
+            if (shouldAnimate)
+            {
+                _lottieAnimation = LOTAnimationView.AnimationNamed("progress_refresh");
+                _lottieAnimation.Frame = new CGRect((UIScreen.MainScreen.Bounds.Width - view.Frame.Width / 2f) / 2,
+                                                    view.Frame.Height - 4, view.Frame.Width / 2f, 3);
+
+                _lottieAnimation.Layer.CornerRadius = 2f;
+                view.AddSubview(_lottieAnimation);
+                _lottieAnimation.LoopAnimation = true;
+                _lottieAnimation.ContentMode = UIViewContentMode.Redraw;
+                _lottieAnimation.Hidden = false;
+                _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.Play();
+            }
+            else
+            {
+                if (_lottieAnimation != null)
+                {
+                    _lottieAnimation.Hidden = true;
+                    _lottieAnimation.Pause();
+                    _lottieAnimation?.Dispose();
+                    _lottieAnimation = null;
+                }
+            }
+        }
+
+        public static void AnimateBackgroundView(UIView view, nfloat animationHeight, bool shouldAnimate)
         {
             if (shouldAnimate)
                 Animations.AnimateBackground(view, animationHeight);

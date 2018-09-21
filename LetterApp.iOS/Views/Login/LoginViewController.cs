@@ -101,7 +101,7 @@ namespace LetterApp.iOS.Views.Login
 
         private void Loading()
         {
-             UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
+             UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
         }
 
         private void InvalidMail()

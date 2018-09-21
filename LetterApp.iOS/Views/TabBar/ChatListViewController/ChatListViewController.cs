@@ -53,10 +53,10 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                     break;
             }
         }
-        
+
         private void LoadingAnimation(bool isLoading)
         {
-            UIViewAnimationExtensions.LottieMadeSimple("loading", _loadingView, isLoading);
+            UIViewAnimationExtensions.LoadingInView("load_blue", _loadingView, isLoading);
         }
 
         private void ConfigureView()
@@ -140,7 +140,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             _noRecenChatLabel.TextAlignment = UITextAlignment.Center;
 
             _loadingView.Hidden = true;
-            _loadingView.Frame = new CGRect(0, 0, 35, 35);
+            _loadingView.Frame = new CGRect(0, 0, 50, 50);
             var imageLoadingCenter = _noRecentChatImage.Center;
             imageLoadingCenter.X = _tableView.Bounds.GetMidX();
             imageLoadingCenter.Y = _tableView.Bounds.Height - 40;

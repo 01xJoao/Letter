@@ -878,6 +878,10 @@
     <BundleResource Include="Resources\waiting_call.aiff" />
     <BundleResource Include="Resources\ringback.wav" />
     <BundleResource Include="Resources\EndCallSound.wav" />
+    <BundleResource Include="Resources\progress_refresh.json" />
+    <BundleResource Include="Resources\progress_animation.json" />
+    <BundleResource Include="Resources\load_blue.json" />
+    <BundleResource Include="Resources\load_white.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

@@ -74,7 +74,7 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _button, ViewModel.SubmitButton, ViewModel.IsActivating);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _button, ViewModel.SubmitButton, ViewModel.IsActivating);
         }
 
         private void OnRequestCodeButton_TouchUpInside(object sender, EventArgs e)

@@ -17,7 +17,7 @@ namespace LetterApp.Core.Services.Interfaces
         void ShowCallStack(string title = "", List<CallStackModel> calls = null);
         Task<bool> ShowMessageAlert(string photo = "", string name = "", string message = "");
 
-        void StartLoading();
+        void StartLoading(LoadingColor color = LoadingColor.Blue);
         void StopLoading();
     }
 
@@ -59,5 +59,11 @@ namespace LetterApp.Core.Services.Interfaces
         Letter,
         Cellphone,
         Close
+    }
+
+    public enum LoadingColor
+    {
+        Blue,
+        White
     }
 }

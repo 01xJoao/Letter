@@ -20,7 +20,6 @@
                 <outlet property="_helpLabel" destination="kdz-a4-tQK" id="2AV-CO-JuE"/>
                 <outlet property="_imageView" destination="JS4-UM-r2r" id="MYD-21-Zvq"/>
                 <outlet property="_leaveDivisionButton" destination="qnL-cx-GcL" id="OUt-oP-zYB"/>
-                <outlet property="_loadingView" destination="AKT-S3-TFj" id="vAH-iy-cHj"/>
                 <outlet property="_logoutButton" destination="GqK-vu-ic2" id="oUv-fx-0Me"/>
                 <outlet property="_navBarTopConstraint" destination="fcA-Rv-01X" id="vas-pq-Yaa"/>
                 <outlet property="_navTitleLabel" destination="Bat-qQ-fGl" id="C8z-rP-dZ9"/>
@@ -67,14 +66,6 @@
                         <constraint firstItem="RJp-N3-lAQ" firstAttribute="centerY" secondItem="Bat-qQ-fGl" secondAttribute="centerY" id="iCZ-f2-uM7"/>
                         <constraint firstAttribute="height" constant="66" id="u7c-Cy-cBc"/>
                         <constraint firstItem="gHe-hd-Bej" firstAttribute="centerY" secondItem="RJp-N3-lAQ" secondAttribute="centerY" id="x1Y-ca-Ekf"/>
-                    </constraints>
-                </view>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AKT-S3-TFj">
-                    <rect key="frame" x="137.5" y="363.5" width="100" height="100"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="AKT-S3-TFj" secondAttribute="height" id="MUi-Ck-Cef"/>
-                        <constraint firstAttribute="height" constant="100" id="oxa-Uv-F6g"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ik-2U-wnI">
@@ -176,8 +167,6 @@
                 <constraint firstItem="0Ik-2U-wnI" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="ZEi-Pj-O37"/>
                 <constraint firstItem="wMU-Y9-6L0" firstAttribute="top" secondItem="2" secondAttribute="top" id="fcA-Rv-01X"/>
                 <constraint firstItem="0Ik-2U-wnI" firstAttribute="top" secondItem="wMU-Y9-6L0" secondAttribute="bottom" id="joJ-NV-xak"/>
-                <constraint firstItem="AKT-S3-TFj" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" constant="80" id="jz4-fD-hAy"/>
-                <constraint firstItem="AKT-S3-TFj" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="mcw-pd-QVA"/>
                 <constraint firstAttribute="trailing" secondItem="0Ik-2U-wnI" secondAttribute="trailing" id="rNv-r0-vgm"/>
             </constraints>
             <point key="canvasLocation" x="24.5" y="51.5"/>

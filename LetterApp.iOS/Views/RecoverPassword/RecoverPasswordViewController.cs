@@ -80,7 +80,7 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsSubmiting);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsSubmiting);
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool changeKeyboardState)

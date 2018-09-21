@@ -38,25 +38,11 @@ namespace LetterApp.iOS.Views.PendingApproval
                 case nameof(ViewModel.CanContinue):
                     SetupView(ViewModel.CanContinue);
                     break;
-                case nameof(ViewModel.IsLoading):
-                    Loading(ViewModel.IsLoading);
-                    break;
             }
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            Loading(true);
-        }
-
-        private void Loading(bool shouldAnimate)
-        {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading", this.View, _loadingView, shouldAnimate);
         }
 
         private void SetupView(bool canContinue)
         {
-
             _descriptionLabel.Hidden = false;
 
             if(canContinue)

@@ -39,20 +39,7 @@ namespace LetterApp.iOS.Views.SelectDivision
                 case nameof(ViewModel.Divisions):
                     SetupTableView();
                     break;
-                case nameof(ViewModel.IsLoading):
-                    Loading(ViewModel.IsLoading);
-                    break;
             }
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            Loading(ViewModel.IsLoading);
-        }
-
-        private void Loading(bool shouldAnimate)
-        {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading_white", this.View, _loadingView, shouldAnimate);
         }
 
         private void SetupTableView()

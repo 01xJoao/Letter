@@ -93,17 +93,17 @@ namespace LetterApp.iOS.Services
             callStackView.Show();
         }
 
-        public void StartLoading()
+        public void StartLoading(LoadingColor color)
         {
             StopLoading();
 
-            _lottieAnimation = LOTAnimationView.AnimationNamed("loading");
+            _lottieAnimation = color == LoadingColor.Blue ? LOTAnimationView.AnimationNamed("load_blue") : LOTAnimationView.AnimationNamed("load_white");
             _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
 
             if(_view == null)
                 _view = ((AppDelegate)UIApplication.SharedApplication.Delegate).Window;
 
-            _lottieAnimation.Frame = new CGRect(0, 0, _view.Bounds.Size.Width * 0.5,  _view.Bounds.Size.Height * 0.5);
+            _lottieAnimation.Frame = new CGRect(0, 0, 90, 90);
             _lottieAnimation.Center = _view.Center;
 
             _view.AddSubview(_lottieAnimation);

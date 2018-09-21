@@ -60,7 +60,7 @@ namespace LetterApp.iOS.Views.SelectOrganization
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading", _submitButton, ViewModel.AccessButton, ViewModel.IsBusy);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_blue", _submitButton, ViewModel.AccessButton, ViewModel.IsBusy);
         }
 
         private void SetupView()

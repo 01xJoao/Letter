@@ -19,7 +19,6 @@ namespace LetterApp.iOS.Views.Organization
         {
             base.ViewDidLoad();
 
-            Loading(true);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
@@ -38,15 +37,8 @@ namespace LetterApp.iOS.Views.Organization
             }
         }
 
-        private void Loading(bool showLoading)
-        {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading", this.View, _imageView, showLoading);
-        }
-
         private void SetupView()
         {
-            Loading(false);
-
             this.View.BackgroundColor = Colors.MainBlue;
             _tableView.BackgroundColor = Colors.MainBlue4;
 
