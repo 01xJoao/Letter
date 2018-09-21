@@ -8,8 +8,8 @@ using Foundation;
 
 namespace LetterApp.iOS.Views.Chat.Cells
 {
-    [Register("ChatCell")]
-    partial class ChatCell
+    [Register("MessageCell")]
+    partial class MessageCell
     {
         void ReleaseDesignerOutlets()
         {

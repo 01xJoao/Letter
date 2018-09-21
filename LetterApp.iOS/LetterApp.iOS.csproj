@@ -577,7 +577,7 @@
     <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
     <InterfaceDefinition Include="Views\Chat\ChatViewController.xib" />
-    <InterfaceDefinition Include="Views\Chat\Cells\ChatCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\MessageCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -865,9 +865,9 @@
     <Compile Include="Views\Chat\ChatViewController.designer.cs">
       <DependentUpon>ChatViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Chat\Cells\ChatCell.cs" />
-    <Compile Include="Views\Chat\Cells\ChatCell.designer.cs">
-      <DependentUpon>ChatCell.cs</DependentUpon>
+    <Compile Include="Views\Chat\Cells\MessageCell.cs" />
+    <Compile Include="Views\Chat\Cells\MessageCell.designer.cs">
+      <DependentUpon>MessageCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
