@@ -17,6 +17,7 @@
                 <outlet property="_imageView1" destination="fGE-fd-oY9" id="KE6-j0-bj6"/>
                 <outlet property="_imageView2" destination="dad-Qr-hoN" id="hqC-c5-FDa"/>
                 <outlet property="_imageView3" destination="fXo-Bc-Nnj" id="x1Y-ju-KFY"/>
+                <outlet property="_keyBoardAreaViewHeightConstraint" destination="R0J-VE-Zob" id="hCT-FK-CkO"/>
                 <outlet property="_keyboardAreaView" destination="j8W-8D-snE" id="kDv-Xq-Bsg"/>
                 <outlet property="_navBarView" destination="Uyp-M0-Pt9" id="f91-OU-JZF"/>
                 <outlet property="_sendButton" destination="dmc-iW-KRi" id="WfT-De-zWT"/>
@@ -79,10 +80,10 @@
                             <rect key="frame" x="102" y="51.5" width="38" height="38"/>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h3R-6F-9jh">
-                            <rect key="frame" x="301" y="56" width="54" height="29"/>
+                            <rect key="frame" x="301" y="57" width="54" height="27"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmc-iW-KRi">
-                                    <rect key="frame" x="10" y="0.0" width="34" height="29"/>
+                                    <rect key="frame" x="10" y="0.0" width="34" height="27"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <state key="normal" title="Send"/>
                                 </button>
@@ -93,6 +94,7 @@
                                 <constraint firstItem="dmc-iW-KRi" firstAttribute="centerX" secondItem="h3R-6F-9jh" secondAttribute="centerX" id="P0i-Xz-kMJ"/>
                                 <constraint firstItem="dmc-iW-KRi" firstAttribute="height" secondItem="h3R-6F-9jh" secondAttribute="height" id="VT3-Yb-tb3"/>
                                 <constraint firstItem="dmc-iW-KRi" firstAttribute="centerY" secondItem="h3R-6F-9jh" secondAttribute="centerY" id="nWy-aH-9ta"/>
+                                <constraint firstAttribute="height" constant="27" id="ncy-of-XpA"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -103,12 +105,14 @@
                         <constraint firstAttribute="bottom" secondItem="fGE-fd-oY9" secondAttribute="bottom" constant="10" id="7qR-s2-kPK"/>
                         <constraint firstItem="kB0-3X-LuZ" firstAttribute="height" secondItem="fGE-fd-oY9" secondAttribute="height" constant="12" id="BcH-1w-1Uv"/>
                         <constraint firstItem="dad-Qr-hoN" firstAttribute="width" secondItem="fGE-fd-oY9" secondAttribute="width" id="Bo2-Oa-VJO"/>
+                        <constraint firstItem="kB0-3X-LuZ" firstAttribute="top" secondItem="yfT-F6-ijB" secondAttribute="bottom" id="G9J-eV-Lii"/>
                         <constraint firstItem="Clf-KJ-Ejz" firstAttribute="width" secondItem="dad-Qr-hoN" secondAttribute="width" constant="12" id="Hry-Fz-jGi"/>
                         <constraint firstItem="dad-Qr-hoN" firstAttribute="bottom" secondItem="fGE-fd-oY9" secondAttribute="bottom" id="IdG-TK-X7G"/>
                         <constraint firstAttribute="trailing" secondItem="yfT-F6-ijB" secondAttribute="trailing" constant="2" id="IiE-DE-282"/>
                         <constraint firstItem="kB0-3X-LuZ" firstAttribute="centerY" secondItem="fGE-fd-oY9" secondAttribute="centerY" id="Ikz-89-jIL"/>
                         <constraint firstItem="kB0-3X-LuZ" firstAttribute="centerX" secondItem="fGE-fd-oY9" secondAttribute="centerX" id="IpW-wa-4bu"/>
                         <constraint firstItem="fXo-Bc-Nnj" firstAttribute="width" secondItem="dad-Qr-hoN" secondAttribute="width" id="LNO-EG-ZmN"/>
+                        <constraint firstAttribute="height" constant="93.5" id="R0J-VE-Zob"/>
                         <constraint firstItem="n1U-74-bJm" firstAttribute="centerY" secondItem="fXo-Bc-Nnj" secondAttribute="centerY" id="SRZ-D5-EeZ"/>
                         <constraint firstItem="n1U-74-bJm" firstAttribute="width" secondItem="fXo-Bc-Nnj" secondAttribute="width" constant="12" id="Vwi-Sj-ePf"/>
                         <constraint firstItem="dad-Qr-hoN" firstAttribute="height" secondItem="fGE-fd-oY9" secondAttribute="height" id="Zxi-Xp-cCb"/>
@@ -119,7 +123,6 @@
                         <constraint firstItem="Clf-KJ-Ejz" firstAttribute="height" secondItem="dad-Qr-hoN" secondAttribute="height" constant="12" id="eQ7-P2-qer"/>
                         <constraint firstItem="kB0-3X-LuZ" firstAttribute="width" secondItem="fGE-fd-oY9" secondAttribute="width" constant="12" id="fxW-aa-4aI"/>
                         <constraint firstItem="n1U-74-bJm" firstAttribute="height" secondItem="fXo-Bc-Nnj" secondAttribute="height" constant="12" id="fxa-wa-wz2"/>
-                        <constraint firstItem="h3R-6F-9jh" firstAttribute="top" secondItem="yfT-F6-ijB" secondAttribute="bottom" constant="5" id="fy4-Gw-ioe"/>
                         <constraint firstItem="h3R-6F-9jh" firstAttribute="centerY" secondItem="fXo-Bc-Nnj" secondAttribute="centerY" id="job-D0-DxS"/>
                         <constraint firstItem="fGE-fd-oY9" firstAttribute="leading" secondItem="j8W-8D-snE" secondAttribute="leading" constant="20" id="kAx-Gh-bx1"/>
                         <constraint firstItem="Clf-KJ-Ejz" firstAttribute="centerX" secondItem="dad-Qr-hoN" secondAttribute="centerX" id="nl1-gw-16Z"/>

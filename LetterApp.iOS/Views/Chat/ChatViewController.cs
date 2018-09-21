@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
+using System.Diagnostics;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
@@ -12,6 +12,7 @@ namespace LetterApp.iOS.Views.Chat
 {
     public partial class ChatViewController : XViewController<ChatViewModel>, IUITextViewDelegate
     {
+        private int _lineCount;
         private bool _keyboardState;
         private nfloat _keyboardHeight;
         private UIPanGestureRecognizer tableViewGesture = new UIPanGestureRecognizer();
@@ -57,14 +58,16 @@ namespace LetterApp.iOS.Views.Chat
 
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
 
-            _textView.TextContainerInset = new UIEdgeInsets(10, 10, 10, 10);
+            _textView.TextContainerInset = new UIEdgeInsets(10, 10, 12, 10);
 
             _textView.Text = "Type something...";
             _textView.TextColor = Colors.ProfileGrayDarker;
             _textViewHeightConstraint.Constant = 45;
+            _keyBoardAreaViewHeightConstraint.Constant = 89;
             _textView.Font = UIFont.SystemFontOfSize(14f);
+            CustomUIExtensions.CornerView(_sendView, 2);
 
-            UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.ProfileGray, 15f, "Send", UIFontWeight.Semibold);
+            UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.ProfileGray, 15f, "Send", UIFontWeight.Medium);
 
             _sendView.BackgroundColor = UIColor.Clear;
 
@@ -76,6 +79,13 @@ namespace LetterApp.iOS.Views.Chat
 
             _button3.TouchUpInside -= OnButton3_TouchUpInside;
             _button3.TouchUpInside += OnButton3_TouchUpInside;
+
+            _sendButton.TouchUpInside -= OnSendButton_TouchUpInside;
+            _sendButton.TouchUpInside += OnSendButton_TouchUpInside;
+        }
+
+        private void OnSendButton_TouchUpInside(object sender, EventArgs e)
+        {
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -99,16 +109,80 @@ namespace LetterApp.iOS.Views.Chat
         [Export("textViewShouldBeginEditing:")]
         public bool ShouldBeginEditing(UITextView textView)
         {
+            _imageView1.Image = UIImage.FromBundle("keyboard_active");
+
+            if (!_textView.TranslatesAutoresizingMaskIntoConstraints)
+            {
+                _textView.TranslatesAutoresizingMaskIntoConstraints = true;
+                _keyboardAreaView.TranslatesAutoresizingMaskIntoConstraints = true;
+
+                _textView.SetNeedsLayout();
+                _textView.LayoutIfNeeded();
+
+                _keyboardAreaView.SetNeedsLayout();
+                _keyboardAreaView.LayoutIfNeeded();
+            }
+
             return true;
+        }
+
+        [Export("textViewDidChange:")]
+        public void Changed(UITextView textView)
+        {
+            if(!string.IsNullOrEmpty(textView.Text) && _sendView.BackgroundColor != Colors.SenderButton)
+            {
+                _sendView.BackgroundColor = Colors.SenderButton;
+                _sendButton.SetTitleColor(Colors.White, UIControlState.Normal);
+                _sendButton.Enabled = true;
+            }
+            else if(string.IsNullOrEmpty(textView.Text))
+            {
+                _sendView.BackgroundColor = UIColor.Clear;
+                _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
+                _sendButton.Enabled = false;
+            }
+
+            int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
+
+            if(lineCount < 5 && lineCount != _lineCount)
+            {
+                _textView.Frame = new CGRect(_textView.Frame.X, _textView.Frame.Y, _textView.Frame.Width,
+                                             _textViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
+
+                int keyHeight = _keyboardState ? (int)_keyboardHeight : 0;
+                var keyViewY = this.View.Frame.Height - (keyHeight + _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
+
+                _keyboardAreaView.Frame = new CGRect(_keyboardAreaView.Frame.X, keyViewY, _keyboardAreaView.Frame.Width, 
+                                                     _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
+
+                if (!_textView.TranslatesAutoresizingMaskIntoConstraints)
+                {
+                    _textView.TranslatesAutoresizingMaskIntoConstraints = true;
+                    _keyboardAreaView.TranslatesAutoresizingMaskIntoConstraints = true;
+                }
+
+                _textView.SetNeedsLayout();
+                _textView.LayoutIfNeeded();
+
+                _keyboardAreaView.SetNeedsLayout();
+                _keyboardAreaView.LayoutIfNeeded();
+
+                OnKeyboardChanged(_keyboardState, _keyboardHeight);
+
+                _lineCount = lineCount;
+            }
         }
 
         [Export("textViewDidEndEditing:")]
         public void EditingEnded(UITextView textView)
         {
+            _imageView1.Image = UIImage.FromBundle("keyboard");
         }
 
         private void OnButton1_TouchUpInside(object sender, EventArgs e)
         {
+            if(!_keyboardState)
+                _textView.BecomeFirstResponder();
         }
 
         private void OnButton2_TouchUpInside(object sender, EventArgs e)
@@ -121,7 +195,6 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ConfigureTableView()
         {
-
         }
 
         public override void ViewWillAppear(bool animated)
@@ -130,14 +203,15 @@ namespace LetterApp.iOS.Views.Chat
 
             var titleViewMaxSize = UIScreen.MainScreen.Bounds.Width - 165; //165 is the size and icons space
 
-            this.NavigationItem.TitleView = CustomUIExtensions.SetupNavigationBarWithSubtitle("João Palma", "Instituto Politecnico de Viana do Castelo - Escola Superior TG", titleViewMaxSize);
+            this.NavigationItem.TitleView = CustomUIExtensions.SetupNavigationBarWithSubtitle("João Palma", "ESTG - Aluno ECGM", titleViewMaxSize);
             this.NavigationController.NavigationBar.TintColor = Colors.MainBlue;
-            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.White };
+            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White };
             this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(44, "back_white", CloseView);
 
-            var optionsItem = UIButtonExtensions.SetupImageBarButton(44, "options", Options, false);
-            var callItem = UIButtonExtensions.SetupImageBarSecondButton(44, "call_white_medium", CallUser);
-            this.NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { optionsItem, callItem };
+            this.NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {
+                UIButtonExtensions.SetupBarWithTwoButtons(44, "options", Options),
+                UIButtonExtensions.SetupBarWithTwoButtons(44, "call_white_medium", CallUser)
+            };
 
             this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
@@ -145,7 +219,7 @@ namespace LetterApp.iOS.Views.Chat
             this.NavigationController.SetNavigationBarHidden(false, true);
             this.NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             this.NavigationController.NavigationBar.ShadowImage = new UIImage();
-            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.BlackOpaque;
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
             _navBarView.BackgroundColor = Colors.MainBlue;
         }
 
@@ -153,13 +227,13 @@ namespace LetterApp.iOS.Views.Chat
         {
         }
 
+        private void CallUser(object sender, EventArgs e)
+        {
+        }
+
         private void CloseView(object sender, EventArgs e)
         {
             ViewModel.CloseViewCommand.Execute();
-        }
-
-        private void CallUser(object sender, EventArgs e)
-        {
         }
 
         public override void ViewWillDisappear(bool animated)
