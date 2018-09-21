@@ -11,12 +11,12 @@ namespace LetterApp.iOS.Views.Chat
 {
     public partial class ChatViewController : XViewController<ChatViewModel>, IUITextViewDelegate
     {
+        public override bool HandlesKeyboardNotifications => true;
+
         private int _lineCount;
         private bool _keyboardState;
         private nfloat _keyboardHeight;
         private UIPanGestureRecognizer tableViewGesture = new UIPanGestureRecognizer();
-
-        public override bool HandlesKeyboardNotifications => true;
 
         public ChatViewController() : base("ChatViewController", null) { }
 
