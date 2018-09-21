@@ -123,9 +123,6 @@
     <Reference Include="Lottie.iOS">
       <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="GetiOSModel">
-      <HintPath>..\packages\dannycabrera.GetiOSModel.1.4.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
-    </Reference>
     <Reference Include="System.Security.Principal.Windows">
       <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
@@ -179,6 +176,9 @@
     </Reference>
     <Reference Include="websocket-sharp">
       <HintPath>..\Tools\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GetiOSModel">
+      <HintPath>..\packages\dannycabrera.GetiOSModel.1.5.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -515,6 +515,7 @@
     <Folder Include="Resources\Assets.xcassets\keyboard_active.imageset\" />
     <Folder Include="Resources\Assets.xcassets\files.imageset\" />
     <Folder Include="Resources\Assets.xcassets\photo_picker.imageset\" />
+    <Folder Include="Views\Chat\Cells\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -576,6 +577,7 @@
     <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
     <InterfaceDefinition Include="Views\Chat\ChatViewController.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ChatCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -862,6 +864,10 @@
     <Compile Include="Views\Chat\ChatViewController.cs" />
     <Compile Include="Views\Chat\ChatViewController.designer.cs">
       <DependentUpon>ChatViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\ChatCell.cs" />
+    <Compile Include="Views\Chat\Cells\ChatCell.designer.cs">
+      <DependentUpon>ChatCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Airbnb.Lottie;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
