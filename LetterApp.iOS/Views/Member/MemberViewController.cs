@@ -1,12 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using CallKit;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
-using Foundation;
 using LetterApp.Core.ViewModels;
-using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;

@@ -52,6 +52,10 @@ namespace LetterApp.Core.ViewModels
         {
             _memberProfileModel = Realm.Find<MembersProfileModel>(_userId);
             SetupModels(_memberProfileModel);
+
+            if (_memberProfileModel == null)
+                _dialogService.StartLoading();
+
             try
             {
                 var result = await _memberService.GetMemberProfile(_userId);
@@ -76,6 +80,10 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _dialogService.StopLoading();
             }
         }
 
