@@ -6,6 +6,7 @@ namespace LetterApp.Core.Models
     public class MessagesModel : RealmObject
     {
         public int MessageSenderId { get; set; }
+        public int MessageId { get; set; }
         public string MessageData { get; set; }
         public int MessageType { get; set; }
         public long MessageDateTicks { get; set; }

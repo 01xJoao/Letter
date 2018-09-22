@@ -583,6 +583,7 @@
     <InterfaceDefinition Include="Views\Chat\Cells\ImageCell.xib" />
     <InterfaceDefinition Include="Views\Chat\Cells\ImageWithUserCell.xib" />
     <InterfaceDefinition Include="Views\Chat\Cells\FileWithUserCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\DateHeaderCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -894,6 +895,10 @@
     <Compile Include="Views\Chat\Cells\FileWithUserCell.cs" />
     <Compile Include="Views\Chat\Cells\FileWithUserCell.designer.cs">
       <DependentUpon>FileWithUserCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\DateHeaderCell.cs" />
+    <Compile Include="Views\Chat\Cells\DateHeaderCell.designer.cs">
+      <DependentUpon>DateHeaderCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

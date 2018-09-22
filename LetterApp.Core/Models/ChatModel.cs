@@ -14,5 +14,7 @@ namespace LetterApp.Core.Models
         public bool MemberSeenMyLastMessage { get; set; }
         public MemberPresence MemberPresence { get; set; }
         public List<ChatMessagesModel> Messages { get; set; }
+        public EventHandler<int> MessageEvent { get; set; }
+        public Dictionary<int,Tuple<string,int>> SectionsAndRowsCount { get; set; }
     }
 }

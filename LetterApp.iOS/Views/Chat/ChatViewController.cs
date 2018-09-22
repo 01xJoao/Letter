@@ -4,6 +4,7 @@ using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
+using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using UIKit;
 
@@ -29,7 +30,6 @@ namespace LetterApp.iOS.Views.Chat
             tableViewGesture.AddTarget(() => HandleTableDragGesture(tableViewGesture));
 
             ConfigureView();
-            ConfigureTableView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -39,6 +39,8 @@ namespace LetterApp.iOS.Views.Chat
         {
             switch (e.PropertyName)
             {
+                case nameof(ViewModel.ChatModel):
+                    UpdateTableView();
                 default:
                     break;
             }
@@ -48,10 +50,10 @@ namespace LetterApp.iOS.Views.Chat
         {
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
-
             //TODO Update status Label
             _statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)){ TextAlignment = UITextAlignment.Center};
-
+            _tableView.TableFooterView = new UIView();
+            _tableView.TableFooterView.AddSubview(_statusLabel);
 
             _imageView1.Image?.Dispose();
             _imageView2.Image?.Dispose();
@@ -89,14 +91,9 @@ namespace LetterApp.iOS.Views.Chat
             _sendButton.TouchUpInside += OnSendButton_TouchUpInside;
         }
 
-        private void ConfigureTableView()
+        private void UpdateTableView()
         {
-            if (_tableView.TableFooterView == null)
-            {
-                _tableView.TableFooterView = new UIView();
-                _tableView.TableFooterView.AddSubview(_statusLabel);
-            }
-
+            _tableView.Source = new ChatSource(_tableView, ViewModel.ChatModel);
             _tableView.ReloadData();
         }
 
