@@ -13,6 +13,7 @@ namespace LetterApp.iOS.Views.Base
         public TViewModel ViewModel { get; private set; }
         public object ParameterData { get; set; }
         public virtual bool ShowAsPresentView => false;
+        public int ScreenWidth => (int)UIScreen.MainScreen.Bounds.Width;
 
         public XViewController(string nibName, NSBundle bundle) : base(nibName, bundle) { }
 

@@ -13,6 +13,7 @@ namespace LetterApp.iOS.Views.Chat
     {
         public override bool HandlesKeyboardNotifications => true;
 
+        private UILabel _statusLabel;
         private int _lineCount;
         private bool _keyboardState;
         private nfloat _keyboardHeight;
@@ -45,6 +46,13 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ConfigureView()
         {
+            _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+
+
+            //TODO Update status Label
+            _statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)){ TextAlignment = UITextAlignment.Center};
+
+
             _imageView1.Image?.Dispose();
             _imageView2.Image?.Dispose();
             _imageView3.Image?.Dispose();
@@ -83,7 +91,13 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ConfigureTableView()
         {
-            //Configure TableView
+            if (_tableView.TableFooterView == null)
+            {
+                _tableView.TableFooterView = new UIView();
+                _tableView.TableFooterView.AddSubview(_statusLabel);
+            }
+
+            _tableView.ReloadData();
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -98,6 +112,7 @@ namespace LetterApp.iOS.Views.Chat
                     _keyboardHeight = keybordEvent.FrameEnd.Height;
                 }
 
+                UIViewAnimationExtensions.AnimateView(_tableView.TableFooterView.Subviews[0], keybordEvent.FrameEnd.Height, keyboardState);
                 UIViewAnimationExtensions.AnimateView(_keyboardAreaView, keybordEvent.FrameEnd.Height, keyboardState);
 
                 OnKeyboardChanged(keyboardState, _keyboardHeight);
@@ -218,7 +233,7 @@ namespace LetterApp.iOS.Views.Chat
         {
             base.ViewWillAppear(animated);
 
-            var titleViewMaxSize = UIScreen.MainScreen.Bounds.Width - LocalConstants.Chat_TotalIconsWidth;
+            var titleViewMaxSize = ScreenWidth - LocalConstants.Chat_TotalIconsWidth;
 
             this.NavigationItem.TitleView = CustomUIExtensions.SetupNavigationBarWithSubtitle("João Palma", "ESTG - Aluno", titleViewMaxSize);
             this.NavigationController.NavigationBar.TintColor = Colors.MainBlue;

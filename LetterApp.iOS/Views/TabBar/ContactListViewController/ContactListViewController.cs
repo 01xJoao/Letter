@@ -231,8 +231,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             UpdatePageView();
 
             _totalTabs = ViewModel.ContactTab.Count;
-            float screenWidth = (float)UIScreen.MainScreen.Bounds.Width;
-            var sizeForTab = screenWidth / _totalTabs;
+            var sizeForTab = _viewSize / _totalTabs;
             sizeForTab = sizeForTab < LocalConstants.Contacts_TabMinWidth ? LocalConstants.Contacts_TabMinWidth : sizeForTab;
 
             if ((int)sizeForTab == (int)LocalConstants.Contacts_TabMinWidth)
