@@ -578,6 +578,11 @@
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
     <InterfaceDefinition Include="Views\Chat\ChatViewController.xib" />
     <InterfaceDefinition Include="Views\Chat\Cells\MessageCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\LabelCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\FileCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ImageCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ImageWithUserCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\FileWithUserCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -868,6 +873,27 @@
     <Compile Include="Views\Chat\Cells\MessageCell.cs" />
     <Compile Include="Views\Chat\Cells\MessageCell.designer.cs">
       <DependentUpon>MessageCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\LabelCell.cs" />
+    <Compile Include="Views\Chat\Cells\LabelCell.designer.cs">
+      <DependentUpon>LabelCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\FileCell.cs" />
+    <Compile Include="Views\Chat\Cells\FileCell.designer.cs">
+      <DependentUpon>FileCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\ImageCell.cs" />
+    <Compile Include="Views\Chat\Cells\ImageCell.designer.cs">
+      <DependentUpon>ImageCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatSource.cs" />
+    <Compile Include="Views\Chat\Cells\ImageWithUserCell.cs" />
+    <Compile Include="Views\Chat\Cells\ImageWithUserCell.designer.cs">
+      <DependentUpon>ImageWithUserCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\FileWithUserCell.cs" />
+    <Compile Include="Views\Chat\Cells\FileWithUserCell.designer.cs">
+      <DependentUpon>FileWithUserCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

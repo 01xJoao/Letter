@@ -9,17 +9,20 @@ using System.CodeDom.Compiler;
 
 namespace LetterApp.iOS.Views.Chat.Cells
 {
-	[Register ("MessageCell")]
-	partial class MessageCell
+	[Register ("ImageWithUserCell")]
+	partial class ImageWithUserCell
 	{
 		[Outlet]
 		UIKit.UIImageView _imageView { get; set; }
 
 		[Outlet]
-		UIKit.UILabel _messageLabel { get; set; }
+		UIKit.UILabel _nameLabel { get; set; }
 
 		[Outlet]
-		UIKit.UILabel _nameLabel { get; set; }
+		UIKit.UIButton _pictureButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView _pictureImage { get; set; }
 
 		[Outlet]
 		UIKit.UIView _presenceView { get; set; }
@@ -31,14 +34,19 @@ namespace LetterApp.iOS.Views.Chat.Cells
 				_imageView = null;
 			}
 
-			if (_messageLabel != null) {
-				_messageLabel.Dispose ();
-				_messageLabel = null;
-			}
-
 			if (_nameLabel != null) {
 				_nameLabel.Dispose ();
 				_nameLabel = null;
+			}
+
+			if (_pictureButton != null) {
+				_pictureButton.Dispose ();
+				_pictureButton = null;
+			}
+
+			if (_pictureImage != null) {
+				_pictureImage.Dispose ();
+				_pictureImage = null;
 			}
 
 			if (_presenceView != null) {
