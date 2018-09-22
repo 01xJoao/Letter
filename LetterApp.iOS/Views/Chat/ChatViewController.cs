@@ -39,9 +39,10 @@ namespace LetterApp.iOS.Views.Chat
         {
             switch (e.PropertyName)
             {
-                case nameof(ViewModel.ChatModel):
+                case nameof(ViewModel.Chat):
                     UpdateTableView();
-                default:
+                    break;
+                case nameof(ViewModel.Status):
                     break;
             }
         }
@@ -49,6 +50,7 @@ namespace LetterApp.iOS.Views.Chat
         private void ConfigureView()
         {
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            _tableView.BackgroundColor = Colors.White;
 
             //TODO Update status Label
             _statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)){ TextAlignment = UITextAlignment.Center};
@@ -93,7 +95,7 @@ namespace LetterApp.iOS.Views.Chat
 
         private void UpdateTableView()
         {
-            _tableView.Source = new ChatSource(_tableView, ViewModel.ChatModel);
+            _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
             _tableView.ReloadData();
         }
 
