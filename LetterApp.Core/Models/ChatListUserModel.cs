@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LetterApp.Core.Models
 {
@@ -17,5 +18,6 @@ namespace LetterApp.Core.Models
         public int MemberPresence { get; set; }
         public long MemberPresenceConnectionDate { get; set; }
         public int UnreadMessagesCount { get; set; }
+        public IList<MessagesModel> MessagesList { get; }
     }
 }
