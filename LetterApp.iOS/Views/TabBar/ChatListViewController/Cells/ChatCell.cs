@@ -23,19 +23,19 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
         {
             _chatUser = chatUser;
 
-            UILabelExtensions.SetupLabelAppearance(_dateLabel, chatUser.LastMessageDate, chatUser.ShouldAlertNewMessage ? Colors.Black : Colors.ProfileGrayDarker, 11f, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular);
-            UILabelExtensions.SetupLabelAppearance(_messageLabel, chatUser.LastMessage, Colors.MessageTextColor, 13f, chatUser.ShouldAlertNewMessage ? UIFontWeight.Medium : UIFontWeight.Regular);
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, chatUser.LastMessageDate, chatUser.IsNewMessage ? Colors.Black : Colors.ProfileGrayDarker, 11f, chatUser.IsNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular);
+            UILabelExtensions.SetupLabelAppearance(_messageLabel, chatUser.LastMessage, Colors.MessageTextColor, 13f, chatUser.IsNewMessage ? UIFontWeight.Medium : UIFontWeight.Regular);
 
             var nameAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.BlackChatName,
-                Font = UIFont.SystemFontOfSize(15f, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
+                Font = UIFont.SystemFontOfSize(15f, chatUser.IsNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
             var RoleAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.BlackChatName,
-                Font = UIFont.SystemFontOfSize(13f, chatUser.ShouldAlertNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
+                Font = UIFont.SystemFontOfSize(13f, chatUser.IsNewMessage ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
             var letterCount = chatUser.MemberName.IndexOf("-");

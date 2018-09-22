@@ -6,7 +6,7 @@ namespace LetterApp.Core.Models
     {
         public ChatListUserCellModel() {}
 
-        public ChatListUserCellModel(int memberId, string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool shouldAlertNewMessage, bool isMemberMuted, int unreadMessagesCount,
+        public ChatListUserCellModel(int memberId, string memberName, string memberPhoto, string lastMessage, string lastMessageDate, bool isNewMessage, bool isMemberMuted, int unreadMessagesCount,
                                      EventHandler<int> openMemberProfile, EventHandler<int> openChat, DateTime lastMessageDateTime, MemberPresence memberPresence = MemberPresence.Offline)
         {
             MemberId = memberId;
@@ -15,7 +15,7 @@ namespace LetterApp.Core.Models
             MemberPresence = memberPresence;
             LastMessage = lastMessage;
             LastMessageDate = lastMessageDate;
-            ShouldAlertNewMessage = shouldAlertNewMessage;
+            IsNewMessage = isNewMessage;
             OpenMemberProfile = openMemberProfile;
             OpenChat = openChat;
             LastMessageDateTime = lastMessageDateTime;
@@ -29,7 +29,7 @@ namespace LetterApp.Core.Models
         public MemberPresence MemberPresence { get; set; }
         public string LastMessage { get; set; }
         public string LastMessageDate { get; set; }
-        public bool ShouldAlertNewMessage { get; set; }
+        public bool IsNewMessage { get; set; }
         public DateTime LastMessageDateTime { get; set; }
         public bool IsMemberMuted { get; set; }
         public int UnreadMessagesCount { get; set; }

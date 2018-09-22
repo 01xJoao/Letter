@@ -94,7 +94,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 try
                 {
                     var result = await _messagerService.ConnectMessenger();
-                    if (result) UpdateMessengerService();
+                    if (result) 
+                        UpdateMessengerService();
 
                     //TODO Remove This.
                     //SendMessage();
@@ -186,7 +187,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     userChatModel.LastMessage = msg.Message;
                     userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
                     userChatModel.IsArchived = false;
-                    userChatModel.ShouldAlertNewMessage = true;
+                    userChatModel.IsNewMessage = true;
                     userChatModel.UnreadMessagesCount += 1; 
                 });
 
@@ -208,7 +209,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
 
                 member.UnreadMessagesCount = userChatModel.UnreadMessagesCount;
-                member.ShouldAlertNewMessage = userChatModel.ShouldAlertNewMessage;
+                member.IsNewMessage = userChatModel.IsNewMessage;
                 member.LastMessage = userChatModel.LastMessage;
                 member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
                 member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
@@ -251,7 +252,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var date = new DateTime(chat.LastMessageDateTimeTicks);
 
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
-                                                    DateUtils.TimeForChat(date), chat.ShouldAlertNewMessage, chat.IsMemeberMuted, chat.UnreadMessagesCount,
+                                                    DateUtils.TimeForChat(date), chat.IsNewMessage, chat.IsMemeberMuted, chat.UnreadMessagesCount,
                                                     OpenUserProfileEvent, OpenUserChatEvent, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));
@@ -303,7 +304,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             var lastMessage = channel.LastMessage as UserMessage;
                             DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data).ToLocalTime() : DateTime.Now;
                             long userLastSeen = DateTime.Now.AddMilliseconds(-user.LastSeenAt).Ticks;
-                            var shouldAlertMsg = !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
+                            var newMessage = !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
 
                             //if (userInModel != null)
                             //{
@@ -322,7 +323,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberName = $"{userInDB.FirstName} {userInDB.LastName} - {userInDB.Position}",
                                 MemberPhoto = userInDB.Picture,
                                 IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
-                                ShouldAlertNewMessage = shouldAlertMsg,
+                                IsNewMessage = newMessage,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = userLastSeen,
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
