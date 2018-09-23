@@ -11,6 +11,7 @@ namespace LetterApp.Core.Models
         public string MemberPhoto { get; set; }
         public string MemberEmail { get; set; }
         public bool MemberMuted { get; set; }
+        public bool MemberArchived { get; set; }
         public bool MemberSeenMyLastMessage { get; set; }
         public MemberPresence MemberPresence { get; set; }
         public List<ChatMessagesModel> Messages { get; set; }

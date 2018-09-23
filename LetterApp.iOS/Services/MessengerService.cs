@@ -234,6 +234,20 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
+        public Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery)
+        {
+            var tcs = new TaskCompletionSource<List<BaseMessage>>();
+
+            channelQuery.Load(30, true, (List<BaseMessage> queryResult, SendBirdException e) => {
+                if (e != null)
+                    tcs.TrySetCanceled();
+                else
+                    tcs.TrySetResult(queryResult);
+            });
+
+            return tcs.Task;
+        }
+
         public void TypingMessage(GroupChannel channel)
         {
             channel.StartTyping();

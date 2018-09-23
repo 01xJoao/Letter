@@ -11,7 +11,6 @@ namespace LetterApp.Core.Services.Interfaces
         Task<bool> ConnectMessenger();
         void DisconnectMessenger();
         void RegisterMessengerToken();
-
         Task<GroupChannel> GetUsersInChannel(string channelUrl);
         Task<BaseMessage> InitializeHandlers();
         Task<GroupChannel> CreateChannel(List<string> users);
@@ -20,6 +19,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<GroupChannel> GetCurrentChannel(string userId);
         Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTime);
         Task<List<User>> CheckUsersInGroupPresence(GroupChannel channel);
+        Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery);
         void TypingMessage(GroupChannel channel);
         void TypingMessageEnded(GroupChannel channel);
         void MarkMessageAsRead(GroupChannel channel);

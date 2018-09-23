@@ -181,6 +181,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     }
                 }
 
+                var newmsg = new MessagesModel
+                {
+                    MessageId = msg.MessageId,
+                    MessageType = 0,
+                    MessageData = msg.Message,
+                    MessageSenderId = msg.Sender.UserId,
+                    MessageDateTicks = lastMessageDate.Ticks
+                };
+
                 Realm.Write(() => {
                     userChatModel.MemberPresence = 0;
                     userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
@@ -188,7 +197,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
                     userChatModel.IsArchived = false;
                     userChatModel.IsNewMessage = true;
-                    userChatModel.UnreadMessagesCount += 1; 
+                    userChatModel.UnreadMessagesCount += 1;
+                    userChatModel.MessagesList.Add(newmsg);
                 });
 
                 var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
@@ -330,8 +340,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
                                 IsArchived = userInModel != null && (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
                                 ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0,
-                                UnreadMessagesCount = channel.UnreadMessageCount
+                                UnreadMessagesCount = channel.UnreadMessageCount,
                             };
+
+                            foreach (var msg in userInModel?.MessagesList)
+                                usr.MessagesList.Add(msg);
 
                             newChatList.Add(usr);
                         }

@@ -40,17 +40,17 @@ namespace LetterApp.iOS.Sources
             {
                 case PresentMessageType.UserText:
                     var userTextCell = tableView.DequeueReusableCell(MessageCell.Key) as MessageCell;
-                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent);
+                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
                     cell = userTextCell;
                     break;
                 case PresentMessageType.UserImage:
                     var userImageCell = tableView.DequeueReusableCell(ImageWithUserCell.Key) as ImageWithUserCell;
-                    userImageCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent);
+                    userImageCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
                     cell = userImageCell;
                     break;
                 case PresentMessageType.UserFile:
                     var userFileCell = tableView.DequeueReusableCell(FileWithUserCell.Key) as FileWithUserCell;
-                    userFileCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent);
+                    userFileCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
                     cell = userFileCell;
                     break;
                 case PresentMessageType.Text:

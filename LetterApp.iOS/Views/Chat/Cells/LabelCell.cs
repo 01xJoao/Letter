@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation;
 using LetterApp.Core.Models;
+using LetterApp.iOS.Helpers;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Chat.Cells
@@ -13,7 +14,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<int> messageEvent)
         {
-            throw new NotImplementedException();
+            UILabelExtensions.SetupLabelAppearance(_textLabel, chatMessagesModel.MessageData, Colors.Black, 13f);
         }
     }
 }

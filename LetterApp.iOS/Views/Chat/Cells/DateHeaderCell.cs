@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Foundation;
+using LetterApp.iOS.Helpers;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Chat.Cells
@@ -13,7 +14,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(string date)
         {
-
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, date, Colors.GrayDivider, 15f, UIFontWeight.Medium);
         }
     }
 }

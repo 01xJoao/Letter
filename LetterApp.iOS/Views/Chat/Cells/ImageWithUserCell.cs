@@ -16,5 +16,10 @@ namespace LetterApp.iOS.Views.Chat.Cells
         {
             throw new NotImplementedException();
         }
+
+        internal void Configure(ChatMessagesModel chatMessagesModel, EventHandler<int> messageEvent, string memberName, string memberPhoto, MemberPresence memberPresence)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

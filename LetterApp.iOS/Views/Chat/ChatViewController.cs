@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
@@ -30,6 +31,10 @@ namespace LetterApp.iOS.Views.Chat
             tableViewGesture.AddTarget(() => HandleTableDragGesture(tableViewGesture));
 
             ConfigureView();
+
+            Debug.WriteLine("DidLoadView:" + ViewModel.Chat?.Messages?.Count);
+            if (ViewModel.Chat?.Messages?.Count > 0)
+                UpdateTableView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -97,6 +102,7 @@ namespace LetterApp.iOS.Views.Chat
         {
             _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
             _tableView.ReloadData();
+            _tableView.SetContentOffset(new CGPoint(0, _tableView.Frame.Height), false);
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
