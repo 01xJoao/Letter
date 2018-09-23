@@ -35,13 +35,14 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task InitializeAsync()
         {
+            await Task.Delay(TimeSpan.FromSeconds(0.5f));
+
             try
             {
                 if (AppSettings.IsUserLogged)
                     await CheckUser();
                 else
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(0.3f));
                     await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
                 }
             }
