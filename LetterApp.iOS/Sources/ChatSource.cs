@@ -40,7 +40,7 @@ namespace LetterApp.iOS.Sources
             {
                 case PresentMessageType.UserText:
                     var userTextCell = tableView.DequeueReusableCell(MessageCell.Key) as MessageCell;
-                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
+                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberPresence);
                     cell = userTextCell;
                     break;
                 case PresentMessageType.UserImage:

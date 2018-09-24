@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
@@ -18,8 +19,10 @@ namespace LetterApp.iOS.Views.Chat
         private UILabel _statusLabel;
         private int _lineCount;
         private bool _keyboardState;
-        private nfloat _keyboardHeight;
         private UIPanGestureRecognizer tableViewGesture = new UIPanGestureRecognizer();
+        private UIScrollView _tableScrollView;
+        private int _keyboardHeight;
+        private bool _scrollToBottom;
 
         public ChatViewController() : base("ChatViewController", null) { }
 
@@ -27,6 +30,8 @@ namespace LetterApp.iOS.Views.Chat
         {
             base.ViewDidLoad();
 
+            _sendButton.Enabled = false;
+            _tableView.ContentInset = new UIEdgeInsets(-36, 0, -36, 0);
             _textView.Delegate = this;
             tableViewGesture.AddTarget(() => HandleTableDragGesture(tableViewGesture));
 
@@ -58,7 +63,7 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.BackgroundColor = Colors.White;
 
             //TODO Update status Label
-            _statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)){ TextAlignment = UITextAlignment.Center};
+            _statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)) { TextAlignment = UITextAlignment.Center };
             _tableView.TableFooterView = new UIView();
             _tableView.TableFooterView.AddSubview(_statusLabel);
 
@@ -73,14 +78,11 @@ namespace LetterApp.iOS.Views.Chat
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
 
             _textView.TextContainerInset = new UIEdgeInsets(10, 10, 12, 10);
-
-            _textView.Text = "Type something...";
+            _textView.Text = ViewModel.TypeSomething;
             _textView.TextColor = Colors.ProfileGrayDarker;
-            _textViewHeightConstraint.Constant = LocalConstants.Chat_TextViewHeight;
-            _keyBoardAreaViewHeightConstraint.Constant = LocalConstants.Chat_KeyboardHeight;
             _textView.Font = UIFont.SystemFontOfSize(14f);
-            CustomUIExtensions.CornerView(_sendView, 2);
 
+            CustomUIExtensions.CornerView(_sendView, 2);
             UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.ProfileGray, 15f, "Send", UIFontWeight.Medium);
 
             _sendView.BackgroundColor = UIColor.Clear;
@@ -100,9 +102,23 @@ namespace LetterApp.iOS.Views.Chat
 
         private void UpdateTableView()
         {
-            _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
-            _tableView.ReloadData();
-            _tableView.SetContentOffset(new CGPoint(0, _tableView.Frame.Height), false);
+            Debug.WriteLine("ENTER HERE!!!!!!!!!! : ");
+
+            if (ViewModel.Chat.Messages != null && ViewModel.Chat.Messages.Count > 0)
+            {
+                _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
+                _tableView.ReloadData();
+
+                if (_scrollToBottom)
+                {
+                    _scrollToBottom = false;
+                    ScrollToBottom();
+                }
+            }
+            else
+            {
+                _scrollToBottom = true;
+            }
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -112,16 +128,39 @@ namespace LetterApp.iOS.Views.Chat
                 _keyboardState = keyboardState;
 
                 if (keyboardState)
-                {
                     _tableView.AddGestureRecognizer(tableViewGesture);
-                    _keyboardHeight = keybordEvent.FrameEnd.Height;
-                }
 
-                UIViewAnimationExtensions.AnimateView(_tableView.TableFooterView.Subviews[0], keybordEvent.FrameEnd.Height, keyboardState);
-                UIViewAnimationExtensions.AnimateView(_keyboardAreaView, keybordEvent.FrameEnd.Height, keyboardState);
+                _keyboardHeight = (int)keybordEvent.FrameEnd.Height;
 
-                OnKeyboardChanged(keyboardState, _keyboardHeight);
+                _keyboardViewBottomConstraint.Constant = keyboardState ? _keyboardHeight : 0;
+                _tableViewBottomConstraint.Constant = keyboardState ? _keyboardHeight : _keyboardAreaView.Frame.Height;
+
+                UIView.Animate(0.3f, this.View.LayoutIfNeeded);
+
+                AnimateTableView(keyboardState);
             }
+        }
+
+        private void AnimateTableView(bool keyboardState)
+        {
+            if (_tableScrollView == null)
+                _tableScrollView = _tableView as UIScrollView;
+
+            if (keyboardState)
+            {
+                if (_tableScrollView.ContentSize.Height < _tableScrollView.Bounds.Size.Height)
+                    return;
+
+                CGPoint bottomOffset = new CGPoint(0, _tableScrollView.ContentSize.Height - (_tableScrollView.Bounds.Size.Height - _keyboardAreaView.Frame.Height) - 36);
+                _tableScrollView.SetContentOffset(bottomOffset, true);
+            }
+            else
+            {
+                _tableScrollView.ContentInset = UIEdgeInsets.Zero;
+                _tableScrollView.ScrollIndicatorInsets = UIEdgeInsets.Zero;
+            }
+
+            _tableView.ContentInset = new UIEdgeInsets(-36, 0, -36, 0);
         }
 
         private void HandleTableDragGesture(UIPanGestureRecognizer tableViewGesture)
@@ -133,34 +172,25 @@ namespace LetterApp.iOS.Views.Chat
         [Export("textViewShouldBeginEditing:")]
         public bool ShouldBeginEditing(UITextView textView)
         {
+            if (textView.Text == ViewModel.TypeSomething)
+                textView.Text = "";
+
             _imageView1.Image = UIImage.FromBundle("keyboard_active");
-
-            if (!_textView.TranslatesAutoresizingMaskIntoConstraints)
-            {
-                _textView.TranslatesAutoresizingMaskIntoConstraints = true;
-                _keyboardAreaView.TranslatesAutoresizingMaskIntoConstraints = true;
-
-                _textView.SetNeedsLayout();
-                _textView.LayoutIfNeeded();
-
-                _keyboardAreaView.SetNeedsLayout();
-                _keyboardAreaView.LayoutIfNeeded();
-            }
-
             return true;
         }
 
         [Export("textViewDidChange:")]
         public void Changed(UITextView textView)
         {
-            if(!string.IsNullOrEmpty(textView.Text) && _sendView.BackgroundColor != Colors.SenderButton)
+            if (!string.IsNullOrEmpty(textView.Text) && _sendView.BackgroundColor != Colors.SenderButton)
             {
                 _sendView.BackgroundColor = Colors.SenderButton;
                 _sendButton.SetTitleColor(Colors.White, UIControlState.Normal);
                 _sendButton.Enabled = true;
             }
-            else if(string.IsNullOrEmpty(textView.Text))
+            else if (string.IsNullOrEmpty(textView.Text) && _keyboardState == false)
             {
+                textView.Text = ViewModel.TypeSomething;
                 _sendView.BackgroundColor = UIColor.Clear;
                 _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
                 _sendButton.Enabled = false;
@@ -168,44 +198,47 @@ namespace LetterApp.iOS.Views.Chat
 
             int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
 
-            if(lineCount < 5 && lineCount != _lineCount)
+            if (lineCount < 5 && lineCount != _lineCount)
             {
-                _textView.Frame = new CGRect(_textView.Frame.X, _textView.Frame.Y, _textView.Frame.Width,
-                                             _textViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
+                //_textView.Frame = new CGRect(_textView.Frame.X, _textView.Frame.Y, _textView.Frame.Width,
+                //_textViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
 
-                int keyHeight = _keyboardState ? (int)_keyboardHeight : 0;
-                var keyViewY = this.View.Frame.Height - (keyHeight + _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
+                //int keyHeight = _keyboardState ? (int)_keyboardHeight : 0;
+                //var keyViewY = this.View.Frame.Height - (keyHeight + _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
 
-                _keyboardAreaView.Frame = new CGRect(_keyboardAreaView.Frame.X, keyViewY, _keyboardAreaView.Frame.Width, 
-                                                     _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
+                //_keyboardAreaView.Frame = new CGRect(_keyboardAreaView.Frame.X, keyViewY, _keyboardAreaView.Frame.Width, 
+                //                                     _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
 
-                if (!_textView.TranslatesAutoresizingMaskIntoConstraints)
-                {
-                    _textView.TranslatesAutoresizingMaskIntoConstraints = true;
-                    _keyboardAreaView.TranslatesAutoresizingMaskIntoConstraints = true;
-                }
+                //if (!_textView.TranslatesAutoresizingMaskIntoConstraints)
+                //{
+                //    _textView.TranslatesAutoresizingMaskIntoConstraints = true;
+                //    _keyboardAreaView.TranslatesAutoresizingMaskIntoConstraints = true;
+                //}
 
-                _textView.SetNeedsLayout();
-                _textView.LayoutIfNeeded();
+                ////_textView.SetNeedsLayout();
+                ////_textView.LayoutIfNeeded();
 
-                _keyboardAreaView.SetNeedsLayout();
-                _keyboardAreaView.LayoutIfNeeded();
+                //_keyboardAreaView.SetNeedsLayout();
+                //_keyboardAreaView.LayoutIfNeeded();
 
-                OnKeyboardChanged(_keyboardState, _keyboardHeight);
+                ////OnKeyboardChanged(_keyboardState, _keyboardHeight + _keyboardAreaView.Frame.Height);
 
-                _lineCount = lineCount;
+                //_lineCount = lineCount;
             }
         }
 
         [Export("textViewDidEndEditing:")]
         public void EditingEnded(UITextView textView)
         {
+            if (string.IsNullOrEmpty(textView.Text))
+                textView.Text = ViewModel.TypeSomething;
+
             _imageView1.Image = UIImage.FromBundle("keyboard");
         }
 
         private void OnButton1_TouchUpInside(object sender, EventArgs e)
         {
-            if(!_keyboardState)
+            if (!_keyboardState)
                 _textView.BecomeFirstResponder();
         }
 
@@ -219,6 +252,11 @@ namespace LetterApp.iOS.Views.Chat
 
         private void OnSendButton_TouchUpInside(object sender, EventArgs e)
         {
+            if (ViewModel.SendMessageCommand.CanExecute(null))
+            {
+                ViewModel.SendMessageCommand.Execute(_textView.Text);
+                _textView.Text = string.Empty;
+            }
         }
 
         private void Options(object sender, EventArgs e)
@@ -232,6 +270,22 @@ namespace LetterApp.iOS.Views.Chat
         private void CloseView(object sender, EventArgs e)
         {
             ViewModel.CloseViewCommand.Execute();
+        }
+
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            ScrollToBottom();
+        }
+
+       private void ScrollToBottom()
+       {
+            if (_tableView.ContentSize.Height > _tableView.Bounds.Size.Height)
+            {
+                var offSet = _tableView.ContentSize.Height - _tableView.Bounds.Size.Height;
+                _tableView.SetContentOffset(new CGPoint(0, offSet), false);
+            }
         }
 
         public override void ViewWillAppear(bool animated)
@@ -258,11 +312,16 @@ namespace LetterApp.iOS.Views.Chat
             this.NavigationController.NavigationBar.ShadowImage = new UIImage();
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
             _navBarView.BackgroundColor = Colors.MainBlue;
+
+            _tableView.EstimatedRowHeight = 30;
+            _tableView.RowHeight = UITableView.AutomaticDimension;
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+
+            ViewModel.ViewWillCloseCommand.Execute();
 
             if (this.IsMovingFromParentViewController)
                 this.NavigationController.SetNavigationBarHidden(true, true);
@@ -278,46 +337,6 @@ namespace LetterApp.iOS.Views.Chat
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }
-
-        #region ScrollView
-
-        private void OnKeyboardChanged(bool visible, nfloat keyboardHeight)
-        {
-            UIScrollView scrollView = _tableView as UIScrollView;
-
-            if (visible)
-                CenterViewInScroll(_tableView, scrollView, keyboardHeight);
-            else
-                RestoreScrollPosition(scrollView);
-        }
-
-        private void CenterViewInScroll(UIView viewToCenter, UIScrollView scrollView, nfloat keyboardHeight)
-        {
-            var contentInsets = new UIEdgeInsets(0, 0, keyboardHeight, 0);
-            scrollView.ContentInset = contentInsets;
-            scrollView.ScrollIndicatorInsets = contentInsets;
-
-            // Position of the active field relative inside the scroll view
-            var relativeFrame = viewToCenter.Superview.ConvertRectToView(viewToCenter.Frame, scrollView);
-
-            var landscape = TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Compact;
-            var spaceAboveKeyboard = (landscape ? scrollView.Frame.Width : scrollView.Frame.Height) - keyboardHeight;
-
-            if (relativeFrame.Y + relativeFrame.Height + 16 > spaceAboveKeyboard)
-            {
-                // Move the active field to the center of the available space
-                var offset = relativeFrame.Y - (spaceAboveKeyboard - viewToCenter.Frame.Height) / 2;
-                scrollView.ContentOffset = new CGPoint(0, (float)offset);
-            }
-        }
-
-        private void RestoreScrollPosition(UIScrollView scrollView)
-        {
-            scrollView.ContentInset = UIEdgeInsets.Zero;
-            scrollView.ScrollIndicatorInsets = UIEdgeInsets.Zero;
-        }
-
-        #endregion
     }
 }
 

@@ -96,9 +96,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     var result = await _messagerService.ConnectMessenger();
                     if (result) 
                         UpdateMessengerService();
-
-                    //TODO Remove This.
-                    //SendMessage();
+                        
                 }
                 catch (Exception ex)
                 {
@@ -314,7 +312,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             var lastMessage = channel.LastMessage as UserMessage;
                             DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data).ToLocalTime() : DateTime.Now;
                             long userLastSeen = DateTime.Now.AddMilliseconds(-user.LastSeenAt).Ticks;
-                            var newMessage = !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
+                            var newMessage = lastMessage.Sender.UserId != _thisUserFinalId && !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
 
                             //if (userInModel != null)
                             //{
@@ -340,11 +338,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
                                 IsArchived = userInModel != null && (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
                                 ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0,
-                                UnreadMessagesCount = channel.UnreadMessageCount,
+                                UnreadMessagesCount = newMessage ? channel.UnreadMessageCount : 0,
                             };
 
-                            foreach (var msg in userInModel?.MessagesList)
-                                usr.MessagesList.Add(msg);
+                            if (userInModel != null)
+                            {
+                                foreach (var msg in userInModel?.MessagesList)
+                                    usr.MessagesList.Add(msg);
+                            }
 
                             newChatList.Add(usr);
                         }
@@ -375,21 +376,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
             }
         }
-
-        //private async Task SendMessage()
-        //{
-        //    try
-        //    {
-        //        var channel = await _messagerService.CreateChannel(new List<string> { "59-33" });
-
-        //        if (channel != null)
-        //            await _messagerService.SendMessage(channel, "This is a text message to check how it works in two lines label, thank you.", DateTime.UtcNow.ToString());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Ui.Handle(ex as dynamic);
-        //    }
-        //}
 
         private async Task OpenContacts()
         {

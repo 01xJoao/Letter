@@ -17,14 +17,14 @@ namespace LetterApp.iOS.Views.Chat.Cells
         public static readonly UINib Nib = UINib.FromName("MessageCell", NSBundle.MainBundle);
         protected MessageCell(IntPtr handle) : base(handle){}
 
-        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, string memberName, string memberPhoto, MemberPresence memberPresence)
+        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, MemberPresence memberPresence)
         {
-            UILabelExtensions.SetupLabelAppearance(_nameLabel,$"{memberName} - {message.MessageDate}" , Colors.ProfileGrayDarker, 14f, UIFontWeight.Semibold);
+            UILabelExtensions.SetupLabelAppearance(_nameLabel,$"{message.Name} - {message.MessageDate}" , Colors.ProfileGrayDarker, 14f, UIFontWeight.Semibold);
             UILabelExtensions.SetupLabelAppearance(_messageLabel, message.MessageData, Colors.Black, 13f);
 
-            if (!string.IsNullOrEmpty(memberPhoto))
+            if (!string.IsNullOrEmpty(message.Picture))
             {
-                _picture = string.Copy(memberPhoto);
+                _picture = string.Copy(message.Picture);
 
                 ImageService.Instance.LoadStream((token) => {
                     return ImageHelper.GetStreamFromImageByte(token, _picture);

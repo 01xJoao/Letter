@@ -33,6 +33,7 @@ namespace LetterApp.Core.ViewModels
         private int _userId;
         private GetUsersInDivisionModel _user;
         private ChatListUserModel _userChat;
+        private GroupChannel _channel;
 
         private ChatModel _chat;
         public ChatModel Chat
@@ -41,6 +42,7 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _chat, value);
         }
 
+        private UserModel _thisUser;
         private List<MessagesModel> _messagesModel;
         private List<ChatMessagesModel> _chatMessages;
         private Dictionary<int, Tuple<string, int>> _sectionsAndRowsCount;
@@ -51,6 +53,12 @@ namespace LetterApp.Core.ViewModels
             get => _status;
             set => SetProperty(ref _status, value);
         }
+
+        private XPCommand<string> _sendMessageCommand;
+        public XPCommand<string> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<string>(async (msg) => await SendMessage(msg), CanExecuteMsg));
+
+        private XPCommand _viewWillCloseCommand;
+        public XPCommand ViewWillCloseCommand => _viewWillCloseCommand ?? (_viewWillCloseCommand = new XPCommand(ViewWillClose));
 
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
@@ -77,19 +85,19 @@ namespace LetterApp.Core.ViewModels
             var users = Realm.All<GetUsersInDivisionModel>();
             _user = users?.First(x => x.UserId == _userId);
 
-            var thisUser = Realm.Find<UserModel>(AppSettings.UserId);
+            _thisUser = Realm.Find<UserModel>(AppSettings.UserId);
 
-            if (_user == null || _userChat == null || thisUser == null)
+            if (_user == null || _thisUser == null)
             {
                 CloseView();
                 return;
             }
 
-            if (thisUser.Divisions.Count > 1)
+            if (_thisUser.Divisions.Count > 1)
             {
                 var division = Realm.Find<DivisionModelProfile>(_user.MainDivisionId);
 
-                if(division == null)
+                if (division == null)
                 {
                     try
                     {
@@ -109,7 +117,7 @@ namespace LetterApp.Core.ViewModels
                 }
             }
 
-            MessagesLogic(_userChat.MessagesList);
+            MessagesLogic(_userChat?.MessagesList);
 
             var chat = new ChatModel
             {
@@ -118,12 +126,12 @@ namespace LetterApp.Core.ViewModels
                 MemberDetails = string.IsNullOrEmpty(fromDivision) ? _user?.Position : $"{fromDivision} - {_user?.Position}",
                 MemberPhoto = _user.Picture,
                 MemberEmail = _user.Email,
-                MemberMuted = _userChat.IsMemeberMuted,
-                MemberSeenMyLastMessage = _userChat.MemberSeenMyLastMessage,
+                MemberMuted = _userChat != null && _userChat.IsMemeberMuted,
+                MemberSeenMyLastMessage = _userChat != null && _userChat.MemberSeenMyLastMessage,
                 //MemberPresence = (MemberPresence)_userChat.MemberPresence,
                 Messages = _chatMessages,
                 MessageEvent = MessageClickEvent,
-                SectionsAndRowsCount = _sectionsAndRowsCount
+                SectionsAndRowsCount = _sectionsAndRowsCount,
             };
 
             Debug.WriteLine("_chat = chat");
@@ -131,9 +139,12 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                var channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
+                _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
 
-                _PrevMessageListQuery = channel.CreatePreviousMessageListQuery();
+                if (_channel == null)
+                    _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
+
+                _PrevMessageListQuery = _channel.CreatePreviousMessageListQuery();
             }
             catch (Exception ex)
             {
@@ -153,9 +164,9 @@ namespace LetterApp.Core.ViewModels
                 {
                     var result = await _messengerService.LoadMessages(_PrevMessageListQuery);
 
-                    foreach(BaseMessage message in result)
+                    foreach (BaseMessage message in result)
                     {
-                        if(message is UserMessage msg)
+                        if (message is UserMessage msg)
                         {
                             var newMessage = new MessagesModel
                             {
@@ -203,7 +214,7 @@ namespace LetterApp.Core.ViewModels
 
         private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
         {
-            if (messagesList?.Count == 0)
+            if (messagesList == null || messagesList?.Count == 0)
                 return;
 
             if (!shouldKeepOldMessages || _chatMessages == null || _sectionsAndRowsCount == null)
@@ -215,18 +226,19 @@ namespace LetterApp.Core.ViewModels
                 _messagesInDate = 0;
 
             }
+
             var messageOrdered = messagesList.OrderBy(x => x.MessageDateTicks).ToList();
 
-            DateTime lastDay = new DateTime(messageOrdered.Last().MessageDateTicks).Date;
+            DateTime lastDay = new DateTime(messageOrdered.First().MessageDateTicks).Date;
 
-            foreach (MessagesModel message in messagesList.OrderBy(x => x.MessageDateTicks))
+            foreach (MessagesModel message in messageOrdered)
             {
                 var newMessage = new ChatMessagesModel();
                 var dateMessage = new DateTime(message.MessageDateTicks);
 
                 if (lastDay != dateMessage.Date)
                 {
-                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(lastDay.ToString(), _messagesInDate));
+                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(lastDay.ToString("dd MMMM"), _messagesInDate));
 
                     lastDay = dateMessage.Date;
                     _differentDateCount++;
@@ -238,21 +250,102 @@ namespace LetterApp.Core.ViewModels
                 {
                     _messagesInDate++;
 
-                    if (_chatMessages.Count == 0 || _chatMessages.Last().MessageSenderId != message.MessageSenderId)
+                    if (_chatMessages.Count == 0 || _chatMessages[_chatMessages.Count - 1].MessageSenderId != message.MessageSenderId)
+                    {
                         newMessage.PresentMessage = (PresentMessageType)message.MessageType;
+                        newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
+                        newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
+                    }
                     else
                         newMessage.PresentMessage = (PresentMessageType)(message.MessageType + 3);
                 }
 
                 newMessage.MessageId = message.MessageId;
                 newMessage.MessageData = message.MessageData;
-                newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.MessageType = (MessageType)message.MessageType;
+                newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.CustomData = message.CustomData;
                 newMessage.MessageDate = DateUtils.TimeForChat(dateMessage);
                 newMessage.MessageDateTime = dateMessage;
 
                 _chatMessages.Add(newMessage);
+            }
+            if (_messagesInDate > 0 && !shouldKeepOldMessages)
+                _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMMM"), _messagesInDate));
+            else
+            {
+                var sameDay = _chatMessages[_chatMessages.Count - 2].MessageDateTime.Date == _chatMessages[_chatMessages.Count - 1].MessageDateTime.Date;
+
+                if (sameDay)
+                    _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1] = new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMMM"),
+                                                                                                    _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1].Item2 + 1);
+                else
+                    _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMMM"),1));
+            }
+        }
+
+        private async Task SendMessage(string msg)
+        {
+            try
+            {
+                var result = await _messengerService.SendMessage(_channel, msg, DateTime.UtcNow.ToString());
+
+                if(result != null)
+                {
+                    var newMessage = new MessagesModel
+                    {
+                        MessageId = result.MessageId,
+                        MessageType = 0,
+                        MessageData = result.Message,
+                        MessageSenderId = result.Sender.UserId,
+                        MessageDateTicks = DateTime.Parse(result.Data).ToLocalTime().Ticks
+                    };
+
+                    _messagesModel.Add(newMessage);
+
+                    MessagesLogic(_messagesModel, _updated);
+                    _updated = true;
+
+                    _chat.Messages = _chatMessages;
+                    _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
+                    RaisePropertyChanged(nameof(Chat));
+
+                    //var newMessage = new ChatMessagesModel();
+
+                    //newMessage.MessageId = result.MessageId;
+                    //newMessage.MessageData = result.Message;
+                    //newMessage.MessageType = (MessageType)0;
+                    //newMessage.MessageSenderId = result.Sender.UserId;
+                    //newMessage.CustomData = "";
+                    //newMessage.MessageDate = DateUtils.TimeForChat(DateTime.Now);
+                    //newMessage.MessageDateTime = DateTime.Now;
+
+                    //_chatMessages.Add(newMessage);
+
+                    //if(_chat.Messages == null)
+                    //{
+                    //    newMessage.PresentMessage = PresentMessageType.UserText;
+                    //    _chat.Messages = new List<ChatMessagesModel>();
+                    //    _chat.SectionsAndRowsCount = new Dictionary<int, Tuple<string, int>>();
+                    //    _chat.SectionsAndRowsCount.Add(0, new Tuple<string, int>(DateTime.Now.ToString("dd MMMM"), 1));
+                    //}
+                    //else
+                    //{
+                    //    var lastMessage = _chat.Messages.Last();
+                    //    newMessage.PresentMessage = lastMessage.MessageSenderId == result.Sender.UserId ? PresentMessageType.Text : PresentMessageType.UserText;
+
+
+                    //    if(lastMessage.MessageDateTime.Date == newMessage.MessageDate
+
+                    //}
+
+                    //_chat.Messages.Add(newMessage);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
             }
         }
 
@@ -262,9 +355,18 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView()
         {
-            if(_chat?.Messages?.Count > 0 && _userChat != null)
+
+            ViewWillClose();
+
+            await NavigationService.Close(this);
+        }
+
+        private void ViewWillClose()
+        {
+            if (_chat?.Messages?.Count > 0 && _userChat != null)
             {
-                Realm.Write(() => {
+                Realm.Write(() =>
+                {
 
                     var lastMessage = _chat.Messages.Last();
 
@@ -294,13 +396,18 @@ namespace LetterApp.Core.ViewModels
                     Realm.Add(userChat, true);
                 });
             }
-
-            await NavigationService.Close(this);
         }
 
         private bool CanExecute() => !IsBusy;
+        private bool CanExecuteMsg(string msg) => !IsBusy;
 
+        #region Resources 
 
         private string YouChatLabel => L10N.Localize("ChatList_You");
+        public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
+
+     
+
+        #endregion
     }
 }
