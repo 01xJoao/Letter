@@ -22,7 +22,6 @@ namespace LetterApp.iOS.Views.Chat
         private int _lineCount;
         private bool _keyboardState;
         private int _keyboardHeight;
-        private bool _shouldScrollToLastRow;
 
         public ChatViewController() : base("ChatViewController", null) { }
 
