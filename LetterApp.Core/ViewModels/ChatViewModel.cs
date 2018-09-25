@@ -76,7 +76,7 @@ namespace LetterApp.Core.ViewModels
             _userId = userId;
         }
 
-        public override async Task InitializeAsync()
+        public override async Task Appeared()
         {
             string fromDivision = string.Empty;
 
@@ -135,7 +135,7 @@ namespace LetterApp.Core.ViewModels
             };
 
             Debug.WriteLine("_chat = chat");
-            _chat = chat;
+            Chat = chat;
 
             try
             {
@@ -207,9 +207,13 @@ namespace LetterApp.Core.ViewModels
             MessagesLogic(_messagesModel, _updated);
             _updated = true;
 
+            bool shouldUpdate = _chat.Messages?.Last()?.MessageId != _chatMessages?.Last()?.MessageId;
+
             _chat.Messages = _chatMessages;
             _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
-            RaisePropertyChanged(nameof(Chat));
+
+            if(shouldUpdate)
+                RaisePropertyChanged(nameof(Chat));
         }
 
         private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)

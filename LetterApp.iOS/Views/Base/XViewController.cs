@@ -13,6 +13,7 @@ namespace LetterApp.iOS.Views.Base
         public TViewModel ViewModel { get; private set; }
         public object ParameterData { get; set; }
         public virtual bool ShowAsPresentView => false;
+        public virtual bool DismissKeyboardOnTap => true;
         public int ScreenWidth => (int)UIScreen.MainScreen.Bounds.Width;
 
         public XViewController(string nibName, NSBundle bundle) : base(nibName, bundle) { }
@@ -41,9 +42,16 @@ namespace LetterApp.iOS.Views.Base
             if (HandlesKeyboardNotifications)
                 RegisterForKeyboardNotifications(true);
 
-            DismissKeyboardOnBackgroundTap();
+            if(DismissKeyboardOnTap)
+                DismissKeyboardOnBackgroundTap();
 
             base.ViewWillAppear(animated);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            ViewModel.Appeared();
         }
 
         public override void ViewWillDisappear(bool animated)

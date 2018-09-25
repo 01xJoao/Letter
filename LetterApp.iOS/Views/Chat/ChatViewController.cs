@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.ViewModels;
@@ -15,14 +13,16 @@ namespace LetterApp.iOS.Views.Chat
     public partial class ChatViewController : XViewController<ChatViewModel>, IUITextViewDelegate
     {
         public override bool HandlesKeyboardNotifications => true;
+        public override bool DismissKeyboardOnTap => false;
 
         private UILabel _statusLabel;
+        private UITapGestureRecognizer _tableViewTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
+        private UIScrollView _tableScrollView;
+
         private int _lineCount;
         private bool _keyboardState;
-        private UIPanGestureRecognizer tableViewGesture = new UIPanGestureRecognizer();
-        private UIScrollView _tableScrollView;
         private int _keyboardHeight;
-        private bool _scrollToBottom;
+        private bool _shouldScrollToLastRow;
 
         public ChatViewController() : base("ChatViewController", null) { }
 
@@ -30,16 +30,9 @@ namespace LetterApp.iOS.Views.Chat
         {
             base.ViewDidLoad();
 
-            _sendButton.Enabled = false;
-            _tableView.ContentInset = new UIEdgeInsets(-36, 0, -36, 0);
-            _textView.Delegate = this;
-            tableViewGesture.AddTarget(() => HandleTableDragGesture(tableViewGesture));
+            _tableView.Hidden = true;
 
             ConfigureView();
-
-            Debug.WriteLine("DidLoadView:" + ViewModel.Chat?.Messages?.Count);
-            if (ViewModel.Chat?.Messages?.Count > 0)
-                UpdateTableView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -51,6 +44,7 @@ namespace LetterApp.iOS.Views.Chat
             {
                 case nameof(ViewModel.Chat):
                     UpdateTableView();
+                    ScrollToLastRow();
                     break;
                 case nameof(ViewModel.Status):
                     break;
@@ -59,13 +53,22 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ConfigureView()
         {
+            _sendButton.Enabled = false;
+            _textView.Delegate = this;
+            _tableView.SectionHeaderHeight = 0;
+            _tableView.SectionFooterHeight = 0;
+            _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 0.1f));
+           // _tableView.ContentInset = new UIEdgeInsets(0, 0, -10, 0);
+            _tableViewTapGesture.AddTarget(HandleTableDragGesture);
+            _tableScrollView = _tableView as UIScrollView;
+
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.BackgroundColor = Colors.White;
 
             //TODO Update status Label
-            _statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)) { TextAlignment = UITextAlignment.Center };
-            _tableView.TableFooterView = new UIView();
-            _tableView.TableFooterView.AddSubview(_statusLabel);
+            //_statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)) { TextAlignment = UITextAlignment.Center };
+            //_tableView.TableFooterView = new UIView();
+            //_tableView.TableFooterView.AddSubview(_statusLabel);
 
             _imageView1.Image?.Dispose();
             _imageView2.Image?.Dispose();
@@ -102,22 +105,10 @@ namespace LetterApp.iOS.Views.Chat
 
         private void UpdateTableView()
         {
-            Debug.WriteLine("ENTER HERE!!!!!!!!!! : ");
-
-            if (ViewModel.Chat.Messages != null && ViewModel.Chat.Messages.Count > 0)
+            if (ViewModel.Chat.Messages?.Count > 0)
             {
                 _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
                 _tableView.ReloadData();
-
-                if (_scrollToBottom)
-                {
-                    _scrollToBottom = false;
-                    ScrollToBottom();
-                }
-            }
-            else
-            {
-                _scrollToBottom = true;
             }
         }
 
@@ -125,48 +116,27 @@ namespace LetterApp.iOS.Views.Chat
         {
             if (keyboardState != _keyboardState)
             {
-                _keyboardState = keyboardState;
-
                 if (keyboardState)
-                    _tableView.AddGestureRecognizer(tableViewGesture);
-
-                _keyboardHeight = (int)keybordEvent.FrameEnd.Height;
-
-                _keyboardViewBottomConstraint.Constant = keyboardState ? _keyboardHeight : 0;
-                _tableViewBottomConstraint.Constant = keyboardState ? _keyboardHeight : _keyboardAreaView.Frame.Height;
-
-                UIView.Animate(0.3f, this.View.LayoutIfNeeded);
-
+                {
+                    _tableView.AddGestureRecognizer(_tableViewTapGesture);
+                    _keyboardHeight = (int)keybordEvent.FrameEnd.Height;
+                }
+                _keyboardState = keyboardState;
                 AnimateTableView(keyboardState);
             }
         }
 
-        private void AnimateTableView(bool keyboardState)
+        private void AnimateTableView(bool showKeyboard)
         {
-            if (_tableScrollView == null)
-                _tableScrollView = _tableView as UIScrollView;
-
-            if (keyboardState)
-            {
-                if (_tableScrollView.ContentSize.Height < _tableScrollView.Bounds.Size.Height)
-                    return;
-
-                CGPoint bottomOffset = new CGPoint(0, _tableScrollView.ContentSize.Height - (_tableScrollView.Bounds.Size.Height - _keyboardAreaView.Frame.Height) - 36);
-                _tableScrollView.SetContentOffset(bottomOffset, true);
-            }
-            else
-            {
-                _tableScrollView.ContentInset = UIEdgeInsets.Zero;
-                _tableScrollView.ScrollIndicatorInsets = UIEdgeInsets.Zero;
-            }
-
-            _tableView.ContentInset = new UIEdgeInsets(-36, 0, -36, 0);
+            _keyboardViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight : 0;
+            _tableViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight + _keyboardAreaView.Frame.Height : _keyboardAreaView.Frame.Height;
+            UIView.Animate(0.3f, this.View.LayoutIfNeeded);
         }
 
-        private void HandleTableDragGesture(UIPanGestureRecognizer tableViewGesture)
+        private void HandleTableDragGesture()
         {
             _textView.ResignFirstResponder();
-            _tableView.RemoveGestureRecognizer(tableViewGesture);
+            _tableView.RemoveGestureRecognizer(_tableViewTapGesture);
         }
 
         [Export("textViewShouldBeginEditing:")]
@@ -176,63 +146,47 @@ namespace LetterApp.iOS.Views.Chat
                 textView.Text = "";
 
             _imageView1.Image = UIImage.FromBundle("keyboard_active");
+
             return true;
         }
 
         [Export("textViewDidChange:")]
         public void Changed(UITextView textView)
         {
-            if (!string.IsNullOrEmpty(textView.Text) && _sendView.BackgroundColor != Colors.SenderButton)
+            if (!string.IsNullOrEmpty(textView.Text) && _sendButton.Enabled == false)
             {
                 _sendView.BackgroundColor = Colors.SenderButton;
                 _sendButton.SetTitleColor(Colors.White, UIControlState.Normal);
                 _sendButton.Enabled = true;
             }
-            else if (string.IsNullOrEmpty(textView.Text) && _keyboardState == false)
-            {
-                textView.Text = ViewModel.TypeSomething;
-                _sendView.BackgroundColor = UIColor.Clear;
-                _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
-                _sendButton.Enabled = false;
-            }
+            else if (string.IsNullOrEmpty(textView.Text))
+                DefaultKeyboard(false);
 
             int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
 
             if (lineCount < 5 && lineCount != _lineCount)
             {
-                //_textView.Frame = new CGRect(_textView.Frame.X, _textView.Frame.Y, _textView.Frame.Width,
-                //_textViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
-
-                //int keyHeight = _keyboardState ? (int)_keyboardHeight : 0;
-                //var keyViewY = this.View.Frame.Height - (keyHeight + _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
-
-                //_keyboardAreaView.Frame = new CGRect(_keyboardAreaView.Frame.X, keyViewY, _keyboardAreaView.Frame.Width, 
-                //                                     _keyBoardAreaViewHeightConstraint.Constant + (lineCount * (int)textView.Font.LineHeight));
-
-                //if (!_textView.TranslatesAutoresizingMaskIntoConstraints)
-                //{
-                //    _textView.TranslatesAutoresizingMaskIntoConstraints = true;
-                //    _keyboardAreaView.TranslatesAutoresizingMaskIntoConstraints = true;
-                //}
-
-                ////_textView.SetNeedsLayout();
-                ////_textView.LayoutIfNeeded();
-
-                //_keyboardAreaView.SetNeedsLayout();
-                //_keyboardAreaView.LayoutIfNeeded();
-
-                ////OnKeyboardChanged(_keyboardState, _keyboardHeight + _keyboardAreaView.Frame.Height);
-
-                //_lineCount = lineCount;
+                //TODO Increase keyboardArea height
+                _lineCount = lineCount;
             }
         }
+
 
         [Export("textViewDidEndEditing:")]
         public void EditingEnded(UITextView textView)
         {
             if (string.IsNullOrEmpty(textView.Text))
-                textView.Text = ViewModel.TypeSomething;
+                DefaultKeyboard();
+        }
 
+        private void DefaultKeyboard(bool editEnded = true)
+        {
+            if(editEnded)
+                _textView.Text = ViewModel.TypeSomething;
+
+            _sendView.BackgroundColor = UIColor.Clear;
+            _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
+            _sendButton.Enabled = false;
             _imageView1.Image = UIImage.FromBundle("keyboard");
         }
 
@@ -240,6 +194,8 @@ namespace LetterApp.iOS.Views.Chat
         {
             if (!_keyboardState)
                 _textView.BecomeFirstResponder();
+            else
+                _textView.ResignFirstResponder();
         }
 
         private void OnButton2_TouchUpInside(object sender, EventArgs e)
@@ -256,6 +212,7 @@ namespace LetterApp.iOS.Views.Chat
             {
                 ViewModel.SendMessageCommand.Execute(_textView.Text);
                 _textView.Text = string.Empty;
+                _textView.ResignFirstResponder();
             }
         }
 
@@ -272,21 +229,32 @@ namespace LetterApp.iOS.Views.Chat
             ViewModel.CloseViewCommand.Execute();
         }
 
-
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
             ScrollToBottom();
         }
 
-       private void ScrollToBottom()
-       {
+        private void ScrollToBottom()
+        {
             if (_tableView.ContentSize.Height > _tableView.Bounds.Size.Height)
             {
                 var offSet = _tableView.ContentSize.Height - _tableView.Bounds.Size.Height;
                 _tableView.SetContentOffset(new CGPoint(0, offSet), false);
             }
         }
+
+        private void ScrollToLastRow()
+        {
+            var section = _tableView.NumberOfSections();
+            var row = _tableView.NumberOfRowsInSection(section - 1);
+
+            if (row > 0 && section > 0)
+                _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, true);
+
+            _tableView.Hidden = false;
+        }
+
 
         public override void ViewWillAppear(bool animated)
         {
@@ -333,7 +301,7 @@ namespace LetterApp.iOS.Views.Chat
 
             if (this.IsMovingFromParentViewController)
             {
-                tableViewGesture = null;
+                _tableViewTapGesture = null;
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
         }

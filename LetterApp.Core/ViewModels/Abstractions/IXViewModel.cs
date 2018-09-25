@@ -7,6 +7,7 @@ namespace LetterApp.Core.ViewModels.Abstractions
     {
         void InitializeViewModel();
         Task Appearing();
+        Task Appeared();
         Task Disappearing();
         void Prepare();
         void Prepare(object dataObject);

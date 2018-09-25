@@ -47,6 +47,8 @@ namespace LetterApp.Core.ViewModels.Abstractions
 
         public virtual Task Appearing() => Task.CompletedTask;
 
+        public virtual Task Appeared() => Task.CompletedTask;
+
         public virtual Task Disappearing() => Task.CompletedTask;
 
         protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
