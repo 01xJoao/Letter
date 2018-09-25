@@ -33,6 +33,7 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.Hidden = true;
 
             ConfigureView();
+            UpdateTableView();
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -58,7 +59,6 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.SectionHeaderHeight = 0;
             _tableView.SectionFooterHeight = 0;
             _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 0.1f));
-           // _tableView.ContentInset = new UIEdgeInsets(0, 0, -10, 0);
             _tableViewTapGesture.AddTarget(HandleTableDragGesture);
             _tableScrollView = _tableView as UIScrollView;
 
@@ -233,6 +233,12 @@ namespace LetterApp.iOS.Views.Chat
         {
             base.ViewDidLayoutSubviews();
             ScrollToBottom();
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            ScrollToLastRow();
         }
 
         private void ScrollToBottom()

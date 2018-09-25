@@ -76,7 +76,7 @@ namespace LetterApp.Core.ViewModels
             _userId = userId;
         }
 
-        public override async Task Appeared()
+        public override async Task InitializeAsync()
         {
             string fromDivision = string.Empty;
 
@@ -135,7 +135,7 @@ namespace LetterApp.Core.ViewModels
             };
 
             Debug.WriteLine("_chat = chat");
-            Chat = chat;
+            _chat = chat;
 
             try
             {
