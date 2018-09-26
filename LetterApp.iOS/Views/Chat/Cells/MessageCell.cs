@@ -16,10 +16,35 @@ namespace LetterApp.iOS.Views.Chat.Cells
         public static readonly UINib Nib = UINib.FromName("MessageCell", NSBundle.MainBundle);
         protected MessageCell(IntPtr handle) : base(handle){}
 
-        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, MemberPresence memberPresence, int memberId)
+        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, MemberPresence memberPresence)
         {
-            UILabelExtensions.SetupLabelAppearance(_nameLabel,$"{message.Name} - {message.MessageDate}" , Colors.Black, 15f, UIFontWeight.Medium);
-            UILabelExtensions.SetupLabelAppearance(_messageLabel, message.MessageData, Colors.Black, 14f);
+            var nameAttr = new UIStringAttributes
+            {
+                ForegroundColor = Colors.Black,
+                Font = UIFont.SystemFontOfSize(15f, UIFontWeight.Semibold)
+            };
+
+            var timeAttr = new UIStringAttributes
+            {
+                ForegroundColor = Colors.ProfileGrayDarker,
+                Font = UIFont.SystemFontOfSize(11f, UIFontWeight.Regular)
+            };
+
+            var messageAttributes = new UIStringAttributes
+            {
+                Font = UIFont.SystemFontOfSize(14),
+                ForegroundColor = UIColor.Black,
+                ParagraphStyle = new NSMutableParagraphStyle { LineSpacing = 2f }
+            };
+
+            var customString = new NSMutableAttributedString(message.Name + message.MessageDate);
+            customString.SetAttributes(nameAttr.Dictionary, new NSRange(0, message.Name.Length));
+            customString.SetAttributes(timeAttr.Dictionary, new NSRange(message.Name.Length + 1, message.MessageDate.Length - 1));
+            _nameLabel.AttributedText = customString;
+
+            var attributedText = new NSMutableAttributedString(message.MessageData);
+            attributedText.AddAttributes(messageAttributes, new NSRange(0, message.MessageData.Length));
+            _messageLabel.AttributedText = attributedText;
 
             if (!string.IsNullOrEmpty(message.Picture))
             {

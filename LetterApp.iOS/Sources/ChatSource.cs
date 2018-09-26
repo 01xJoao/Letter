@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Foundation;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
@@ -36,38 +35,40 @@ namespace LetterApp.iOS.Sources
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
+            int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
+
             var cell = new UITableViewCell();
 
-            switch (_chat.Messages[indexPath.Row].PresentMessage)
+            switch (_chat.Messages[messageIndex].PresentMessage)
             {
                 case PresentMessageType.UserText:
                     var userTextCell = tableView.DequeueReusableCell(MessageCell.Key) as MessageCell;
-                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberPresence, _chat.MemberId);
+                    userTextCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberPresence);
                     cell = userTextCell;
                     break;
                 case PresentMessageType.UserImage:
                     var userImageCell = tableView.DequeueReusableCell(ImageWithUserCell.Key) as ImageWithUserCell;
-                    userImageCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
+                    userImageCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
                     cell = userImageCell;
                     break;
                 case PresentMessageType.UserFile:
                     var userFileCell = tableView.DequeueReusableCell(FileWithUserCell.Key) as FileWithUserCell;
-                    userFileCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
+                    userFileCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
                     cell = userFileCell;
                     break;
                 case PresentMessageType.Text:
                     var textCell = tableView.DequeueReusableCell(LabelCell.Key) as LabelCell;
-                    textCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent);
+                    textCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent);
                     cell = textCell;
                     break;
                 case PresentMessageType.Image:
                     var imageCell = tableView.DequeueReusableCell(ImageCell.Key) as ImageCell;
-                    imageCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent);
+                    imageCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent);
                     cell = imageCell;
                     break;
                 case PresentMessageType.File:
                     var fileCell = tableView.DequeueReusableCell(FileCell.Key) as FileCell;
-                    fileCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent);
+                    fileCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent);
                     cell = fileCell;
                     break;
             }
@@ -81,29 +82,36 @@ namespace LetterApp.iOS.Sources
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            int lastHeight = 0;
-            int cellHeight = 3;
+            int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
 
-            if (_chat.Messages.ElementAtOrDefault(indexPath.Row + 1) != null)
-            {
-                if ((int)_chat.Messages[indexPath.Row].PresentMessage <= 2 && (int)_chat.Messages[indexPath.Row + 1].PresentMessage <= 2)
-                    lastHeight = 2;
-            }
+            int cellHeight = 6;
 
-            var message = _chat.Messages[indexPath.Row];
+            var message = _chat.Messages[messageIndex];
             var approximateWidthOfText = screenWidth - 80;
             var size = new CoreGraphics.CGSize(approximateWidthOfText, 1000);
-            var attributes = new UIStringAttributes { Font = UIFont.SystemFontOfSize(14) };
+
+            var paragraphStyle = new NSMutableParagraphStyle
+            {
+                LineSpacing = 2,
+                MinimumLineHeight = UIFont.SystemFontOfSize(14).LineHeight,
+                MaximumLineHeight = UIFont.SystemFontOfSize(14).LineHeight
+            };
+
+            var attributes = new UIStringAttributes { Font = UIFont.SystemFontOfSize(14), ParagraphStyle = paragraphStyle };
             var estimatedFrame = new NSString(message.MessageData).GetBoundingRect(size, NSStringDrawingOptions.UsesLineFragmentOrigin, attributes, null);
 
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 27;
+                    cellHeight += 28;
+
+                    if (estimatedFrame.Height < 20)
+                        cellHeight -= 1;
+
                     break;
             }
 
-            return estimatedFrame.Height + cellHeight + lastHeight;
+            return (int)estimatedFrame.Height + cellHeight;
         }
     }
 }

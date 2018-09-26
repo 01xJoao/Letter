@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
@@ -34,6 +35,7 @@ namespace LetterApp.Core.ViewModels
         private GetUsersInDivisionModel _user;
         private ChatListUserModel _userChat;
         private GroupChannel _channel;
+        private DateTime _lastDayMessage;
 
         private ChatModel _chat;
         public ChatModel Chat
@@ -220,7 +222,7 @@ namespace LetterApp.Core.ViewModels
         {
             if (messagesList == null || messagesList?.Count == 0)
                 return;
-
+                
             if (!shouldKeepOldMessages || _chatMessages == null || _sectionsAndRowsCount == null)
             {
                 _chatMessages = new List<ChatMessagesModel>();
@@ -228,27 +230,31 @@ namespace LetterApp.Core.ViewModels
 
                 _differentDateCount = 0;
                 _messagesInDate = 0;
-
             }
 
             var messageOrdered = messagesList.OrderBy(x => x.MessageDateTicks).ToList();
 
-            DateTime lastDay = new DateTime(messageOrdered.First().MessageDateTicks).Date;
+            _lastDayMessage = new DateTime(messageOrdered.First().MessageDateTicks).Date;
 
             foreach (MessagesModel message in messageOrdered)
             {
+                if (message.MessageData == "")
+                    continue;
+
                 var newMessage = new ChatMessagesModel();
                 var dateMessage = new DateTime(message.MessageDateTicks);
 
-                if (lastDay != dateMessage.Date)
+                if (_lastDayMessage != dateMessage.Date)
                 {
-                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(lastDay.ToString("dd MMMM"), _messagesInDate));
+                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_lastDayMessage.ToString("MMMM, dd"), _messagesInDate));
 
-                    lastDay = dateMessage.Date;
+                    _lastDayMessage = dateMessage.Date;
                     _differentDateCount++;
                     _messagesInDate = 1;
 
                     newMessage.PresentMessage = (PresentMessageType)message.MessageType;
+                    newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
+                    newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
                 }
                 else
                 {
@@ -269,23 +275,28 @@ namespace LetterApp.Core.ViewModels
                 newMessage.MessageType = (MessageType)message.MessageType;
                 newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.CustomData = message.CustomData;
-                newMessage.MessageDate = DateUtils.TimeForChat(dateMessage);
+                newMessage.MessageDate = $"  •  {dateMessage.ToString("hh:mm tt", CultureInfo.InvariantCulture).ToLower()}";
                 newMessage.MessageDateTime = dateMessage;
                 newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
 
                 _chatMessages.Add(newMessage);
             }
+
             if (_messagesInDate > 0 && !shouldKeepOldMessages)
-                _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMMM"), _messagesInDate));
+            {
+                _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("MMMM, dd"), _messagesInDate));
+            }
             else
             {
                 var sameDay = _chatMessages[_chatMessages.Count - 2].MessageDateTime.Date == _chatMessages[_chatMessages.Count - 1].MessageDateTime.Date;
 
                 if (sameDay)
-                    _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1] = new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMMM"),
-                                                                                                    _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1].Item2 + 1);
+                {
+                    _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1] = new Tuple<string, int>
+                        (_chatMessages.Last().MessageDateTime.ToString("MMMM, dd"), _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1].Item2 + 1);
+                }
                 else
-                    _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMMM"),1));
+                    _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("MMMM, dd"),1));
             }
         }
 
@@ -314,38 +325,6 @@ namespace LetterApp.Core.ViewModels
                     _chat.Messages = _chatMessages;
                     _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
                     RaisePropertyChanged(nameof(Chat));
-
-                    //var newMessage = new ChatMessagesModel();
-
-                    //newMessage.MessageId = result.MessageId;
-                    //newMessage.MessageData = result.Message;
-                    //newMessage.MessageType = (MessageType)0;
-                    //newMessage.MessageSenderId = result.Sender.UserId;
-                    //newMessage.CustomData = "";
-                    //newMessage.MessageDate = DateUtils.TimeForChat(DateTime.Now);
-                    //newMessage.MessageDateTime = DateTime.Now;
-
-                    //_chatMessages.Add(newMessage);
-
-                    //if(_chat.Messages == null)
-                    //{
-                    //    newMessage.PresentMessage = PresentMessageType.UserText;
-                    //    _chat.Messages = new List<ChatMessagesModel>();
-                    //    _chat.SectionsAndRowsCount = new Dictionary<int, Tuple<string, int>>();
-                    //    _chat.SectionsAndRowsCount.Add(0, new Tuple<string, int>(DateTime.Now.ToString("dd MMMM"), 1));
-                    //}
-                    //else
-                    //{
-                    //    var lastMessage = _chat.Messages.Last();
-                    //    newMessage.PresentMessage = lastMessage.MessageSenderId == result.Sender.UserId ? PresentMessageType.Text : PresentMessageType.UserText;
-
-
-                    //    if(lastMessage.MessageDateTime.Date == newMessage.MessageDate
-
-                    //}
-
-                    //_chat.Messages.Add(newMessage);
-
                 }
             }
             catch (Exception ex)

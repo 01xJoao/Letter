@@ -173,7 +173,6 @@ namespace LetterApp.iOS.Views.Chat
             }
         }
 
-
         [Export("textViewDidEndEditing:")]
         public void EditingEnded(UITextView textView)
         {

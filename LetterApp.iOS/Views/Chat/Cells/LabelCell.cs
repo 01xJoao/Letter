@@ -14,7 +14,16 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<int> messageEvent)
         {
-            UILabelExtensions.SetupLabelAppearance(_textLabel, chatMessagesModel.MessageData, Colors.Black, 14f);
+            var messageAttributes = new UIStringAttributes
+            {
+                Font = UIFont.SystemFontOfSize(14),
+                ForegroundColor = UIColor.Black,
+                ParagraphStyle = new NSMutableParagraphStyle { LineSpacing = 2f }
+            };
+
+            var attributedText = new NSMutableAttributedString(chatMessagesModel.MessageData);
+            attributedText.AddAttributes(messageAttributes, new NSRange(0, chatMessagesModel.MessageData.Length));
+            _textLabel.AttributedText = attributedText;
         }
     }
 }
