@@ -14,7 +14,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<int> messageEvent)
         {
-            UILabelExtensions.SetupLabelAppearance(_textLabel, chatMessagesModel.MessageData, Colors.Black, 13f);
+            UILabelExtensions.SetupLabelAppearance(_textLabel, chatMessagesModel.MessageData, Colors.Black, 14f);
         }
     }
 }

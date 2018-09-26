@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Foundation;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
@@ -9,6 +10,7 @@ namespace LetterApp.iOS.Sources
 {
     public class ChatSource : UITableViewSource
     {
+        private nfloat screenWidth = UIScreen.MainScreen.Bounds.Width;
         private readonly ChatModel _chat;
 
         public ChatSource(UITableView tableView, ChatModel chat)
@@ -40,7 +42,7 @@ namespace LetterApp.iOS.Sources
             {
                 case PresentMessageType.UserText:
                     var userTextCell = tableView.DequeueReusableCell(MessageCell.Key) as MessageCell;
-                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberPresence);
+                    userTextCell.Configure(_chat.Messages[indexPath.Row], _chat.MessageEvent, _chat.MemberPresence, _chat.MemberId);
                     cell = userTextCell;
                     break;
                 case PresentMessageType.UserImage:
@@ -76,5 +78,32 @@ namespace LetterApp.iOS.Sources
 
         public override nint RowsInSection(UITableView tableview, nint section) => _chat.SectionsAndRowsCount[(int)section].Item2;
         public override nint NumberOfSections(UITableView tableView) => _chat.SectionsAndRowsCount.Count;
+
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
+        {
+            int lastHeight = 0;
+            int cellHeight = 3;
+
+            if (_chat.Messages.ElementAtOrDefault(indexPath.Row + 1) != null)
+            {
+                if ((int)_chat.Messages[indexPath.Row].PresentMessage <= 2 && (int)_chat.Messages[indexPath.Row + 1].PresentMessage <= 2)
+                    lastHeight = 2;
+            }
+
+            var message = _chat.Messages[indexPath.Row];
+            var approximateWidthOfText = screenWidth - 80;
+            var size = new CoreGraphics.CGSize(approximateWidthOfText, 1000);
+            var attributes = new UIStringAttributes { Font = UIFont.SystemFontOfSize(14) };
+            var estimatedFrame = new NSString(message.MessageData).GetBoundingRect(size, NSStringDrawingOptions.UsesLineFragmentOrigin, attributes, null);
+
+            switch (message.PresentMessage)
+            {
+                case PresentMessageType.UserText:
+                    cellHeight += 27;
+                    break;
+            }
+
+            return estimatedFrame.Height + cellHeight + lastHeight;
+        }
     }
 }

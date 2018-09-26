@@ -271,6 +271,7 @@ namespace LetterApp.Core.ViewModels
                 newMessage.CustomData = message.CustomData;
                 newMessage.MessageDate = DateUtils.TimeForChat(dateMessage);
                 newMessage.MessageDateTime = dateMessage;
+                newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
 
                 _chatMessages.Add(newMessage);
             }

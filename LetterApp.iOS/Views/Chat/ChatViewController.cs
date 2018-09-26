@@ -79,7 +79,7 @@ namespace LetterApp.iOS.Views.Chat
 
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
 
-            _textView.TextContainerInset = new UIEdgeInsets(10, 10, 12, 10);
+            _textView.TextContainerInset = new UIEdgeInsets(10, 10, 10, 10);
             _textView.Text = ViewModel.TypeSomething;
             _textView.TextColor = Colors.ProfileGrayDarker;
             _textView.Font = UIFont.SystemFontOfSize(14f);
@@ -163,10 +163,13 @@ namespace LetterApp.iOS.Views.Chat
 
             int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
 
-            if (lineCount < 5 && lineCount != _lineCount)
+            if (lineCount < 4 && lineCount != _lineCount)
             {
-                //TODO Increase keyboardArea height
                 _lineCount = lineCount;
+                _keyBoardAreaViewHeightConstraint.Constant = LocalConstants.Chat_KeyboardAreaHeight + (14 * _lineCount);
+                _tableViewBottomConstraint.Constant = _keyboardHeight + _keyBoardAreaViewHeightConstraint.Constant;
+                UIView.Animate(0.3f, this.View.LayoutIfNeeded);
+                textView.ScrollRangeToVisible(new NSRange(0, textView.Text.Length));
             }
         }
 
@@ -285,9 +288,6 @@ namespace LetterApp.iOS.Views.Chat
             this.NavigationController.NavigationBar.ShadowImage = new UIImage();
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
             _navBarView.BackgroundColor = Colors.MainBlue;
-
-            _tableView.EstimatedRowHeight = 30;
-            _tableView.RowHeight = UITableView.AutomaticDimension;
         }
 
         public override void ViewWillDisappear(bool animated)

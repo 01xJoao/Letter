@@ -11,16 +11,15 @@ namespace LetterApp.iOS.Views.Chat.Cells
 {
     public partial class MessageCell : UITableViewCell
     {
-        public string _picture;
-
+        private string _picture;
         public static readonly NSString Key = new NSString("MessageCell");
         public static readonly UINib Nib = UINib.FromName("MessageCell", NSBundle.MainBundle);
         protected MessageCell(IntPtr handle) : base(handle){}
 
-        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, MemberPresence memberPresence)
+        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, MemberPresence memberPresence, int memberId)
         {
-            UILabelExtensions.SetupLabelAppearance(_nameLabel,$"{message.Name} - {message.MessageDate}" , Colors.ProfileGrayDarker, 14f, UIFontWeight.Semibold);
-            UILabelExtensions.SetupLabelAppearance(_messageLabel, message.MessageData, Colors.Black, 13f);
+            UILabelExtensions.SetupLabelAppearance(_nameLabel,$"{message.Name} - {message.MessageDate}" , Colors.Black, 15f, UIFontWeight.Medium);
+            UILabelExtensions.SetupLabelAppearance(_messageLabel, message.MessageData, Colors.Black, 14f);
 
             if (!string.IsNullOrEmpty(message.Picture))
             {
@@ -54,8 +53,10 @@ namespace LetterApp.iOS.Views.Chat.Cells
                     break;
             }
 
+            _presenceView.Hidden = !message.ShowPresense;
+
             CustomUIExtensions.RoundView(_presenceView);
-            _presenceView.Layer.BorderWidth = 2f;
+            _presenceView.Layer.BorderWidth = 1f;
             _presenceView.Layer.BorderColor = Colors.White.CGColor;
         }
 

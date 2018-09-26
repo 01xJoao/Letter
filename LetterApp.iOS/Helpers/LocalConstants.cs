@@ -57,10 +57,10 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Contacts_TitleHeight = 23;
         public static nfloat CallHistory_Height = 65;
 
-        public static nfloat Chat_KeyboardHeight = 90;
+        public static nfloat Chat_KeyboardAreaHeight = 85;
         public static nfloat Chat_KeyboardBottom = 20;
         public static nfloat Chat_TextViewHeight = 45;
         public static nfloat Chat_TotalIconsWidth = 165;
-        public static nfloat Chat_HeaderDate = 50;
+        public static nfloat Chat_HeaderDate = 46;
     }
 }

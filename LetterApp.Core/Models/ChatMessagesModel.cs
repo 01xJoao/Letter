@@ -7,6 +7,7 @@ namespace LetterApp.Core.Models
         public string Name { get; set; }
         public string Picture { get; set; }
         public string MessageSenderId { get; set; }
+        public bool ShowPresense { get; set; }
         public long MessageId { get; set; }
         public string MessageData { get; set; }
         public MessageType MessageType { get; set; }
