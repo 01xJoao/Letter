@@ -54,6 +54,8 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _status, value);
         }
 
+        public bool MessageSended;
+
         private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
         public XPCommand<Tuple<string, MessageType>> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<Tuple<string, MessageType>>(async (msg) => await SendMessage(msg), CanExecuteMsg));
 
@@ -206,7 +208,7 @@ namespace LetterApp.Core.ViewModels
             MessagesLogic(_messagesModel, _updated);
             _updated = true;
 
-            bool shouldUpdate = _chat.Messages?.Last()?.MessageId != _chatMessages?.Last()?.MessageId;
+            bool shouldUpdate = _chat.Messages?.Last().MessageId != _chatMessages?.Last()?.MessageId;
 
             _chat.Messages = _chatMessages;
             _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
@@ -231,7 +233,7 @@ namespace LetterApp.Core.ViewModels
 
             var messageOrdered = messagesList.OrderBy(x => x.MessageDateTicks).ToList();
 
-            if(_lastDayMessage == null || !shouldKeepOldMessages)
+            if(_lastDayMessage == default(DateTime) || !shouldKeepOldMessages)
                 _lastDayMessage = new DateTime(messageOrdered.First().MessageDateTicks).Date;
 
             foreach (MessagesModel message in messageOrdered)
@@ -304,6 +306,12 @@ namespace LetterApp.Core.ViewModels
         {
             IsBusy = true;
 
+            string messageToSend = message.Item1;
+
+            while(messageToSend.EndsWith(Environment.NewLine)) {
+                messageToSend = messageToSend.TrimEnd(Environment.NewLine.ToCharArray());
+            }
+
             try
             {
                 _sendedMessageDateTime = DateTime.UtcNow;
@@ -311,7 +319,7 @@ namespace LetterApp.Core.ViewModels
                 var fakeMessage = new MessagesModel
                 {
                     MessageId = _sendedMessageDateTime.Ticks,
-                    MessageData = message.Item1,
+                    MessageData = messageToSend,
                     MessageType = (int)message.Item2,
                     MessageSenderId = _finalUserId,
                     MessageDateTicks = _sendedMessageDateTime.ToLocalTime().Ticks,
@@ -322,9 +330,26 @@ namespace LetterApp.Core.ViewModels
                 _chat.Messages = _chatMessages;
                 _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
 
-                RaisePropertyChanged(nameof(Chat));
+                RaisePropertyChanged(nameof(MessageSended));
 
-                await _messengerService.SendMessage(_channel, message.Item1, _sendedMessageDateTime.ToString());
+                var result = await _messengerService.SendMessage(_channel, messageToSend, _sendedMessageDateTime.ToString());
+
+                if(result != null)
+                {
+                    var msg = new MessagesModel
+                    {
+                        MessageId = result.MessageId,
+                        MessageData = result.Message,
+                        MessageType = (int)message.Item2,
+                        MessageSenderId = result.Sender.UserId,
+                        MessageDateTicks = DateTime.Parse(result.Data).ToLocalTime().Ticks
+                    };
+
+                    if (_messagesModel == null)
+                        _messagesModel = new List<MessagesModel>();
+
+                    _messagesModel.Add(msg);
+                }
             }
             catch (Exception ex)
             {
@@ -332,7 +357,6 @@ namespace LetterApp.Core.ViewModels
 
                 _chat.Messages.Last(x => x.MessageId == _sendedMessageDateTime.Ticks).FailedToSend = true;
                 RaisePropertyChanged(nameof(Chat));
-
             }
             finally
             {
@@ -346,7 +370,6 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView()
         {
-            ViewWillClose();
             await NavigationService.Close(this);
         }
 
@@ -376,7 +399,7 @@ namespace LetterApp.Core.ViewModels
                         MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
                     };
 
-                    var historyMessages = _messagesModel?.Take(30) ?? _userChat?.MessagesList;
+                    var historyMessages = _messagesModel?.Skip(Math.Max(0, _messagesModel.Count() - 30)) ?? _userChat?.MessagesList;
 
                     foreach (var msg in historyMessages)
                         userChat.MessagesList.Add(msg);

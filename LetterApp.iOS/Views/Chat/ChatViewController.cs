@@ -47,6 +47,9 @@ namespace LetterApp.iOS.Views.Chat
                     UpdateTableView();
                     ScrollToLastRow();
                     break;
+                case nameof(ViewModel.MessageSended):
+                    AddNewMessageToTable();
+                    break;
                 case nameof(ViewModel.Status):
                     break;
             }
@@ -80,6 +83,7 @@ namespace LetterApp.iOS.Views.Chat
 
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
 
+            _textView.EnablesReturnKeyAutomatically = true;
             _textView.TextContainerInset = new UIEdgeInsets(10, 10, 10, 10);
             _textView.TextColor = Colors.Black;
             _textView.Font = UIFont.SystemFontOfSize(14f);
@@ -111,6 +115,21 @@ namespace LetterApp.iOS.Views.Chat
                 _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
                 _tableView.ReloadData();
             }
+        }
+
+        private void AddNewMessageToTable()
+        {
+            _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
+
+            var section = _tableView.NumberOfSections();
+            var row = _tableView.NumberOfRowsInSection(section - 1);
+            var indexPath = NSIndexPath.FromRowSection(row - 1, section - 1);
+
+            _tableView.BeginUpdates();
+            _tableView.InsertRows(new NSIndexPath[] {indexPath}, UITableViewRowAnimation.None);
+            _tableView.EndUpdates();
+
+            _tableView.ScrollToRow(indexPath, UITableViewScrollPosition.Bottom, false);
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -150,14 +169,14 @@ namespace LetterApp.iOS.Views.Chat
         [Export("textViewDidChange:")]
         public void Changed(UITextView textView)
         {
-            if (!string.IsNullOrEmpty(textView.Text) && _sendButton.Enabled == false)
+            if (!string.IsNullOrEmpty(textView.Text) && _sendButton.Enabled == false && textView.Text != Environment.NewLine)
             {
                 _sendView.BackgroundColor = Colors.SenderButton;
                 _sendButton.SetTitleColor(Colors.White, UIControlState.Normal);
                 _sendButton.Enabled = true;
                 _placeholderLabel.Hidden = true;
             }
-            else if (string.IsNullOrEmpty(textView.Text))
+            else if (string.IsNullOrEmpty(textView.Text) || textView.Text == Environment.NewLine)
             {
                 DefaultKeyboard();
             }
