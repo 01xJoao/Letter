@@ -275,7 +275,7 @@ namespace LetterApp.Core.ViewModels
                 newMessage.MessageType = (MessageType)message.MessageType;
                 newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.CustomData = message.CustomData;
-                newMessage.MessageDate = $"  •  {dateMessage.ToString("hh:mm tt", CultureInfo.InvariantCulture).ToLower()}";
+                newMessage.MessageDate = $"  •  {dateMessage.ToString("HH:mm")}";
                 newMessage.MessageDateTime = dateMessage;
                 newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
 
@@ -351,7 +351,6 @@ namespace LetterApp.Core.ViewModels
             {
                 Realm.Write(() =>
                 {
-
                     var lastMessage = _chat.Messages.Last();
 
                     var userChat = new ChatListUserModel()

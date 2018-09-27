@@ -84,7 +84,7 @@ namespace LetterApp.iOS.Sources
         {
             int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
 
-            int cellHeight = 6;
+            float cellHeight = 6;
 
             var message = _chat.Messages[messageIndex];
             var approximateWidthOfText = screenWidth - 80;
@@ -106,8 +106,12 @@ namespace LetterApp.iOS.Sources
                     cellHeight += 28;
 
                     if (estimatedFrame.Height < 20)
-                        cellHeight -= 1;
+                        cellHeight -= 3f;
+                    break;
 
+                case PresentMessageType.Text:
+                    if (estimatedFrame.Height < 20)
+                        cellHeight -= 2;
                     break;
             }
 

@@ -63,7 +63,6 @@ namespace LetterApp.iOS.Views.Chat
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.BackgroundColor = Colors.White;
-            _textView.Text = string.Empty;
 
             //TODO Update status Label
             //_statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)) { TextAlignment = UITextAlignment.Center };
@@ -83,6 +82,7 @@ namespace LetterApp.iOS.Views.Chat
             _textView.TextContainerInset = new UIEdgeInsets(10, 10, 10, 10);
             _textView.TextColor = Colors.Black;
             _textView.Font = UIFont.SystemFontOfSize(14f);
+            _textView.Text = string.Empty;
 
             CustomUIExtensions.CornerView(_sendView, 2);
             UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.ProfileGray, 15f, "Send", UIFontWeight.Medium);
