@@ -126,10 +126,10 @@ namespace LetterApp.iOS.Views.Chat
             var indexPath = NSIndexPath.FromRowSection(row - 1, section - 1);
 
             _tableView.BeginUpdates();
-            _tableView.InsertRows(new NSIndexPath[] {indexPath}, UITableViewRowAnimation.None);
+            _tableView.InsertRows(new NSIndexPath[] {indexPath}, UITableViewRowAnimation.Automatic);
             _tableView.EndUpdates();
-
-            _tableView.ScrollToRow(indexPath, UITableViewScrollPosition.Bottom, false);
+            //ScrollToBottom(false);
+            //ScrollToLastRow();
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -260,12 +260,12 @@ namespace LetterApp.iOS.Views.Chat
             ScrollToLastRow();
         }
 
-        private void ScrollToBottom()
+        private void ScrollToBottom(bool animated = false)
         {
             if (_tableView.ContentSize.Height > _tableView.Bounds.Size.Height)
             {
                 var offSet = _tableView.ContentSize.Height - _tableView.Bounds.Size.Height;
-                _tableView.SetContentOffset(new CGPoint(0, offSet), false);
+                _tableView.SetContentOffset(new CGPoint(0, offSet), animated);
             }
         }
 
