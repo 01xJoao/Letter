@@ -9,7 +9,7 @@ namespace LetterApp.iOS.Sources
 {
     public class ChatSource : UITableViewSource
     {
-        private nfloat screenWidth = UIScreen.MainScreen.Bounds.Width;
+        private readonly nfloat _screenWidth = UIScreen.MainScreen.Bounds.Width;
         private readonly ChatModel _chat;
 
         public ChatSource(UITableView tableView, ChatModel chat)
@@ -35,7 +35,11 @@ namespace LetterApp.iOS.Sources
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
+            int messageIndex = indexPath.Row;
+
+            for (int i = 0; i < (indexPath.Section); i++) {
+                messageIndex += _chat.SectionsAndRowsCount[i].Item2;
+            }
 
             var cell = new UITableViewCell();
 
@@ -83,10 +87,14 @@ namespace LetterApp.iOS.Sources
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
             float cellHeight = 6;
-            int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
+            int messageIndex = indexPath.Row;
+
+            for (int i = 0; i < (indexPath.Section); i++) {
+                messageIndex += _chat.SectionsAndRowsCount[i].Item2;
+            }
 
             var message = _chat.Messages[messageIndex];
-            var approximateWidthOfText = screenWidth - 80;
+            var approximateWidthOfText = _screenWidth - 80;
             var size = new CoreGraphics.CGSize(approximateWidthOfText, 1000);
 
             var paragraphStyle = new NSMutableParagraphStyle

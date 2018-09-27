@@ -19,13 +19,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ht-KW-F08">
-                        <rect key="frame" x="10" y="12.5" width="42" height="21"/>
+                        <rect key="frame" x="15" y="10.5" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R1L-KN-dA3">
-                        <rect key="frame" x="10" y="37.5" width="300" height="1"/>
+                        <rect key="frame" x="10" y="35.5" width="300" height="1"/>
                         <color key="backgroundColor" red="0.64736675126903553" green="0.64736675126903553" blue="0.64736675126903553" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="pOH-2Q-1PT"/>
@@ -34,10 +34,10 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="R1L-KN-dA3" firstAttribute="top" secondItem="1ht-KW-F08" secondAttribute="bottom" constant="4" id="ATy-Eb-F95"/>
-                    <constraint firstItem="1ht-KW-F08" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="10" id="JiP-ZM-GBf"/>
-                    <constraint firstItem="R1L-KN-dA3" firstAttribute="leading" secondItem="1ht-KW-F08" secondAttribute="leading" id="qT0-pv-K5T"/>
+                    <constraint firstItem="1ht-KW-F08" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="15" id="JiP-ZM-GBf"/>
                     <constraint firstAttribute="trailing" secondItem="R1L-KN-dA3" secondAttribute="trailing" constant="10" id="tOb-Ly-quw"/>
-                    <constraint firstAttribute="bottom" secondItem="R1L-KN-dA3" secondAttribute="bottom" constant="10" id="uJT-dX-vPV"/>
+                    <constraint firstAttribute="bottom" secondItem="R1L-KN-dA3" secondAttribute="bottom" constant="12" id="uJT-dX-vPV"/>
+                    <constraint firstItem="R1L-KN-dA3" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="10" id="yFh-na-Oc0"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

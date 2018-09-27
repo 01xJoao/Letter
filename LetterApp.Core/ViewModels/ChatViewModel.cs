@@ -242,7 +242,7 @@ namespace LetterApp.Core.ViewModels
 
                 if (_lastDayMessage != dateMessage.Date)
                 {
-                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_lastDayMessage.ToString("MMMM, dd"), _messagesInDate));
+                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_lastDayMessage.ToString("dd MMM"), _messagesInDate));
 
                     _lastDayMessage = dateMessage.Date;
                     _differentDateCount++;
@@ -280,7 +280,7 @@ namespace LetterApp.Core.ViewModels
 
             if (_messagesInDate > 0 && !shouldKeepOldMessages)
             {
-                _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("MMMM, dd"), _messagesInDate));
+                _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _messagesInDate));
             }
             else
             {
@@ -289,10 +289,10 @@ namespace LetterApp.Core.ViewModels
                 if (sameDay)
                 {
                     _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1] = new Tuple<string, int>
-                        (_chatMessages.Last().MessageDateTime.ToString("MMMM, dd"), _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1].Item2 + 1);
+                        (_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1].Item2 + 1);
                 }
                 else
-                    _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("MMMM, dd"),1));
+                    _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"),1));
             }
         }
 

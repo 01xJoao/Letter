@@ -159,7 +159,6 @@ namespace LetterApp.iOS.Views.Chat
             else if (string.IsNullOrEmpty(textView.Text))
             {
                 DefaultKeyboard();
-                _placeholderLabel.Hidden = false;
             }
 
             int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
@@ -183,9 +182,11 @@ namespace LetterApp.iOS.Views.Chat
 
         private void DefaultKeyboard()
         {
+            _textView.Text = string.Empty;
             _sendView.BackgroundColor = UIColor.Clear;
             _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
             _sendButton.Enabled = false;
+            _placeholderLabel.Hidden = false;
             _imageView1.Image = UIImage.FromBundle("keyboard");
         }
 
@@ -210,7 +211,7 @@ namespace LetterApp.iOS.Views.Chat
             if (ViewModel.SendMessageCommand.CanExecute(null))
             {
                 ViewModel.SendMessageCommand.Execute(_textView.Text);
-                _textView.Text = string.Empty;
+                DefaultKeyboard();
             }
         }
 

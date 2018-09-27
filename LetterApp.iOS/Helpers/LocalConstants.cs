@@ -61,6 +61,6 @@ namespace LetterApp.iOS.Helpers
         public static nfloat Chat_KeyboardBottom = 20;
         public static nfloat Chat_TextViewHeight = 45;
         public static nfloat Chat_TotalIconsWidth = 165;
-        public static nfloat Chat_HeaderDate = 46;
+        public static nfloat Chat_HeaderDate = 45;
     }
 }

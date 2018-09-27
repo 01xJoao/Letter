@@ -14,7 +14,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(string date)
         {
-            UILabelExtensions.SetupLabelAppearance(_dateLabel, date, Colors.GrayDivider, 15f, UIFontWeight.Medium);
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, date, Colors.GrayIndicator, 14f, UIFontWeight.Medium);
         }
     }
 }
