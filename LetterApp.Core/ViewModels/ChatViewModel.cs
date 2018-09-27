@@ -29,6 +29,7 @@ namespace LetterApp.Core.ViewModels
         private ChatListUserModel _userChat;
         private GroupChannel _channel;
         private DateTime _lastDayMessage;
+        private DateTime _sendedMessageDateTime;
 
         private int _userId;
         private int _organizationId = AppSettings.OrganizationId;
@@ -53,8 +54,8 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _status, value);
         }
 
-        private XPCommand<string> _sendMessageCommand;
-        public XPCommand<string> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<string>(async (msg) => await SendMessage(msg), CanExecuteMsg));
+        private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
+        public XPCommand<Tuple<string, MessageType>> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<Tuple<string, MessageType>>(async (msg) => await SendMessage(msg), CanExecuteMsg));
 
         private XPCommand _viewWillCloseCommand;
         public XPCommand ViewWillCloseCommand => _viewWillCloseCommand ?? (_viewWillCloseCommand = new XPCommand(ViewWillClose));
@@ -230,7 +231,8 @@ namespace LetterApp.Core.ViewModels
 
             var messageOrdered = messagesList.OrderBy(x => x.MessageDateTicks).ToList();
 
-            _lastDayMessage = new DateTime(messageOrdered.First().MessageDateTicks).Date;
+            if(_lastDayMessage == null || !shouldKeepOldMessages)
+                _lastDayMessage = new DateTime(messageOrdered.First().MessageDateTicks).Date;
 
             foreach (MessagesModel message in messageOrdered)
             {
@@ -294,39 +296,47 @@ namespace LetterApp.Core.ViewModels
                 else
                     _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"),1));
             }
+
+            _lastDayMessage = new DateTime(messageOrdered.Last().MessageDateTicks).Date;
         }
 
-        private async Task SendMessage(string msg)
+        private async Task SendMessage(Tuple<string, MessageType> message)
         {
+            IsBusy = true;
+
             try
             {
-                var result = await _messengerService.SendMessage(_channel, msg, DateTime.UtcNow.ToString());
+                _sendedMessageDateTime = DateTime.UtcNow;
 
-                if(result != null)
+                var fakeMessage = new MessagesModel
                 {
-                    var newMessage = new MessagesModel
-                    {
-                        MessageId = result.MessageId,
-                        MessageType = 0,
-                        MessageData = result.Message,
-                        MessageSenderId = result.Sender.UserId,
-                        MessageDateTicks = DateTime.Parse(result.Data).ToLocalTime().Ticks
-                    };
+                    MessageId = _sendedMessageDateTime.Ticks,
+                    MessageData = message.Item1,
+                    MessageType = (int)message.Item2,
+                    MessageSenderId = _finalUserId,
+                    MessageDateTicks = _sendedMessageDateTime.ToLocalTime().Ticks,
+                };
 
-                    _messagesModel.Add(newMessage);
+                MessagesLogic(new List<MessagesModel> { fakeMessage }, true);
 
-                    MessagesLogic(_messagesModel, _updated);
+                _chat.Messages = _chatMessages;
+                _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
 
-                    _updated = true;
+                RaisePropertyChanged(nameof(Chat));
 
-                    _chat.Messages = _chatMessages;
-                    _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
-                    RaisePropertyChanged(nameof(Chat));
-                }
+                await _messengerService.SendMessage(_channel, message.Item1, _sendedMessageDateTime.ToString());
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+
+                _chat.Messages.Last(x => x.MessageId == _sendedMessageDateTime.Ticks).FailedToSend = true;
+                RaisePropertyChanged(nameof(Chat));
+
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -377,7 +387,7 @@ namespace LetterApp.Core.ViewModels
         }
 
         private bool CanExecute() => !IsBusy;
-        private bool CanExecuteMsg(string msg) => !IsBusy;
+        private bool CanExecuteMsg(Tuple<string, MessageType> msg) => !IsBusy;
 
         #region Resources 
 

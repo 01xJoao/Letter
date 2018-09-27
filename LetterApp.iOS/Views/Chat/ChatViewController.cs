@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using CoreGraphics;
 using Foundation;
+using LetterApp.Core.Models;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -105,7 +106,7 @@ namespace LetterApp.iOS.Views.Chat
 
         private void UpdateTableView()
         {
-            if (ViewModel.Chat.Messages?.Count > 0)
+            if (ViewModel.Chat?.Messages?.Count > 0)
             {
                 _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
                 _tableView.ReloadData();
@@ -210,7 +211,7 @@ namespace LetterApp.iOS.Views.Chat
         {
             if (ViewModel.SendMessageCommand.CanExecute(null))
             {
-                ViewModel.SendMessageCommand.Execute(_textView.Text);
+                ViewModel.SendMessageCommand.Execute(new Tuple<string, MessageType>(_textView.Text, MessageType.Text));
                 DefaultKeyboard();
             }
         }

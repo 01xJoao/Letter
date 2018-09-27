@@ -15,6 +15,7 @@ namespace LetterApp.Core.Models
         public DateTime MessageDateTime { get; set; }
         public string CustomData { get; set; }
         public PresentMessageType PresentMessage { get; set; }
+        public bool FailedToSend { get; set; }
     }
 
     public enum MessageType 
