@@ -43,6 +43,9 @@ namespace LetterApp.iOS.Views.Chat
 		UIKit.UIView _navBarView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel _placeholderLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIButton _sendButton { get; set; }
 
 		[Outlet]
@@ -132,6 +135,11 @@ namespace LetterApp.iOS.Views.Chat
 			if (_textView != null) {
 				_textView.Dispose ();
 				_textView = null;
+			}
+
+			if (_placeholderLabel != null) {
+				_placeholderLabel.Dispose ();
+				_placeholderLabel = null;
 			}
 		}
 	}

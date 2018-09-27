@@ -63,6 +63,7 @@ namespace LetterApp.iOS.Views.Chat
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.BackgroundColor = Colors.White;
+            _textView.Text = string.Empty;
 
             //TODO Update status Label
             //_statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)) { TextAlignment = UITextAlignment.Center };
@@ -80,12 +81,12 @@ namespace LetterApp.iOS.Views.Chat
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
 
             _textView.TextContainerInset = new UIEdgeInsets(10, 10, 10, 10);
-            _textView.Text = ViewModel.TypeSomething;
-            _textView.TextColor = Colors.ProfileGrayDarker;
+            _textView.TextColor = Colors.Black;
             _textView.Font = UIFont.SystemFontOfSize(14f);
 
             CustomUIExtensions.CornerView(_sendView, 2);
             UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.ProfileGray, 15f, "Send", UIFontWeight.Medium);
+            UILabelExtensions.SetupLabelAppearance(_placeholderLabel, ViewModel.TypeSomething, Colors.ProfileGrayDarker, 14f);
 
             _sendView.BackgroundColor = UIColor.Clear;
 
@@ -141,11 +142,7 @@ namespace LetterApp.iOS.Views.Chat
         [Export("textViewShouldBeginEditing:")]
         public bool ShouldBeginEditing(UITextView textView)
         {
-            if (textView.Text == ViewModel.TypeSomething)
-                textView.Text = "";
-
             _imageView1.Image = UIImage.FromBundle("keyboard_active");
-
             return true;
         }
 
@@ -157,9 +154,13 @@ namespace LetterApp.iOS.Views.Chat
                 _sendView.BackgroundColor = Colors.SenderButton;
                 _sendButton.SetTitleColor(Colors.White, UIControlState.Normal);
                 _sendButton.Enabled = true;
+                _placeholderLabel.Hidden = true;
             }
             else if (string.IsNullOrEmpty(textView.Text))
-                DefaultKeyboard(false);
+            {
+                DefaultKeyboard();
+                _placeholderLabel.Hidden = false;
+            }
 
             int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
 
@@ -180,11 +181,8 @@ namespace LetterApp.iOS.Views.Chat
                 DefaultKeyboard();
         }
 
-        private void DefaultKeyboard(bool editEnded = true)
+        private void DefaultKeyboard()
         {
-            if(editEnded)
-                _textView.Text = ViewModel.TypeSomething;
-
             _sendView.BackgroundColor = UIColor.Clear;
             _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
             _sendButton.Enabled = false;
@@ -213,7 +211,6 @@ namespace LetterApp.iOS.Views.Chat
             {
                 ViewModel.SendMessageCommand.Execute(_textView.Text);
                 _textView.Text = string.Empty;
-                _textView.ResignFirstResponder();
             }
         }
 
