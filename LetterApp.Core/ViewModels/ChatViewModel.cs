@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
-using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -23,19 +20,19 @@ namespace LetterApp.Core.ViewModels
         private readonly IMessengerService _messengerService;
         private readonly IDialogService _dialogService;
 
+        private bool _updated;
         private int _differentDateCount;
         private int _messagesInDate;
 
-        private bool _updated = false;
-        private const int _loadPrevMessages = 30;
         private PreviousMessageListQuery _PrevMessageListQuery;
-        private int _organizationId = AppSettings.OrganizationId;
-        private string _finalUserId = AppSettings.UserAndOrganizationIds;
-        private int _userId;
         private GetUsersInDivisionModel _user;
         private ChatListUserModel _userChat;
         private GroupChannel _channel;
         private DateTime _lastDayMessage;
+
+        private int _userId;
+        private int _organizationId = AppSettings.OrganizationId;
+        private string _finalUserId = AppSettings.UserAndOrganizationIds;
 
         private ChatModel _chat;
         public ChatModel Chat
@@ -136,7 +133,6 @@ namespace LetterApp.Core.ViewModels
                 SectionsAndRowsCount = _sectionsAndRowsCount,
             };
 
-            Debug.WriteLine("_chat = chat");
             _chat = chat;
 
             try
@@ -238,7 +234,7 @@ namespace LetterApp.Core.ViewModels
 
             foreach (MessagesModel message in messageOrdered)
             {
-                if (message.MessageData == "")
+                if (string.IsNullOrEmpty(message.MessageData))
                     continue;
 
                 var newMessage = new ChatMessagesModel();
@@ -320,6 +316,7 @@ namespace LetterApp.Core.ViewModels
                     _messagesModel.Add(newMessage);
 
                     MessagesLogic(_messagesModel, _updated);
+
                     _updated = true;
 
                     _chat.Messages = _chatMessages;
@@ -339,9 +336,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView()
         {
-
             ViewWillClose();
-
             await NavigationService.Close(this);
         }
 
@@ -388,8 +383,6 @@ namespace LetterApp.Core.ViewModels
 
         private string YouChatLabel => L10N.Localize("ChatList_You");
         public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
-
-     
 
         #endregion
     }

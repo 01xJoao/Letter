@@ -82,9 +82,8 @@ namespace LetterApp.iOS.Sources
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
-
             float cellHeight = 6;
+            int messageIndex = indexPath.Row + (_chat.SectionsAndRowsCount.ContainsKey(indexPath.Section - 1) ? _chat.SectionsAndRowsCount[indexPath.Section - 1].Item2 : 0);
 
             var message = _chat.Messages[messageIndex];
             var approximateWidthOfText = screenWidth - 80;
@@ -100,18 +99,13 @@ namespace LetterApp.iOS.Sources
             var attributes = new UIStringAttributes { Font = UIFont.SystemFontOfSize(14), ParagraphStyle = paragraphStyle };
             var estimatedFrame = new NSString(message.MessageData).GetBoundingRect(size, NSStringDrawingOptions.UsesLineFragmentOrigin, attributes, null);
 
+            if (estimatedFrame.Height < 20)
+                cellHeight -= 2f;
+
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 28;
-
-                    if (estimatedFrame.Height < 20)
-                        cellHeight -= 3f;
-                    break;
-
-                case PresentMessageType.Text:
-                    if (estimatedFrame.Height < 20)
-                        cellHeight -= 2;
+                    cellHeight += 28.5f;
                     break;
             }
 
