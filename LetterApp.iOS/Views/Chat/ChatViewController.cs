@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using CoreGraphics;
 using Foundation;
 using LetterApp.Core.Models;
@@ -19,6 +20,7 @@ namespace LetterApp.iOS.Views.Chat
         private UILabel _statusLabel;
         private UITapGestureRecognizer _tableViewTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
         private UIScrollView _tableScrollView;
+        private NSObject _viewWillShow;
 
         private int _lineCount;
         private bool _keyboardState;
@@ -35,7 +37,7 @@ namespace LetterApp.iOS.Views.Chat
             ConfigureView();
             UpdateTableView();
 
-            UIApplication.Notifications.ObserveWillEnterForeground(ConnectMessageHandler);
+            _viewWillShow = UIApplication.Notifications.ObserveWillEnterForeground(ConnectMessageHandler);
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -304,6 +306,8 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ConnectMessageHandler(object sender, NSNotificationEventArgs e)
         {
+            Debug.WriteLine("did enter foreground to connect to messenger");
+
             ViewModel.LoadMessagesCommand.Execute();
         }
 
@@ -352,6 +356,8 @@ namespace LetterApp.iOS.Views.Chat
 
             if (this.IsMovingFromParentViewController)
             {
+                _viewWillShow?.Dispose();
+                _viewWillShow = null;
                 _tableViewTapGesture = null;
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }

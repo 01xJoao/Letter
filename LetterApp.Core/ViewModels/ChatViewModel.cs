@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
@@ -70,7 +71,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView()));
 
         private XPCommand _loadMessagesCommand;
-        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(500); await LoadRecentMessages(); }));
+        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => await ComesFromForeGround(), CanExecute));
 
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService)
         {
@@ -158,6 +159,8 @@ namespace LetterApp.Core.ViewModels
         {
             IsLoading = true;
 
+            Debug.WriteLine("LoadRecentMessages");
+
             if (!await CheckMessageServiceConnection()) 
             {
                 IsLoading = false;
@@ -227,6 +230,8 @@ namespace LetterApp.Core.ViewModels
 
         private async Task<bool> CheckMessageServiceConnection()
         {
+            Debug.WriteLine("Checking Message Service Connection: " + SendBirdClient.GetConnectionState());
+
             IsBusy = true;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -284,6 +289,8 @@ namespace LetterApp.Core.ViewModels
 
         private async Task ConnectToMessenger()
         {
+            Debug.WriteLine("Connect to Internet");
+
             if (await CheckMessageServiceConnection())
                 LoadRecentMessages();
         }
@@ -478,6 +485,17 @@ namespace LetterApp.Core.ViewModels
             {
                 Ui.Handle(ex as dynamic);
             }
+        }
+
+        private async Task ComesFromForeGround()
+        {
+            try
+            {
+                await Task.Delay(500);
+                Debug.WriteLine("From ForeGround LoadMessageCommand");
+                await LoadRecentMessages();
+            }
+            catch (Exception ex){}
         }
 
         private void MessageClickEvent(object sender, long messageId)

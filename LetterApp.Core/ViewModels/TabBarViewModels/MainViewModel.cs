@@ -15,17 +15,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public XPCommand<string> CallCommand => _callCommand ?? (_callCommand = new XPCommand<string>(async (userId) => await Call(userId)));
 
         private XPCommand<bool> _messengerServiceCommand;
-        public XPCommand<bool> MessengerServiceCommand => _messengerServiceCommand ?? (_messengerServiceCommand = new XPCommand<bool>(MessengerService));
+        public XPCommand<bool> MessengerServiceCommand => _messengerServiceCommand ?? (_messengerServiceCommand = new XPCommand<bool>(async (connect) => await MessengerService(connect), CanExecute));
 
         public MainViewModel(IMessengerService messengerService)
         {
             _messengerService = messengerService;
         }
 
-        private void MessengerService(bool connect)
+        private async Task MessengerService(bool connect)
         {
             if (connect)
-                _messengerService.ConnectMessenger();
+                await _messengerService.ConnectMessenger();
             //else
                 //_messengerService.DisconnectMessenger();
         }
@@ -34,6 +34,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(Int32.Parse(userId), false));
         }
+
+        private bool CanExecute(bool connect) => !IsBusy;
 
         #region resources
 

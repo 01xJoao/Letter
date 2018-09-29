@@ -14,6 +14,9 @@ namespace LetterApp.iOS.Views.Base
 {
     public class MainViewController : XTabBarViewController<MainViewModel>, IRootView
     {
+        private NSObject _willEnterForeGround;
+        private NSObject _didEnterBackGround;
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -23,8 +26,8 @@ namespace LetterApp.iOS.Views.Base
             TabBar.BackgroundImage = new UIImage();
             TabBar.ShadowImage = new UIImage();
 
-            UIApplication.Notifications.ObserveWillEnterForeground(ConnectToService);
-            UIApplication.Notifications.ObserveDidEnterBackground(DisconnectFromService);
+            _willEnterForeGround = UIApplication.Notifications.ObserveWillEnterForeground(ConnectToService);
+            _didEnterBackGround = UIApplication.Notifications.ObserveDidEnterBackground(DisconnectFromService);
 
             this.ViewControllers = new[]
             {
@@ -39,12 +42,14 @@ namespace LetterApp.iOS.Views.Base
 
         private void ConnectToService(object sender, NSNotificationEventArgs e)
         {
-            ViewModel.MessengerServiceCommand.Execute(true);
+            if (ViewModel.MessengerServiceCommand.CanExecute(true))
+                ViewModel.MessengerServiceCommand.Execute(true);
         }
 
         private void DisconnectFromService(object sender, NSNotificationEventArgs e)
         {
-            ViewModel.MessengerServiceCommand.Execute(false);
+            if(ViewModel.MessengerServiceCommand.CanExecute(false))
+                ViewModel.MessengerServiceCommand.Execute(false);
         }
 
         public void SetVisibleView(int index)
@@ -85,6 +90,17 @@ namespace LetterApp.iOS.Views.Base
         {
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            if (this.IsMovingFromParentViewController)
+            {
+                _willEnterForeGround?.Dispose();
+                _didEnterBackGround?.Dispose();
+            }
         }
     }
 }

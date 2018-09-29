@@ -11,6 +11,8 @@ namespace LetterApp.iOS.Views.UserSettings
 {
     public partial class UserSettingsViewController : XViewController<UserSettingsViewModel>
     {
+        private NSObject _willEnterForeGround;
+
         public UserSettingsViewController() : base("UserSettingsViewController", null) {}
 
         public override void ViewDidLoad()
@@ -20,7 +22,7 @@ namespace LetterApp.iOS.Views.UserSettings
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
-            UIApplication.Notifications.ObserveWillEnterForeground(UpdateSettingsHandler);
+            _willEnterForeGround = UIApplication.Notifications.ObserveWillEnterForeground(UpdateSettingsHandler);
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -80,8 +82,12 @@ namespace LetterApp.iOS.Views.UserSettings
         {
             base.ViewDidDisappear(animated);
 
-            if(this.IsMovingFromParentViewController)
+            if (this.IsMovingFromParentViewController)
+            {
+                _willEnterForeGround?.Dispose();
+                _willEnterForeGround = null;
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            }
         }
     }
 }
