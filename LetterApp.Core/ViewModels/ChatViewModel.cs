@@ -25,7 +25,7 @@ namespace LetterApp.Core.ViewModels
         private int _differentDateCount;
         private int _messagesInDate;
 
-        private PreviousMessageListQuery _PrevMessageListQuery;
+        private PreviousMessageListQuery _prevMessageListQuery;
         private GetUsersInDivisionModel _user;
         private ChatListUserModel _userChat;
         private GroupChannel _channel;
@@ -71,7 +71,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
         private XPCommand _loadMessagesCommand;
-        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(2000); await LoadPreviousMessages(); }));
+        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(1000); await LoadPreviousMessages(); }));
 
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService)
         {
@@ -154,7 +154,7 @@ namespace LetterApp.Core.ViewModels
             try
             {
                 if (await CheckMessageServiceConnection())
-                    _PrevMessageListQuery = _channel.CreatePreviousMessageListQuery();
+                    _prevMessageListQuery = _channel.CreatePreviousMessageListQuery();
                 else
                     return;
             }
@@ -168,58 +168,62 @@ namespace LetterApp.Core.ViewModels
 
         private async Task LoadPreviousMessages()
         {
-            if (!await CheckMessageServiceConnection()) return;
+            if (!await CheckMessageServiceConnection()) 
+            {
+                IsLoading = false;
+                return;
+            }
 
             _messagesModel = new List<MessagesModel>();
 
-            if (_PrevMessageListQuery != null)
+            if(_prevMessageListQuery == null)
+                _prevMessageListQuery = _channel?.CreatePreviousMessageListQuery();
+
+            try
             {
-                try
+                var result = await _messengerService.LoadMessages(_prevMessageListQuery);
+
+                foreach (BaseMessage message in result)
                 {
-                    var result = await _messengerService.LoadMessages(_PrevMessageListQuery);
-
-                    foreach (BaseMessage message in result)
+                    if (message is UserMessage msg)
                     {
-                        if (message is UserMessage msg)
+                        var newMessage = new MessagesModel
                         {
-                            var newMessage = new MessagesModel
-                            {
-                                MessageId = msg.MessageId,
-                                MessageType = 0,
-                                MessageData = msg.Message,
-                                MessageSenderId = msg.Sender.UserId,
-                                MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks
-                            };
+                            MessageId = msg.MessageId,
+                            MessageType = 0,
+                            MessageData = msg.Message,
+                            MessageSenderId = msg.Sender.UserId,
+                            MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks
+                        };
 
-                            _messagesModel.Add(newMessage);
-                        }
-                        else
+                        _messagesModel.Add(newMessage);
+                    }
+                    else
+                    {
+                        if (!(message is FileMessage mensg))
+                            continue;
+
+                        var newMessage = new MessagesModel
                         {
-                            if (!(message is FileMessage mensg))
-                                continue;
+                            MessageId = mensg.MessageId,
+                            MessageType = mensg.Type == "IMAGE" ? 1 : 2,
+                            MessageData = mensg.Url,
+                            MessageSenderId = mensg.Sender.UserId,
+                            MessageDateTicks = DateTime.Parse(mensg.Data).ToLocalTime().Ticks,
+                            CustomData = mensg.Name
+                        };
 
-                            var newMessage = new MessagesModel
-                            {
-                                MessageId = mensg.MessageId,
-                                MessageType = mensg.Type == "IMAGE" ? 1 : 2,
-                                MessageData = mensg.Url,
-                                MessageSenderId = mensg.Sender.UserId,
-                                MessageDateTicks = DateTime.Parse(mensg.Data).ToLocalTime().Ticks,
-                                CustomData = mensg.Name
-                            };
-
-                            _messagesModel.Add(newMessage);
-                        }
+                        _messagesModel.Add(newMessage);
                     }
                 }
-                catch (Exception ex)
-                {
-                    Ui.Handle(ex as dynamic);
-                }
-                finally
-                {
-                    IsLoading = false;
-                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             MessagesLogic(_messagesModel, false);

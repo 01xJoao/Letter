@@ -11,6 +11,7 @@ namespace LetterApp.iOS.Services
 {
     public class MessengerService : IMessengerService
     {
+        private bool _tokenRegistered;
         const string _handlerId = "SendBirdHandler";
 
         public void InitializeMessenger()
@@ -22,6 +23,8 @@ namespace LetterApp.iOS.Services
 
         public Task<BaseMessage> InitializeHandlers()
         {
+            Debug.WriteLine("Initializing SendBird Handlers");
+
             var tcs = new TaskCompletionSource<BaseMessage>();
 
             SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
@@ -49,25 +52,40 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<bool> ConnectMessenger()
+        public async Task<bool> ConnectMessenger()
         {
-            InitializeMessenger();
-
-            var tcs = new TaskCompletionSource<bool>();
-
-            SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
+            Debug.WriteLine("Connecting to SendBird...");
+            try
             {
-                if (e != null)
-                    tcs.TrySetCanceled();
-                else
+                if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING)
                 {
-                    Debug.WriteLine("Connected to Sendbird Services");
-                    tcs.TrySetResult(true);
-                    RegisterMessengerToken();
-                }
-            });
+                    await Task.Delay(2000);
 
-            return tcs.Task;
+                    if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
+                        return true;
+                }
+                else if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
+                    return true;
+
+                var tcs = new TaskCompletionSource<bool>();
+
+                SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
+                {
+                    if (e != null)
+                        tcs.TrySetCanceled();
+                    else
+                    {
+                        Debug.WriteLine("Connected to Sendbird Services");
+                        tcs.TrySetResult(true);
+
+                        if (!_tokenRegistered)
+                            RegisterMessengerToken();
+                    }
+                });
+            }
+            catch (System.Exception ex) {}
+
+            return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
         }
 
         public void DisconnectMessenger()
@@ -77,33 +95,34 @@ namespace LetterApp.iOS.Services
 
         public void RegisterMessengerToken()
         {
+            Debug.WriteLine("Registering Token");
+
             SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppSettings.UserAndOrganizationIds, 
-                                       (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) =>
-            {
+                               (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
                 if (e != null)
                     return;
 
-                if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                    CheckConnection();
+                //if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                    //CheckConnection();
             });
-
-            Debug.WriteLine("Connected to SendBird and Registered for Token");
+            _tokenRegistered = true;
+            Debug.WriteLine("Token Registered");
         }
 
-        private void CheckConnection()
-        {
-            Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
-            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-        }
+        //private void CheckConnection()
+        //{
+        //    Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+        //    Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        //}
 
-        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
-        {
-            if (e.NetworkAccess == NetworkAccess.Internet)
-            {
-                RegisterMessengerToken();
-                Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
-            }
-        }
+        //private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        //{
+        //    if (e.NetworkAccess == NetworkAccess.Internet)
+        //    {
+        //        RegisterMessengerToken();
+        //        Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+        //    }
+        //}
 
         public Task<GroupChannel> CreateChannel(List<string> users)
         {

@@ -26,8 +26,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             if (connect)
                 _messengerService.ConnectMessenger();
-            else
-                _messengerService.DisconnectMessenger();
+            //else
+                //_messengerService.DisconnectMessenger();
         }
 
         private async Task Call(string userId)

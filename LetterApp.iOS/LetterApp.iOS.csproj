@@ -159,12 +159,6 @@
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.0.10.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
-    <Reference Include="Realm">
-      <HintPath>..\packages\Realm.Database.3.2.0\lib\netstandard1.4\Realm.dll</HintPath>
-    </Reference>
-    <Reference Include="Realm.Sync">
-      <HintPath>..\packages\Realm.3.2.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Agora.Full.iOS">
       <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.3.0\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
     </Reference>
@@ -179,6 +173,12 @@
     </Reference>
     <Reference Include="GetiOSModel">
       <HintPath>..\packages\dannycabrera.GetiOSModel.1.5.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm">
+      <HintPath>..\packages\Realm.Database.3.2.1\lib\netstandard1.4\Realm.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm.Sync">
+      <HintPath>..\packages\Realm.3.2.1\lib\netstandard1.4\Realm.Sync.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -922,7 +922,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Realm.Database.3.2.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.2.0\build\Realm.Database.targets')" />
-  <Import Project="..\packages\Realm.3.2.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.2.0\build\Realm.targets')" />
   <Import Project="..\packages\Fody.3.2.4\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.4\build\Fody.targets')" />
+  <Import Project="..\packages\Realm.Database.3.2.1\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.2.1\build\Realm.Database.targets')" />
+  <Import Project="..\packages\Realm.3.2.1\build\Realm.targets" Condition="Exists('..\packages\Realm.3.2.1\build\Realm.targets')" />
 </Project>
