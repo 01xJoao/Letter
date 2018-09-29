@@ -35,6 +35,8 @@ namespace LetterApp.iOS.Views.Chat
             ConfigureView();
             UpdateTableView();
 
+            UIApplication.Notifications.ObserveWillEnterForeground(ConnectMessageHandler);
+
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
@@ -53,11 +55,16 @@ namespace LetterApp.iOS.Views.Chat
                 case nameof(ViewModel.Status):
                     ShowStatus();
                     break;
+                case nameof(ViewModel.IsLoading):
+                    LoadingAnimation(ViewModel.IsLoading);
+                    break;
             }
         }
 
         private void ConfigureView()
         {
+            LoadingAnimation(true);
+
             _sendButton.Enabled = false;
             _textView.Delegate = this;
 
@@ -290,6 +297,15 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.Hidden = false;
         }
 
+        private void LoadingAnimation(bool animate)
+        {
+            UIViewAnimationExtensions.LoadingInChat(_navBarView, animate);
+        }
+
+        private void ConnectMessageHandler(object sender, NSNotificationEventArgs e)
+        {
+            ViewModel.LoadMessagesCommand.Execute();
+        }
 
         public override void ViewWillAppear(bool animated)
         {
@@ -297,7 +313,10 @@ namespace LetterApp.iOS.Views.Chat
 
             var titleViewMaxSize = ScreenWidth - LocalConstants.Chat_TotalIconsWidth;
 
-            this.NavigationItem.TitleView = CustomUIExtensions.SetupNavigationBarWithSubtitle("João Palma", "ESTG - Aluno", titleViewMaxSize);
+            this.NavigationItem.TitleView = ViewModel.Chat == null
+                ? CustomUIExtensions.SetupNavigationBarWithSubtitle(ViewModel.MemberName, ViewModel.MemberDetails, titleViewMaxSize)
+                : CustomUIExtensions.SetupNavigationBarWithSubtitle(ViewModel.Chat.MemberName, ViewModel.Chat.MemberDetails, titleViewMaxSize);
+
             this.NavigationController.NavigationBar.TintColor = Colors.MainBlue;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White };
             this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "back_white", CloseView);

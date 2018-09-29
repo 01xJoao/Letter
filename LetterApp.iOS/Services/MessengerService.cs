@@ -51,6 +51,8 @@ namespace LetterApp.iOS.Services
 
         public Task<bool> ConnectMessenger()
         {
+            InitializeMessenger();
+
             var tcs = new TaskCompletionSource<bool>();
 
             SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>

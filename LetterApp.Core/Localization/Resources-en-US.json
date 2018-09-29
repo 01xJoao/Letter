@@ -914,5 +914,9 @@
   {
     "key": "ChatList_MessageError",
     "Translated": "Message sent failed, click on the message to try again."
+  },
+  {
+    "key": "ChatList_UserNotFound",
+    "Translated": "User not found, please check if this user still exists in the contacts tab."
   }
 ]

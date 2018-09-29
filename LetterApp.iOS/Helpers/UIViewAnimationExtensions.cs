@@ -7,6 +7,7 @@ namespace LetterApp.iOS.Helpers
 {
     public static class UIViewAnimationExtensions
     {
+        private static int _mainViewSize => (int)UIScreen.MainScreen.Bounds.Width;
         private static LOTAnimationView _lottieAnimation;
 
         public static void CustomButtomLoadingAnimation(string animation, UIButton button, string viewText, bool shouldAnimate)
@@ -70,10 +71,9 @@ namespace LetterApp.iOS.Helpers
             if (shouldAnimate)
             {
                 _lottieAnimation = LOTAnimationView.AnimationNamed("progress_refresh");
-                _lottieAnimation.Frame = new CGRect((UIScreen.MainScreen.Bounds.Width - view.Frame.Width / 2f) / 2,
-                                                    view.Frame.Height - 4, view.Frame.Width / 2f, 3);
-
-                _lottieAnimation.Layer.CornerRadius = 2f;
+                var size = _mainViewSize / 4 + 8;
+                _lottieAnimation.Frame = new CGRect(size, view.Frame.Height - 2.7f, _mainViewSize - size * 2, 2.5f);
+                _lottieAnimation.Layer.CornerRadius = 0.8f;
                 view.AddSubview(_lottieAnimation);
                 _lottieAnimation.LoopAnimation = true;
                 _lottieAnimation.ContentMode = UIViewContentMode.Redraw;

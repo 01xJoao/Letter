@@ -7,6 +7,8 @@ using LetterApp.iOS.Views.TabBar.ContactListViewController;
 using LetterApp.iOS.Views.TabBar.UserProfileViewController;
 using LetterApp.iOS.Helpers;
 using LetterApp.Core;
+using Foundation;
+using System;
 
 namespace LetterApp.iOS.Views.Base
 {
@@ -21,6 +23,9 @@ namespace LetterApp.iOS.Views.Base
             TabBar.BackgroundImage = new UIImage();
             TabBar.ShadowImage = new UIImage();
 
+            UIApplication.Notifications.ObserveWillEnterForeground(ConnectToService);
+            UIApplication.Notifications.ObserveDidEnterBackground(DisconnectFromService);
+
             this.ViewControllers = new[]
             {
                 CreateTabBar(new ChatListViewController(), ViewModel.ChatTab, "tabbar_chats", 0),
@@ -30,6 +35,16 @@ namespace LetterApp.iOS.Views.Base
             };
 
             this.CustomizableViewControllers = null;
+        }
+
+        private void ConnectToService(object sender, NSNotificationEventArgs e)
+        {
+            ViewModel.MessengerServiceCommand.Execute(true);
+        }
+
+        private void DisconnectFromService(object sender, NSNotificationEventArgs e)
+        {
+            ViewModel.MessengerServiceCommand.Execute(false);
         }
 
         public void SetVisibleView(int index)
