@@ -427,6 +427,8 @@ namespace LetterApp.Core.ViewModels
                     _chat.Messages.Last(x => x.MessageId == messageId.MessageId).FailedToSend = true;
                 }
 
+                _dialogService.ShowAlert(SendMessageError, AlertType.Error, 4f);
+
                 RaisePropertyChanged(nameof(Chat));
             }
         }
@@ -520,6 +522,7 @@ namespace LetterApp.Core.ViewModels
 
         private string YouChatLabel => L10N.Localize("ChatList_You");
         private string UserNotRegistered => L10N.Localize("ChatList_UserNotRegistered");
+        private string SendMessageError => L10N.Localize("ChatList_MessageError");
         public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
 
         public string SendingMessage => L10N.Localize("Chat_SendingMessage");

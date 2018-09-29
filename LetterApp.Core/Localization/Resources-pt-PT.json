@@ -910,5 +910,9 @@
   {
     "key": "ChatList_UserNotRegistered",
     "Translated": "Este utilizador ainda não terminou o registo."
+  },
+  {
+    "key": "ChatList_MessageError",
+    "Translated": "Erro no envio, clica na mensagem para tentar novamente."
   }
 ]
