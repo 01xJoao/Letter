@@ -95,8 +95,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     var result = await _messagerService.ConnectMessenger();
                     if (result) 
-                        UpdateMessengerService();
-                        
+                        UpdateMessengerService();   
                 }
                 catch (Exception ex)
                 {
@@ -105,7 +104,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
             else
                 UpdateMessengerService();
-                
         }
 
         private async Task GetUsers()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,22 +53,19 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public async Task<bool> ConnectMessenger()
+        public Task<bool> ConnectMessenger()
         {
             Debug.WriteLine("Connecting to SendBird...");
+
+            var tcs = new TaskCompletionSource<bool>();
+
             try
             {
                 if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING)
-                {
-                    await Task.Delay(2000);
+                    Task.Delay(1000).Wait();
 
-                    if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
-                        return true;
-                }
-                else if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
-                    return true;
-
-                var tcs = new TaskCompletionSource<bool>();
+                if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
+                    tcs.TrySetResult(true);
 
                 SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
                 {
@@ -83,9 +81,12 @@ namespace LetterApp.iOS.Services
                     }
                 });
             }
-            catch (System.Exception ex) {}
+            catch (Exception ex) 
+            {
+                tcs.TrySetCanceled();
+            }
 
-            return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
+            return tcs.Task;
         }
 
         public void DisconnectMessenger()
