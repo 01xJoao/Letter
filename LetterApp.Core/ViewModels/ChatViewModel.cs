@@ -71,7 +71,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
         private XPCommand _loadMessagesCommand;
-        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(1000); await LoadPreviousMessages(); }));
+        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(1000); await LoadRecentMessages(); }));
 
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService)
         {
@@ -151,22 +151,10 @@ namespace LetterApp.Core.ViewModels
 
             _chat = chat;
 
-            try
-            {
-                if (await CheckMessageServiceConnection())
-                    _prevMessageListQuery = _channel.CreatePreviousMessageListQuery();
-                else
-                    return;
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-
-            LoadPreviousMessages();
+            LoadRecentMessages();
         }
 
-        private async Task LoadPreviousMessages()
+        private async Task LoadRecentMessages()
         {
             if (!await CheckMessageServiceConnection()) 
             {
@@ -174,10 +162,11 @@ namespace LetterApp.Core.ViewModels
                 return;
             }
 
+            IsLoading = true;
+
             _messagesModel = new List<MessagesModel>();
 
-            if(_prevMessageListQuery == null)
-                _prevMessageListQuery = _channel?.CreatePreviousMessageListQuery();
+            _prevMessageListQuery = _channel?.CreatePreviousMessageListQuery();
 
             try
             {
@@ -236,6 +225,8 @@ namespace LetterApp.Core.ViewModels
 
             if(shouldUpdate)
                 RaisePropertyChanged(nameof(Chat));
+
+            IsLoading = false;
         }
 
         private async Task<bool> CheckMessageServiceConnection()
@@ -295,7 +286,7 @@ namespace LetterApp.Core.ViewModels
         private async Task ConnectToMessenger()
         {
             if (await CheckMessageServiceConnection())
-                LoadPreviousMessages();
+                LoadRecentMessages();
         }
 
         private bool MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
