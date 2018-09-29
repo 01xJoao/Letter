@@ -70,7 +70,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView()));
 
         private XPCommand _loadMessagesCommand;
-        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(1000); await LoadRecentMessages(); }));
+        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(500); await LoadRecentMessages(); }));
 
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService)
         {
@@ -98,7 +98,8 @@ namespace LetterApp.Core.ViewModels
             _user = users?.First(x => x.UserId == _userId);
             _thisUser = Realm.Find<UserModel>(AppSettings.UserId);
 
-            if (_user == null || _thisUser == null) {
+            if (_user == null || _thisUser == null)
+            {
                 _dialogService.ShowAlert(UserNotFound, AlertType.Error, 4f);
                 CloseView();
                 return;
@@ -155,13 +156,13 @@ namespace LetterApp.Core.ViewModels
 
         private async Task LoadRecentMessages()
         {
+            IsLoading = true;
+
             if (!await CheckMessageServiceConnection()) 
             {
                 IsLoading = false;
                 return;
             }
-
-            IsLoading = true;
 
             _messagesModel = new List<MessagesModel>();
 
@@ -235,10 +236,13 @@ namespace LetterApp.Core.ViewModels
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                     await _messengerService.ConnectMessenger();
 
-                _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
-
                 if (_channel == null)
-                    _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
+                {
+                    _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
+
+                    if (_channel == null)
+                        _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
+                }
 
                 if (_channel.MemberCount < 2)
                 {
