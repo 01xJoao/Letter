@@ -12,12 +12,17 @@ namespace LetterApp.iOS.Views.Chat.Cells
     public partial class MessageCell : UITableViewCell
     {
         private string _picture;
+        private long _messageId;
+        private EventHandler<long> _messageEvent;
         public static readonly NSString Key = new NSString("MessageCell");
         public static readonly UINib Nib = UINib.FromName("MessageCell", NSBundle.MainBundle);
         protected MessageCell(IntPtr handle) : base(handle){}
 
-        public void Configure(ChatMessagesModel message, EventHandler<int> messageEvent, MemberPresence memberPresence)
+        public void Configure(ChatMessagesModel message, EventHandler<long> messageEvent, MemberPresence memberPresence)
         {
+            _messageId = message.MessageId;
+            _messageEvent = messageEvent;
+
             var nameAttr = new UIStringAttributes
             {
                 ForegroundColor = Colors.Black,
@@ -32,9 +37,9 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
             var messageAttributes = new UIStringAttributes
             {
-                Font = UIFont.SystemFontOfSize(14),
-                ForegroundColor = UIColor.Black,
-                ParagraphStyle = new NSMutableParagraphStyle { LineSpacing = 2f }
+                Font = message.FailedToSend ? UIFont.BoldSystemFontOfSize(15f) : UIFont.SystemFontOfSize(14f),
+                ForegroundColor = message.FailedToSend ? Colors.Red : Colors.Black,
+                ParagraphStyle = new NSMutableParagraphStyle { LineSpacing = 2f },
             };
 
             var customString = new NSMutableAttributedString(message.Name + message.MessageDate);

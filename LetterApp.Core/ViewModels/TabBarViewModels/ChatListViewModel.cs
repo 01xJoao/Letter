@@ -82,7 +82,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
-            Debug.WriteLine("Appearing");
+            CheckConnection();
 
             if (_users == null || _users.Count == 0)
                 await GetUsers();
@@ -100,7 +100,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 catch (Exception ex)
                 {
-                    CheckConnection();
                     Ui.Handle(ex as dynamic);
                 }
             }
@@ -427,18 +426,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task CheckConnection()
         {
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-            {
-                Connectivity.ConnectivityChanged -= ConnectivityChanged;
-                Connectivity.ConnectivityChanged += ConnectivityChanged;
-            }
+            Connectivity.ConnectivityChanged -= ConnectivityChanged;
+            Connectivity.ConnectivityChanged += ConnectivityChanged;
         }
 
         private void ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             if (e.NetworkAccess == NetworkAccess.Internet)
             {
-                Connectivity.ConnectivityChanged -= ConnectivityChanged;
+                _updateFrequence = default(DateTime);
                 Appearing();
             }
         }

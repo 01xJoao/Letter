@@ -22,7 +22,8 @@
                 <outlet property="_keyboardViewBottomConstraint" destination="nrF-86-OQ5" id="wW7-KL-Gb7"/>
                 <outlet property="_navBarView" destination="Uyp-M0-Pt9" id="f91-OU-JZF"/>
                 <outlet property="_placeholderLabel" destination="rXS-MA-b6K" id="59n-cV-0Ei"/>
-                <outlet property="_sendButton" destination="dmc-iW-KRi" id="WfT-De-zWT"/>
+                <outlet property="_sendButton" destination="wbx-Hy-FNn" id="mhG-3x-kFV"/>
+                <outlet property="_sendLabel" destination="PnG-O4-yrI" id="AbP-KV-YhS"/>
                 <outlet property="_sendView" destination="h3R-6F-9jh" id="Nle-ME-LVd"/>
                 <outlet property="_tableView" destination="GCC-y4-T5W" id="prT-Dp-pPX"/>
                 <outlet property="_tableViewBottomConstraint" destination="I9s-xy-ary" id="aWy-ir-zfM"/>
@@ -79,21 +80,29 @@
                             <rect key="frame" x="102" y="43" width="38" height="38"/>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h3R-6F-9jh">
-                            <rect key="frame" x="301" y="48.5" width="54" height="27"/>
+                            <rect key="frame" x="299.5" y="48.5" width="55.5" height="27"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmc-iW-KRi">
-                                    <rect key="frame" x="10" y="0.0" width="34" height="27"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <state key="normal" title="Send"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wbx-Hy-FNn">
+                                    <rect key="frame" x="-5.5" y="-3.5" width="65.5" height="33"/>
                                 </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PnG-O4-yrI">
+                                    <rect key="frame" x="10" y="-0.5" width="35.5" height="27"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="dmc-iW-KRi" firstAttribute="width" secondItem="h3R-6F-9jh" secondAttribute="width" constant="-20" id="BkT-Fu-NEc"/>
-                                <constraint firstItem="dmc-iW-KRi" firstAttribute="centerX" secondItem="h3R-6F-9jh" secondAttribute="centerX" id="P0i-Xz-kMJ"/>
-                                <constraint firstItem="dmc-iW-KRi" firstAttribute="height" secondItem="h3R-6F-9jh" secondAttribute="height" id="VT3-Yb-tb3"/>
-                                <constraint firstItem="dmc-iW-KRi" firstAttribute="centerY" secondItem="h3R-6F-9jh" secondAttribute="centerY" id="nWy-aH-9ta"/>
+                                <constraint firstItem="PnG-O4-yrI" firstAttribute="width" secondItem="h3R-6F-9jh" secondAttribute="width" constant="-20" id="BJh-gl-10d"/>
+                                <constraint firstItem="PnG-O4-yrI" firstAttribute="centerX" secondItem="h3R-6F-9jh" secondAttribute="centerX" id="FUc-aq-cIA"/>
+                                <constraint firstItem="PnG-O4-yrI" firstAttribute="centerY" secondItem="h3R-6F-9jh" secondAttribute="centerY" id="Odv-Ib-1av"/>
+                                <constraint firstItem="wbx-Hy-FNn" firstAttribute="centerX" secondItem="h3R-6F-9jh" secondAttribute="centerX" id="WkQ-nn-Tr3"/>
+                                <constraint firstItem="PnG-O4-yrI" firstAttribute="height" secondItem="h3R-6F-9jh" secondAttribute="height" id="bZa-79-CLe"/>
                                 <constraint firstAttribute="height" constant="27" id="ncy-of-XpA"/>
+                                <constraint firstItem="wbx-Hy-FNn" firstAttribute="height" secondItem="h3R-6F-9jh" secondAttribute="height" constant="6" id="r9a-0D-XwN"/>
+                                <constraint firstItem="wbx-Hy-FNn" firstAttribute="width" secondItem="h3R-6F-9jh" secondAttribute="width" constant="10" id="rsc-Mn-EVz"/>
+                                <constraint firstItem="wbx-Hy-FNn" firstAttribute="centerY" secondItem="h3R-6F-9jh" secondAttribute="centerY" id="xzC-oG-sVc"/>
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type Something..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXS-MA-b6K">

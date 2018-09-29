@@ -11,7 +11,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
         public static readonly UINib Nib = UINib.FromName("FileCell", NSBundle.MainBundle);
         protected FileCell(IntPtr handle) : base(handle){}
 
-        public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<int> messageEvent)
+        public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<long> messageEvent)
         {
             throw new NotImplementedException();
         }

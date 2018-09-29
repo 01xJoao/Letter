@@ -10,6 +10,7 @@ using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
 using SendBird;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -20,7 +21,7 @@ namespace LetterApp.Core.ViewModels
         private readonly IMessengerService _messengerService;
         private readonly IDialogService _dialogService;
 
-        private bool _updated;
+        //private bool _updated;
         private int _differentDateCount;
         private int _messagesInDate;
 
@@ -47,14 +48,8 @@ namespace LetterApp.Core.ViewModels
         private List<ChatMessagesModel> _chatMessages;
         private Dictionary<int, Tuple<string, int>> _sectionsAndRowsCount;
 
-        private string _status;
-        public string Status
-        {
-            get => _status;
-            set => SetProperty(ref _status, value);
-        }
-
-        public bool MessageSended;
+        public bool Status;
+        public List<MessagesModel> SendedMessages = new List<MessagesModel>();
 
         private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
         public XPCommand<Tuple<string, MessageType>> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<Tuple<string, MessageType>>(async (msg) => await SendMessage(msg), CanExecuteMsg));
@@ -80,6 +75,8 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task InitializeAsync()
         {
+            CheckConnection();
+
             string fromDivision = string.Empty;
 
             _userChat = Realm.Find<ChatListUserModel>(_userId);
@@ -140,12 +137,10 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
-
-                if (_channel == null)
-                    _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
-
-                _PrevMessageListQuery = _channel.CreatePreviousMessageListQuery();
+                if (await CheckMessageServiceConnection())
+                    _PrevMessageListQuery = _channel.CreatePreviousMessageListQuery();
+                else
+                    return;
             }
             catch (Exception ex)
             {
@@ -157,6 +152,9 @@ namespace LetterApp.Core.ViewModels
 
         private async Task LoadPreviousMessages()
         {
+            if (!await CheckMessageServiceConnection())
+                return;
+
             _messagesModel = new List<MessagesModel>();
 
             if (_PrevMessageListQuery != null)
@@ -205,8 +203,8 @@ namespace LetterApp.Core.ViewModels
                 }
             }
 
-            MessagesLogic(_messagesModel, _updated);
-            _updated = true;
+            MessagesLogic(_messagesModel, false);
+            //_updated = true;
 
             bool shouldUpdate = _chat.Messages?.Last().MessageId != _chatMessages?.Last()?.MessageId;
 
@@ -217,10 +215,69 @@ namespace LetterApp.Core.ViewModels
                 RaisePropertyChanged(nameof(Chat));
         }
 
-        private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
+        private async Task<bool> CheckMessageServiceConnection()
+        {
+            IsBusy = true;
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            try
+            {
+                if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                {
+                    await _messengerService.ConnectMessenger();
+                    return true;
+                }
+
+                _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
+
+                if (_channel == null)
+                    _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
+
+                if (_channel.MemberCount < 2)
+                {
+                    _messengerService.RemoveChannel(_channel);
+                    _dialogService.ShowAlert(UserNotRegistered, AlertType.Error, 4f);
+
+                    if (_userChat != null)
+                        Realm.Write(() => Realm.Remove(_userChat));
+
+                    _chat = null;
+                    CloseView();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+                return false;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+            return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
+        }
+
+        private void CheckConnection()
+        {
+            Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        }
+
+        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess == NetworkAccess.Internet)
+                CheckMessageServiceConnection();
+        }
+
+        private bool MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
         {
             if (messagesList == null || messagesList?.Count == 0)
-                return;
+                return false;
+
+            bool updateTableView = !shouldKeepOldMessages;
                 
             if (!shouldKeepOldMessages || _chatMessages == null || _sectionsAndRowsCount == null)
             {
@@ -233,7 +290,7 @@ namespace LetterApp.Core.ViewModels
 
             var messageOrdered = messagesList.OrderBy(x => x.MessageDateTicks).ToList();
 
-            if(_lastDayMessage == default(DateTime) || !shouldKeepOldMessages)
+            if(_lastDayMessage == default(DateTime))
                 _lastDayMessage = new DateTime(messageOrdered.First().MessageDateTicks).Date;
 
             foreach (MessagesModel message in messageOrdered)
@@ -244,7 +301,7 @@ namespace LetterApp.Core.ViewModels
                 var newMessage = new ChatMessagesModel();
                 var dateMessage = new DateTime(message.MessageDateTicks);
 
-                if (_lastDayMessage != dateMessage.Date)
+                if (_lastDayMessage != dateMessage.Date && !shouldKeepOldMessages)
                 {
                     _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_lastDayMessage.ToString("dd MMM"), _messagesInDate));
 
@@ -282,29 +339,36 @@ namespace LetterApp.Core.ViewModels
                 _chatMessages.Add(newMessage);
             }
 
+            //This is to add the Last Message
             if (_messagesInDate > 0 && !shouldKeepOldMessages)
             {
                 _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _messagesInDate));
             }
-            else
+            else if (_messagesInDate > 0)
             {
-                var sameDay = _chatMessages[_chatMessages.Count - 2].MessageDateTime.Date == _chatMessages[_chatMessages.Count - 1].MessageDateTime.Date;
+                int sectionsCount = _sectionsAndRowsCount.Count;
+                bool sameDay = false;
+
+                if (_chatMessages.Count > 2)
+                        sameDay = _chatMessages[_chatMessages.Count - 2].MessageDateTime.Date == _chatMessages[_chatMessages.Count - 1].MessageDateTime.Date;
 
                 if (sameDay)
-                {
-                    _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1] = new Tuple<string, int>
-                        (_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _sectionsAndRowsCount[_sectionsAndRowsCount.Count - 1].Item2 + 1);
-                }
+                    _sectionsAndRowsCount[sectionsCount - 1] = new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _sectionsAndRowsCount[sectionsCount - 1].Item2 + 1);
                 else
-                    _sectionsAndRowsCount.Add(_sectionsAndRowsCount.Count, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"),1));
+                {
+                    _sectionsAndRowsCount.Add(sectionsCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), 1));
+                    updateTableView = true;
+                }
             }
 
             _lastDayMessage = new DateTime(messageOrdered.Last().MessageDateTicks).Date;
+
+            return updateTableView;
         }
 
         private async Task SendMessage(Tuple<string, MessageType> message)
         {
-            IsBusy = true;
+            await CheckMessageServiceConnection();
 
             string messageToSend = message.Item1;
 
@@ -330,12 +394,16 @@ namespace LetterApp.Core.ViewModels
                 _chat.Messages = _chatMessages;
                 _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
 
-                RaisePropertyChanged(nameof(MessageSended));
+                SendedMessages.Add(fakeMessage);
+                RaisePropertyChanged(nameof(SendedMessages));
 
                 var result = await _messengerService.SendMessage(_channel, messageToSend, _sendedMessageDateTime.ToString());
 
                 if(result != null)
                 {
+                    var sendedmsg = SendedMessages.FirstOrDefault(x => new DateTime(x.MessageDateTicks).Date == DateTime.Parse(result.Data).ToLocalTime().Date);
+                    SendedMessages.Remove(sendedmsg);
+
                     var msg = new MessagesModel
                     {
                         MessageId = result.MessageId,
@@ -355,17 +423,53 @@ namespace LetterApp.Core.ViewModels
             {
                 Ui.Handle(ex as dynamic);
 
-                _chat.Messages.Last(x => x.MessageId == _sendedMessageDateTime.Ticks).FailedToSend = true;
+                foreach (var messageId in SendedMessages) {
+                    _chat.Messages.Last(x => x.MessageId == messageId.MessageId).FailedToSend = true;
+                }
+
                 RaisePropertyChanged(nameof(Chat));
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
 
-        private void MessageClickEvent(object sender, int e)
+        private async Task RetrySendMessages()
         {
+            try
+            {
+                if (await CheckMessageServiceConnection())
+                {
+                    var listMsg = new List<MessagesModel>();
+                    foreach (var msg in SendedMessages) { listMsg.Add(msg); }
+
+                    foreach(var msg in listMsg)
+                    {
+                        SendedMessages.Remove(msg);
+                        await SendMessage(new Tuple<string, MessageType>(msg.MessageData, (MessageType)msg.MessageType));
+                    }
+
+                    foreach(var msg in listMsg)
+                    {
+                        _chat.Messages.Remove(_chat.Messages.Find(x => x.MessageId == msg.MessageId));
+                    }
+
+                    RaisePropertyChanged(nameof(Chat));
+
+                    listMsg = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private void MessageClickEvent(object sender, long messageId)
+        {
+            var message = SendedMessages.Find(x => x.MessageId == messageId);
+
+            if(message != null)
+            {
+                RetrySendMessages();
+            }
         }
 
         private async Task CloseView()
@@ -375,21 +479,21 @@ namespace LetterApp.Core.ViewModels
 
         private void ViewWillClose()
         {
-            if (_chat?.Messages?.Count > 0 && _userChat != null)
+            if (_chat?.Messages?.Count > 0)
             {
                 Realm.Write(() =>
                 {
                     var lastMessage = _chat.Messages.Last();
 
-                    var userChat = new ChatListUserModel()
+                    var userChat = new ChatListUserModel
                     {
                         MemberId = _user.UserId,
                         MemberName = $"{_user.FirstName} {_user.LastName} - {_user.Position}",
                         MemberPhoto = _user.Picture,
-                        IsMemeberMuted = _userChat.IsMemeberMuted,
+                        IsMemeberMuted = _chat.MemberMuted,
                         IsNewMessage = false,
                         MemberPresence = (int)_chat.MemberPresence,
-                        MemberPresenceConnectionDate = _userChat.MemberPresenceConnectionDate,
+                        MemberPresenceConnectionDate = _userChat != null ? _userChat.MemberPresenceConnectionDate : default(DateTime).Ticks,
                         //TODO LastMessage: Add logic for file and images
                         LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {lastMessage.MessageData}" : lastMessage.MessageData,
                         LastMessageDateTimeTicks = lastMessage.MessageDateTime.Ticks,
@@ -415,7 +519,13 @@ namespace LetterApp.Core.ViewModels
         #region Resources 
 
         private string YouChatLabel => L10N.Localize("ChatList_You");
+        private string UserNotRegistered => L10N.Localize("ChatList_UserNotRegistered");
         public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
+
+        public string SendingMessage => L10N.Localize("Chat_SendingMessage");
+        public string TypingMessage => L10N.Localize("Chat_TypingMessage");
+        public string SeenMessage => L10N.Localize("Chat_SeenMessage");
+        public string SendMessageButton => L10N.Localize("Chat_SendMessage");
 
         #endregion
     }

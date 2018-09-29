@@ -262,5 +262,10 @@ namespace LetterApp.iOS.Services
         {
             channel.MarkAsRead();
         }
+
+        public void RemoveChannel(GroupChannel channel)
+        {
+            channel.Leave((e) => {});
+        }
     }
 }

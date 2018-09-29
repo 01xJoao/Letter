@@ -47,10 +47,11 @@ namespace LetterApp.iOS.Views.Chat
                     UpdateTableView();
                     ScrollToLastRow();
                     break;
-                case nameof(ViewModel.MessageSended):
+                case nameof(ViewModel.SendedMessages):
                     AddNewMessageToTable();
                     break;
                 case nameof(ViewModel.Status):
+                    ShowStatus();
                     break;
             }
         }
@@ -59,19 +60,18 @@ namespace LetterApp.iOS.Views.Chat
         {
             _sendButton.Enabled = false;
             _textView.Delegate = this;
+
             _tableView.SectionHeaderHeight = 0;
-            _tableView.SectionFooterHeight = 0;
             _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 0.1f));
+
+            _tableView.SectionFooterHeight = 5;
+            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 5f));
+
             _tableViewTapGesture.AddTarget(HandleTableDragGesture);
             _tableScrollView = _tableView as UIScrollView;
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             _tableView.BackgroundColor = Colors.White;
-
-            //TODO Update status Label
-            //_statusLabel = new UILabel(new CGRect(0, _tableView.Frame.Height - 20, ScreenWidth, 20)) { TextAlignment = UITextAlignment.Center };
-            //_tableView.TableFooterView = new UIView();
-            //_tableView.TableFooterView.AddSubview(_statusLabel);
 
             _imageView1.Image?.Dispose();
             _imageView2.Image?.Dispose();
@@ -90,7 +90,7 @@ namespace LetterApp.iOS.Views.Chat
             _textView.Text = string.Empty;
 
             CustomUIExtensions.CornerView(_sendView, 2);
-            UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.ProfileGray, 15f, "Send", UIFontWeight.Medium);
+            UILabelExtensions.SetupLabelAppearance(_sendLabel, ViewModel.SendMessageButton, Colors.ProfileGray, 15f, UIFontWeight.Medium);
             UILabelExtensions.SetupLabelAppearance(_placeholderLabel, ViewModel.TypeSomething, Colors.ProfileGrayDarker, 14f);
 
             _sendView.BackgroundColor = UIColor.Clear;
@@ -119,17 +119,27 @@ namespace LetterApp.iOS.Views.Chat
 
         private void AddNewMessageToTable()
         {
-            _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
-
+            UpdateTableView();
             var section = _tableView.NumberOfSections();
             var row = _tableView.NumberOfRowsInSection(section - 1);
-            var indexPath = NSIndexPath.FromRowSection(row - 1, section - 1);
+            _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, false);
+        }
 
-            _tableView.BeginUpdates();
-            _tableView.InsertRows(new NSIndexPath[] {indexPath}, UITableViewRowAnimation.Automatic);
-            _tableView.EndUpdates();
-            //ScrollToBottom(false);
-            //ScrollToLastRow();
+        private void ShowStatus(string text = "")
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                _statusLabel = new UILabel(new CGRect(0, 0, ScreenWidth, 15)) { TextAlignment = UITextAlignment.Center };
+                UILabelExtensions.SetupLabelAppearance(_statusLabel, text, Colors.GrayLabel, 11f);
+
+                _tableView.TableFooterView = new UIView();
+                _tableView.TableFooterView.AddSubview(_statusLabel);
+            }
+            else
+            {
+                _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 5f));
+                _tableView.SectionFooterHeight = 5;
+            }
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -151,6 +161,7 @@ namespace LetterApp.iOS.Views.Chat
             _keyboardViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight : 0;
             _tableViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight + _keyboardAreaView.Frame.Height : _keyboardAreaView.Frame.Height;
             UIView.Animate(0.3f, this.View.LayoutIfNeeded);
+            ScrollToLastRow();
         }
 
         private void HandleTableDragGesture()
@@ -172,12 +183,11 @@ namespace LetterApp.iOS.Views.Chat
             if (!string.IsNullOrEmpty(textView.Text) && _sendButton.Enabled == false && textView.Text != Environment.NewLine)
             {
                 _sendView.BackgroundColor = Colors.SenderButton;
-                _sendButton.SetTitleColor(Colors.White, UIControlState.Normal);
+                _sendLabel.TextColor = Colors.White;
                 _sendButton.Enabled = true;
                 _placeholderLabel.Hidden = true;
             }
-            else if (string.IsNullOrEmpty(textView.Text) || textView.Text == Environment.NewLine)
-            {
+            else if (string.IsNullOrEmpty(textView.Text) || textView.Text == Environment.NewLine) {
                 DefaultKeyboard();
             }
 
@@ -204,7 +214,7 @@ namespace LetterApp.iOS.Views.Chat
         {
             _textView.Text = string.Empty;
             _sendView.BackgroundColor = UIColor.Clear;
-            _sendButton.SetTitleColor(Colors.ProfileGray, UIControlState.Normal);
+            _sendLabel.TextColor = Colors.ProfileGray;
             _sendButton.Enabled = false;
             _placeholderLabel.Hidden = false;
             _imageView1.Image = UIImage.FromBundle("keyboard");
@@ -260,12 +270,12 @@ namespace LetterApp.iOS.Views.Chat
             ScrollToLastRow();
         }
 
-        private void ScrollToBottom(bool animated = false)
+        private void ScrollToBottom()
         {
             if (_tableView.ContentSize.Height > _tableView.Bounds.Size.Height)
             {
                 var offSet = _tableView.ContentSize.Height - _tableView.Bounds.Size.Height;
-                _tableView.SetContentOffset(new CGPoint(0, offSet), animated);
+                _tableView.SetContentOffset(new CGPoint(0, offSet), true);
             }
         }
 
@@ -275,7 +285,7 @@ namespace LetterApp.iOS.Views.Chat
             var row = _tableView.NumberOfRowsInSection(section - 1);
 
             if (row > 0 && section > 0)
-                _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, true);
+                _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, false);
 
             _tableView.Hidden = false;
         }

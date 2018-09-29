@@ -52,12 +52,12 @@ namespace LetterApp.iOS.Sources
                     break;
                 case PresentMessageType.UserImage:
                     var userImageCell = tableView.DequeueReusableCell(ImageWithUserCell.Key) as ImageWithUserCell;
-                    userImageCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
+                    userImageCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberPresence);
                     cell = userImageCell;
                     break;
                 case PresentMessageType.UserFile:
                     var userFileCell = tableView.DequeueReusableCell(FileWithUserCell.Key) as FileWithUserCell;
-                    userFileCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberName, _chat.MemberPhoto, _chat.MemberPresence);
+                    userFileCell.Configure(_chat.Messages[messageIndex], _chat.MessageEvent, _chat.MemberPresence);
                     cell = userFileCell;
                     break;
                 case PresentMessageType.Text:

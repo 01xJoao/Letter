@@ -890,5 +890,25 @@
   {
     "key": "ChatList_You",
     "Translated": "Tu:"
+  },
+  {
+    "key": "Chat_SendingMessage",
+    "translated": "A enviar..."
+  },
+  {
+    "key": "Chat_TypingMessage",
+    "translated": "A escrever..."
+  },
+  {
+    "key": "Chat_SeenMessage",
+    "Translated": "Vista"
+  },
+  {
+    "key": "Chat_SendMessage",
+    "Translated": "Enviar"
+  },
+  {
+    "key": "ChatList_UserNotRegistered",
+    "Translated": "Este utilizador ainda não terminou o registo."
   }
 ]

@@ -890,5 +890,25 @@
   {
     "key": "ChatList_You",
     "Translated": "You:"
+  },
+  {
+    "key": "Chat_SendingMessage",
+    "translated": "Sending..."
+  },
+  {
+    "key": "Chat_TypingMessage",
+    "translated": "Typing..."
+  },
+  {
+    "key": "Chat_SeenMessage",
+    "Translated": "Seen"
+  },
+  {
+    "key": "Chat_SendMessage",
+    "Translated": "Send"
+  },
+  {
+    "key": "ChatList_UserNotRegistered",
+    "Translated": "This user has not yet finish the registration."
   }
 ]

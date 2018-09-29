@@ -13,6 +13,9 @@ namespace LetterApp.iOS.Views.Chat.Cells
 	partial class LabelCell
 	{
 		[Outlet]
+		UIKit.UIButton _button { get; set; }
+
+		[Outlet]
 		UIKit.UILabel _textLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -20,6 +23,11 @@ namespace LetterApp.iOS.Views.Chat.Cells
 			if (_textLabel != null) {
 				_textLabel.Dispose ();
 				_textLabel = null;
+			}
+
+			if (_button != null) {
+				_button.Dispose ();
+				_button = null;
 			}
 		}
 	}

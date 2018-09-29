@@ -11,7 +11,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
         public static readonly UINib Nib = UINib.FromName("ImageCell", NSBundle.MainBundle);
         protected ImageCell(IntPtr handle) : base(handle){}
 
-        public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<int> messageEvent)
+        public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<long> messageEvent)
         {
             throw new NotImplementedException();
         }
