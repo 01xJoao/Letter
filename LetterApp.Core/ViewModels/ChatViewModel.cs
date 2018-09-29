@@ -21,7 +21,6 @@ namespace LetterApp.Core.ViewModels
         private readonly IMessengerService _messengerService;
         private readonly IDialogService _dialogService;
 
-        //private bool _updated;
         private int _differentDateCount;
         private int _messagesInDate;
 
@@ -68,7 +67,7 @@ namespace LetterApp.Core.ViewModels
         public XPCommand ViewWillCloseCommand => _viewWillCloseCommand ?? (_viewWillCloseCommand = new XPCommand(ViewWillClose));
 
         private XPCommand _closeViewCommand;
-        public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
+        public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView()));
 
         private XPCommand _loadMessagesCommand;
         public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => { await Task.Delay(1000); await LoadRecentMessages(); }));
@@ -208,15 +207,11 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
                 IsLoading = false;
+                Ui.Handle(ex as dynamic);
             }
 
             MessagesLogic(_messagesModel, false);
-            //_updated = true;
 
             bool shouldUpdate = _chat.Messages?.Last().MessageId != _chatMessages?.Last()?.MessageId;
 
