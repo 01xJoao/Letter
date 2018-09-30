@@ -83,7 +83,7 @@ namespace LetterApp.Core.Helpers
                 return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
 
             if (date.Date.Year == DateTime.Now.Year)
-                return date.ToString("dd MMM").ToUpper();
+                return date.ToString("dd MMM");
 
             return date.Date.ToShortDateString();
         }
