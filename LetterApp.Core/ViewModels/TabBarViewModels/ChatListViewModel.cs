@@ -77,7 +77,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             _contactsService = contactsService;
             _messagerService = messagerService;
             Actions = new string[] { ArchiveAction, MuteAction, UnMuteAction };
-            CheckForMessagesHandler();
+            ChatHandler();
         }
 
         public override async Task Appearing()
@@ -139,23 +139,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
         }
 
-        private async Task CheckForMessagesHandler()
+        private async Task CheckForMessagesHandler(BaseChannel channel, BaseMessage message)
         {
             try
             {
-                var message = await _messagerService.InitializeHandlers();
-
-                if (!(message is UserMessage msg))
-                {
-                    CheckForMessagesHandler();
-                    return;
-                }
+                var msg = message as UserMessage;
 
                 DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data).ToLocalTime() : DateTime.Now;
 
                 var userChatModel = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(msg.Sender.UserId));
 
-                if(userChatModel == null)
+                if (userChatModel == null)
                 {
                     var res = _users.Find(x => x.UserId == StringUtils.GetUserId(msg.Sender.UserId));
 
@@ -185,7 +179,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     MessageDateTicks = lastMessageDate.Ticks
                 };
 
-                Realm.Write(() => {
+                Realm.Write(() =>
+                {
                     userChatModel.MemberPresence = 0;
                     userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
                     userChatModel.LastMessage = msg.Message;
@@ -198,10 +193,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 var member = _chatList.Find(x => x.MemberId == userChatModel.MemberId);
 
-                if(member == null)
+                if (member == null)
                 {
                     member = new ChatListUserCellModel
-                    { 
+                    {
                         MemberId = userChatModel.MemberId,
                         MemberName = userChatModel.MemberName,
                         MemberPhoto = userChatModel.MemberPhoto,
@@ -220,19 +215,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
                 member.MemberPresence = MemberPresence.Online;
 
-                if(!member.IsMemberMuted)
+                if (!member.IsMemberMuted)
                     AlertUser(member);
 
-                if(!_isSearching)
+                if (!_isSearching)
                     RaisePropertyChanged(nameof(UpdateTableView));
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                CheckForMessagesHandler();
             }
         }
 
@@ -407,6 +398,31 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 default:
                     break;
             }
+        }
+
+        public Task<Tuple<BaseChannel, BaseMessage>> ChatHandler()
+        {
+            var tcs = new TaskCompletionSource<Tuple<BaseChannel, BaseMessage>>();
+
+            Debug.WriteLine("Initializing SendBird Handlers in Chat");
+
+            SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
+            {
+                OnMessageReceived = MessageListner
+            };
+
+            SendBirdClient.AddChannelHandler("ChatListHandler", ch);
+
+            Debug.WriteLine("SendBird Handlers Initialized");
+
+            return tcs.Task;
+        }
+
+        private void MessageListner(BaseChannel channel, BaseMessage message)
+        {
+            MainThread.BeginInvokeOnMainThread(() => { 
+                CheckForMessagesHandler(channel, message); 
+            });
         }
 
         private void SearchChat(string search)

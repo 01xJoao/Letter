@@ -75,6 +75,8 @@ namespace LetterApp.Core.ViewModels
             _contactService = contactsService;
             _messengerService = messengerService;
             _dialogService = dialogService;
+
+            ChatHandler();
         }
 
         protected override void Prepare(int userId)
@@ -102,15 +104,15 @@ namespace LetterApp.Core.ViewModels
                 return;
             }
 
+            MemberName = $"{_user?.FirstName} {_user?.LastName}";
+            MemberDetails = _user?.Position;
+
             if (_thisUser.Divisions.Count > 1)
             {
                 var division = Realm.Find<DivisionModelProfile>(_user.MainDivisionId);
 
                 if (division == null)
                 {
-                    MemberName = $"{_user?.FirstName} {_user?.LastName}";
-                    MemberDetails = _user?.Position;
-
                     try
                     {
                         division = await _divisionService.GetDivisionProfile(_user.MainDivisionId);
@@ -300,12 +302,10 @@ namespace LetterApp.Core.ViewModels
                 LoadRecentMessages();
         }
 
-        private bool MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
+        private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
         {
             if (messagesList == null || messagesList?.Count == 0)
-                return false;
-
-            bool updateTableView = !shouldKeepOldMessages;
+                return;
                 
             if (!shouldKeepOldMessages || _chatMessages == null) {
                 _chatMessages = new List<ChatMessagesModel>();
@@ -354,8 +354,6 @@ namespace LetterApp.Core.ViewModels
 
                 _chatMessages.Add(newMessage);
             }
-
-            return updateTableView;
         }
 
         private async Task SendMessage(Tuple<string, MessageType> message)
@@ -479,8 +477,56 @@ namespace LetterApp.Core.ViewModels
             await NavigationService.Close(this);
         }
 
+        public Task<Tuple<BaseChannel, BaseMessage>> ChatHandler()
+        {
+            var tcs = new TaskCompletionSource<Tuple<BaseChannel, BaseMessage>>();
+
+            Debug.WriteLine("Initializing SendBird Handlers in Chat");
+
+            SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
+            {
+                OnMessageReceived = MessageReceived
+            };
+
+            SendBirdClient.AddChannelHandler("ChatHandler", ch);
+
+            Debug.WriteLine("SendBird Handlers Initialized");
+
+            return tcs.Task;
+        }
+
+        private void MessageReceived(BaseChannel baseChannel, BaseMessage baseMessage)
+        {
+            MainThread.BeginInvokeOnMainThread(() => {
+
+                var channel = baseChannel as GroupChannel;
+
+                if (channel?.Url != _channel.Url)
+                    return;
+
+                var newMessage = new MessagesModel();
+
+                if (baseMessage is UserMessage msg)
+                {
+                    newMessage.MessageId = msg.MessageId;
+                    newMessage.MessageType = 0;
+                    newMessage.MessageData = msg.Message;
+                    newMessage.MessageSenderId = msg.Sender.UserId;
+                    newMessage.MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks;
+                }
+
+                MessagesLogic(new List<MessagesModel> { newMessage }, true);
+
+                _chat.Messages = _chatMessages;
+                RaisePropertyChanged(nameof(Chat));
+
+            });
+        }
+
         private void ViewWillClose()
         {
+            SendBirdClient.RemoveChannelHandler("ChatHandler");
+
             if (_chat?.Messages?.Count > 0)
             {
                 Realm.Write(() =>
