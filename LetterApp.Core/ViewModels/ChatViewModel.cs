@@ -339,6 +339,8 @@ namespace LetterApp.Core.ViewModels
                 if (newMessage.ShowHeaderDate)
                     newMessage.HeaderDate = DateUtils.DateForChatHeader(massageDate).ToUpper();
 
+                string dateForMessage = L10N.Locale() == "en-US" ? massageDate.ToString("hh:mm tt") : massageDate.ToString("HH:mm");
+
                 newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
                 newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
                 newMessage.MessageId = message.MessageId;
@@ -346,7 +348,7 @@ namespace LetterApp.Core.ViewModels
                 newMessage.MessageType = (MessageType)message.MessageType;
                 newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.CustomData = message.CustomData;
-                newMessage.MessageDate = $"  •  {massageDate.ToString("HH:mm")}";
+                newMessage.MessageDate = $"  •  {dateForMessage}";
                 newMessage.MessageDateTime = massageDate;
                 newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
 

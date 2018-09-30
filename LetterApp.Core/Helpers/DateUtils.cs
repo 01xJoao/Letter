@@ -58,7 +58,7 @@ namespace LetterApp.Core.Helpers
                 return date.Date.ToShortDateString();
 
             if (date.Date == DateTime.Now.Date || delta <= 18 * HOUR)
-                return date.ToString("HH:mm");
+                return L10N.Locale() == "en-US" ? date.ToString("hh:mm tt") : date.ToString("HH:mm");
 
             if (delta > 48 * HOUR && delta < 144 * HOUR || date.Date.AddDays(1) == DateTime.Now.Date)
                 return date.ToString("ddd");
@@ -83,7 +83,7 @@ namespace LetterApp.Core.Helpers
                 return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
 
             if (date.Date.Year == DateTime.Now.Year)
-                return date.ToString("dd MMM");
+                return L10N.Locale() == "en-US" ? date.ToString("MMM dd") : date.ToString("dd MMM");
 
             return date.Date.ToShortDateString();
         }
