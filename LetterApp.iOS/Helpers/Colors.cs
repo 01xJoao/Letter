@@ -43,5 +43,6 @@ namespace LetterApp.iOS.Helpers
         public static UIColor UnreadCount => UIColor.FromRGB(0, 111, 170);
         public static UIColor KeyboardView => UIColor.FromRGB(246, 246, 246);
         public static UIColor SenderButton => UIColor.FromRGB(17, 116, 175);
+        public static UIColor ChatDate => UIColor.FromRGB(105, 105, 105);
     }
 }

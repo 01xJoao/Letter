@@ -22,24 +22,11 @@ namespace LetterApp.iOS.Sources
             tableView.RegisterNibForCellReuse(FileWithUserCell.Nib, FileWithUserCell.Key);
             tableView.RegisterNibForCellReuse(ImageCell.Nib, ImageCell.Key);
             tableView.RegisterNibForCellReuse(ImageWithUserCell.Nib, ImageWithUserCell.Key);
-            tableView.RegisterNibForCellReuse(DateHeaderCell.Nib, DateHeaderCell.Key);
         }
-        public override UIView GetViewForHeader(UITableView tableView, nint section)
-        {
-            var view = tableView.DequeueReusableCell(DateHeaderCell.Key) as DateHeaderCell;
-            view.Configure(_chat.SectionsAndRowsCount[(int)section].Item1);
-            return view;
-        }
-
-        public override nfloat GetHeightForHeader(UITableView tableView, nint section) => LocalConstants.Chat_HeaderDate;
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             int messageIndex = indexPath.Row;
-
-            for (int i = 0; i < (indexPath.Section); i++) {
-                messageIndex += _chat.SectionsAndRowsCount[i].Item2;
-            }
 
             var cell = new UITableViewCell();
 
@@ -81,17 +68,12 @@ namespace LetterApp.iOS.Sources
             return cell;
         }
 
-        public override nint RowsInSection(UITableView tableview, nint section) => _chat.SectionsAndRowsCount[(int)section].Item2;
-        public override nint NumberOfSections(UITableView tableView) => _chat.SectionsAndRowsCount.Count;
+        public override nint RowsInSection(UITableView tableview, nint section) => _chat.Messages.Count;
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
             float cellHeight = 6;
             int messageIndex = indexPath.Row;
-
-            for (int i = 0; i < (indexPath.Section); i++) {
-                messageIndex += _chat.SectionsAndRowsCount[i].Item2;
-            }
 
             var message = _chat.Messages[messageIndex];
             var approximateWidthOfText = _screenWidth - 80;
@@ -113,11 +95,11 @@ namespace LetterApp.iOS.Sources
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 28.5f;
+                    cellHeight += 13.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? 50 : 20);
                     break;
             }
 
-            return (int)estimatedFrame.Height + cellHeight;
+            return estimatedFrame.Height + cellHeight;
         }
     }
 }

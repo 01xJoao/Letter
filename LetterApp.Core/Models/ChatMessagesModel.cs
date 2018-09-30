@@ -16,6 +16,7 @@ namespace LetterApp.Core.Models
         public string CustomData { get; set; }
         public PresentMessageType PresentMessage { get; set; }
         public bool FailedToSend { get; set; }
+        public bool ShowHeaderDate { get; set; }
     }
 
     public enum MessageType 

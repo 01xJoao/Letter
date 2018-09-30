@@ -88,6 +88,13 @@ namespace LetterApp.iOS.Views.Chat.Cells
             CustomUIExtensions.RoundView(_presenceView);
             _presenceView.Layer.BorderWidth = 1f;
             _presenceView.Layer.BorderColor = Colors.White.CGColor;
+
+            _dividerLeftView.BackgroundColor = Colors.AlertDividerColor;
+            _dividerRightView.BackgroundColor = Colors.AlertDividerColor;
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, message.MessageDateTime.ToString("dd MMM").ToUpper(), Colors.ChatDate, 12f, UIFontWeight.Medium);
+
+            _dateView.Hidden = !message.ShowHeaderDate;
+            _dateViewHeightConstraint.Constant = message.ShowHeaderDate ? 50 : 20;
         }
 
         private void CleanString(IScheduledWork obj)

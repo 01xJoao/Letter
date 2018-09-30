@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using CoreGraphics;
 using Foundation;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Models;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
@@ -347,7 +348,10 @@ namespace LetterApp.iOS.Views.Chat
             ViewModel.ViewWillCloseCommand.Execute();
 
             if (this.IsMovingFromParentViewController)
-                this.NavigationController.SetNavigationBarHidden(true, true);
+            {   
+                if(this.NavigationController.VisibleViewController is RootViewController)
+                    this.NavigationController.SetNavigationBarHidden(true, true);
+            }
         }
 
         public override void ViewDidDisappear(bool animated)

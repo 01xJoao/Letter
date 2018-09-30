@@ -61,8 +61,8 @@ namespace LetterApp.iOS.Services
 
             try
             {
-                if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING)
-                    Task.Delay(1000).Wait();
+                //if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING)
+                    //Task.Delay(1000).Wait();
 
                 if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
                     tcs.TrySetResult(true);

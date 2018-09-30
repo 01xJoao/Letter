@@ -22,14 +22,10 @@ namespace LetterApp.Core.ViewModels
         private readonly IMessengerService _messengerService;
         private readonly IDialogService _dialogService;
 
-        private int _differentDateCount;
-        private int _messagesInDate;
-
         private PreviousMessageListQuery _prevMessageListQuery;
         private GetUsersInDivisionModel _user;
         private ChatListUserModel _userChat;
         private GroupChannel _channel;
-        private DateTime _lastDayMessage;
         private DateTime _sendedMessageDateTime;
 
         private int _userId;
@@ -46,7 +42,6 @@ namespace LetterApp.Core.ViewModels
         private UserModel _thisUser;
         private List<MessagesModel> _messagesModel;
         private List<ChatMessagesModel> _chatMessages;
-        private Dictionary<int, Tuple<string, int>> _sectionsAndRowsCount;
 
         private bool _isLoading;
         public bool IsLoading
@@ -146,8 +141,7 @@ namespace LetterApp.Core.ViewModels
                 MemberSeenMyLastMessage = _userChat != null && _userChat.MemberSeenMyLastMessage,
                 //MemberPresence = (MemberPresence)_userChat.MemberPresence,
                 Messages = _chatMessages,
-                MessageEvent = MessageClickEvent,
-                SectionsAndRowsCount = _sectionsAndRowsCount,
+                MessageEvent = MessageClickEvent
             };
 
             _chat = chat;
@@ -175,57 +169,66 @@ namespace LetterApp.Core.ViewModels
             {
                 var result = await _messengerService.LoadMessages(_prevMessageListQuery);
 
-                foreach (BaseMessage message in result)
+                if (result != null || result.Count > 0)
                 {
-                    if (message is UserMessage msg)
+                    foreach (BaseMessage message in result)
                     {
-                        var newMessage = new MessagesModel
+                        if (message is UserMessage msg)
                         {
-                            MessageId = msg.MessageId,
-                            MessageType = 0,
-                            MessageData = msg.Message,
-                            MessageSenderId = msg.Sender.UserId,
-                            MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks
-                        };
+                            var newMessage = new MessagesModel
+                            {
+                                MessageId = msg.MessageId,
+                                MessageType = 0,
+                                MessageData = msg.Message,
+                                MessageSenderId = msg.Sender.UserId,
+                                MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks
+                            };
 
-                        _messagesModel.Add(newMessage);
-                    }
-                    else
-                    {
-                        if (!(message is FileMessage mensg))
-                            continue;
-
-                        var newMessage = new MessagesModel
+                            _messagesModel.Add(newMessage);
+                        }
+                        else
                         {
-                            MessageId = mensg.MessageId,
-                            MessageType = mensg.Type == "IMAGE" ? 1 : 2,
-                            MessageData = mensg.Url,
-                            MessageSenderId = mensg.Sender.UserId,
-                            MessageDateTicks = DateTime.Parse(mensg.Data).ToLocalTime().Ticks,
-                            CustomData = mensg.Name
-                        };
+                            if (!(message is FileMessage mensg))
+                                continue;
 
-                        _messagesModel.Add(newMessage);
+                            var newMessage = new MessagesModel
+                            {
+                                MessageId = mensg.MessageId,
+                                MessageType = mensg.Type == "IMAGE" ? 1 : 2,
+                                MessageData = mensg.Url,
+                                MessageSenderId = mensg.Sender.UserId,
+                                MessageDateTicks = DateTime.Parse(mensg.Data).ToLocalTime().Ticks,
+                                CustomData = mensg.Name
+                            };
+
+                            _messagesModel.Add(newMessage);
+                        }
                     }
+                }
+                else
+                {
+                    _isLoading = false; 
+                    RaisePropertyChanged(nameof(Chat));
+                    return;
                 }
             }
             catch (Exception ex)
             {
-                IsLoading = false;
+                _isLoading = false;
                 Ui.Handle(ex as dynamic);
             }
 
-            MessagesLogic(_messagesModel, false);
+            MessagesLogic(_messagesModel);
 
             bool shouldUpdate = _chat.Messages?.Last().MessageId != _chatMessages?.Last()?.MessageId;
 
             _chat.Messages = _chatMessages;
-            _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
 
             if(shouldUpdate)
                 RaisePropertyChanged(nameof(Chat));
 
-            IsLoading = false;
+            _isLoading = false;
+            RaisePropertyChanged(nameof(IsLoading));
         }
 
         private async Task<bool> CheckMessageServiceConnection()
@@ -266,6 +269,7 @@ namespace LetterApp.Core.ViewModels
             }
             catch (Exception ex)
             {
+                IsLoading = false;
                 Ui.Handle(ex as dynamic);
                 return false;
             }
@@ -302,19 +306,11 @@ namespace LetterApp.Core.ViewModels
 
             bool updateTableView = !shouldKeepOldMessages;
                 
-            if (!shouldKeepOldMessages || _chatMessages == null || _sectionsAndRowsCount == null)
-            {
+            if (!shouldKeepOldMessages || _chatMessages == null) {
                 _chatMessages = new List<ChatMessagesModel>();
-                _sectionsAndRowsCount = new Dictionary<int, Tuple<string, int>>();
-
-                _differentDateCount = 0;
-                _messagesInDate = 0;
             }
 
             var messageOrdered = messagesList.OrderBy(x => x.MessageDateTicks).ToList();
-
-            if(_lastDayMessage == default(DateTime))
-                _lastDayMessage = new DateTime(messageOrdered.First().MessageDateTicks).Date;
 
             foreach (MessagesModel message in messageOrdered)
             {
@@ -322,69 +318,36 @@ namespace LetterApp.Core.ViewModels
                     continue;
 
                 var newMessage = new ChatMessagesModel();
-                var dateMessage = new DateTime(message.MessageDateTicks);
+                var massageDate = new DateTime(message.MessageDateTicks);
 
-                if (_lastDayMessage != dateMessage.Date && !shouldKeepOldMessages)
+                if (_chatMessages.Count == 0)
                 {
-                    _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_lastDayMessage.ToString("dd MMM"), _messagesInDate));
-
-                    _lastDayMessage = dateMessage.Date;
-                    _differentDateCount++;
-                    _messagesInDate = 1;
-
+                    newMessage.ShowHeaderDate = true;
                     newMessage.PresentMessage = (PresentMessageType)message.MessageType;
-                    newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
-                    newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
                 }
                 else
                 {
-                    _messagesInDate++;
+                    newMessage.ShowHeaderDate = _chatMessages[_chatMessages.Count - 1].MessageDateTime.Date != massageDate.Date;
 
-                    if (_chatMessages.Count == 0 || _chatMessages[_chatMessages.Count - 1].MessageSenderId != message.MessageSenderId)
-                    {
+                    if (newMessage.ShowHeaderDate || _chatMessages[_chatMessages.Count - 1].MessageSenderId != message.MessageSenderId)
                         newMessage.PresentMessage = (PresentMessageType)message.MessageType;
-                        newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
-                        newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
-                    }
                     else
                         newMessage.PresentMessage = (PresentMessageType)(message.MessageType + 3);
                 }
 
+                newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
+                newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
                 newMessage.MessageId = message.MessageId;
                 newMessage.MessageData = message.MessageData;
                 newMessage.MessageType = (MessageType)message.MessageType;
                 newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.CustomData = message.CustomData;
-                newMessage.MessageDate = $"  •  {dateMessage.ToString("HH:mm")}";
-                newMessage.MessageDateTime = dateMessage;
+                newMessage.MessageDate = $"  •  {massageDate.ToString("HH:mm")}";
+                newMessage.MessageDateTime = massageDate;
                 newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
 
                 _chatMessages.Add(newMessage);
             }
-
-            //This is to add the Last Message
-            if (_messagesInDate > 0 && !shouldKeepOldMessages)
-            {
-                _sectionsAndRowsCount.Add(_differentDateCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _messagesInDate));
-            }
-            else if (_messagesInDate > 0)
-            {
-                int sectionsCount = _sectionsAndRowsCount.Count;
-                bool sameDay = false;
-
-                if (_chatMessages.Count > 2)
-                        sameDay = _chatMessages[_chatMessages.Count - 2].MessageDateTime.Date == _chatMessages[_chatMessages.Count - 1].MessageDateTime.Date;
-
-                if (sameDay)
-                    _sectionsAndRowsCount[sectionsCount - 1] = new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), _sectionsAndRowsCount[sectionsCount - 1].Item2 + 1);
-                else
-                {
-                    _sectionsAndRowsCount.Add(sectionsCount, new Tuple<string, int>(_chatMessages.Last().MessageDateTime.ToString("dd MMM"), 1));
-                    updateTableView = true;
-                }
-            }
-
-            _lastDayMessage = new DateTime(messageOrdered.Last().MessageDateTicks).Date;
 
             return updateTableView;
         }
@@ -415,7 +378,6 @@ namespace LetterApp.Core.ViewModels
                 MessagesLogic(new List<MessagesModel> { fakeMessage }, true);
 
                 _chat.Messages = _chatMessages;
-                _chat.SectionsAndRowsCount = _sectionsAndRowsCount;
 
                 SendedMessages.Add(fakeMessage);
                 RaisePropertyChanged(nameof(SendedMessages));

@@ -16,6 +16,6 @@ namespace LetterApp.Core.Models
         public MemberPresence MemberPresence { get; set; }
         public List<ChatMessagesModel> Messages { get; set; }
         public EventHandler<long> MessageEvent { get; set; }
-        public Dictionary<int,Tuple<string,int>> SectionsAndRowsCount { get; set; }
+        //public Dictionary<int,Tuple<string,int>> SectionsAndRowsCount { get; set; }
     }
 }
