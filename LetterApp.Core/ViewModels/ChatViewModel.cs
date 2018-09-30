@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
+using LetterApp.Core.Helpers;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Models;
@@ -334,6 +335,9 @@ namespace LetterApp.Core.ViewModels
                     else
                         newMessage.PresentMessage = (PresentMessageType)(message.MessageType + 3);
                 }
+
+                if (newMessage.ShowHeaderDate)
+                    newMessage.HeaderDate = DateUtils.DateForChatHeader(massageDate).ToUpper();
 
                 newMessage.Name = message.MessageSenderId == _finalUserId ? $"{_thisUser.FirstName} {_thisUser.LastName}" : $"{_user.FirstName} {_user.LastName}";
                 newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;

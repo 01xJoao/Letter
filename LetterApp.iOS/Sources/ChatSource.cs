@@ -76,7 +76,7 @@ namespace LetterApp.iOS.Sources
             int messageIndex = indexPath.Row;
 
             var message = _chat.Messages[messageIndex];
-            var approximateWidthOfText = _screenWidth - 80;
+            var approximateWidthOfText = _screenWidth - 75;
             var size = new CoreGraphics.CGSize(approximateWidthOfText, 1000);
 
             var paragraphStyle = new NSMutableParagraphStyle
@@ -95,7 +95,7 @@ namespace LetterApp.iOS.Sources
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 13.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? 50 : 20);
+                    cellHeight += 13.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
                     break;
             }
 

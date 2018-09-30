@@ -91,10 +91,10 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
             _dividerLeftView.BackgroundColor = Colors.AlertDividerColor;
             _dividerRightView.BackgroundColor = Colors.AlertDividerColor;
-            UILabelExtensions.SetupLabelAppearance(_dateLabel, message.MessageDateTime.ToString("dd MMM").ToUpper(), Colors.ChatDate, 12f, UIFontWeight.Medium);
+            UILabelExtensions.SetupLabelAppearance(_dateLabel, message.HeaderDate, Colors.ChatDate, 12f, UIFontWeight.Medium);
 
             _dateView.Hidden = !message.ShowHeaderDate;
-            _dateViewHeightConstraint.Constant = message.ShowHeaderDate ? 50 : 20;
+            _dateViewHeightConstraint.Constant = message.ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall;
         }
 
         private void CleanString(IScheduledWork obj)

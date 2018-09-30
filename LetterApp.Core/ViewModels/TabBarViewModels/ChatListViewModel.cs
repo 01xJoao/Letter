@@ -216,7 +216,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 member.UnreadMessagesCount = userChatModel.UnreadMessagesCount;
                 member.IsNewMessage = userChatModel.IsNewMessage;
                 member.LastMessage = userChatModel.LastMessage;
-                member.LastMessageDate = DateUtils.TimeForChat(lastMessageDate);
+                member.LastMessageDate = DateUtils.DateForMessages(lastMessageDate);
                 member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
                 member.MemberPresence = MemberPresence.Online;
 
@@ -257,7 +257,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var date = new DateTime(chat.LastMessageDateTimeTicks);
 
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
-                                                    DateUtils.TimeForChat(date), chat.IsNewMessage, chat.IsMemeberMuted, chat.UnreadMessagesCount,
+                                                    DateUtils.DateForMessages(date), chat.IsNewMessage, chat.IsMemeberMuted, chat.UnreadMessagesCount,
                                                     OpenUserProfileEvent, OpenUserChatEvent, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));

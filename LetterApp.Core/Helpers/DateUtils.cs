@@ -49,7 +49,7 @@ namespace LetterApp.Core.Helpers
             return date.Date.ToShortDateString();
         }
 
-        public static string TimeForChat(DateTime date)
+        public static string DateForMessages(DateTime date)
         {
             var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
             double delta = Math.Abs(ts.TotalSeconds);
@@ -66,6 +66,26 @@ namespace LetterApp.Core.Helpers
             string month = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(date.Month);
 
             return L10N.Locale() == "en-US" ? $"{month} {date.Day}" : $"{date.Day} {month}";
+        }
+
+        public static string DateForChatHeader(DateTime date)
+        {
+            var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
+            double delta = Math.Abs(ts.TotalSeconds);
+            
+            if (date.Date == DateTime.Now.Date)
+                return L10N.Localize("date_Today");
+
+            if (date.Date.AddDays(1) == DateTime.Now.Date)
+                return L10N.Localize("date_Yesterday");
+
+            if (date.Date.AddDays(2) == DateTime.Now.Date || delta < 144 * HOUR)
+                return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
+
+            if (date.Date.Year == DateTime.Now.Year)
+                return date.ToString("dd MMM").ToUpper();
+
+            return date.Date.ToShortDateString();
         }
     }
 }
