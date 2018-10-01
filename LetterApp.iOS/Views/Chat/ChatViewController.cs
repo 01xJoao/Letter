@@ -40,7 +40,6 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.Hidden = true;
 
             ConfigureView();
-            UpdateTableView();
 
             _viewWillShow = UIApplication.Notifications.ObserveWillEnterForeground(ConnectMessageHandler);
             _viewWillHide = UIApplication.Notifications.ObserveWillEnterForeground(DisconnectMessageHandler);
@@ -386,6 +385,8 @@ namespace LetterApp.iOS.Views.Chat
             this.NavigationController.NavigationBar.ShadowImage = new UIImage();
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
             _navBarView.BackgroundColor = Colors.MainBlue;
+
+            UpdateTableView();
         }
 
         public override void ViewWillDisappear(bool animated)

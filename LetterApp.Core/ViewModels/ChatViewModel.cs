@@ -96,11 +96,13 @@ namespace LetterApp.Core.ViewModels
 
         protected override void Prepare(int userId)
         {
-            _userId = NavigationService.ChatOpen(userId);
+            _userId = userId;
         }
 
-        public override async Task InitializeAsync()
+        public override async Task Appearing()
         {
+            NavigationService.ChatOpen(_userId);
+
             _isLoading = true;
 
             string fromDivision = string.Empty;
