@@ -4,6 +4,7 @@ using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -11,29 +12,38 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
     {
         private readonly IMessengerService _messengerService;
 
-        private XPCommand<string> _callCommand;
-        public XPCommand<string> CallCommand => _callCommand ?? (_callCommand = new XPCommand<string>(async (userId) => await Call(userId)));
-
         private XPCommand<bool> _messengerServiceCommand;
         public XPCommand<bool> MessengerServiceCommand => _messengerServiceCommand ?? (_messengerServiceCommand = new XPCommand<bool>(async (connect) => await MessengerService(connect), CanExecute));
 
         public MainViewModel(IMessengerService messengerService)
         {
             _messengerService = messengerService;
+
+           // CheckConnection();
         }
 
         private async Task MessengerService(bool connect)
         {
-            if (connect)
-                await _messengerService.ConnectMessenger();
+            //if (connect)
+            //{
+            //    await Task.Delay(TimeSpan.FromSeconds(0.5f));
+            //    await _messengerService.ConnectMessenger();
+            //}
             //else
                 //_messengerService.DisconnectMessenger();
         }
 
-        private async Task Call(string userId)
-        {
-            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(Int32.Parse(userId), false));
-        }
+        //private void CheckConnection()
+        //{
+        //    Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+        //    Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        //}
+
+        //private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        //{
+        //    if (e.NetworkAccess == NetworkAccess.Internet)
+        //        MessengerService(true);
+        //}
 
         private bool CanExecute(bool connect) => !IsBusy;
 

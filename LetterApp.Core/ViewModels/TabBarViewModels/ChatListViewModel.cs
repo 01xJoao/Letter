@@ -26,6 +26,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private int _thisUserId => AppSettings.UserId;
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
+        private int _openChatUserId;
 
         public bool _isLoading;
         public bool IsLoading
@@ -229,10 +230,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task AlertUser(ChatListUserCellModel member)
         {
-            var result = await _dialogService.ShowMessageAlert(member.MemberPhoto, member.MemberName, member.LastMessage);
+            if (NavigationService.ChatOpen() != member.MemberId)
+            {
+                var result = await _dialogService.ShowMessageAlert(member.MemberPhoto, member.MemberName, member.LastMessage);
 
-            if (result)
-                await NavigationService.NavigateAsync<ChatViewModel, int>(member.MemberId);
+                if (result)
+                    await NavigationService.NavigateAsync<ChatViewModel, int>(member.MemberId);
+            }
         }
 
         private void UpdateChatList(bool updated = false)
@@ -261,11 +265,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             }
 
             if (_chatList.Count > 0)
-            {
-                Debug.WriteLine("going to updateve from viewmode the TableView with chats count: " + _chatList.Count);
-
                 RaisePropertyChanged(nameof(ChatList));
-            }
         }
 
         private async Task UpdateMessengerService()

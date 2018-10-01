@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using Airbnb.Lottie;
 using CoreGraphics;
 using Foundation;
-using LetterApp.Core.Helpers;
 using LetterApp.Core.Models;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
@@ -22,10 +23,13 @@ namespace LetterApp.iOS.Views.Chat
         private UITapGestureRecognizer _tableViewTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
         private UIScrollView _tableScrollView;
         private NSObject _viewWillShow;
+        private NSObject _viewWillHide;
 
+        private bool _isViewVisible = true;
         private int _lineCount;
         private bool _keyboardState;
         private int _keyboardHeight;
+        private LOTAnimationView _lottieAnimation = LOTAnimationView.AnimationNamed("progress_refresh");
 
         public ChatViewController() : base("ChatViewController", null) { }
 
@@ -39,6 +43,7 @@ namespace LetterApp.iOS.Views.Chat
             UpdateTableView();
 
             _viewWillShow = UIApplication.Notifications.ObserveWillEnterForeground(ConnectMessageHandler);
+            _viewWillHide = UIApplication.Notifications.ObserveWillEnterForeground(DisconnectMessageHandler);
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -49,8 +54,10 @@ namespace LetterApp.iOS.Views.Chat
             switch (e.PropertyName)
             {
                 case nameof(ViewModel.Chat):
+                    Debug.WriteLine("Message Received - ViewModel_PropertyChanged");
                     UpdateTableView();
                     ScrollToLastRow();
+                    LoadingAnimation(false);
                     break;
                 case nameof(ViewModel.SendedMessages):
                     AddNewMessageToTable();
@@ -60,6 +67,10 @@ namespace LetterApp.iOS.Views.Chat
                     break;
                 case nameof(ViewModel.IsLoading):
                     LoadingAnimation(ViewModel.IsLoading);
+                    break;
+                case nameof(ViewModel.NewMessageAlert):
+                    if (_isViewVisible)
+                        ViewModel.LoadMessagesUpdateReceiptCommand.Execute(false);
                     break;
             }
         }
@@ -74,8 +85,13 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.SectionHeaderHeight = 0;
             _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 0.1f));
 
-            _tableView.SectionFooterHeight = 5;
-            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 5f));
+            _tableView.SectionFooterHeight = 0;
+            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f));
+
+            _statusLabel = new UILabel(new CGRect(0, 5, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
+            UILabelExtensions.SetupLabelAppearance(_statusLabel, string.Empty, Colors.GrayLabel, 10f);
+            _tableView.TableFooterView = new UIView {BackgroundColor = UIColor.Clear};
+            _tableView.TableFooterView.AddSubview(_statusLabel);
 
             _tableViewTapGesture.AddTarget(HandleTableDragGesture);
             _tableScrollView = _tableView as UIScrollView;
@@ -120,6 +136,8 @@ namespace LetterApp.iOS.Views.Chat
 
         private void UpdateTableView()
         {
+            Debug.WriteLine("DidEnterTableView");
+
             if (ViewModel.Chat?.Messages?.Count > 0)
             {
                 _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
@@ -129,27 +147,19 @@ namespace LetterApp.iOS.Views.Chat
 
         private void AddNewMessageToTable()
         {
+            Debug.WriteLine("AddNewMessageToTable");
             UpdateTableView();
             var section = _tableView.NumberOfSections();
             var row = _tableView.NumberOfRowsInSection(section - 1);
             _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, false);
         }
 
-        private void ShowStatus(string text = "")
+        private void ShowStatus()
         {
-            if (!string.IsNullOrEmpty(text))
-            {
-                _statusLabel = new UILabel(new CGRect(0, 0, ScreenWidth, 15)) { TextAlignment = UITextAlignment.Center };
-                UILabelExtensions.SetupLabelAppearance(_statusLabel, text, Colors.GrayLabel, 11f);
+            Debug.WriteLine("STATUS:" + ViewModel.Status);
 
-                _tableView.TableFooterView = new UIView();
-                _tableView.TableFooterView.AddSubview(_statusLabel);
-            }
-            else
-            {
-                _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 5f));
-                _tableView.SectionFooterHeight = 5;
-            }
+            if (_tableView.TableFooterView.Subviews.Last() is UILabel label)
+                label.Text = ViewModel.Status;
         }
 
         public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
@@ -163,6 +173,11 @@ namespace LetterApp.iOS.Views.Chat
                 }
                 _keyboardState = keyboardState;
                 AnimateTableView(keyboardState);
+
+                if(!keyboardState)
+                    ViewModel.TypingCommand.Execute(false);
+                else if (!string.IsNullOrEmpty(_textView.Text) && keyboardState)
+                    ViewModel.TypingCommand.Execute(true);
             }
         }
 
@@ -196,12 +211,18 @@ namespace LetterApp.iOS.Views.Chat
                 _sendLabel.TextColor = Colors.White;
                 _sendButton.Enabled = true;
                 _placeholderLabel.Hidden = true;
+                ViewModel.TypingCommand.Execute(true);
             }
             else if (string.IsNullOrEmpty(textView.Text) || textView.Text == Environment.NewLine) {
                 DefaultKeyboard();
             }
 
-            int lineCount = (int)(textView.ContentSize.Height / textView.Font.LineHeight) - 2;
+            TextAreaSize();
+        }
+
+        private void TextAreaSize()
+        {
+            int lineCount = (int)(_textView.ContentSize.Height / _textView.Font.LineHeight) - 2;
 
             if (lineCount < 4 && lineCount != _lineCount)
             {
@@ -209,7 +230,7 @@ namespace LetterApp.iOS.Views.Chat
                 _keyBoardAreaViewHeightConstraint.Constant = LocalConstants.Chat_KeyboardAreaHeight + (14 * _lineCount);
                 _tableViewBottomConstraint.Constant = _keyboardHeight + _keyBoardAreaViewHeightConstraint.Constant;
                 UIView.Animate(0.3f, this.View.LayoutIfNeeded);
-                textView.ScrollRangeToVisible(new NSRange(0, textView.Text.Length));
+                _textView.ScrollRangeToVisible(new NSRange(0, _textView.Text.Length));
             }
         }
 
@@ -228,6 +249,7 @@ namespace LetterApp.iOS.Views.Chat
             _sendButton.Enabled = false;
             _placeholderLabel.Hidden = false;
             _imageView1.Image = UIImage.FromBundle("keyboard");
+            ViewModel.TypingCommand.Execute(false);
         }
 
         private void OnButton1_TouchUpInside(object sender, EventArgs e)
@@ -252,6 +274,7 @@ namespace LetterApp.iOS.Views.Chat
             {
                 ViewModel.SendMessageCommand.Execute(new Tuple<string, MessageType>(_textView.Text, MessageType.Text));
                 DefaultKeyboard();
+                TextAreaSize();
             }
         }
 
@@ -302,14 +325,38 @@ namespace LetterApp.iOS.Views.Chat
 
         private void LoadingAnimation(bool animate)
         {
-            UIViewAnimationExtensions.LoadingInChat(_navBarView, animate);
+            if(_lottieAnimation == null)
+                _lottieAnimation = LOTAnimationView.AnimationNamed("progress_refresh");
+
+            if (animate)
+            {
+                var size = ScreenWidth / 4 + 8;
+                _lottieAnimation.Frame = new CGRect(size, _navBarView.Frame.Height - 2.7f, ScreenWidth - size * 2, 2.5f);
+                _lottieAnimation.Layer.CornerRadius = 0.8f;
+                _navBarView.AddSubview(_lottieAnimation);
+                _lottieAnimation.LoopAnimation = true;
+                _lottieAnimation.ContentMode = UIViewContentMode.Redraw;
+                _lottieAnimation.Hidden = false;
+                _lottieAnimation.AnimationProgress = 0;
+                _lottieAnimation.Play();
+            }
+            else
+            {
+                _lottieAnimation.Hidden = true;
+                _lottieAnimation?.Pause();
+            }
         }
 
         private void ConnectMessageHandler(object sender, NSNotificationEventArgs e)
         {
-            Debug.WriteLine("did enter foreground to connect to messenger");
+            _isViewVisible = true;
+            ViewModel.LoadMessagesUpdateReceiptCommand.Execute(true);
+        }
 
-            ViewModel.LoadMessagesCommand.Execute();
+        private void DisconnectMessageHandler(object sender, NSNotificationEventArgs e)
+        {
+            _isViewVisible = false;
+            ViewModel.RemoveChatHandlersCommand.Execute();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -360,6 +407,8 @@ namespace LetterApp.iOS.Views.Chat
 
             if (this.IsMovingFromParentViewController)
             {
+                _lottieAnimation?.Dispose();
+                _lottieAnimation = null;
                 _viewWillShow?.Dispose();
                 _viewWillShow = null;
                 _tableViewTapGesture = null;

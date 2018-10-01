@@ -22,16 +22,19 @@ namespace LetterApp.Core.ViewModels
         private readonly IContactsService _contactService;
         private readonly IMessengerService _messengerService;
         private readonly IDialogService _dialogService;
+        private readonly IAudioService _audioService;
 
         private PreviousMessageListQuery _prevMessageListQuery;
         private GetUsersInDivisionModel _user;
         private ChatListUserModel _userChat;
         private GroupChannel _channel;
-        private DateTime _sendedMessageDateTime;
 
         private int _userId;
         private int _organizationId = AppSettings.OrganizationId;
         private string _finalUserId = AppSettings.UserAndOrganizationIds;
+        public string MemberName;
+        public string MemberDetails;
+        public bool NewMessageAlert;
 
         private ChatModel _chat;
         public ChatModel Chat
@@ -51,10 +54,13 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
-        public string MemberName;
-        public string MemberDetails;
+        private string _status;
+        public string Status
+        {
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
 
-        public bool Status;
         public List<MessagesModel> SendedMessages = new List<MessagesModel>();
 
         private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
@@ -66,29 +72,36 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView()));
 
-        private XPCommand _loadMessagesCommand;
-        public XPCommand LoadMessagesCommand => _loadMessagesCommand ?? (_loadMessagesCommand = new XPCommand(async () => await ComesFromForeGround(), CanExecute));
+        private XPCommand<bool> _typingCommand;
+        public XPCommand<bool> TypingCommand => _typingCommand ?? (_typingCommand = new XPCommand<bool>(TypingStatus));
 
-        public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService)
+        private XPCommand<bool> _loadMessagesUpdateReceiptCommand;
+        public XPCommand<bool> LoadMessagesUpdateReceiptCommand => _loadMessagesUpdateReceiptCommand ?? (_loadMessagesUpdateReceiptCommand = new XPCommand<bool>(async (val) => await LoadMessagesAndUpdateReadReceipt(val), CanExecuteLoad));
+
+        private XPCommand _removeChatHandlersCommand;
+        public XPCommand RemoveChatHandlersCommand => _removeChatHandlersCommand ?? (_removeChatHandlersCommand = new XPCommand(() => { SendBirdClient.RemoveChannelHandler("ChatHandler"); }));
+
+
+        public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService, IAudioService audioService)
         {
             _divisionService = divisionService;
             _contactService = contactsService;
             _messengerService = messengerService;
             _dialogService = dialogService;
+            _audioService = audioService;
 
-            ChatHandler();
+            ChatHandlers();
+            CheckConnection();
         }
 
         protected override void Prepare(int userId)
         {
-            _userId = userId;
+            _userId = NavigationService.ChatOpen(userId);
         }
 
         public override async Task InitializeAsync()
         {
             _isLoading = true;
-
-            CheckConnection();
 
             string fromDivision = string.Empty;
 
@@ -142,14 +155,14 @@ namespace LetterApp.Core.ViewModels
                 MemberEmail = _user.Email,
                 MemberMuted = _userChat != null && _userChat.IsMemeberMuted,
                 MemberSeenMyLastMessage = _userChat != null && _userChat.MemberSeenMyLastMessage,
-                //MemberPresence = (MemberPresence)_userChat.MemberPresence,
+                MemberPresence = Connectivity.NetworkAccess == NetworkAccess.Internet ? (MemberPresence)_userChat.MemberPresence : MemberPresence.Offline,
                 Messages = _chatMessages,
                 MessageEvent = MessageClickEvent
             };
 
             _chat = chat;
 
-            LoadRecentMessages();
+            LoadMessagesAndUpdateReadReceipt(true);
         }
 
         private async Task LoadRecentMessages()
@@ -158,11 +171,8 @@ namespace LetterApp.Core.ViewModels
 
             Debug.WriteLine("LoadRecentMessages");
 
-            if (!await CheckMessageServiceConnection()) 
-            {
-                IsLoading = false;
-                return;
-            }
+            if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN) 
+                await MessageServiceConnection();
 
             _messagesModel = new List<MessagesModel>();
 
@@ -211,14 +221,18 @@ namespace LetterApp.Core.ViewModels
                 else
                 {
                     _isLoading = false; 
-                    RaisePropertyChanged(nameof(Chat));
+                    RaisePropertyChanged(nameof(IsLoading));
                     return;
                 }
             }
             catch (Exception ex)
             {
-                _isLoading = false;
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _isLoading = false;
+                RaisePropertyChanged(nameof(IsLoading));
             }
 
             MessagesLogic(_messagesModel);
@@ -229,12 +243,9 @@ namespace LetterApp.Core.ViewModels
 
             if(shouldUpdate)
                 RaisePropertyChanged(nameof(Chat));
-
-            _isLoading = false;
-            RaisePropertyChanged(nameof(IsLoading));
         }
 
-        private async Task<bool> CheckMessageServiceConnection()
+        private async Task<bool> MessageServiceConnection()
         {
             Debug.WriteLine("Checking Message Service Connection: " + SendBirdClient.GetConnectionState());
 
@@ -245,34 +256,26 @@ namespace LetterApp.Core.ViewModels
             try
             {
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
-                    await _messengerService.ConnectMessenger();
-
-                if (_channel == null)
                 {
-                    _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
+                    int numberOfTries = 0;
 
-                    if (_channel == null)
-                        _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
+                    while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 4)
+                    {
+                        Debug.WriteLine("Trying to reconnect to Messenger Services");
+                        await Task.Delay(TimeSpan.FromSeconds(numberOfTries++));
+                    }
+
+                    if(SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                        await _messengerService.ConnectMessenger();
+
                 }
 
-                if (_channel.MemberCount < 2)
-                {
-                    _messengerService.RemoveChannel(_channel);
-                    _dialogService.ShowAlert(UserNotRegistered, AlertType.Error, 4f);
-
-                    if (_userChat != null)
-                        Realm.Write(() => Realm.Remove(_userChat));
-
-                    _chat = null;
-                    await CloseView();
-                    return false;
-                }
+                await GetChannel();
 
                 return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
             }
             catch (Exception ex)
             {
-                IsLoading = false;
                 Ui.Handle(ex as dynamic);
                 return false;
             }
@@ -280,26 +283,6 @@ namespace LetterApp.Core.ViewModels
             {
                 IsBusy = false;
             }
-        }
-
-        private void CheckConnection()
-        {
-            Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
-            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-        }
-
-        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
-        {
-            if (e.NetworkAccess == NetworkAccess.Internet)
-                ConnectToMessenger();
-        }
-
-        private async Task ConnectToMessenger()
-        {
-            Debug.WriteLine("Connect to Internet");
-
-            if (await CheckMessageServiceConnection())
-                LoadRecentMessages();
         }
 
         private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
@@ -350,15 +333,15 @@ namespace LetterApp.Core.ViewModels
                 newMessage.CustomData = message.CustomData;
                 newMessage.MessageDate = $"  •  {dateForMessage}";
                 newMessage.MessageDateTime = massageDate;
-                newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
+                newMessage.ShowPresense = message.MessageSenderId != _finalUserId; 
 
                 _chatMessages.Add(newMessage);
             }
         }
 
-        private async Task SendMessage(Tuple<string, MessageType> message)
+        private async Task SendMessage(Tuple<string, MessageType> message, bool sendingFailedMessages = false)
         {
-            await CheckMessageServiceConnection();
+            await MessageServiceConnection();
 
             string messageToSend = message.Item1;
 
@@ -368,7 +351,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                _sendedMessageDateTime = DateTime.UtcNow;
+                var _sendedMessageDateTime = DateTime.UtcNow;
 
                 var fakeMessage = new MessagesModel
                 {
@@ -382,9 +365,16 @@ namespace LetterApp.Core.ViewModels
                 MessagesLogic(new List<MessagesModel> { fakeMessage }, true);
 
                 _chat.Messages = _chatMessages;
-
                 SendedMessages.Add(fakeMessage);
-                RaisePropertyChanged(nameof(SendedMessages));
+
+                if (!sendingFailedMessages)
+                {
+                    RaisePropertyChanged(nameof(SendedMessages));
+                    _audioService.PlaySendMessage();
+                }
+
+                _status = string.Empty;
+                RaisePropertyChanged(nameof(Status));
 
                 var result = await _messengerService.SendMessage(_channel, messageToSend, _sendedMessageDateTime.ToString());
 
@@ -418,15 +408,24 @@ namespace LetterApp.Core.ViewModels
 
                 _dialogService.ShowAlert(SendMessageError, AlertType.Error, 4f);
 
-                RaisePropertyChanged(nameof(Chat));
+                if (!sendingFailedMessages)
+                    RaisePropertyChanged(nameof(Chat));
             }
+        }
+
+        private void MessageClickEvent(object sender, long messageId)
+        {
+            var message = SendedMessages.Find(x => x.MessageId == messageId);
+
+            if (message != null)
+                RetrySendMessages();
         }
 
         private async Task RetrySendMessages()
         {
             try
             {
-                if (await CheckMessageServiceConnection())
+                if (await MessageServiceConnection())
                 {
                     var listMsg = new List<MessagesModel>();
                     foreach (var msg in SendedMessages) { listMsg.Add(msg); }
@@ -434,7 +433,7 @@ namespace LetterApp.Core.ViewModels
                     foreach(var msg in listMsg)
                     {
                         SendedMessages.Remove(msg);
-                        await SendMessage(new Tuple<string, MessageType>(msg.MessageData, (MessageType)msg.MessageType));
+                        await SendMessage(new Tuple<string, MessageType>(msg.MessageData, (MessageType)msg.MessageType), true);
                     }
 
                     foreach(var msg in listMsg)
@@ -442,9 +441,9 @@ namespace LetterApp.Core.ViewModels
                         _chat.Messages.Remove(_chat.Messages.Find(x => x.MessageId == msg.MessageId));
                     }
 
-                    RaisePropertyChanged(nameof(Chat));
-
                     listMsg = null;
+
+                    RaisePropertyChanged(nameof(Chat));
                 }
             }
             catch (Exception ex)
@@ -453,51 +452,99 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private async Task ComesFromForeGround()
+        public void ChatHandlers()
         {
-            try
-            {
-                await Task.Delay(500);
-                Debug.WriteLine("From ForeGround LoadMessageCommand");
-                await LoadRecentMessages();
-            }
-            catch (Exception ex){}
-        }
-
-        private void MessageClickEvent(object sender, long messageId)
-        {
-            var message = SendedMessages.Find(x => x.MessageId == messageId);
-
-            if(message != null)
-                RetrySendMessages();
-        }
-
-        private async Task CloseView()
-        {
-            await NavigationService.Close(this);
-        }
-
-        public Task<Tuple<BaseChannel, BaseMessage>> ChatHandler()
-        {
-            var tcs = new TaskCompletionSource<Tuple<BaseChannel, BaseMessage>>();
-
             Debug.WriteLine("Initializing SendBird Handlers in Chat");
 
             SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
             {
-                OnMessageReceived = MessageReceived
+                OnMessageReceived = MessageReceived,
+                OnTypingStatusUpdated = TypingStatus,
+                OnReadReceiptUpdated = ReadReceipt
             };
 
             SendBirdClient.AddChannelHandler("ChatHandler", ch);
 
             Debug.WriteLine("SendBird Handlers Initialized");
+        }
 
-            return tcs.Task;
+        private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages)
+        {
+            Debug.WriteLine("LoadMessagesAndUpdateReadReceipt WithLoadMessages:" + SendBirdClient.GetConnectionState());
+
+            if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(2));
+                await MessageServiceConnection();
+            }
+                
+            await GetChannel();
+
+            _messengerService.MarkMessageAsRead(_channel);
+
+            if (loadMessages)
+                await LoadRecentMessages();
+        }
+
+        private async Task GetChannel()
+        {
+            try
+            {
+                if (_channel == null)
+                {
+                    _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
+
+                    if (_channel == null)
+                        _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
+                }
+
+                if (_channel.MemberCount < 2)
+                {
+                    _messengerService.RemoveChannel(_channel);
+                    _dialogService.ShowAlert(UserNotRegistered, AlertType.Error, 4f);
+
+                    if (_userChat != null)
+                        Realm.Write(() => Realm.Remove(_userChat));
+
+                    _chat = null;
+                    await CloseView();
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        #region Status
+
+        private void TypingStatus(GroupChannel channel)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (channel.Url == _channel.Url)
+                {
+                    _status = channel.IsTyping() ? TypingMessage : string.Empty;
+                    StatusLogic();
+                }
+            });
+        }
+
+        private void TypingStatus(bool isTyping)
+        {
+            if (isTyping)
+                _messengerService.TypingMessage(_channel);
+            else
+                _messengerService.TypingMessageEnded(_channel);
         }
 
         private void MessageReceived(BaseChannel baseChannel, BaseMessage baseMessage)
         {
             MainThread.BeginInvokeOnMainThread(() => {
+
+                Debug.WriteLine("Message Received");
+
+                _chat.MemberPresence = MemberPresence.Online;
 
                 var channel = baseChannel as GroupChannel;
 
@@ -520,11 +567,78 @@ namespace LetterApp.Core.ViewModels
                 _chat.Messages = _chatMessages;
                 RaisePropertyChanged(nameof(Chat));
 
+                _status = string.Empty;
+
+                RaisePropertyChanged("Status");
+                RaisePropertyChanged("NewMessageAlert");
+
+                _audioService.PlayReceivedMessage();
             });
+        }
+
+        private void ReadReceipt(GroupChannel channel)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (_chat.MemberPresence != MemberPresence.Online)
+                {
+                    _chat.MemberPresence = MemberPresence.Online;
+                    RaisePropertyChanged("Chat");
+                }
+
+                StatusLogic();
+            });
+        }
+
+        private void StatusLogic()
+        {
+            if (_status != TypingMessage)
+            {
+                if (_chat.Messages.Last().MessageSenderId == _finalUserId)
+                    _status = _channel.GetReadReceipt(_channel.LastMessage) <= 0 ? SeenMessage : string.Empty;
+                else
+                    _status = string.Empty;
+            }
+
+            RaisePropertyChanged(nameof(Status));
+        }
+
+        #endregion
+
+        private async Task CheckConnection()
+        {
+            Connectivity.ConnectivityChanged -= ConnectivityChanged;
+            Connectivity.ConnectivityChanged += ConnectivityChanged;
+        }
+
+        private void ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess == NetworkAccess.Internet)
+            {
+                ConnectionOn();
+            }
+            else
+            {
+                _chat.MemberPresence = MemberPresence.Offline;
+                RaisePropertyChanged(nameof(Chat));
+                SendBirdClient.RemoveChannelHandler("ChatHandler");
+            }
+        }
+
+        private async Task ConnectionOn()
+        {
+            await LoadMessagesAndUpdateReadReceipt(true);
+            ChatHandlers();
+        }
+
+        private async Task CloseView()
+        {
+            await NavigationService.Close(this);
         }
 
         private void ViewWillClose()
         {
+            NavigationService.ChatOpen(-1);
             SendBirdClient.RemoveChannelHandler("ChatHandler");
 
             if (_chat?.Messages?.Count > 0)
@@ -551,7 +665,7 @@ namespace LetterApp.Core.ViewModels
                         MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
                     };
 
-                    var historyMessages = _messagesModel?.Skip(Math.Max(0, _messagesModel.Count() - 30)) ?? _userChat?.MessagesList;
+                    var historyMessages = _messagesModel?.Skip(Math.Max(0, _messagesModel.Count() - 30)) ?? _userChat?.MessagesList?.Skip(Math.Max(0, _userChat.MessagesList.Count() - 30));
 
                     foreach (var msg in historyMessages)
                         userChat.MessagesList.Add(msg);
@@ -563,6 +677,7 @@ namespace LetterApp.Core.ViewModels
 
         private bool CanExecute() => !IsBusy;
         private bool CanExecuteMsg(Tuple<string, MessageType> msg) => !IsBusy;
+        private bool CanExecuteLoad(bool arg) => !IsBusy;
 
         #region Resources 
 

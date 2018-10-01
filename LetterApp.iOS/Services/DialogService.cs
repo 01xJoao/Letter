@@ -33,7 +33,6 @@ namespace LetterApp.iOS.Services
 
         public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
         {
-            //TODO What is this for?
             return null;
         }
 

@@ -14,8 +14,8 @@ namespace LetterApp.iOS.Views.Base
 {
     public class MainViewController : XTabBarViewController<MainViewModel>, IRootView
     {
-        private NSObject _willEnterForeGround;
-        private NSObject _didEnterBackGround;
+        //private NSObject _willEnterForeGround;
+        //private NSObject _didEnterBackGround;
 
         public override void ViewDidLoad()
         {
@@ -26,8 +26,8 @@ namespace LetterApp.iOS.Views.Base
             TabBar.BackgroundImage = new UIImage();
             TabBar.ShadowImage = new UIImage();
 
-            _willEnterForeGround = UIApplication.Notifications.ObserveWillEnterForeground(ConnectToService);
-            _didEnterBackGround = UIApplication.Notifications.ObserveDidEnterBackground(DisconnectFromService);
+            //_willEnterForeGround = UIApplication.Notifications.ObserveWillEnterForeground(ConnectToService);
+            //_didEnterBackGround = UIApplication.Notifications.ObserveDidEnterBackground(DisconnectFromService);
 
             this.ViewControllers = new[]
             {
@@ -40,17 +40,15 @@ namespace LetterApp.iOS.Views.Base
             this.CustomizableViewControllers = null;
         }
 
-        private void ConnectToService(object sender, NSNotificationEventArgs e)
-        {
-            if (ViewModel.MessengerServiceCommand.CanExecute(true))
-                ViewModel.MessengerServiceCommand.Execute(true);
-        }
+        //private void ConnectToService(object sender, NSNotificationEventArgs e)
+        //{
+        //    ViewModel.MessengerServiceCommand.Execute(true);
+        //}
 
-        private void DisconnectFromService(object sender, NSNotificationEventArgs e)
-        {
-            if(ViewModel.MessengerServiceCommand.CanExecute(false))
-                ViewModel.MessengerServiceCommand.Execute(false);
-        }
+        //private void DisconnectFromService(object sender, NSNotificationEventArgs e)
+        //{
+        //    ViewModel.MessengerServiceCommand.Execute(false);
+        //}
 
         public void SetVisibleView(int index)
         {
@@ -96,11 +94,11 @@ namespace LetterApp.iOS.Views.Base
         {
             base.ViewDidDisappear(animated);
 
-            if (this.IsMovingFromParentViewController)
-            {
-                _willEnterForeGround?.Dispose();
-                _didEnterBackGround?.Dispose();
-            }
+            //if (this.IsMovingFromParentViewController)
+            //{
+            //    _willEnterForeGround?.Dispose();
+            //    _didEnterBackGround?.Dispose();
+            //}
         }
     }
 }

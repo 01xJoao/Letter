@@ -900,6 +900,7 @@
     <Compile Include="Views\Chat\Cells\DateHeaderCell.designer.cs">
       <DependentUpon>DateHeaderCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\AudioService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -919,6 +920,8 @@
     <BundleResource Include="Resources\progress_animation.json" />
     <BundleResource Include="Resources\load_blue.json" />
     <BundleResource Include="Resources\load_white.json" />
+    <BundleResource Include="Resources\message_received.mp3" />
+    <BundleResource Include="Resources\message_sent.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

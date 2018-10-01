@@ -78,9 +78,6 @@ namespace LetterApp.iOS.Views.Chat.Cells
                 case MemberPresence.Offline:
                     _presenceView.Hidden = true;
                     break;
-                default:
-                    _presenceView.Hidden = true;
-                    break;
             }
 
             _presenceView.Hidden = !message.ShowPresense;

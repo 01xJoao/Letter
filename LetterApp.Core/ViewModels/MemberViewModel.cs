@@ -32,6 +32,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _callCommand;
         public XPCommand CallCommand => _callCommand ?? (_callCommand = new XPCommand(async () => await Call()));
 
+        private XPCommand _chatCommand;
+        public XPCommand ChatCommand => _chatCommand ?? (_chatCommand = new XPCommand(async () => await Chat()));
+
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
@@ -154,6 +157,11 @@ namespace LetterApp.Core.ViewModels
             {
                 Ui.Handle(ex as dynamic);
             }
+        }
+
+        private async Task Chat()
+        {
+            await NavigationService.NavigateAsync<ChatViewModel, int>(_memberProfileModel.UserID);
         }
 
         private async Task CloseView()

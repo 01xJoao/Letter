@@ -91,16 +91,12 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController.Cells
             _silentImage.Image = UIImage.FromBundle("silent").ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
             _silentImage.TintColor = Colors.ProfileGrayDarker;
 
-            //_silentImageWidthConstraint.Constant = chatUser.IsMemberMuted ? _silentImageWidthConstraint.Constant : 0;
-            //_unreadCountWidthConstraint.Constant = chatUser.UnreadMessagesCount > 0 ? _unreadCountWidthConstraint.Constant : 0;
-            //_unreadCountHeightConstraint.Constant = chatUser.UnreadMessagesCount > 0 ? _unreadCountWidthConstraint.Constant : 0;
-
             UILabelExtensions.SetupLabelAppearance(_unreadCountLabel, chatUser.UnreadMessagesCount.ToString(), Colors.White, 10f, UIFontWeight.Medium);
             _unreadCountLabel.Hidden = _unreadCountView.Hidden = chatUser.UnreadMessagesCount == 0;
             _unreadCountView.BackgroundColor = Colors.UnreadCount;
             CustomUIExtensions.RoundView(_unreadCountView);
 
-            _messageTrailConstraint.Constant = chatUser.UnreadMessagesCount > 0 || chatUser.IsMemberMuted ? _messageTrailConstraint.Constant : 0;
+            //_messageTrailConstraint.Constant = chatUser.UnreadMessagesCount > 0 || chatUser.IsMemberMuted ? _messageTrailConstraint.Constant : 0;
 
             _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
             _chatButton.TouchUpInside += OnChatButton_TouchUpInside;

@@ -12,7 +12,6 @@ namespace LetterApp.Core.Services.Interfaces
         void DisconnectMessenger();
         void RegisterMessengerToken();
         Task<GroupChannel> GetUsersInChannel(string channelUrl);
-        Task<BaseMessage> InitializeHandlers();
         Task<GroupChannel> CreateChannel(List<string> users);
         Task<List<GroupChannel>> GetChannels(List<string> users);
         Task<List<GroupChannel>> GetAllChannels();
