@@ -283,6 +283,7 @@ namespace LetterApp.iOS.Views.Chat
 
         private void CallUser(object sender, EventArgs e)
         {
+            ViewModel.CallCommand.Execute();
         }
 
         private void CloseView(object sender, EventArgs e)

@@ -81,6 +81,11 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _removeChatHandlersCommand;
         public XPCommand RemoveChatHandlersCommand => _removeChatHandlersCommand ?? (_removeChatHandlersCommand = new XPCommand(() => { SendBirdClient.RemoveChannelHandler("ChatHandler"); }));
 
+        private XPCommand _callCommand;
+        public XPCommand CallCommand => _callCommand ?? (_callCommand = new XPCommand(async () => await Call()));
+
+        private XPCommand _optionsCommand;
+        public XPCommand OptionsCommand => _optionsCommand ?? (_optionsCommand = new XPCommand(async () => await Options()));
 
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService, IAudioService audioService)
         {
@@ -92,6 +97,7 @@ namespace LetterApp.Core.ViewModels
 
             ChatHandlers();
             CheckConnection();
+            SetL10NResources();
         }
 
         protected override void Prepare(int userId)
@@ -155,7 +161,7 @@ namespace LetterApp.Core.ViewModels
                 MemberDetails = string.IsNullOrEmpty(fromDivision) ? _user?.Position : $"{fromDivision} - {_user?.Position}",
                 MemberPhoto = _user.Picture,
                 MemberEmail = _user.Email,
-                MemberMuted = _userChat != null && _userChat.IsMemeberMuted,
+                MemberMuted = _userChat != null && _userChat.IsMemberMuted,
                 MemberSeenMyLastMessage = _userChat != null && _userChat.MemberSeenMyLastMessage,
                 MemberPresence = Connectivity.NetworkAccess == NetworkAccess.Internet ? (MemberPresence)_userChat.MemberPresence : MemberPresence.Offline,
                 Messages = _chatMessages,
@@ -633,6 +639,44 @@ namespace LetterApp.Core.ViewModels
             ChatHandlers();
         }
 
+        private async Task Call()
+        {
+            try
+            {
+                var callType = await _dialogService.ShowContactOptions(LocationResources, _user.ShowNumber);
+
+                switch (callType)
+                {
+                    case CallingType.Letter:
+                        if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(_user.UserId, true));
+                        break;
+                    case CallingType.Cellphone:
+                        CallUtils.Call(_user.ContactNumber);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task Options()
+        {
+            try
+            {
+                string[] resources = {SeeUserProfile, UserMuted, ArchiveChat, SendEmail};
+                var options = await _dialogService.ShowChatOptions(_userChat.MemberName, _userChat.MemberPhoto, _user.Email, _userChat.IsMemberMuted, resources);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private async Task CloseView()
         {
             await NavigationService.Close(this);
@@ -654,7 +698,7 @@ namespace LetterApp.Core.ViewModels
                         MemberId = _user.UserId,
                         MemberName = $"{_user.FirstName} {_user.LastName} - {_user.Position}",
                         MemberPhoto = _user.Picture,
-                        IsMemeberMuted = _chat.MemberMuted,
+                        IsMemberMuted = _chat.MemberMuted,
                         IsNewMessage = false,
                         MemberPresence = (int)_chat.MemberPresence,
                         MemberPresenceConnectionDate = _userChat != null ? _userChat.MemberPresenceConnectionDate : default(DateTime).Ticks,
@@ -693,6 +737,27 @@ namespace LetterApp.Core.ViewModels
         public string TypingMessage => L10N.Localize("Chat_TypingMessage");
         public string SeenMessage => L10N.Localize("Chat_SeenMessage");
         public string SendMessageButton => L10N.Localize("Chat_SendMessage");
+
+        private string SeeUserProfile => L10N.Localize("Chat_UserProfile");
+        private string UserMuted => L10N.Localize("Chat_UserMuted");
+        private string ArchiveChat => L10N.Localize("Chat_Archive");
+        private string SendEmail => L10N.Localize("Division_SendEmail");
+
+        private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
+        private string TitleDialog => L10N.Localize("ContactDialog_Title");
+        private string LetterDialog => L10N.Localize("ContactDialog_TitleLetter");
+        private string LetterDescriptionDialog => L10N.Localize("ContactDialog_DescriptionLetter");
+        private string PhoneDialog => L10N.Localize("ContactDialog_TitlePhone");
+        private string PhoneDescriptionDialog => L10N.Localize("ContactDialog_DescriptionPhone");
+
+        private void SetL10NResources()
+        {
+            LocationResources.Add("Title", TitleDialog);
+            LocationResources.Add("TitleLetter", LetterDialog);
+            LocationResources.Add("DescriptionLetter", LetterDescriptionDialog);
+            LocationResources.Add("TitlePhone", PhoneDialog);
+            LocationResources.Add("DescriptionPhone", PhoneDescriptionDialog);
+        }
 
         #endregion
     }

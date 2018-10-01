@@ -918,5 +918,17 @@
   {
     "key": "ChatList_UserNotFound",
     "Translated": "User not found, please check if this user still exists in the contacts tab."
+  },
+  {
+    "key": "Chat_Archive",
+    "translated": "Archive chat"
+  },
+  {
+    "key": "Chat_UserMuted",
+    "translated": "Chat muted"
+  },
+  {
+    "key": "Chat_UserProfile",
+    "translated": "See user profile"
   }
 ]

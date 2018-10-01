@@ -16,6 +16,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<CallingType> ShowContactOptions(Dictionary<string, string> locationResources, bool showPhoneOption = true);
         void ShowCallStack(string title = "", List<CallStackModel> calls = null);
         Task<bool> ShowMessageAlert(string photo = "", string name = "", string message = "");
+        Task<Tuple<ChatOptions,bool>> ShowChatOptions(string name = "", string photo = "", string email = "", bool muted = false, string[] resources = null);
 
         void StartLoading(LoadingColor color = LoadingColor.Blue);
         void StopLoading();
@@ -65,5 +66,13 @@ namespace LetterApp.Core.Services.Interfaces
     {
         Blue,
         White
+    }
+
+    public enum ChatOptions
+    {
+        SeeProfile,
+        MuteChat,
+        ArchiveChat,
+        SendEmail
     }
 }

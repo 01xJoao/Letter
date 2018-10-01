@@ -914,5 +914,21 @@
   {
     "key": "ChatList_MessageError",
     "Translated": "Erro no envio, clica na mensagem para tentar novamente."
+  },
+  {
+    "key": "ChatList_UserNotFound",
+    "Translated": "Utilizador não encontrado, por favor verifique se utilizador existe nos contactos."
+  },
+  {
+    "key": "Chat_Archive",
+    "translated": "Arquivar conversa"
+  },
+  {
+    "key": "Chat_UserMuted",
+    "translated": "Conversa silenciada"
+  },
+  {
+    "key": "Chat_UserProfile",
+    "translated": "See user profile"
   }
 ]

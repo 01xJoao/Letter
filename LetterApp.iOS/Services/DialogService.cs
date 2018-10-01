@@ -31,9 +31,14 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
+        public Task<Tuple<ChatOptions, bool>> ShowChatOptions(string name = "", string photo = "", string email = "", bool muted = false, string[] resources = null)
         {
-            return null;
+            var tcs = new TaskCompletionSource<Tuple<ChatOptions, bool>>();
+
+            var chatOptionsView = new ShowChatOptionsViewController(name, photo, email, muted, resources, val => tcs.TrySetResult(val));
+            chatOptionsView.Show();
+
+            return tcs.Task;
         }
 
         public Task<bool> ShowMessageAlert(string photo = "", string name = "", string message = "")
@@ -90,6 +95,11 @@ namespace LetterApp.iOS.Services
         {
             var callStackView = new CallStackViewController(title, calls);
             callStackView.Show();
+        }
+
+        public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
+        {
+            return null;
         }
 
         public void StartLoading(LoadingColor color)

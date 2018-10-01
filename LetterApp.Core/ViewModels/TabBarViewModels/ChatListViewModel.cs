@@ -164,7 +164,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             MemberId = result.UserId,
                             MemberName = $"{result.FirstName} {result.LastName} - {result.Position}",
                             MemberPhoto = result.Picture,
-                            IsMemeberMuted = false,
+                            IsMemberMuted = false,
                         };
 
                         Realm.Write(() => Realm.Add(userChatModel));
@@ -201,7 +201,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                         MemberId = userChatModel.MemberId,
                         MemberName = userChatModel.MemberName,
                         MemberPhoto = userChatModel.MemberPhoto,
-                        IsMemberMuted = userChatModel.IsMemeberMuted,
+                        IsMemberMuted = userChatModel.IsMemberMuted,
                         OpenChat = OpenUserChatEvent,
                         OpenMemberProfile = OpenUserProfileEvent
                     };
@@ -252,7 +252,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 var date = new DateTime(chat.LastMessageDateTimeTicks);
 
                 var cht = new ChatListUserCellModel(chat.MemberId, chat.MemberName, chat.MemberPhoto, chat.LastMessage,
-                                                    DateUtils.DateForMessages(date), chat.IsNewMessage, chat.IsMemeberMuted, chat.UnreadMessagesCount,
+                                                    DateUtils.DateForMessages(date), chat.IsNewMessage, chat.IsMemberMuted, chat.UnreadMessagesCount,
                                                     OpenUserProfileEvent, OpenUserChatEvent, date);
 
                 TimeSpan timeDifference = DateTime.Now.Subtract(new DateTime(chat.MemberPresenceConnectionDate));
@@ -318,7 +318,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberId = userInDB.UserId,
                                 MemberName = $"{userInDB.FirstName} {userInDB.LastName} - {userInDB.Position}",
                                 MemberPhoto = userInDB.Picture,
-                                IsMemeberMuted = userInModel != null && userInModel.IsMemeberMuted,
+                                IsMemberMuted = userInModel != null && userInModel.IsMemberMuted,
                                 IsNewMessage = newMessage,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = userLastSeen,
@@ -391,8 +391,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     break;
 
                 case ChatEventType.Mute:
-                    Realm.Write(() => _chatUser.IsMemeberMuted = !_chatUser.IsMemeberMuted);
-                    _chatList.FindLast(x => x.MemberId == userId).IsMemberMuted = _chatUser.IsMemeberMuted;
+                    Realm.Write(() => _chatUser.IsMemberMuted = !_chatUser.IsMemberMuted);
+                    _chatList.FindLast(x => x.MemberId == userId).IsMemberMuted = _chatUser.IsMemberMuted;
                     break;
 
                 default:
