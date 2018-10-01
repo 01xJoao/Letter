@@ -288,7 +288,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     {
                         var users = await _messagerService.CheckUsersInGroupPresence(channel);
                        
-                        foreach (var user in users)
+                        foreach (var user in users.ToList())
                         {
                             var userId = StringUtils.GetUserId(user.UserId);
                             var userInDB = _users.Find(x => x.UserId == userId);
@@ -353,6 +353,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 catch (Exception ex)
                 {
+                    _updateFrequence = default(DateTime);
                     Ui.Handle(ex as dynamic);
                 }
                 finally
