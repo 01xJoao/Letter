@@ -123,9 +123,6 @@
     <Reference Include="Lottie.iOS">
       <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="System.Security.Principal.Windows">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="System.Security.AccessControl">
       <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\netstandard2.0\System.Security.AccessControl.dll</HintPath>
     </Reference>
@@ -134,9 +131,6 @@
     </Reference>
     <Reference Include="System.Configuration.ConfigurationManager">
       <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="FFImageLoading">
       <HintPath>..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.dll</HintPath>
@@ -179,6 +173,12 @@
     </Reference>
     <Reference Include="Realm.Sync">
       <HintPath>..\packages\Realm.3.2.1\lib\netstandard1.4\Realm.Sync.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.5.1\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -931,7 +931,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Fody.3.2.4\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.4\build\Fody.targets')" />
   <Import Project="..\packages\Realm.Database.3.2.1\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.2.1\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.2.1\build\Realm.targets" Condition="Exists('..\packages\Realm.3.2.1\build\Realm.targets')" />
+  <Import Project="..\packages\Fody.3.2.6\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.6\build\Fody.targets')" />
 </Project>

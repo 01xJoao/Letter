@@ -97,11 +97,6 @@ namespace LetterApp.iOS.Services
             callStackView.Show();
         }
 
-        public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
-        {
-            return null;
-        }
-
         public void StartLoading(LoadingColor color)
         {
             StopLoading();

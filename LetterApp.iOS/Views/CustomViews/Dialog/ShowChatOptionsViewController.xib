@@ -32,7 +32,7 @@
                         <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vx8-79-aan">
                             <rect key="frame" x="0.0" y="0.0" width="308" height="278"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RGa-qa-FmN">
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RGa-qa-FmN">
                             <rect key="frame" x="104" y="-40" width="100" height="100"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="100" id="24d-2E-Dtt"/>
@@ -40,7 +40,7 @@
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rmy-8R-kDr">
-                            <rect key="frame" x="135.5" y="70" width="37.5" height="18"/>
+                            <rect key="frame" x="135.5" y="62" width="37.5" height="18"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -82,7 +82,7 @@
                         <constraint firstItem="sbI-zD-KdX" firstAttribute="leading" secondItem="2sA-L0-M1e" secondAttribute="leading" id="qIU-dB-A6k"/>
                         <constraint firstItem="oPk-Lg-52r" firstAttribute="top" secondItem="sbI-zD-KdX" secondAttribute="bottom" constant="-2" id="xCq-aV-5sp"/>
                         <constraint firstItem="oPk-Lg-52r" firstAttribute="leading" secondItem="2sA-L0-M1e" secondAttribute="leading" id="yhy-qn-2BO"/>
-                        <constraint firstItem="rmy-8R-kDr" firstAttribute="top" secondItem="RGa-qa-FmN" secondAttribute="bottom" constant="10" id="zKW-ys-j7j"/>
+                        <constraint firstItem="rmy-8R-kDr" firstAttribute="top" secondItem="RGa-qa-FmN" secondAttribute="bottom" constant="2" id="zKW-ys-j7j"/>
                         <constraint firstItem="Vx8-79-aan" firstAttribute="height" secondItem="2sA-L0-M1e" secondAttribute="height" multiplier="2/3" id="zn4-lc-XZk"/>
                     </constraints>
                 </view>

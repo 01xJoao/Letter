@@ -88,7 +88,7 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
         public void Show()
         {
-            this.View.Frame = new CoreGraphics.CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 92);
+            this.View.Frame = new CoreGraphics.CGRect(0, PhoneModelExtensions.IsIphoneX() ? LocalConstants.IphoneXNotchHeight : 0, UIScreen.MainScreen.Bounds.Width, 92);
             UIApplication.SharedApplication.KeyWindow.AddSubview(this.View);
             UIView.Animate(0.3f, () => View.Alpha = 1);
             Animations.SlideVerticaly(this.View, true, true, onFinished: () => DismissCountDown());

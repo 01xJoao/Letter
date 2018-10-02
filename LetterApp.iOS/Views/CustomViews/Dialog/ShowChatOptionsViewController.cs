@@ -54,16 +54,15 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
                 ImageService.Instance.LoadStream((token) =>
                 {
                     return ImageHelper.GetStreamFromImageByte(token, _photo);
-                }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Into(_profileImage);
+                }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new RoundedTransformation(30)).Into(_profileImage);
 
             }
             else
             {
                 _backgroundImage.BackgroundColor = Colors.MainBlue;
                 _profileImage.Image = UIImage.FromBundle("letter_curved");
+                CustomUIExtensions.CornerView(_profileImage, 3);
             }
-
-            CustomUIExtensions.CornerView(_profileImage, 3);
 
             _backgroundImage.ContentMode = UIViewContentMode.ScaleToFill;
 
