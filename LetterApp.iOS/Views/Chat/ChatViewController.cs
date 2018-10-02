@@ -283,11 +283,13 @@ namespace LetterApp.iOS.Views.Chat
 
         private void Options(object sender, EventArgs e)
         {
+            _textView.ResignFirstResponder();
             ViewModel.OptionsCommand.Execute();
         }
 
         private void CallUser(object sender, EventArgs e)
         {
+            _textView.ResignFirstResponder();
             ViewModel.CallCommand.Execute();
         }
 

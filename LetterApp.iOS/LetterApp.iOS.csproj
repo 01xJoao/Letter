@@ -376,9 +376,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\options.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\options%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px.png" />
     <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%402x.png" />
@@ -395,6 +392,9 @@
     <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px.png" />
     <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -907,6 +907,7 @@
       <DependentUpon>ShowChatOptionsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\ChatOptionsSource.cs" />
+    <Compile Include="Helpers\AudioManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
@@ -928,10 +929,11 @@
     <BundleResource Include="Resources\load_white.json" />
     <BundleResource Include="Resources\message_received.mp3" />
     <BundleResource Include="Resources\message_sent.mp3" />
+    <BundleResource Include="Resources\ringingback.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Import Project="..\packages\Realm.Database.3.2.1\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.2.1\build\Realm.Database.targets')" />
   <Import Project="..\packages\Realm.3.2.1\build\Realm.targets" Condition="Exists('..\packages\Realm.3.2.1\build\Realm.targets')" />
-  <Import Project="..\packages\Fody.3.2.6\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.6\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.3.2.7\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.7\build\Fody.targets')" />
 </Project>

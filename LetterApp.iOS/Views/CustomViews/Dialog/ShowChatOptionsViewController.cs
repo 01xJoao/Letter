@@ -32,6 +32,9 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
         {
             base.ViewDidLoad();
 
+            _backgroundImage.Image?.Dispose();
+            _profileImage.Image?.Dispose();
+
             this.View.Alpha = 0.3f;
             this.View.BackgroundColor = Colors.Black30;
             _backgroundView.Layer.CornerRadius = 2f;

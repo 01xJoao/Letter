@@ -9,7 +9,6 @@ namespace LetterApp.iOS.Services
 {
     public class AudioService : IAudioService
     {
-        private AVAudioSession audioSession;
         private AVAudioPlayer receiveMessagePlayer;
         private AVAudioPlayer sentMessagePlayer;
 
@@ -18,10 +17,9 @@ namespace LetterApp.iOS.Services
             if (DeviceInfo.DeviceType != DeviceType.Physical)
                 return;
 
-            if (audioSession == null)
-                audioSession = AVAudioSession.SharedInstance();
+            var audioSession = AVAudioSession.SharedInstance();
 
-            audioSession.SetCategory(AVAudioSessionCategory.Playback);
+            audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
             audioSession.SetActive(true);
 
             if(receiveMessagePlayer == null)
@@ -36,10 +34,9 @@ namespace LetterApp.iOS.Services
             if (DeviceInfo.DeviceType != DeviceType.Physical)
                 return;
 
-            if (audioSession == null)
-                audioSession = AVAudioSession.SharedInstance();
+            var audioSession = AVAudioSession.SharedInstance();
 
-            audioSession.SetCategory(AVAudioSessionCategory.Playback);
+            audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
             audioSession.SetActive(true);
 
             if (sentMessagePlayer == null)
