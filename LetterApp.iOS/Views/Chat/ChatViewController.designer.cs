@@ -22,6 +22,9 @@ namespace LetterApp.iOS.Views.Chat
 		UIKit.UIButton _button3 { get; set; }
 
 		[Outlet]
+		UIKit.UIView _fakeAreaView { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView _imageView1 { get; set; }
 
 		[Outlet]
@@ -148,6 +151,11 @@ namespace LetterApp.iOS.Views.Chat
 			if (_textView != null) {
 				_textView.Dispose ();
 				_textView = null;
+			}
+
+			if (_fakeAreaView != null) {
+				_fakeAreaView.Dispose ();
+				_fakeAreaView = null;
 			}
 		}
 	}

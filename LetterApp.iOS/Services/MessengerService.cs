@@ -146,6 +146,13 @@ namespace LetterApp.iOS.Services
             var tcs = new TaskCompletionSource<GroupChannel>();
 
             GroupChannelListQuery filteredQuery = GroupChannel.CreateMyGroupChannelListQuery();
+
+            if(filteredQuery == null)
+            {
+                tcs.TrySetCanceled();
+                return tcs.Task;
+            }
+
             filteredQuery.SetUserIdsExactFilter(new List<string> { userId });
             filteredQuery.Next((List<GroupChannel> queryResult, SendBirdException e) =>
             {

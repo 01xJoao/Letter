@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,6 +14,7 @@
                 <outlet property="_button1" destination="kB0-3X-LuZ" id="a0b-2N-38z"/>
                 <outlet property="_button2" destination="Clf-KJ-Ejz" id="qCP-0Y-UUf"/>
                 <outlet property="_button3" destination="n1U-74-bJm" id="6ao-R2-T3u"/>
+                <outlet property="_fakeAreaView" destination="M9G-G9-Dvw" id="MhQ-nI-AEl"/>
                 <outlet property="_imageView1" destination="fGE-fd-oY9" id="KE6-j0-bj6"/>
                 <outlet property="_imageView2" destination="dad-Qr-hoN" id="hqC-c5-FDa"/>
                 <outlet property="_imageView3" destination="fXo-Bc-Nnj" id="x1Y-ju-KFY"/>
@@ -47,6 +48,10 @@
                     <rect key="frame" x="0.0" y="17" width="375" height="565"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M9G-G9-Dvw">
+                    <rect key="frame" x="0.0" y="582" width="375" height="85"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j8W-8D-snE">
                     <rect key="frame" x="0.0" y="582" width="375" height="85"/>
                     <subviews>
@@ -83,10 +88,10 @@
                             <rect key="frame" x="299.5" y="48.5" width="55.5" height="27"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wbx-Hy-FNn">
-                                    <rect key="frame" x="-5.5" y="-3.5" width="65.5" height="33"/>
+                                    <rect key="frame" x="-5" y="-3" width="65.5" height="33"/>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PnG-O4-yrI">
-                                    <rect key="frame" x="10" y="-0.5" width="35.5" height="27"/>
+                                    <rect key="frame" x="10" y="0.0" width="35.5" height="27"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -151,16 +156,21 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="M9G-G9-Dvw" firstAttribute="top" secondItem="j8W-8D-snE" secondAttribute="top" id="1bB-hu-qAV"/>
                 <constraint firstItem="Uyp-M0-Pt9" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="2qk-bT-X09"/>
                 <constraint firstAttribute="trailing" secondItem="Uyp-M0-Pt9" secondAttribute="trailing" id="3PC-Ny-H2d"/>
                 <constraint firstAttribute="trailing" secondItem="GCC-y4-T5W" secondAttribute="trailing" id="4sX-Wr-hCZ"/>
                 <constraint firstItem="Uyp-M0-Pt9" firstAttribute="top" secondItem="2" secondAttribute="top" id="76t-1b-E80"/>
                 <constraint firstAttribute="bottom" secondItem="GCC-y4-T5W" secondAttribute="bottom" constant="85" id="I9s-xy-ary"/>
+                <constraint firstItem="M9G-G9-Dvw" firstAttribute="centerX" secondItem="j8W-8D-snE" secondAttribute="centerX" id="KFf-Id-tWT"/>
                 <constraint firstAttribute="trailing" secondItem="j8W-8D-snE" secondAttribute="trailing" id="M0T-3N-iR4"/>
+                <constraint firstItem="M9G-G9-Dvw" firstAttribute="centerY" secondItem="j8W-8D-snE" secondAttribute="centerY" id="NMh-2V-NgD"/>
                 <constraint firstItem="j8W-8D-snE" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="QkJ-TW-X9T"/>
                 <constraint firstItem="GCC-y4-T5W" firstAttribute="top" secondItem="Uyp-M0-Pt9" secondAttribute="bottom" id="eBu-fg-CG4"/>
+                <constraint firstAttribute="bottom" secondItem="M9G-G9-Dvw" secondAttribute="bottom" id="kHu-6L-I5d"/>
                 <constraint firstItem="GCC-y4-T5W" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="mof-mh-xyc"/>
                 <constraint firstAttribute="bottom" secondItem="j8W-8D-snE" secondAttribute="bottom" id="nrF-86-OQ5"/>
+                <constraint firstItem="M9G-G9-Dvw" firstAttribute="width" secondItem="j8W-8D-snE" secondAttribute="width" id="psm-1e-9S0"/>
             </constraints>
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>

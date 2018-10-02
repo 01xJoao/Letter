@@ -19,6 +19,7 @@ namespace LetterApp.iOS.Views.Chat
         public override bool HandlesKeyboardNotifications => true;
         public override bool DismissKeyboardOnTap => false;
 
+        private nfloat _keyboardBottomHeight = PhoneModelExtensions.IsIphoneX() ? UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom : 0;
         private UILabel _statusLabel;
         private UITapGestureRecognizer _tableViewTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
         private UIScrollView _tableScrollView;
@@ -87,6 +88,8 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.SectionFooterHeight = 0;
             _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f));
 
+            _keyboardViewBottomConstraint.Constant = _keyboardBottomHeight;
+
             _statusLabel = new UILabel(new CGRect(0, 5, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
             UILabelExtensions.SetupLabelAppearance(_statusLabel, string.Empty, Colors.GrayLabel, 10f);
             _tableView.TableFooterView = new UIView {BackgroundColor = UIColor.Clear};
@@ -107,6 +110,7 @@ namespace LetterApp.iOS.Views.Chat
             _imageView3.Image = UIImage.FromBundle("photo_picker");
 
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
+            _fakeAreaView.BackgroundColor = Colors.KeyboardView;
 
             _textView.EnablesReturnKeyAutomatically = true;
             _textView.TextContainerInset = new UIEdgeInsets(10, 10, 10, 10);
@@ -182,7 +186,7 @@ namespace LetterApp.iOS.Views.Chat
 
         private void AnimateTableView(bool showKeyboard)
         {
-            _keyboardViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight : 0;
+            _keyboardViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight : _keyboardBottomHeight;
             _tableViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight + _keyboardAreaView.Frame.Height : _keyboardAreaView.Frame.Height;
             UIView.Animate(0.3f, this.View.LayoutIfNeeded);
             ScrollToLastRow();
