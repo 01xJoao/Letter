@@ -163,8 +163,8 @@ namespace LetterApp.Core.ViewModels
                 MemberEmail = _user.Email,
                 MemberMuted = _userChat != null && _userChat.IsMemberMuted,
                 MemberSeenMyLastMessage = _userChat != null && _userChat.MemberSeenMyLastMessage,
-                MemberPresence = Connectivity.NetworkAccess == NetworkAccess.Internet ? (MemberPresence)_userChat.MemberPresence : MemberPresence.Offline,
-                Messages = _chatMessages,
+                MemberPresence = Connectivity.NetworkAccess == NetworkAccess.Internet && _userChat != null ? (MemberPresence)_userChat.MemberPresence : MemberPresence.Offline,
+                Messages = _chatMessages ?? new List<ChatMessagesModel>(),
                 MessageEvent = MessageClickEvent
             };
 
@@ -245,7 +245,10 @@ namespace LetterApp.Core.ViewModels
 
             MessagesLogic(_messagesModel);
 
-            bool shouldUpdate = _chat.Messages?.Last().MessageId != _chatMessages?.Last()?.MessageId;
+            bool shouldUpdate = false;
+
+            if(_chat.Messages?.Count > 0 && _chatMessages?.Count > 0)
+                shouldUpdate = _chat.Messages.Last().MessageId != _chatMessages.Last().MessageId;
 
             _chat.Messages = _chatMessages;
 
@@ -669,7 +672,7 @@ namespace LetterApp.Core.ViewModels
             try
             {
                 string[] resources = { SeeUserProfile, SendEmail, UserMuted, ArchiveChat, Close };
-                var options = await _dialogService.ShowChatOptions(MemberName, _userChat.MemberPhoto, _userChat.IsMemberMuted, resources);
+                var options = await _dialogService.ShowChatOptions(MemberName, _chat.MemberPhoto, _chat.MemberMuted, resources);
 
                 _chat.MemberMuted = options.Item2;
 
