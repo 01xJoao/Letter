@@ -337,6 +337,7 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallEnded()
         {
+            _agoraKit?.StopAllEffects();
             _agoraKit?.LeaveChannel(AgoraLeftChannelCompleted);
         }
 
