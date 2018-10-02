@@ -247,8 +247,10 @@ namespace LetterApp.Core.ViewModels
 
             bool shouldUpdate = false;
 
-            if(_chat.Messages?.Count > 0 && _chatMessages?.Count > 0)
+            if (_chat.Messages?.Count > 0 && _chatMessages?.Count > 0)
                 shouldUpdate = _chat.Messages.Last().MessageId != _chatMessages.Last().MessageId;
+            else
+                shouldUpdate = true;
 
             _chat.Messages = _chatMessages;
 

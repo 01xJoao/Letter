@@ -113,23 +113,25 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 _users = Realm.All<GetUsersInDivisionModel>().ToList();
 
-                if (_users.Count == 0)
+                if (_users == null || _users.Count == 0)
                 {
                     var result = await _contactsService.GetUsersFromAllDivisions();
 
                     if (result == null && result.Count == 0)
                         return;
 
-                    foreach (var res in result)
-                    {
-                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
-                        var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
-                        string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
-                        stringSearch = StringUtils.NormalizeString(stringSearch);
-                        res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
+                    Realm.Write(() => {
+                        foreach (var res in result)
+                        {
+                            res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                            var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                            string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+                            stringSearch = StringUtils.NormalizeString(stringSearch);
+                            res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
 
-                        Realm.Write(() => { Realm.Add(res, true); });
-                    }
+                            Realm.Add(res, true); 
+                        }
+                    });
 
                     _users = Realm.All<GetUsersInDivisionModel>().ToList();
                 }
@@ -146,18 +148,23 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 var msg = message as UserMessage;
 
+                int msgUserId = StringUtils.GetUserId(msg.Sender.UserId);
+
                 DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data).ToLocalTime() : DateTime.Now;
 
-                var userChatModel = _chatUserModel.Find(x => x.MemberId == StringUtils.GetUserId(msg.Sender.UserId));
+                var userChatModel = _chatUserModel?.Find(x => x.MemberId == msgUserId);
 
                 if (userChatModel == null)
                 {
-                    var res = _users.Find(x => x.UserId == StringUtils.GetUserId(msg.Sender.UserId));
+                    var res = _users?.Find(x => x.UserId == msgUserId);
 
                     if (res == null)
                     {
                         await GetUsers();
-                        var result = _users.Find(x => x.UserId == StringUtils.GetUserId(msg.Sender.UserId));
+                        var result = _users?.Find(x => x.UserId == msgUserId);
+
+                        if (result == null)
+                            return;
 
                         userChatModel = new ChatListUserModel
                         {

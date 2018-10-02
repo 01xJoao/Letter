@@ -150,16 +150,18 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     if (result == null && result.Count == 0)
                         return;
 
-                    foreach (var res in result)
-                    {
-                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
-                        var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
-                        string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
-                        stringSearch = StringUtils.NormalizeString(stringSearch);
-                        res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
+                    Realm.Write(() => {
+                        foreach (var res in result)
+                        {
+                            res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                            var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                            string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+                            stringSearch = StringUtils.NormalizeString(stringSearch);
+                            res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
 
-                        Realm.Write(() => { Realm.Add(res, true); });
-                    }
+                            Realm.Add(res, true);
+                        }
+                    });
 
                     _users = Realm.All<GetUsersInDivisionModel>().ToList();
                 }
