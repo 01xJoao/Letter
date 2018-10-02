@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -22,14 +21,12 @@ namespace LetterApp.iOS.Views.Call
     public partial class CallViewController : XViewController<CallViewModel>
     {
         public override bool ShowAsPresentView => true;
+        public AgoraRtcDelegate AgoraDelegate { get; set; }
 
         private string _backgroundImg;
         private ActiveCall _activeCall;
-
         private int _callTime;
         private Timer _callTimer = new Timer(1000);
-
-        public AgoraRtcDelegate AgoraDelegate { get; set; }
 
         private ProviderDelegate CallProvider
         {
@@ -200,14 +197,14 @@ namespace LetterApp.iOS.Views.Call
 
         public void JoinCompleted()
         {
-            if(ViewModel.StartedCall)
-                PlayAudio("ringback.wav", 100);
+            //if(ViewModel.StartedCall)
+                //PlayAudio("ringback.wav", 100);
         }
 
         public async Task DidEnterRoom()
         {
-            if (ViewModel.StartedCall)
-                players.LastOrDefault()?.Stop();
+            //if (ViewModel.StartedCall)
+                //players.LastOrDefault()?.Stop();
 
             _callTimer.Start();
 
@@ -230,7 +227,7 @@ namespace LetterApp.iOS.Views.Call
 
         public override void ViewWillDisappear(bool animated)
         {
-            players.LastOrDefault()?.Stop();
+            //players.LastOrDefault()?.Stop();
             PlayAudio("EndCallSound.wav", 0);
             _callTimer.Stop();
 
@@ -279,19 +276,15 @@ namespace LetterApp.iOS.Views.Call
         {
             NSUrl url = NSUrl.FromFilename(fileName);
             AVAudioPlayer player = AVAudioPlayer.FromUrl(url);
-            player.NumberOfLoops = loops;
+            player.NumberOfLoops = 0;
             player.Volume = 1;
 
             if (players.Count == 1)
                 players.Dequeue().Dispose();
 
             players.Enqueue(player);
-            player.Play();
-        }
 
-        string PathForSound(string soundName)
-        {
-            return Path.Combine(NSBundle.MainBundle.ResourcePath, soundName);
+            player.Play();
         }
 
         #endregion

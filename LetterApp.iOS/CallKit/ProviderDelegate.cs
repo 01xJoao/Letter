@@ -308,14 +308,20 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.SetChannelProfile(ChannelProfile.Communication);
             _agoraKit.SetEnableSpeakerphone(speaker);
             _agoraKit.MuteLocalAudioStream(muted);
+            _agoraKit.SetAudioProfile(AudioProfile.MusicHighQualityStereo, AudioScenario.GameStreaming);
+            _agoraKit.EnableExternalAudioSourceWithSampleRate(48, 2);
+            _agoraKit.SetEffectsVolume(100);
+            _agoraKit.PlayEffect(0, PathForSound("ringback.wav"), 100, 1, 0, 100);
+
             _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0,(arg1, arg2, arg3) => {
-                _callViewController.JoinCompleted();
-                
+                _callViewController.JoinCompleted(); 
             });
         }
 
         public void AgoraCallStarted()
         {
+            _agoraKit?.StopAllEffects();
+
             var call = CallManager.Calls.LastOrDefault();
 
             if (call == null)
