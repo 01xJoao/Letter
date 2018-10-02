@@ -906,6 +906,7 @@
     <Compile Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.designer.cs">
       <DependentUpon>ShowChatOptionsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sources\ChatOptionsSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

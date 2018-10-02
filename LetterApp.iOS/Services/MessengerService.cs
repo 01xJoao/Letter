@@ -179,6 +179,12 @@ namespace LetterApp.iOS.Services
         {
             var tcs = new TaskCompletionSource<List<User>>();
 
+            if (channel == null)
+            {
+                tcs.TrySetCanceled();
+                return tcs.Task;
+            }
+
             channel.Refresh((e) =>
             {
                 if (e != null)
@@ -196,6 +202,12 @@ namespace LetterApp.iOS.Services
         {
             var tcs = new TaskCompletionSource<UserMessage>();
 
+            if (channel == null)
+            {
+                tcs.TrySetCanceled();
+                return tcs.Task;
+            }
+
             channel.SendUserMessage(message, dateTime, (msg, e) =>
             {
                 if (e != null)
@@ -210,6 +222,12 @@ namespace LetterApp.iOS.Services
         public Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery)
         {
             var tcs = new TaskCompletionSource<List<BaseMessage>>();
+
+            if (channelQuery == null)
+            {
+                tcs.TrySetCanceled();
+                return tcs.Task;
+            }
 
             channelQuery.Load(30, true, (List<BaseMessage> queryResult, SendBirdException e) => {
                 if (e != null)

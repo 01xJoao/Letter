@@ -668,19 +668,33 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
-                string[] resources = {SeeUserProfile, UserMuted, ArchiveChat, SendEmail};
-                var options = await _dialogService.ShowChatOptions(_userChat.MemberName, _userChat.MemberPhoto, _user.Email, _userChat.IsMemberMuted, resources);
+                string[] resources = { SeeUserProfile, SendEmail, UserMuted, ArchiveChat, Close };
+                var options = await _dialogService.ShowChatOptions(MemberName, _userChat.MemberPhoto, _userChat.IsMemberMuted, resources);
+
+                _chat.MemberMuted = options.Item2;
+
+                switch (options.Item1)
+                {
+                    case ChatOptions.SeeProfile:
+                        await NavigationService.NavigateAsync<MemberViewModel, int>(_userId);
+                        break;
+                    case ChatOptions.SendEmail:
+                        await EmailUtils.SendEmail(_chat.MemberEmail);
+                        break;
+                    case ChatOptions.ArchiveChat:
+                        _chat.MemberArchived = true;
+                        CloseView();
+                        break;
+                }
+
             }
             catch (Exception ex)
             {
-
+                Ui.Handle(ex as dynamic);
             }
         }
 
-        private async Task CloseView()
-        {
-            await NavigationService.Close(this);
-        }
+        private async Task CloseView() => await NavigationService.Close(this);
 
         private void ViewWillClose()
         {
@@ -742,6 +756,7 @@ namespace LetterApp.Core.ViewModels
         private string UserMuted => L10N.Localize("Chat_UserMuted");
         private string ArchiveChat => L10N.Localize("Chat_Archive");
         private string SendEmail => L10N.Localize("Division_SendEmail");
+        private string Close => L10N.Localize("Chat_Close");
 
         private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string TitleDialog => L10N.Localize("ContactDialog_Title");

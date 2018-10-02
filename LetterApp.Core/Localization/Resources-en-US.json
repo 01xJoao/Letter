@@ -930,5 +930,9 @@
   {
     "key": "Chat_UserProfile",
     "translated": "See user profile"
+  },
+  {
+    "key": "Chat_Close",
+    "translated": "Close"
   }
 ]

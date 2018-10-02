@@ -34,9 +34,7 @@ namespace LetterApp.iOS
 
         private static void StatusBarColor(bool hasInternet)
         {
-            var statusBar = UIApplication.SharedApplication?.ValueForKey((NSString)"statusBarWindow")?.ValueForKey((NSString)"statusBar") as UIView;
-
-            if(statusBar != null)
+            if (UIApplication.SharedApplication?.ValueForKey((NSString)"statusBarWindow")?.ValueForKey((NSString)"statusBar") is UIView statusBar)
             {
                 if (!hasInternet)
                     statusBar.BackgroundColor = Colors.Red;

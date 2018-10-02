@@ -31,11 +31,11 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<Tuple<ChatOptions, bool>> ShowChatOptions(string name = "", string photo = "", string email = "", bool muted = false, string[] resources = null)
+        public Task<Tuple<ChatOptions, bool>> ShowChatOptions(string name = "", string photo = "", bool muted = false, string[] resources = null)
         {
             var tcs = new TaskCompletionSource<Tuple<ChatOptions, bool>>();
 
-            var chatOptionsView = new ShowChatOptionsViewController(name, photo, email, muted, resources, val => tcs.TrySetResult(val));
+            var chatOptionsView = new ShowChatOptionsViewController(name, photo, muted, resources, val => tcs.TrySetResult(val));
             chatOptionsView.Show();
 
             return tcs.Task;
