@@ -72,7 +72,7 @@ namespace LetterApp.iOS.Sources
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            float cellHeight = 6;
+            float cellHeight = 2;
             int messageIndex = indexPath.Row;
 
             var message = _chat.Messages[messageIndex];
@@ -81,7 +81,7 @@ namespace LetterApp.iOS.Sources
 
             var paragraphStyle = new NSMutableParagraphStyle
             {
-                LineSpacing = 2,
+                LineSpacing = 2f,
                 MinimumLineHeight = UIFont.SystemFontOfSize(14).LineHeight,
                 MaximumLineHeight = UIFont.SystemFontOfSize(14).LineHeight
             };
@@ -89,13 +89,10 @@ namespace LetterApp.iOS.Sources
             var attributes = new UIStringAttributes { Font = UIFont.SystemFontOfSize(14), ParagraphStyle = paragraphStyle };
             var estimatedFrame = new NSString(message.MessageData).GetBoundingRect(size, NSStringDrawingOptions.UsesLineFragmentOrigin, attributes, null);
 
-            if (estimatedFrame.Height < 20)
-                cellHeight -= 2f;
-
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 13.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
+                    cellHeight += 18.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
                     break;
             }
 
