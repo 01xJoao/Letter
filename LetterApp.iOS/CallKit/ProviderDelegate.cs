@@ -310,12 +310,7 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.MuteLocalAudioStream(muted);
 
             if (startedCall)
-            {
-                _agoraKit.SetAudioProfile(AudioProfile.MusicHighQualityStereo, AudioScenario.GameStreaming);
-                _agoraKit.EnableExternalAudioSourceWithSampleRate(48, 2);
-                _agoraKit.SetEffectsVolume(100);
                 _agoraKit.PlayEffect(0, PathForSound("ringback.wav"), 100, 1, 0, 100);
-            }
 
             _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0,(arg1, arg2, arg3) => {
                 _callViewController.JoinCompleted(); 
@@ -324,14 +319,17 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallStarted()
         {
-            _agoraKit?.StopEffect(0);
-            
-            //_agoraKit.SetAudioProfile(AudioProfile.Default, AudioScenario.Default);
-
             var call = CallManager.Calls.LastOrDefault();
 
             if (call == null)
                 return;
+
+            _agoraKit.SetInEarMonitoringVolume(100);
+            _agoraKit.SetAudioProfile(AudioProfile.Default, AudioScenario.ChatRoomEntertainment);
+            _agoraKit.EnableAudio();
+
+            if(call.IsOutgoing)
+                _agoraKit?.StopEffect(0);
 
             call.AnswerCall();
 

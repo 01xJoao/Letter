@@ -43,9 +43,11 @@ namespace LetterApp.iOS.Views.Call
         {
             base.ViewDidLoad();
 
-            //var audioSession = AVAudioSession.SharedInstance();
-            //audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
-            //audioSession.SetActive(true);
+            using (var audioSession = AVAudioSession.SharedInstance() as AVAudioSession)
+            {
+                audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+                audioSession.SetActive(false);
+            }
 
             this.View.BackgroundColor = Colors.Black;
 
