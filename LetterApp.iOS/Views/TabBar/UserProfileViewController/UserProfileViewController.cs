@@ -62,8 +62,12 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -71,7 +75,8 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
 
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+            if (_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
         }
 
         [Export("gestureRecognizerShouldBegin:")]

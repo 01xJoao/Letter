@@ -476,8 +476,11 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             if (ViewModel.IsPresentingCustomView != ContactListViewModel.ContactsType.All)
                 UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
 
-            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -496,7 +499,8 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
 
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+            if(_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
         }
 
 

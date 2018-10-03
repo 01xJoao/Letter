@@ -151,8 +151,11 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
                 }
             }
 
-            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -160,7 +163,8 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
 
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+            if (_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
         }
 
         IUIGestureRecognizerDelegate _navigationGesture;

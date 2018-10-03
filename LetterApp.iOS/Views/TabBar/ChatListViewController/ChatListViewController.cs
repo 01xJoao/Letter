@@ -238,8 +238,11 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
             HasChats(ViewModel?.ChatList?.Count > 0);
 
-            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -247,7 +250,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
 
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+            if (_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
         }
 
         IUIGestureRecognizerDelegate _navigationGesture;
