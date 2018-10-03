@@ -308,8 +308,8 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.SetChannelProfile(ChannelProfile.Communication);
             _agoraKit.SetEnableSpeakerphone(speaker);
             _agoraKit.MuteLocalAudioStream(muted);
-            _agoraKit.SetAudioProfile(AudioProfile.MusicHighQualityStereo, AudioScenario.GameStreaming);
-            _agoraKit.EnableExternalAudioSourceWithSampleRate(48, 2);
+            //_agoraKit.SetAudioProfile(AudioProfile.MusicHighQualityStereo, AudioScenario.GameStreaming);
+            //_agoraKit.EnableExternalAudioSourceWithSampleRate(48, 2);
             _agoraKit.SetEffectsVolume(100);
             _agoraKit.PlayEffect(0, PathForSound("ringback.wav"), 100, 1, 0, 100);
 

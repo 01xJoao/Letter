@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using CoreGraphics;
+using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.iOS.Helpers;
@@ -149,12 +150,25 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
                     }
                 }
             }
+
+            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
+
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+        }
+
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }

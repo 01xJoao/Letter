@@ -100,6 +100,12 @@ namespace LetterApp.iOS.Views.Member
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            this.NavigationController.SetNavigationBarHidden(true, true);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
             this.NavigationController.SetNavigationBarHidden(false, false);
             this.NavigationController.NavigationBar.Hidden = true;
         }
@@ -107,9 +113,7 @@ namespace LetterApp.iOS.Views.Member
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-
             this.NavigationController.SetNavigationBarHidden(true, false);
-            this.NavigationController.NavigationBar.Hidden = false;
         }
 
         public override void ViewDidDisappear(bool animated)

@@ -110,7 +110,7 @@ namespace LetterApp.iOS.Views.Division
 
             if (this.IsMovingFromParentViewController)
             {
-                this.NavigationController.SetNavigationBarHidden(true, true);
+                this.NavigationController?.SetNavigationBarHidden(true, true);
             }
         }
 

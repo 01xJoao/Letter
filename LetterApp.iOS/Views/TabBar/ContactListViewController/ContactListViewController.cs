@@ -14,7 +14,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 {
-    public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating
+    public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating, IUIGestureRecognizerDelegate
     {
         public override bool ShowAsPresentView => true;
 
@@ -475,6 +475,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             if (ViewModel.IsPresentingCustomView != ContactListViewModel.ContactsType.All)
                 UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
+
+            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -492,6 +495,17 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             {
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
+
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+        }
+
+
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }

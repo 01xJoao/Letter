@@ -148,9 +148,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 var msg = message as UserMessage;
 
+                if (msg == null)
+                    return;
+
                 int msgUserId = StringUtils.GetUserId(msg.Sender.UserId);
 
-                DateTime lastMessageDate = !string.IsNullOrEmpty(msg?.Data) ? DateTime.Parse(msg.Data).ToLocalTime() : DateTime.Now;
+                DateTime lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(msg.CreatedAt.ToString())).ToLocalTime();
 
                 var userChatModel = _chatUserModel?.Find(x => x.MemberId == msgUserId);
 
@@ -305,20 +308,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 continue;
 
                             var lastMessage = channel.LastMessage as UserMessage;
-                            DateTime lastMessageDate = !string.IsNullOrEmpty(lastMessage.Data) ? DateTime.Parse(lastMessage.Data).ToLocalTime() : DateTime.Now;
+                            var lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(lastMessage.CreatedAt.ToString())).ToLocalTime();
                             long userLastSeen = DateTime.Now.AddMilliseconds(-user.LastSeenAt).Ticks;
-                            var newMessage = lastMessage.Sender.UserId != _thisUserFinalId && !channel.GetReadMembers(channel.LastMessage).Any(x => x.UserId == _thisUserFinalId);
-
-                            //if (userInModel != null)
-                            //{
-                            //    lastSeenTime = userInModel.MemberPresenceConnectionDate >= user.LastSeenAt && userInModel.MemberPresenceConnectionDate <= lastMessageDate.Ticks
-                            //        ? lastMessageDate.Ticks
-                            //        : userInModel.MemberPresenceConnectionDate >= user.LastSeenAt ? userInModel.MemberPresenceConnectionDate : user.LastSeenAt;
-                            //}
-                            //else
-                            //lastSeenTime = default(DateTime).Ticks;
-
-                            //var userLastSeen = user.ConnectionStatus == User.UserConnectionStatus.ONLINE || user.LastSeenAt == 0 ? DateTime.Now.Ticks : lastSeenTime;
 
                             var usr = new ChatListUserModel
                             {
@@ -326,14 +317,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 MemberName = $"{userInDB.FirstName} {userInDB.LastName} - {userInDB.Position}",
                                 MemberPhoto = userInDB.Picture,
                                 IsMemberMuted = userInModel != null && userInModel.IsMemberMuted,
-                                IsNewMessage = newMessage,
+                                IsNewMessage = channel.UnreadMessageCount > 0,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = userLastSeen,
                                 LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
                                 IsArchived = userInModel != null && (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
                                 ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0,
-                                UnreadMessagesCount = newMessage ? channel.UnreadMessageCount : 0,
+                                UnreadMessagesCount = channel.UnreadMessageCount,
                             };
 
                             if (userInModel != null)

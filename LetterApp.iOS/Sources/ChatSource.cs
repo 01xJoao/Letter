@@ -30,6 +30,9 @@ namespace LetterApp.iOS.Sources
 
             var cell = new UITableViewCell();
 
+            if (_chat.Messages.Count == messageIndex)
+                return cell;
+
             switch (_chat.Messages[messageIndex].PresentMessage)
             {
                 case PresentMessageType.UserText:

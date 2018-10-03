@@ -10,6 +10,7 @@ using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
+using LetterApp.iOS.Views.Member;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Chat
@@ -216,7 +217,8 @@ namespace LetterApp.iOS.Views.Chat
                 _placeholderLabel.Hidden = true;
                 ViewModel.TypingCommand.Execute(true);
             }
-            else if (string.IsNullOrEmpty(textView.Text) || textView.Text == Environment.NewLine) {
+
+            if (string.IsNullOrEmpty(textView.Text) || textView.Text == Environment.NewLine || string.IsNullOrWhiteSpace(textView.Text)) {
                 DefaultKeyboard();
             }
 
@@ -404,8 +406,8 @@ namespace LetterApp.iOS.Views.Chat
             ViewModel.ViewWillCloseCommand.Execute();
 
             if (this.IsMovingFromParentViewController)
-            {   
-                if(this.NavigationController.VisibleViewController is RootViewController)
+            {
+                if (NavigationController.VisibleViewController is RootViewController)
                     this.NavigationController.SetNavigationBarHidden(true, true);
             }
         }

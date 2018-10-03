@@ -170,6 +170,8 @@ namespace LetterApp.Core.ViewModels
 
             _chat = chat;
 
+            StatusLogic();
+
             LoadMessagesAndUpdateReadReceipt(true);
         }
 
@@ -202,7 +204,7 @@ namespace LetterApp.Core.ViewModels
                                 MessageType = 0,
                                 MessageData = msg.Message,
                                 MessageSenderId = msg.Sender.UserId,
-                                MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks
+                                MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(message.CreatedAt.ToString())).ToLocalTime().Ticks
                             };
 
                             _messagesModel.Add(newMessage);
@@ -218,7 +220,7 @@ namespace LetterApp.Core.ViewModels
                                 MessageType = mensg.Type == "IMAGE" ? 1 : 2,
                                 MessageData = mensg.Url,
                                 MessageSenderId = mensg.Sender.UserId,
-                                MessageDateTicks = DateTime.Parse(mensg.Data).ToLocalTime().Ticks,
+                                MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(message.CreatedAt.ToString())).ToLocalTime().Ticks,
                                 CustomData = mensg.Name
                             };
 
@@ -402,7 +404,7 @@ namespace LetterApp.Core.ViewModels
                         MessageData = result.Message,
                         MessageType = (int)message.Item2,
                         MessageSenderId = result.Sender.UserId,
-                        MessageDateTicks = DateTime.Parse(result.Data).ToLocalTime().Ticks
+                        MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(result.CreatedAt.ToString())).ToLocalTime().Ticks
                     };
 
                     if (_messagesModel == null)
@@ -495,6 +497,8 @@ namespace LetterApp.Core.ViewModels
 
             _messengerService.MarkMessageAsRead(_channel);
 
+            StatusLogic();
+
             if (loadMessages)
                 await LoadRecentMessages();
         }
@@ -572,7 +576,7 @@ namespace LetterApp.Core.ViewModels
                     newMessage.MessageType = 0;
                     newMessage.MessageData = msg.Message;
                     newMessage.MessageSenderId = msg.Sender.UserId;
-                    newMessage.MessageDateTicks = DateTime.Parse(msg.Data).ToLocalTime().Ticks;
+                    newMessage.MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(msg.CreatedAt.ToString())).ToLocalTime().Ticks;
                 }
 
                 MessagesLogic(new List<MessagesModel> { newMessage }, true);
@@ -605,15 +609,28 @@ namespace LetterApp.Core.ViewModels
 
         private void StatusLogic()
         {
-            if (_status != TypingMessage)
+            if (_chat.Messages?.Count > 0)
             {
-                if (_chat.Messages.Last().MessageSenderId == _finalUserId)
-                    _status = _channel.GetReadReceipt(_channel.LastMessage) <= 0 ? SeenMessage : string.Empty;
-                else
-                    _status = string.Empty;
-            }
+                if (_channel == null)
+                {
+                    _status = _chat.Messages.Last().MessageSenderId == _finalUserId && _chat.MemberSeenMyLastMessage ? SeenMessage : string.Empty;
+                }
+                else if (_status != TypingMessage && _channel != null)
+                {
+                    if (_chat.Messages.Last().MessageSenderId == _finalUserId)
+                    {
+                        _status = _channel.GetReadReceipt(_channel.LastMessage) <= 0 ? SeenMessage : string.Empty;
+                        _chat.MemberSeenMyLastMessage = true;
+                    }
+                    else
+                    {
+                        _chat.MemberSeenMyLastMessage = false;
+                        _status = string.Empty;
+                    }
+                }
 
-            RaisePropertyChanged(nameof(Status));
+                RaisePropertyChanged(nameof(Status));
+            }
         }
 
         #endregion
@@ -730,9 +747,14 @@ namespace LetterApp.Core.ViewModels
                         MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
                     };
 
-                    var historyMessages = _messagesModel?.Skip(Math.Max(0, _messagesModel.Count() - 30)) ?? _userChat?.MessagesList?.Skip(Math.Max(0, _userChat.MessagesList.Count() - 30));
+                    List<MessagesModel> historyMessages;
 
-                    foreach (var msg in historyMessages)
+                    if (_messagesModel?.Count > 0)
+                        historyMessages = _messagesModel?.Skip(Math.Max(0, _messagesModel.Count() - 30)).ToList();
+                    else
+                        historyMessages = _userChat?.MessagesList?.Skip(Math.Max(0, _userChat.MessagesList.Count() - 30)).ToList();
+
+                    foreach (var msg in historyMessages.ToList())
                         userChat.MessagesList.Add(msg);
 
                     Realm.Add(userChat, true);

@@ -181,7 +181,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
-            ViewModel.SearchChatCommand.Execute(searchController.SearchBar.Text);
+            ViewModel.SearchChatCommand.Execute(searchController.SearchBar.Text?.ToLower());
         }
 
         private void OnSearchBar_CancelButtonClicked(object sender, EventArgs e)
@@ -219,12 +219,25 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             }
 
             HasChats(ViewModel?.ChatList?.Count > 0);
+
+            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
+
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+        }
+
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }
