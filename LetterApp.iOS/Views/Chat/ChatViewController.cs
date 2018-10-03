@@ -135,12 +135,10 @@ namespace LetterApp.iOS.Views.Chat
         private void AddStatusInTableView()
         {
             _tableView.SectionFooterHeight = 0;
-            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f));
-
-            _statusLabel = new UILabel(new CGRect(0, 5, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
+            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f)) { BackgroundColor = UIColor.Clear };
+            _statusLabel = new UILabel(new CGRect(0, 2, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
             UILabelExtensions.SetupLabelAppearance(_statusLabel, string.Empty, Colors.GrayLabel, 10f);
-            _tableView.TableFooterView = new UIView { BackgroundColor = UIColor.Clear };
-            _tableView.TableFooterView.AddSubview(_statusLabel);
+            _tableView.TableFooterView?.AddSubview(_statusLabel);
         }
 
         private void UpdateTableView()

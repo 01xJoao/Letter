@@ -25,11 +25,6 @@ namespace LetterApp.iOS.Services
                 volume = audioSession.OutputVolume;
             }
 
-            //var audioSession = AVAudioSession.SharedInstance();
-
-            //audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
-            //audioSession.SetActive(true);
-
             if (receiveMessagePlayer == null)
                 receiveMessagePlayer = new AVAudioPlayer(new NSUrl("/System/Library/Audio/UISounds/ReceivedMessage.caf"), "caf", out NSError err);
 
@@ -42,15 +37,18 @@ namespace LetterApp.iOS.Services
             if (DeviceInfo.DeviceType != DeviceType.Physical)
                 return;
 
-            var audioSession = AVAudioSession.SharedInstance();
-
-            audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
-            audioSession.SetActive(true);
+            float volume;
+            using (var audioSession = AVAudioSession.SharedInstance() as AVAudioSession)
+            {
+                audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
+                audioSession.SetActive(true);
+                volume = audioSession.OutputVolume;
+            }
 
             if (sentMessagePlayer == null)
                 sentMessagePlayer = new AVAudioPlayer(new NSUrl("/System/Library/Audio/UISounds/SentMessage.caf"), "caf", out NSError err);
 
-            sentMessagePlayer.Volume = audioSession.OutputVolume;
+            sentMessagePlayer.Volume = volume;
             sentMessagePlayer.Play();
         }
     }
