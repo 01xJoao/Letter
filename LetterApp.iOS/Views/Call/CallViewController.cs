@@ -43,6 +43,10 @@ namespace LetterApp.iOS.Views.Call
         {
             base.ViewDidLoad();
 
+            //var audioSession = AVAudioSession.SharedInstance();
+            //audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+            //audioSession.SetActive(true);
+
             this.View.BackgroundColor = Colors.Black;
 
             _speakerButton.TouchUpInside -= OnLeftButton_TouchUpInside;
@@ -146,7 +150,7 @@ namespace LetterApp.iOS.Views.Call
             UILabelExtensions.SetupLabelAppearance(_muteLabel, ViewModel.MuteLabel, Colors.White, 12f);
 
             AgoraDelegate = new AgoraRtcDelegate(this);
-            CallProvider.SetupAgoraIO(this, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn);
+            CallProvider.SetupAgoraIO(this, ViewModel.RoomName, ViewModel.SpeakerOn, ViewModel.MutedOn, ViewModel.StartedCall);
 
             _activeCall = ViewModel.StartedCall
                 ? CallProvider.CallManager.StartCall(ViewModel.MemberFullName, ViewModel.CallerId)

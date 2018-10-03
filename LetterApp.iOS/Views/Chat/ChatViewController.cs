@@ -86,15 +86,9 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.SectionHeaderHeight = 0;
             _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 0.1f));
 
-            _tableView.SectionFooterHeight = 0;
-            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f));
-
             _keyboardViewBottomConstraint.Constant = _keyboardBottomHeight;
 
-            _statusLabel = new UILabel(new CGRect(0, 5, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
-            UILabelExtensions.SetupLabelAppearance(_statusLabel, string.Empty, Colors.GrayLabel, 10f);
-            _tableView.TableFooterView = new UIView {BackgroundColor = UIColor.Clear};
-            _tableView.TableFooterView.AddSubview(_statusLabel);
+            AddStatusInTableView();
 
             _tableViewTapGesture.AddTarget(HandleTableDragGesture);
             _tableScrollView = _tableView as UIScrollView;
@@ -138,6 +132,17 @@ namespace LetterApp.iOS.Views.Chat
             _sendButton.TouchUpInside += OnSendButton_TouchUpInside;
         }
 
+        private void AddStatusInTableView()
+        {
+            _tableView.SectionFooterHeight = 0;
+            _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f));
+
+            _statusLabel = new UILabel(new CGRect(0, 5, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
+            UILabelExtensions.SetupLabelAppearance(_statusLabel, string.Empty, Colors.GrayLabel, 10f);
+            _tableView.TableFooterView = new UIView { BackgroundColor = UIColor.Clear };
+            _tableView.TableFooterView.AddSubview(_statusLabel);
+        }
+
         private void UpdateTableView()
         {
             Debug.WriteLine("DidEnterTableView");
@@ -162,7 +167,10 @@ namespace LetterApp.iOS.Views.Chat
         {
             Debug.WriteLine("STATUS:" + ViewModel.Status);
 
-            if (_tableView.TableFooterView.Subviews.Last() is UILabel label)
+            if(_tableView.TableFooterView?.Subviews == null || _tableView.TableFooterView.Subviews?.Count() == 0)
+                AddStatusInTableView();
+
+            if (_tableView.TableFooterView?.Subviews?.Last() is UILabel label)
                 label.Text = ViewModel.Status;
         }
 

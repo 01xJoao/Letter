@@ -17,15 +17,23 @@ namespace LetterApp.iOS.Services
             if (DeviceInfo.DeviceType != DeviceType.Physical)
                 return;
 
-            var audioSession = AVAudioSession.SharedInstance();
+            float volume;
+            using(var audioSession = AVAudioSession.SharedInstance() as AVAudioSession)
+            {
+                audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
+                audioSession.SetActive(true);
+                volume = audioSession.OutputVolume;
+            }
 
-            audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
-            audioSession.SetActive(true);
+            //var audioSession = AVAudioSession.SharedInstance();
 
-            if(receiveMessagePlayer == null)
+            //audioSession.SetCategory(AVAudioSessionCategory.SoloAmbient);
+            //audioSession.SetActive(true);
+
+            if (receiveMessagePlayer == null)
                 receiveMessagePlayer = new AVAudioPlayer(new NSUrl("/System/Library/Audio/UISounds/ReceivedMessage.caf"), "caf", out NSError err);
 
-            receiveMessagePlayer.Volume = audioSession.OutputVolume;
+            receiveMessagePlayer.Volume = volume;
             receiveMessagePlayer.Play();
         }
 

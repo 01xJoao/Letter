@@ -40,7 +40,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                     SetupTableView();
                     break;
                 case nameof(ViewModel.UpdateTableView):
-                    if(this.ViewIfLoaded?.Window != null)
+                    if(this.ViewIsVisible)
                         SetupTableView();
                     break;
                 case nameof(ViewModel.NoChats):
@@ -49,7 +49,8 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 case nameof(ViewModel.IsLoading):
                     LoadingAnimation(ViewModel.IsLoading);
                     break;
-                default:
+                case nameof(ViewModel.BadgeForChat):
+                    BadgeForChat();
                     break;
             }
         }
@@ -195,6 +196,23 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             );
 
             ViewModel.CloseSearchCommand.Execute();
+        }
+
+        private void BadgeForChat()
+        {
+            if (!this.ViewIsVisible)
+            {
+                AppSettings.BadgeForChat++;
+
+                using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
+                {
+                    if (appDelegate.RootController?.CurrentViewController is MainViewController view)
+                    {
+                        if (view.TabBar.Items.Any())
+                            view.TabBar.Items[0].BadgeValue = AppSettings.BadgeForChat.ToString();
+                    }
+                }
+            }
         }
 
         public override void ViewWillAppear(bool animated)

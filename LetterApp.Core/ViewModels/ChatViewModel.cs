@@ -94,9 +94,6 @@ namespace LetterApp.Core.ViewModels
             _messengerService = messengerService;
             _dialogService = dialogService;
             _audioService = audioService;
-
-            ChatHandlers();
-            CheckConnection();
             SetL10NResources();
         }
 
@@ -107,6 +104,8 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task Appearing()
         {
+            ChatHandlers();
+            CheckConnection();
             NavigationService.ChatOpen(_userId);
 
             _isLoading = true;
@@ -430,6 +429,9 @@ namespace LetterApp.Core.ViewModels
 
         private void MessageClickEvent(object sender, long messageId)
         {
+            if (IsBusy)
+                return;
+
             var message = SendedMessages.Find(x => x.MessageId == messageId);
 
             if (message != null)
@@ -485,22 +487,40 @@ namespace LetterApp.Core.ViewModels
 
         private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages)
         {
-            Debug.WriteLine("LoadMessagesAndUpdateReadReceipt WithLoadMessages:" + SendBirdClient.GetConnectionState());
+            IsBusy = true;
 
-            if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+            try
             {
-                await Task.Delay(TimeSpan.FromSeconds(2));
-                await MessageServiceConnection();
+                Debug.WriteLine("LoadMessagesAndUpdateReadReceipt WithLoadMessages:" + SendBirdClient.GetConnectionState());
+
+                if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    await MessageServiceConnection();
+                }
+
+                await GetChannel();
+
+                _messengerService.MarkMessageAsRead(_channel);
+
+                StatusLogic();
+
+                if (loadMessages)
+                    await LoadRecentMessages();
+
+                if (SendedMessages?.Count > 0)
+                {
+                    await RetrySendMessages();
+                }
             }
-                
-            await GetChannel();
-
-            _messengerService.MarkMessageAsRead(_channel);
-
-            StatusLogic();
-
-            if (loadMessages)
-                await LoadRecentMessages();
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task GetChannel()
@@ -672,6 +692,7 @@ namespace LetterApp.Core.ViewModels
                     case CallingType.Letter:
                         if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                             await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(_user.UserId, true));
+                            
                         break;
                     case CallingType.Cellphone:
                         CallUtils.Call(_user.ContactNumber);

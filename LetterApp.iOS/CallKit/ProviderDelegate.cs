@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using AVFoundation;
 using CallKit;
 using DT.Xamarin.Agora;
 using Foundation;
@@ -280,9 +281,8 @@ namespace LetterApp.iOS.CallKit
 
                         using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                         {
-                            if (appDelegate.RootController?.CurrentViewController is MainViewController)
+                            if (appDelegate.RootController?.CurrentViewController is MainViewController view)
                             {
-                                var view = appDelegate.RootController.CurrentViewController as MainViewController;
                                 if (view.TabBar.Items.Any())
                                     view.TabBar.Items[1].BadgeValue = AppSettings.BadgeForCalls.ToString();
                             }
@@ -300,7 +300,7 @@ namespace LetterApp.iOS.CallKit
 
         #region AgoraIO
 
-        public void SetupAgoraIO(CallViewController callViewController, string roomName, bool speaker, bool muted)
+        public void SetupAgoraIO(CallViewController callViewController, string roomName, bool speaker, bool muted, bool startedCall)
         {
             _roomName = roomName;
             _callViewController = callViewController;
@@ -308,10 +308,14 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.SetChannelProfile(ChannelProfile.Communication);
             _agoraKit.SetEnableSpeakerphone(speaker);
             _agoraKit.MuteLocalAudioStream(muted);
-            //_agoraKit.SetAudioProfile(AudioProfile.MusicHighQualityStereo, AudioScenario.GameStreaming);
-            //_agoraKit.EnableExternalAudioSourceWithSampleRate(48, 2);
-            _agoraKit.SetEffectsVolume(100);
-            _agoraKit.PlayEffect(0, PathForSound("ringback.wav"), 100, 1, 0, 100);
+
+            if (startedCall)
+            {
+                _agoraKit.SetAudioProfile(AudioProfile.MusicHighQualityStereo, AudioScenario.GameStreaming);
+                _agoraKit.EnableExternalAudioSourceWithSampleRate(48, 2);
+                _agoraKit.SetEffectsVolume(100);
+                _agoraKit.PlayEffect(0, PathForSound("ringback.wav"), 100, 1, 0, 100);
+            }
 
             _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0,(arg1, arg2, arg3) => {
                 _callViewController.JoinCompleted(); 
@@ -320,7 +324,9 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallStarted()
         {
-            _agoraKit?.StopAllEffects();
+            _agoraKit?.StopEffect(0);
+            
+            //_agoraKit.SetAudioProfile(AudioProfile.Default, AudioScenario.Default);
 
             var call = CallManager.Calls.LastOrDefault();
 
@@ -337,7 +343,7 @@ namespace LetterApp.iOS.CallKit
 
         public void AgoraCallEnded()
         {
-            _agoraKit?.StopAllEffects();
+            _agoraKit?.StopEffect(0);
             _agoraKit?.LeaveChannel(AgoraLeftChannelCompleted);
         }
 

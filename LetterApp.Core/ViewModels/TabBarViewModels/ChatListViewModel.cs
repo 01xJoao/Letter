@@ -26,7 +26,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private int _thisUserId => AppSettings.UserId;
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
-        private int _openChatUserId;
 
         public bool _isLoading;
         public bool IsLoading
@@ -38,12 +37,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public bool UpdateTableView { get; set; }
         public bool NoChats { get; set; }
         public string[] Actions;
+        public object BadgeForChat { get; private set; }
 
         private DateTime _updateFrequence;
         private List<GetUsersInDivisionModel> _users;
         private List<ChatListUserModel> _chatUserModel;
-        
         private List<ChatListUserCellModel> _chatListSearch;
+
         private List<ChatListUserCellModel> _chatList;
         public List<ChatListUserCellModel> ChatList
         {
@@ -146,9 +146,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             try
             {
-                var msg = message as UserMessage;
-
-                if (msg == null)
+                if (!(message is UserMessage msg))
                     return;
 
                 int msgUserId = StringUtils.GetUserId(msg.Sender.UserId);
@@ -242,6 +240,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             if (NavigationService.ChatOpen() != member.MemberId)
             {
+                RaisePropertyChanged(nameof(BadgeForChat));
+
                 var result = await _dialogService.ShowMessageAlert(member.MemberPhoto, member.MemberName, member.LastMessage);
 
                 if (result)
