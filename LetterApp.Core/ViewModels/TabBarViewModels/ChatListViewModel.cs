@@ -90,6 +90,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             UpdateChatList();
 
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                return;
+
             if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
             {
                 try
@@ -280,7 +283,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task UpdateMessengerService()
         {
-            if (_users.Count == 0)
+            if (_users.Count == 0 || Connectivity.NetworkAccess != NetworkAccess.Internet)
                 return;
 
             if (DateTime.Now >= _updateFrequence)
