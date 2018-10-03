@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -9,7 +10,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.SelectDivision
 {
-    public partial class SelectDivisionViewController : XViewController<SelectDivisionViewModel>
+    public partial class SelectDivisionViewController : XViewController<SelectDivisionViewModel>, IUIGestureRecognizerDelegate
     {
         public override bool HandlesKeyboardNotifications => true;
         private SelectDivisionsSource _source;
@@ -23,7 +24,7 @@ namespace LetterApp.iOS.Views.SelectDivision
             SetupView();
             _tableView.Hidden = true;
 
-            NavigationController.SetNavigationBarHidden(true, true);
+            //NavigationController.SetNavigationBarHidden(true, true);
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -99,6 +100,16 @@ namespace LetterApp.iOS.Views.SelectDivision
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
 
+            NavigationController.SetNavigationBarHidden(true, true);
+
+            _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
             if (NavigationController?.InteractivePopGestureRecognizer != null)
                 NavigationController.InteractivePopGestureRecognizer.Enabled = false;
         }
@@ -106,17 +117,30 @@ namespace LetterApp.iOS.Views.SelectDivision
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
 
             if (NavigationController?.InteractivePopGestureRecognizer != null)
                 NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+
         }
 
         public override void ViewDidDisappear(bool animated)
         {
-            _source?.Dispose();
-            _source = null;
-            MemoryUtility.ReleaseUIViewWithChildren(this.View);
-            base.ViewDidDisappear(animated);
+            if (this.IsMovingFromParentViewController)
+            {
+                _source?.Dispose();
+                _source = null;
+                MemoryUtility.ReleaseUIViewWithChildren(this.View);
+                base.ViewDidDisappear(animated);
+            }
+        }
+
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }

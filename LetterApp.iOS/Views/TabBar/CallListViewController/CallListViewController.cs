@@ -12,7 +12,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.CallListViewController
 {
-    public partial class CallListViewController : XViewController<CallListViewModel>
+    public partial class CallListViewController : XViewController<CallListViewModel>, IUIGestureRecognizerDelegate
     {
         private UIImageView _noRecentCallsImage = new UIImageView(UIImage.FromBundle("recent_calls"));
         private UILabel _noRecentCallsLabel = new UILabel();

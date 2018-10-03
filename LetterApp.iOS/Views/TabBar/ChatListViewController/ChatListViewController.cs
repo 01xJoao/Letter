@@ -13,7 +13,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 {
-    public partial class ChatListViewController : XViewController<ChatListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating
+    public partial class ChatListViewController : XViewController<ChatListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating, IUIGestureRecognizerDelegate
     {
         private UIView _loadingView = new UIView();
         private UIImageView _noRecentChatImage = new UIImageView(UIImage.FromBundle("nochats"));
