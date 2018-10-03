@@ -409,8 +409,6 @@ namespace LetterApp.iOS.Views.Chat
         {
             base.ViewWillDisappear(animated);
 
-            ViewModel.ViewWillCloseCommand.Execute();
-
             if (this.IsMovingFromParentViewController)
             {
                 if (NavigationController.VisibleViewController is RootViewController)

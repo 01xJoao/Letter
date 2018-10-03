@@ -66,9 +66,6 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
         public XPCommand<Tuple<string, MessageType>> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<Tuple<string, MessageType>>(async (msg) => await SendMessage(msg), CanExecuteMsg));
 
-        private XPCommand _viewWillCloseCommand;
-        public XPCommand ViewWillCloseCommand => _viewWillCloseCommand ?? (_viewWillCloseCommand = new XPCommand(ViewWillClose));
-
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView()));
 
@@ -508,10 +505,8 @@ namespace LetterApp.Core.ViewModels
                 if (loadMessages)
                     await LoadRecentMessages();
 
-                if (SendedMessages?.Count > 0)
-                {
+                if (_chat.Messages != null && _chat.Messages.Any(x => x.FailedToSend == true))
                     await RetrySendMessages();
-                }
             }
             catch (Exception ex)
             {
@@ -739,7 +734,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task CloseView() => await NavigationService.Close(this);
 
-        private void ViewWillClose()
+        public override async Task Disappearing()
         {
             NavigationService.ChatOpen(-1);
             SendBirdClient.RemoveChannelHandler("ChatHandler");
