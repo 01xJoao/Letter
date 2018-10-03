@@ -177,8 +177,14 @@ namespace LetterApp.Core.ViewModels
 
             Debug.WriteLine("LoadRecentMessages");
 
-            if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN) 
-                await MessageServiceConnection();
+            if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+            {
+                if(!await MessageServiceConnection())
+                {
+                    IsLoading = false;
+                    return;
+                }
+            }
 
             _messagesModel = new List<MessagesModel>();
 
@@ -260,6 +266,9 @@ namespace LetterApp.Core.ViewModels
         {
             Debug.WriteLine("Checking Message Service Connection: " + SendBirdClient.GetConnectionState());
 
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                return false;
+
             IsBusy = true;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -269,8 +278,7 @@ namespace LetterApp.Core.ViewModels
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                 {
                     int numberOfTries = 0;
-
-                    while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 4)
+                    while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
                     {
                         Debug.WriteLine("Trying to reconnect to Messenger Services");
                         await Task.Delay(TimeSpan.FromSeconds(numberOfTries++));
@@ -484,6 +492,9 @@ namespace LetterApp.Core.ViewModels
 
         private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages)
         {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                return;
+
             IsBusy = true;
 
             try
@@ -524,6 +535,9 @@ namespace LetterApp.Core.ViewModels
             {
                 if (_channel == null)
                 {
+                    if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                        return;
+
                     _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
 
                     if (_channel == null)
@@ -635,7 +649,7 @@ namespace LetterApp.Core.ViewModels
                     if (_chat.Messages.Last().MessageSenderId == _finalUserId)
                     {
                         _status = _channel.GetReadReceipt(_channel.LastMessage) <= 0 ? SeenMessage : string.Empty;
-                        _chat.MemberSeenMyLastMessage = true;
+                        _chat.MemberSeenMyLastMessage = !string.IsNullOrEmpty(_status);
                     }
                     else
                     {
