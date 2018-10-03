@@ -10,7 +10,6 @@ using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
-using LetterApp.iOS.Views.Member;
 using UIKit;
 
 namespace LetterApp.iOS.Views.Chat
@@ -38,6 +37,8 @@ namespace LetterApp.iOS.Views.Chat
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            _imageView2.Hidden = _imageView3.Hidden = true;
 
             _tableView.Hidden = true;
 
