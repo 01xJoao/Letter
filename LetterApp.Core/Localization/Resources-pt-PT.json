@@ -929,6 +929,10 @@
   },
   {
     "key": "Chat_UserProfile",
-    "translated": "See user profile"
+    "translated": "Ver perfil de utilizador"
+  },
+  {
+    "key": "Chat_Close",
+    "translated": "Fechar"
   }
 ]

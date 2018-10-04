@@ -148,9 +148,20 @@ namespace LetterApp.iOS.Views.Chat
 
             if (ViewModel.Chat?.Messages?.Count > 0)
             {
-                _tableView.Source = new ChatSource(_tableView, ViewModel.Chat);
+                var source = new ChatSource(_tableView, ViewModel.Chat);
+                _tableView.Source = source;
                 _tableView.ReloadData();
+
+
+                source.ScrolledTopEvent -= OnSource_ScrollTopEvent;
+                source.ScrolledTopEvent += OnSource_ScrollTopEvent;
             }
+        }
+
+        private void OnSource_ScrollTopEvent(object sender, EventArgs e)
+        {
+            if (ViewModel.FetchOldMessagesCommand.CanExecute())
+                ViewModel.FetchOldMessagesCommand.Execute();
         }
 
         private void AddNewMessageToTable()

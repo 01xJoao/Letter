@@ -9,6 +9,8 @@ namespace LetterApp.iOS.Sources
 {
     public class ChatSource : UITableViewSource
     {
+        public event EventHandler ScrolledTopEvent;
+
         private readonly nfloat _screenWidth = UIScreen.MainScreen.Bounds.Width;
         private readonly ChatModel _chat;
 
@@ -100,6 +102,13 @@ namespace LetterApp.iOS.Sources
             }
 
             return estimatedFrame.Height + cellHeight;
+        }
+
+        [Export("scrollViewDidScroll:")]
+        public override void Scrolled(UIScrollView scrollView)
+        {
+            if(scrollView.ContentOffset.Y == 0)
+                ScrolledTopEvent?.Invoke(null, EventArgs.Empty);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<GroupChannel> GetCurrentChannel(string userId);
         Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTime);
         Task<List<User>> CheckUsersInGroupPresence(GroupChannel channel);
-        Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery);
+        Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery, int messagesCount);
         void RemoveChannel(GroupChannel channel);
         void TypingMessage(GroupChannel channel);
         void TypingMessageEnded(GroupChannel channel);

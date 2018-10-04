@@ -50,7 +50,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                     LoadingAnimation(ViewModel.IsLoading);
                     break;
                 case nameof(ViewModel.BadgeForChat):
-                    BadgeForChat();
+                    BadgeForChat(ViewModel.BadgeForChat);
                     break;
             }
         }
@@ -198,9 +198,9 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             ViewModel.CloseSearchCommand.Execute();
         }
 
-        private void BadgeForChat()
+        private void BadgeForChat(bool clean)
         {
-            if (!this.ViewIsVisible)
+            if (!this.ViewIsVisible && clean)
             {
                 AppSettings.BadgeForChat++;
 
@@ -213,6 +213,27 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                     }
                 }
             }
+            else if(!clean)
+            {
+                CleanBadge();
+            }
+        }
+
+        private void CleanBadge()
+        {
+            AppSettings.BadgeForChat = 0;
+
+            using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
+            {
+                if (appDelegate.RootController?.CurrentViewController is MainViewController)
+                {
+                    using (var view = appDelegate.RootController.CurrentViewController as MainViewController)
+                    {
+                        if (view.TabBar.Items.Any())
+                            view.TabBar.Items[0].BadgeValue = null;
+                    }
+                }
+            }
         }
 
         public override void ViewWillAppear(bool animated)
@@ -221,19 +242,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
             if (AppSettings.BadgeForChat > 0)
             {
-                AppSettings.BadgeForChat = 0;
-
-                using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
-                {
-                    if (appDelegate.RootController?.CurrentViewController is MainViewController)
-                    {
-                        using (var view = appDelegate.RootController.CurrentViewController as MainViewController)
-                        {
-                            if (view.TabBar.Items.Any())
-                                view.TabBar.Items[0].BadgeValue = null;
-                        }
-                    }
-                }
+                CleanBadge();
             }
 
             HasChats(ViewModel?.ChatList?.Count > 0);

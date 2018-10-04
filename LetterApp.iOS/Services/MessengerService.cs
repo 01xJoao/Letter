@@ -226,7 +226,7 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery)
+        public Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery, int messagesCount)
         {
             var tcs = new TaskCompletionSource<List<BaseMessage>>();
 
@@ -236,7 +236,7 @@ namespace LetterApp.iOS.Services
                 return tcs.Task;
             }
 
-            channelQuery.Load(30, true, (List<BaseMessage> queryResult, SendBirdException e) => {
+            channelQuery.Load(messagesCount, true, (List<BaseMessage> queryResult, SendBirdException e) => {
                 if (e != null)
                     tcs.TrySetCanceled();
                 else

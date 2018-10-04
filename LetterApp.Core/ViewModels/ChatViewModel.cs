@@ -84,6 +84,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _optionsCommand;
         public XPCommand OptionsCommand => _optionsCommand ?? (_optionsCommand = new XPCommand(async () => await Options()));
 
+        private XPCommand _fetchOldMessagesCommand;
+        public XPCommand FetchOldMessagesCommand => _fetchOldMessagesCommand ?? (_fetchOldMessagesCommand = new XPCommand(async () => await FetchOldMessages(), CanExecute));
+
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService, IAudioService audioService)
         {
             _divisionService = divisionService;
@@ -148,7 +151,7 @@ namespace LetterApp.Core.ViewModels
                 }
             }
 
-            MessagesLogic(_userChat?.MessagesList);
+            MessagesLogic(_userChat?.MessagesList, false);
 
             var chat = new ChatModel
             {
@@ -171,7 +174,7 @@ namespace LetterApp.Core.ViewModels
             LoadMessagesAndUpdateReadReceipt(true);
         }
 
-        private async Task LoadRecentMessages()
+        private async Task LoadRecentMessages(bool loadOldMessages = false)
         {
             IsLoading = true;
 
@@ -186,13 +189,15 @@ namespace LetterApp.Core.ViewModels
                 }
             }
 
-            _messagesModel = new List<MessagesModel>();
-
-            _prevMessageListQuery = _channel?.CreatePreviousMessageListQuery();
+            if (!loadOldMessages)
+            {
+                _prevMessageListQuery = _channel?.CreatePreviousMessageListQuery();
+                _messagesModel = new List<MessagesModel>();
+            }
 
             try
             {
-                var result = await _messengerService.LoadMessages(_prevMessageListQuery);
+                var result = await _messengerService.LoadMessages(_prevMessageListQuery, 30);
 
                 if (result != null || result.Count > 0)
                 {
@@ -247,7 +252,10 @@ namespace LetterApp.Core.ViewModels
                 RaisePropertyChanged(nameof(IsLoading));
             }
 
-            MessagesLogic(_messagesModel);
+            if (!loadOldMessages)
+                _chatMessages = null;
+
+            MessagesLogic(_messagesModel, !loadOldMessages);
 
             bool shouldUpdate = false;
 
@@ -256,9 +264,9 @@ namespace LetterApp.Core.ViewModels
             else
                 shouldUpdate = true;
 
-            _chat.Messages = _chatMessages;
+            _chat.Messages = _chatMessages.OrderBy(x => x.MessageDateTime).ToList();
 
-            if(shouldUpdate)
+            if(shouldUpdate || loadOldMessages)
                 RaisePropertyChanged(nameof(Chat));
         }
 
@@ -304,12 +312,12 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages = false)
+        private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages)
         {
             if (messagesList == null || messagesList?.Count == 0)
                 return;
                 
-            if (!shouldKeepOldMessages || _chatMessages == null) {
+            if (shouldKeepOldMessages == false || _chatMessages == null) {
                 _chatMessages = new List<ChatMessagesModel>();
             }
 
@@ -474,6 +482,18 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task FetchOldMessages()
+        {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                return;
+
+            IsBusy = true;
+
+            await LoadRecentMessages(true);
+
+            IsBusy = false;
+        }
+
         public void ChatHandlers()
         {
             Debug.WriteLine("Initializing SendBird Handlers in Chat");
@@ -514,7 +534,7 @@ namespace LetterApp.Core.ViewModels
                 StatusLogic();
 
                 if (loadMessages)
-                    await LoadRecentMessages();
+                    await LoadRecentMessages(false);
 
                 if (_chat.Messages != null && _chat.Messages.Any(x => x.FailedToSend == true))
                     await RetrySendMessages();
@@ -780,9 +800,9 @@ namespace LetterApp.Core.ViewModels
                     List<MessagesModel> historyMessages;
 
                     if (_messagesModel?.Count > 0)
-                        historyMessages = _messagesModel?.Skip(Math.Max(0, _messagesModel.Count() - 30)).ToList();
+                        historyMessages = _messagesModel?.OrderByDescending(x => x.MessageDateTicks).Take(30).ToList();
                     else
-                        historyMessages = _userChat?.MessagesList?.Skip(Math.Max(0, _userChat.MessagesList.Count() - 30)).ToList();
+                        historyMessages = _userChat?.MessagesList?.OrderByDescending(x => x.MessageDateTicks).Take(30).ToList();
 
                     foreach (var msg in historyMessages.ToList())
                         userChat.MessagesList.Add(msg);

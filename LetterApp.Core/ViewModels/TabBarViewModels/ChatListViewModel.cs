@@ -37,7 +37,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public bool UpdateTableView { get; set; }
         public bool NoChats { get; set; }
         public string[] Actions;
-        public object BadgeForChat { get; private set; }
+
+        private bool _badgeForChat;
+        public bool BadgeForChat 
+        {
+            get => _badgeForChat;
+            set => SetProperty(ref _badgeForChat, value);
+        }
 
         private DateTime _updateFrequence;
         private List<GetUsersInDivisionModel> _users;
@@ -243,12 +249,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             if (NavigationService.ChatOpen() != member.MemberId)
             {
-                RaisePropertyChanged(nameof(BadgeForChat));
+                BadgeForChat = true;
 
                 var result = await _dialogService.ShowMessageAlert(member.MemberPhoto, member.MemberName, member.LastMessage);
 
                 if (result)
+                {
+                    BadgeForChat = false;
                     await NavigationService.NavigateAsync<ChatViewModel, int>(member.MemberId);
+                }
+                else
+                {
+                    _badgeForChat = false;
+                }
             }
         }
 
@@ -354,6 +367,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 catch (Exception ex)
                 {
+
                     _updateFrequence = default(DateTime);
                     Ui.Handle(ex as dynamic);
                 }
