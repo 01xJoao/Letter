@@ -55,7 +55,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 var result = await _autheticationService.CheckUser();
 
-                if (result.StatusCode == 200)
+                if (result?.StatusCode == 200)
                 {
                     if (result.LastUpdateTime.Ticks > _user.LastUpdateTime)
                         _updateView = true;

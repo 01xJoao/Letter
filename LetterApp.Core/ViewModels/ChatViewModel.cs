@@ -540,7 +540,7 @@ namespace LetterApp.Core.ViewModels
                 if (loadMessages)
                     await LoadRecentMessages(false);
 
-                if (_chat.Messages != null && _chat.Messages.Any(x => x.FailedToSend == true))
+                if (_chat?.Messages != null && _chat.Messages.Any(x => x.FailedToSend == true))
                     await RetrySendMessages();
             }
             catch (Exception ex)
