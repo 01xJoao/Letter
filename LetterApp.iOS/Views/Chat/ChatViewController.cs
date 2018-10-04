@@ -74,6 +74,9 @@ namespace LetterApp.iOS.Views.Chat
                     if (_isViewVisible)
                         ViewModel.LoadMessagesUpdateReceiptCommand.Execute(false);
                     break;
+                case nameof(ViewModel.ScrollToMiddle):
+                    ScrollToMiddle();
+                    break;
             }
         }
 
@@ -152,9 +155,19 @@ namespace LetterApp.iOS.Views.Chat
                 _tableView.Source = source;
                 _tableView.ReloadData();
 
-
                 source.ScrolledTopEvent -= OnSource_ScrollTopEvent;
                 source.ScrolledTopEvent += OnSource_ScrollTopEvent;
+            }
+        }
+
+
+        private void ScrollToMiddle()
+        {
+            if (ViewModel?.Chat?.Messages?.Count > 10)
+            {
+                _tableView.ScrollToRow(NSIndexPath.FromRowSection(ViewModel.Chat.Messages.Count > 35 
+                                  ? 35 
+                                  : ViewModel.Chat.Messages.Count/2, 0), UITableViewScrollPosition.Bottom, true);
             }
         }
 

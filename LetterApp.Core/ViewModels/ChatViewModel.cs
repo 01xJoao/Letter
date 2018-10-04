@@ -61,6 +61,7 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _status, value);
         }
 
+        public object ScrollToMiddle { get; private set; }
         public List<MessagesModel> SendedMessages = new List<MessagesModel>();
 
         private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
@@ -490,6 +491,8 @@ namespace LetterApp.Core.ViewModels
             IsBusy = true;
 
             await LoadRecentMessages(true);
+
+            RaisePropertyChanged(nameof(ScrollToMiddle));
 
             IsBusy = false;
         }
