@@ -363,7 +363,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 catch (Exception ex)
                 {
-
                     _updateFrequence = default(DateTime);
                     Ui.Handle(ex as dynamic);
                 }
