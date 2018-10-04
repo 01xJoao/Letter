@@ -103,8 +103,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             {
                 try
                 {
-                    var result = await _messagerService.ConnectMessenger();
-                    if (result) 
+                    if (await _messagerService.ConnectMessenger()) 
                         UpdateMessengerService();   
                 }
                 catch (Exception ex)
@@ -308,7 +307,15 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 try
                 {
-                    var allChannels = await _messagerService.GetAllChannels();
+                    List<GroupChannel> allChannels = new List<GroupChannel>();
+
+                    if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                    {
+                        if (await _messagerService.ConnectMessenger())
+                            allChannels = await _messagerService.GetAllChannels();
+                        else
+                            return;
+                    }
 
                     foreach(var channel in allChannels)
                     {
