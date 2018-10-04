@@ -265,7 +265,7 @@ namespace LetterApp.Core.ViewModels
             else
                 shouldUpdate = true;
 
-            _chat.Messages = _chatMessages.OrderBy(x => x.MessageDateTime).ToList();
+            _chat.Messages = _chatMessages?.OrderBy(x => x?.MessageDateTime)?.ToList();
 
             if(shouldUpdate || loadOldMessages)
                 RaisePropertyChanged(nameof(Chat));

@@ -248,7 +248,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             if (NavigationService.ChatOpen() != member.MemberId)
             {
-                BadgeForChat = true;
+                _badgeForChat = true;
+                RaisePropertyChanged(nameof(BadgeForChat));
 
                 var result = await _dialogService.ShowMessageAlert(member.MemberPhoto, member.MemberName, member.LastMessage);
 
@@ -256,10 +257,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     BadgeForChat = false;
                     await NavigationService.NavigateAsync<ChatViewModel, int>(member.MemberId);
-                }
-                else
-                {
-                    _badgeForChat = false;
                 }
             }
         }
@@ -307,17 +304,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 try
                 {
-                    List<GroupChannel> allChannels = new List<GroupChannel>();
+                    var allChannels = await _messagerService.GetAllChannels();
 
-                    if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
-                    {
-                        if (await _messagerService.ConnectMessenger())
-                            allChannels = await _messagerService.GetAllChannels();
-                        else
-                            return;
-                    }
-
-                    foreach(var channel in allChannels)
+                    foreach (var channel in allChannels)
                     {
                         var users = await _messagerService.CheckUsersInGroupPresence(channel);
                        
