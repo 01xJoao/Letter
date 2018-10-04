@@ -259,7 +259,7 @@ namespace LetterApp.Core.ViewModels
 
             bool shouldUpdate = false;
 
-            if (_chat.Messages?.Count > 0 && _chatMessages?.Count > 0)
+            if (_chat?.Messages?.Count > 0 && _chatMessages?.Count > 0)
                 shouldUpdate = _chat.Messages.Last().MessageId != _chatMessages.Last().MessageId;
             else
                 shouldUpdate = true;
@@ -527,7 +527,8 @@ namespace LetterApp.Core.ViewModels
                     await MessageServiceConnection();
                 }
 
-                await GetChannel();
+                if (!await GetChannel())
+                    return;
 
                 _messengerService.MarkMessageAsRead(_channel);
 
@@ -549,14 +550,14 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private async Task GetChannel()
+        private async Task<bool> GetChannel()
         {
             try
             {
                 if (_channel == null)
                 {
                     if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-                        return;
+                        return false;
 
                     _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
 
@@ -574,12 +575,15 @@ namespace LetterApp.Core.ViewModels
 
                     _chat = null;
                     await CloseView();
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
             }
+
+            return true;
         }
 
         #region Status
@@ -609,6 +613,9 @@ namespace LetterApp.Core.ViewModels
             MainThread.BeginInvokeOnMainThread(() => {
 
                 Debug.WriteLine("Message Received");
+
+                if (_chat == null)
+                    return;
 
                 _chat.MemberPresence = MemberPresence.Online;
 
@@ -658,7 +665,7 @@ namespace LetterApp.Core.ViewModels
 
         private void StatusLogic()
         {
-            if (_chat.Messages?.Count > 0)
+            if (_chat?.Messages?.Count > 0)
             {
                 if (_channel == null)
                 {
@@ -668,7 +675,7 @@ namespace LetterApp.Core.ViewModels
                 {
                     if (_chat.Messages.Last().MessageSenderId == _finalUserId)
                     {
-                        _status = _channel.GetReadReceipt(_channel.LastMessage) <= 0 ? SeenMessage : string.Empty;
+                        _status = _channel?.GetReadReceipt(_channel?.LastMessage) <= 0 ? SeenMessage : string.Empty;
                         _chat.MemberSeenMyLastMessage = !string.IsNullOrEmpty(_status);
                     }
                     else
