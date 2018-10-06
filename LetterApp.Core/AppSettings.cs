@@ -23,10 +23,10 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(AuthTokenExpirationDate), value);
         }
 
-        public static string PubNubToken
+        public static string MessengerToken
         {
-            get => Preferences.Get(nameof(PubNubToken), string.Empty);
-            set => Preferences.Set(nameof(PubNubToken), value);
+            get => Preferences.Get(nameof(MessengerToken), string.Empty);
+            set => Preferences.Set(nameof(MessengerToken), value);
         }
 
         public static long PubNubTokenExpirationDate
@@ -118,7 +118,7 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(IsUserLogged));
             Preferences.Remove(nameof(AuthToken));
             Preferences.Remove(nameof(AuthTokenExpirationDate));
-            Preferences.Remove(nameof(PubNubToken));
+            Preferences.Remove(nameof(MessengerToken));
             Preferences.Remove(nameof(PubNubTokenExpirationDate));
             Preferences.Remove(nameof(MainMenuAllowed));
             Preferences.Remove(nameof(UserId));

@@ -752,6 +752,10 @@
     "translated": "Open settings"
   },
   {
+    "key": "Call_FailedCall",
+    "translated": "☎️ You missed a call from"
+  },
+  {
     "key": "Calls_CallActionInfo",
     "translated": "Info"
   },

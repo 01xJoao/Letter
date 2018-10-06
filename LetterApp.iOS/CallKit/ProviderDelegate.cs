@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AVFoundation;
 using CallKit;
 using DT.Xamarin.Agora;
 using Foundation;
@@ -138,6 +137,9 @@ namespace LetterApp.iOS.CallKit
             RealmUtils.AddCallToHistory(callHistory);
 
             CallManager.Calls.Remove(call);
+
+            if(call.IsOutgoing && !call.IsConnected)
+                _callViewController?.ViewModel?.SendPushFailedCallCommand?.Execute();
 
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
             action.Fulfill();

@@ -760,6 +760,10 @@
     "translated": "Abrir Definições"
   },
   {
+    "key": "Call_FailedCall",
+    "translated": "☎ Perdeu uma chamada de"
+  },
+  {
     "key": "ContactDialog_Title",
     "translated": "Faça uma chamada"
   },

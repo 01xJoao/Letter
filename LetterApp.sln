@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterApp.iOS", "LetterApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterApp.Tests", "LetterApp.Tests\LetterApp.Tests.csproj", "{BFF8F751-1B65-428B-8902-1BDAEFE076AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterNotificationService", "LetterNotificationService\LetterNotificationService.csproj", "{EE8BB25F-8B17-41E5-A7A7-462591611BA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,5 +55,17 @@ Global
 		{BFF8F751-1B65-428B-8902-1BDAEFE076AF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{BFF8F751-1B65-428B-8902-1BDAEFE076AF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{BFF8F751-1B65-428B-8902-1BDAEFE076AF}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Release|Any CPU.ActiveCfg = Release|iPhone
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Release|Any CPU.Build.0 = Release|iPhone
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Release|iPhone.ActiveCfg = Release|iPhone
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Release|iPhone.Build.0 = Release|iPhone
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{EE8BB25F-8B17-41E5-A7A7-462591611BA8}.Debug|iPhone.Build.0 = Debug|iPhone
 	EndGlobalSection
 EndGlobal

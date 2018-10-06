@@ -404,7 +404,7 @@ namespace LetterApp.Core.ViewModels
                 _status = string.Empty;
                 RaisePropertyChanged(nameof(Status));
 
-                var result = await _messengerService.SendMessage(_channel, messageToSend, _sendedMessageDateTime.ToString());
+                var result = await _messengerService.SendMessage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}", _user.PushNotificationToken, messageToSend, _sendedMessageDateTime.ToString());
 
                 if(result != null)
                 {

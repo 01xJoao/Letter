@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
-using Xamarin.Essentials;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
@@ -18,8 +16,11 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public MainViewModel(IMessengerService messengerService)
         {
             _messengerService = messengerService;
+        }
 
-           // CheckConnection();
+        public override async Task InitializeAsync()
+        {
+            _messengerService.SubscribeToNotifications();
         }
 
         private async Task MessengerService(bool connect)

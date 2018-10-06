@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
 using LetterApp.Core.Helpers.Commands;
@@ -6,6 +7,7 @@ using LetterApp.Core.Localization;
 using LetterApp.Core.Models.DTO.ReceivedModels;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
+using LetterApp.Models.DTO.ReceivedModels;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -14,11 +16,14 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IMemberService _memberService;
         private ISettingsService _settingsService;
+        private IMessengerService _messengerService;
 
         public bool EndCallForSettings { get; set; }
         public int CallerId { get; set; }
         public bool StartedCall { get; set; }
         public int UserId => AppSettings.UserId;
+        private string _thisUserName;
+        private string _callerPushToken;
         public string RoomName { get; private set; }
         public string MemberFullName { get; private set; }
 
@@ -49,18 +54,15 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _microphoneAlertCommand;
         public XPCommand MicrophoneAlertCommand => _microphoneAlertCommand ?? (_microphoneAlertCommand = new XPCommand(async () => await MicrophoneAlert()));
 
-        private bool _inCall;
-        public bool InCall
-        {
-            get => _inCall;
-            set => SetProperty(ref _inCall, value);
-        }
+        private XPCommand _sendPushFailedCallCommand;
+        public XPCommand SendPushFailedCallCommand => _sendPushFailedCallCommand ?? (_sendPushFailedCallCommand = new XPCommand(SendFailedCallNotification));
 
-        public CallViewModel(IMemberService memberService, IDialogService dialogService, ISettingsService settingsService)
+        public CallViewModel(IMemberService memberService, IDialogService dialogService, ISettingsService settingsService, IMessengerService messengerService)
         {
             _dialogService = dialogService;
             _memberService = memberService;
             _settingsService = settingsService;
+            _messengerService = messengerService;
         }
 
         protected override void Prepare(Tuple<int, bool> call)
@@ -74,14 +76,20 @@ namespace LetterApp.Core.ViewModels
             _memberProfileModel = null;
 
             if (StartedCall)
+            {
                 RoomName = $"RoomId-{AppSettings.UserId}{CallerId}";
+
+                var user = Realm.Find<UserModel>(UserId);
+                _thisUserName = $"{user.FirstName} {user.LastName}";
+                var users = Realm.All<GetUsersInDivisionModel>();
+                var userCall = users.First(x => x.UserId == CallerId);
+                _callerPushToken = userCall?.PushNotificationToken;
+            }
             else
                 RoomName = $"RoomId-{CallerId}{AppSettings.UserId}";
 
-            _inCall = false;
-
             _memberProfileModel = Realm.Find<MembersProfileModel>(CallerId);
-            MemberFullName = $"{MemberProfileModel?.FirstName} {MemberProfileModel?.LastName}";
+            MemberFullName = $"{_memberProfileModel?.FirstName} {_memberProfileModel?.LastName}";
         }
 
         public override async Task Appearing()
@@ -148,12 +156,18 @@ namespace LetterApp.Core.ViewModels
             await NavigationService.Close(this);
         }
 
+        private void SendFailedCallNotification()
+        {
+            _messengerService.SendPushNotification(UserId.ToString(), _thisUserName, _callerPushToken, _thisUserName, true);
+        }
+
         private bool CanExecute() => !IsBusy;
 
         #region Resources
 
         private string MicrophoneLabel => L10N.Localize("Call_MicAlert");
         private string OpenSettingsLabel => L10N.Localize("Call_OpenSettingsAlert");
+        //private string FailedCall => L10N.Localize("Call_FailedCall");
 
         public string LetterLabel       => L10N.Localize("Call_Letter");
         public string CallingLabel      => L10N.Localize("Call_Calling");

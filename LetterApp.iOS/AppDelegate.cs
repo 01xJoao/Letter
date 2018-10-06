@@ -1,10 +1,17 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using AVFoundation;
+using Com.OneSignal;
+using Com.OneSignal.Abstractions;
 using Foundation;
 using LetterApp.Core;
+using LetterApp.Core.Services.Interfaces;
+using LetterApp.Core.ViewModels;
 using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Views.Base;
+using LetterApp.Models.DTO.ReceivedModels;
 using PushKit;
 using SinchBinding;
 using UIKit;
@@ -22,7 +29,7 @@ namespace LetterApp.iOS
         public UINavigationController NavigationController;
         public RootViewController RootController;
 
-        public static string DeviceToken;
+        //public static string DeviceToken;
         public ActiveCallManager CallManager { get; set; }
         public ProviderDelegate CallProviderDelegate { get; set; }
         private ActiveCall _call;
@@ -51,6 +58,7 @@ namespace LetterApp.iOS
             CallProviderDelegate = new ProviderDelegate(CallManager);
 
             SendBird.SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
+            OneSignal.Current.StartInit("0c3dc7b8-fabf-4449-ab16-e07d2091eb47").InFocusDisplaying(OSInFocusDisplayOption.None).EndInit();
 
             Push = Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
             Push.WeakDelegate = this;
@@ -70,19 +78,20 @@ namespace LetterApp.iOS
             Window.MakeKeyAndVisible();
             Setup.Initialize();
 
+            OneSignal.Current.RegisterForPushNotifications();
+            OneSignal.Current.IdsAvailable(HandleIdsAvailableCallback);
+
             using (var audio = AVAudioSession.SharedInstance())
             {
                 if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
                 {
                     audio.RequestRecordPermission((granted) =>
                     {
-                        //Push.RegisterUserNotificationSettings();
                         RegisterRemotePushNotifications(application);
                     });
                 }
                 else
                 {
-                    //Push.RegisterUserNotificationSettings();
                     RegisterRemotePushNotifications(application);
                 }
             }
@@ -104,7 +113,7 @@ namespace LetterApp.iOS
                 }
                 else
                 {
-                    Debug.WriteLine("NOTIFICATIONS NOT GRANTED---!!---");
+                    Debug.WriteLine("NOTIFICATIONS NOT GRANTED!!");
                 }
             });
 
@@ -138,22 +147,43 @@ namespace LetterApp.iOS
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            DeviceToken = deviceToken.Description.TrimStart('<').TrimEnd('>');
+            AppSettings.MessengerToken = deviceToken.Description.TrimStart('<').TrimEnd('>');
 
             //Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
             //byte[] deviceTokenBytes = deviceToken.ToArray();
         }
 
-        [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
-        public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, System.Action completionHandler)
-        {
+        void HandleIdsAvailableCallback(string playerID, string pushToken) => RegisterTokenInDataBase(playerID);
 
+        private async Task RegisterTokenInDataBase(string userToken)
+        {
+            var webService = App.Container.GetInstance<IWebService>();
+
+            try
+            {
+                webService.GetAsync<BaseModel>($"/api/users/registertoken/{userToken}", needsHeaderCheck: true).ConfigureAwait(true);
+            }
+            catch (Exception ex){}
         }
 
-        [Export("userNotificationCenter:willPresentNotification:withCompletionHandler:")]
-        public void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, System.Action<UNNotificationPresentationOptions> completionHandler)
+        [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
+        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
         {
+            if(application.ApplicationState != UIApplicationState.Active)
+            {
+                var info = userInfo["custom"] as NSDictionary;
+                var info1 = info["a"] as NSDictionary;
+                var userId = info1["userId"].ToString();
+                bool result = int.TryParse(userId, out int user);
 
+                var navigationService = App.Container.GetInstance<IXNavigationService>();
+
+                if (result && navigationService.ChatOpen() != user)
+                {
+                    navigationService.PopToRoot(false);
+                    navigationService.NavigateAsync<ChatViewModel, int>(user);
+                }
+            }
         }
 
         private void InitSinchClientWithUserId(string userId)
@@ -192,18 +222,6 @@ namespace LetterApp.iOS
                 //    //CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
                 //}
             }
-        }
-
-        [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
-        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, System.Action<UIBackgroundFetchResult> completionHandler)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        [Export("application:didReceiveRemoteNotification:")]
-        public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
-        {
-            throw new System.NotImplementedException();
         }
 
         public void DidUpdatePushCredentials(PKPushRegistry registry, PKPushCredentials credentials, string type)

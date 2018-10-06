@@ -273,6 +273,8 @@ namespace LetterApp.iOS.Views.Chat
         [Export("textViewDidEndEditing:")]
         public void EditingEnded(UITextView textView)
         {
+            _imageView1.Image = UIImage.FromBundle("keyboard");
+
             if (string.IsNullOrEmpty(textView.Text))
                 DefaultKeyboard();
         }
@@ -284,7 +286,6 @@ namespace LetterApp.iOS.Views.Chat
             _sendLabel.TextColor = Colors.ProfileGray;
             _sendButton.Enabled = false;
             _placeholderLabel.Hidden = false;
-            _imageView1.Image = UIImage.FromBundle("keyboard");
             ViewModel.TypingCommand.Execute(false);
         }
 

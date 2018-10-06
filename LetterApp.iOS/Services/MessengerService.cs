@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Com.OneSignal;
 using LetterApp.Core;
 using LetterApp.Core.Services.Interfaces;
 using SendBird;
@@ -17,6 +18,11 @@ namespace LetterApp.iOS.Services
             SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
 
             Debug.WriteLine("SendBirdClient Initialized");
+        }
+
+        public void SubscribeToNotifications()
+        {
+            OneSignal.Current.SetSubscription(true);
         }
 
         public Task<bool> ConnectMessenger()
@@ -42,7 +48,7 @@ namespace LetterApp.iOS.Services
                             Debug.WriteLine("Connected to Sendbird Services");
                             tcs.TrySetResult(true);
 
-                            RegisterMessengerToken();
+                            //RegisterMessengerToken();
                         }
                     });
                 }
@@ -68,7 +74,7 @@ namespace LetterApp.iOS.Services
         {
             Debug.WriteLine("Registering Token");
 
-            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppSettings.UserAndOrganizationIds, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
+            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(AppSettings.MessengerToken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e) => {
                 if (e != null)
                     return;
             });
@@ -86,7 +92,7 @@ namespace LetterApp.iOS.Services
                     tcs.TrySetCanceled();
                 else
                 {
-                    channel.SetPushPreference(true, (error) => { });
+                    //channel.SetPushPreference(true, (error) => { });
                     tcs.TrySetResult(channel);
                 }
             });
@@ -205,7 +211,7 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<UserMessage> SendMessage(GroupChannel channel, string message, string dateTime)
+        public Task<UserMessage> SendMessage(GroupChannel channel, string userId, string userName, string memberToken, string message, string date)
         {
             var tcs = new TaskCompletionSource<UserMessage>();
 
@@ -215,15 +221,45 @@ namespace LetterApp.iOS.Services
                 return tcs.Task;
             }
 
-            channel.SendUserMessage(message, dateTime, (msg, e) =>
+            channel.SendUserMessage(message, date, (msg, e) =>
             {
                 if (e != null)
                     tcs.TrySetCanceled();
                 else
+                {
                     tcs.TrySetResult(msg);
+                    SendPushNotification(userId, userName, memberToken, message);
+                }
             });
 
             return tcs.Task;
+        }
+
+        public void SendPushNotification(string userId, string userName, string memberTokenId, string message, bool isCall = false)
+        {
+            Dictionary<string, object> notification;
+
+            if (isCall)
+            {
+                notification = new Dictionary<string, object> 
+                {
+                    ["contents"] = new Dictionary<string, string> { { "en", $"☎️ You missed a call from {message}" }, { "pt", $"☎ Perdeu uma chamada de {message}" } },
+                    ["data"] = new Dictionary<string, string> { { "userId", userId } },
+                    ["include_player_ids"] = new List<string> { memberTokenId }
+                };
+            }
+            else
+            {
+                notification = new Dictionary<string, object>
+                {
+                    ["headings"] = new Dictionary<string, string> { { "en", userName } },
+                    ["contents"] = new Dictionary<string, string> { { "en", message } },
+                    ["data"] = new Dictionary<string, string> { { "userId", userId } },
+                    ["include_player_ids"] = new List<string> { memberTokenId }
+                };
+            }
+
+            OneSignal.Current.PostNotification(notification);
         }
 
         public Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery, int messagesCount)

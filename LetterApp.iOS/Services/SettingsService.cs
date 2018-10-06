@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AVFoundation;
+using Com.OneSignal;
 using Foundation;
 using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
@@ -51,6 +52,8 @@ namespace LetterApp.iOS.Services
             {
                 appDelegate.UnregisterTokens();
             }
+
+            OneSignal.Current.SetSubscription(false);
         }
     }
 }

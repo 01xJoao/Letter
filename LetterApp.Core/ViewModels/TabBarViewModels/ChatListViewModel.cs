@@ -87,12 +87,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             ChatHandler();
         }
 
+        public override async Task InitializeAsync()
+        {
+            await GetUsers();
+        }
+
         public override async Task Appearing()
         {
             CheckConnection();
-
-            if (_users == null || _users.Count == 0)
-                await GetUsers();
 
             UpdateChatList();
 
@@ -304,19 +306,32 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 try
                 {
+                    bool newUsersCheck = false;
+
                     var allChannels = await _messagerService.GetAllChannels();
 
                     foreach (var channel in allChannels)
                     {
                         var users = await _messagerService.CheckUsersInGroupPresence(channel);
-                       
+
                         foreach (var user in users.ToList())
                         {
                             var userId = StringUtils.GetUserId(user.UserId);
                             var userInDB = _users.Find(x => x.UserId == userId);
                             var userInModel = _chatUserModel?.Find(x => x?.MemberId == userId);
 
-                            if (userInDB == null || userId == _thisUserId)
+                            if (userId == _thisUserId)
+                                continue;
+
+                            if ((userInDB == null || string.IsNullOrEmpty(userInDB?.PushNotificationToken)) && !newUsersCheck)
+                            {
+                                newUsersCheck = true;
+
+                                await GetUsers();
+                                userInDB = _users.Find(x => x.UserId == userId);
+                            }
+
+                            if (userInDB == null)
                                 continue;
 
                             var lastMessage = channel.LastMessage as UserMessage;
