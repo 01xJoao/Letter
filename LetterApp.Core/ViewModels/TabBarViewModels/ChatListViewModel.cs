@@ -27,6 +27,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
         private bool _showNotifications = true;
+        private bool _initializing = true;
 
         public bool _isLoading;
         public bool IsLoading
@@ -92,13 +93,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             ChatHandler();
         }
 
-        public override async Task InitializeAsync()
-        {
-            await GetUsers();
-        }
-
         public override async Task Appearing()
         {
+            if (_initializing)
+            {
+                await GetUsers();
+                _initializing = false;
+            }
+
             CheckConnection();
 
             UpdateChatList();
@@ -138,12 +140,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                         Realm.Add(res, true);
                     }
                 });
-
-                _users = Realm.All<GetUsersInDivisionModel>().ToList();
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
             }
         }
 
@@ -289,7 +293,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task UpdateMessengerService()
         {
-            if (_users.Count == 0 || Connectivity.NetworkAccess != NetworkAccess.Internet)
+            if (_users == null || _users.Count == 0 || Connectivity.NetworkAccess != NetworkAccess.Internet)
                 return;
 
             if (DateTime.Now >= _updateFrequence)
