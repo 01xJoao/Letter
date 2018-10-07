@@ -938,5 +938,9 @@
   {
     "key": "Chat_Close",
     "translated": "Fechar"
+  },
+  {
+    "key": "Chat_MuteInApp",
+    "translated": "Apenas notificações dentro da app."
   }
 ]

@@ -750,7 +750,7 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
-                string[] resources = { SeeUserProfile, SendEmail, UserMuted, ArchiveChat, Close };
+                string[] resources = { SeeUserProfile, SendEmail, UserMuted, ArchiveChat, InAppNotifications, Close };
                 var options = await _dialogService.ShowChatOptions(MemberName, _chat.MemberPhoto, _chat.MemberMuted, resources);
 
                 _chat.MemberMuted = options.Item2;
@@ -844,6 +844,7 @@ namespace LetterApp.Core.ViewModels
         private string ArchiveChat => L10N.Localize("Chat_Archive");
         private string SendEmail => L10N.Localize("Division_SendEmail");
         private string Close => L10N.Localize("Chat_Close");
+        private string InAppNotifications => L10N.Localize("Chat_MuteInApp");
 
         private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string TitleDialog => L10N.Localize("ContactDialog_Title");

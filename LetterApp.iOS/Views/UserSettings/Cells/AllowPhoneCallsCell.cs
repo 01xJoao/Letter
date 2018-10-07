@@ -9,6 +9,7 @@ namespace LetterApp.iOS.Views.UserSettings.Cells
     public partial class AllowPhoneCallsCell : UITableViewCell
     {
         private SettingsAllowCallsModel _settings;
+        private EventHandler<bool> _muteEvent;
         public static readonly NSString Key = new NSString("AllowPhoneCallsCell");
         public static readonly UINib Nib = UINib.FromName("AllowPhoneCallsCell", NSBundle.MainBundle);
         protected AllowPhoneCallsCell(IntPtr handle) : base(handle) {}
@@ -31,6 +32,23 @@ namespace LetterApp.iOS.Views.UserSettings.Cells
                 _settings.AllowCalls.Execute(_switch.On);
                 _settings.IsActive = _switch.On;
             }
+        }
+
+        public void ConfigureForChat(string text, string description, bool isOn, EventHandler<bool> muteEvent)
+        {
+            _muteEvent = muteEvent;
+            UILabelExtensions.SetupLabelAppearance(_title, text, Colors.Black, 15f);
+            UILabelExtensions.SetupLabelAppearance(_description, description, Colors.Black, 12f);
+            _switch.On = isOn;
+            _switch.OnTintColor = Colors.Red;
+
+            _switch.ValueChanged -= OnSwitch_ChatEvent;
+            _switch.ValueChanged += OnSwitch_ChatEvent;
+        }
+
+        private void OnSwitch_ChatEvent(object sender, EventArgs e)
+        {
+            _muteEvent?.Invoke(this, _switch.On);
         }
     }
 }

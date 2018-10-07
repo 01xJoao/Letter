@@ -26,6 +26,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private int _thisUserId => AppSettings.UserId;
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
+        private bool _showNotifications = true;
 
         public bool _isLoading;
         public bool IsLoading
@@ -77,6 +78,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private XPCommand<Tuple<ChatEventType, int>> _rowActionCommand;
         public XPCommand<Tuple<ChatEventType, int>> RowActionCommand => _rowActionCommand ?? (_rowActionCommand = new XPCommand<Tuple<ChatEventType, int>>(RowAction));
+
+        private XPCommand<bool> _chowNotificationsCommand;
+        public XPCommand<bool> ShowNotificationsCommand => _chowNotificationsCommand ?? (_chowNotificationsCommand = new XPCommand<bool>((value) => _showNotifications = value));
+
 
         public ChatListViewModel(IContactsService contactsService, IMessengerService messagerService, IDialogService dialogService)
         {
@@ -234,7 +239,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 member.LastMessageDateTime = new DateTime(userChatModel.LastMessageDateTimeTicks);
                 member.MemberPresence = MemberPresence.Online;
 
-                if (!member.IsMemberMuted)
+                if (!member.IsMemberMuted && _showNotifications)
                     AlertUser(member);
 
                 if (!_isSearching)

@@ -30,6 +30,9 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+           UIApplication.Notifications.ObserveWillEnterForeground(ShowNotifications);
+           UIApplication.Notifications.ObserveWillEnterForeground(RemoveNotifications);
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -157,6 +160,16 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             _tableView.Hidden = !value;
             _noRecentChatImage.Hidden = value;
             _noRecenChatLabel.Hidden = value;
+        }
+
+        private void ShowNotifications(object sender, NSNotificationEventArgs e)
+        {
+            ViewModel.ShowNotificationsCommand.Execute(true);
+        }
+
+        private void RemoveNotifications(object sender, NSNotificationEventArgs e)
+        {
+            ViewModel.ShowNotificationsCommand.Execute(false);
         }
 
         private void OnSource_ChatListActionsEvent(object sender, Tuple<ChatListViewModel.ChatEventType, int> action)

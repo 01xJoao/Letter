@@ -3,6 +3,7 @@ using Foundation;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Views.CustomViews.Cells;
+using LetterApp.iOS.Views.UserSettings.Cells;
 using UIKit;
 
 namespace LetterApp.iOS.Sources
@@ -19,8 +20,9 @@ namespace LetterApp.iOS.Sources
         {
             _muted = muted;
             _resources = resources;
+
+            tableView.RegisterNibForCellReuse(AllowPhoneCallsCell.Nib, AllowPhoneCallsCell.Key);
             tableView.RegisterNibForCellReuse(LabelWithArrowCell.Nib, LabelWithArrowCell.Key);
-            tableView.RegisterNibForCellReuse(SwitchCell.Nib, SwitchCell.Key);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -42,8 +44,8 @@ namespace LetterApp.iOS.Sources
                     break;
 
                 case (int)ChatOptions.MuteChat:
-                    var muteCell = tableView.DequeueReusableCell(SwitchCell.Key) as SwitchCell;
-                    muteCell.ConfigureForChat(_resources[(int)ChatOptions.MuteChat], _muted, OptionMuteEvent);
+                    var muteCell = tableView.DequeueReusableCell(AllowPhoneCallsCell.Key) as AllowPhoneCallsCell;
+                    muteCell.ConfigureForChat(_resources[(int)ChatOptions.MuteChat], _resources[_resources.Length-2], _muted, OptionMuteEvent);
                     cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     cell = muteCell;
                     break;
@@ -71,6 +73,9 @@ namespace LetterApp.iOS.Sources
         {
             if(indexPath.Row == (int)ChatOptions.ArchiveChat)
                 return LocalConstants.Settings_GenericCells + 20;
+
+            if (indexPath.Row == (int)ChatOptions.MuteChat)
+                return LocalConstants.Settings_AllowCalls - 8;
 
             return LocalConstants.Settings_GenericCells;
         }
