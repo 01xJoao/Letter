@@ -128,6 +128,9 @@ namespace LetterApp.Core.ViewModels
             MemberName = $"{_user?.FirstName} {_user?.LastName}";
             MemberDetails = _user?.Position;
 
+            if(!string.IsNullOrEmpty(_user.PushNotificationToken))
+                GetUserPushToken();
+
             if (_thisUser.Divisions.Count > 1)
             {
                 var division = Realm.Find<DivisionModelProfile>(_user.MainDivisionId);
@@ -173,6 +176,21 @@ namespace LetterApp.Core.ViewModels
             StatusLogic();
 
             LoadMessagesAndUpdateReadReceipt(true);
+        }
+
+        private async Task GetUserPushToken()
+        {
+            try
+            {
+                var result = await _contactService.GetUserPushToken(_userId);
+
+                if(!string.IsNullOrEmpty(result))
+                    Realm.Write(() => { _user.PushNotificationToken = result; });
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
         private async Task LoadRecentMessages(bool loadOldMessages = false)
