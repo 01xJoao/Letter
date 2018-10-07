@@ -128,7 +128,7 @@ namespace LetterApp.Core.ViewModels
             MemberName = $"{_user?.FirstName} {_user?.LastName}";
             MemberDetails = _user?.Position;
 
-            if(!string.IsNullOrEmpty(_user.PushNotificationToken))
+            if(string.IsNullOrEmpty(_user.PushNotificationToken))
                 GetUserPushToken();
 
             if (_thisUser.Divisions.Count > 1)

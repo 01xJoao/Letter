@@ -91,22 +91,22 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             _messagerService = messagerService;
             Actions = new string[] { ArchiveAction, MuteAction, UnMuteAction };
             ChatHandler();
+            HandleConnection();
         }
 
         public override async Task Appearing()
         {
+            _users = Realm.All<GetUsersInDivisionModel>().ToList();
+            UpdateChatList();
+
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                return;
+
             if (_initializing)
             {
                 await GetUsers();
                 _initializing = false;
             }
-
-            CheckConnection();
-
-            UpdateChatList();
-
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-                return;
 
             if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
             {
@@ -322,10 +322,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             if (userId == _thisUserId)
                                 continue;
 
-                            if ((userInDB == null || string.IsNullOrEmpty(userInDB?.PushNotificationToken)) && !newUsersCheck)
+                            if (userInDB == null && !newUsersCheck)
                             {
                                 newUsersCheck = true;
-
                                 await GetUsers();
                                 userInDB = _users.Find(x => x.UserId == userId);
                             }
@@ -463,7 +462,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
             RaisePropertyChanged(nameof(ChatList));
         }
 
-        private async Task CheckConnection()
+        private async Task HandleConnection()
         {
             Connectivity.ConnectivityChanged -= ConnectivityChanged;
             Connectivity.ConnectivityChanged += ConnectivityChanged;
