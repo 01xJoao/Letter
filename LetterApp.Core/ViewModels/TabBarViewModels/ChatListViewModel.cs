@@ -126,30 +126,20 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             try
             {
-                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+                var result = await _contactsService.GetUsersFromAllDivisions();
 
-                if (_users == null || _users.Count == 0)
+                if (result == null && result.Count == 0)
+                    return;
+
+                Realm.Write(() => 
                 {
-                    var result = await _contactsService.GetUsersFromAllDivisions();
+                    foreach (var res in result) {
+                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                        Realm.Add(res, true);
+                    }
+                });
 
-                    if (result == null && result.Count == 0)
-                        return;
-
-                    Realm.Write(() => {
-                        foreach (var res in result)
-                        {
-                            res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
-                            var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
-                            string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
-                            stringSearch = StringUtils.NormalizeString(stringSearch);
-                            res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
-
-                            Realm.Add(res, true); 
-                        }
-                    });
-
-                    _users = Realm.All<GetUsersInDivisionModel>().ToList();
-                }
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
             }
             catch (Exception ex)
             {

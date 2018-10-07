@@ -76,8 +76,8 @@ namespace LetterApp.Core.ViewModels
         private XPCommand<bool> _loadMessagesUpdateReceiptCommand;
         public XPCommand<bool> LoadMessagesUpdateReceiptCommand => _loadMessagesUpdateReceiptCommand ?? (_loadMessagesUpdateReceiptCommand = new XPCommand<bool>(async (val) => await LoadMessagesAndUpdateReadReceipt(val), CanExecuteLoad));
 
-        private XPCommand _removeChatHandlersCommand;
-        public XPCommand RemoveChatHandlersCommand => _removeChatHandlersCommand ?? (_removeChatHandlersCommand = new XPCommand(() => { SendBirdClient.RemoveChannelHandler("ChatHandler"); }));
+        private XPCommand<bool> _chatHandlersCommand;
+        public XPCommand<bool> ChatHandlersCommand => _chatHandlersCommand ?? (_chatHandlersCommand = new XPCommand<bool>(ChatHandlers));
 
         private XPCommand _callCommand;
         public XPCommand CallCommand => _callCommand ?? (_callCommand = new XPCommand(async () => await Call()));
@@ -497,20 +497,21 @@ namespace LetterApp.Core.ViewModels
             IsBusy = false;
         }
 
-        public void ChatHandlers()
+        public void ChatHandlers(bool enable = true)
         {
-            Debug.WriteLine("Initializing SendBird Handlers in Chat");
-
-            SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
+            if (enable)
             {
-                OnMessageReceived = MessageReceived,
-                OnTypingStatusUpdated = TypingStatus,
-                OnReadReceiptUpdated = ReadReceipt
-            };
+                SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
+                {
+                    OnMessageReceived = MessageReceived,
+                    OnTypingStatusUpdated = TypingStatus,
+                    OnReadReceiptUpdated = ReadReceipt
+                };
 
-            SendBirdClient.AddChannelHandler("ChatHandler", ch);
-
-            Debug.WriteLine("SendBird Handlers Initialized");
+                SendBirdClient.AddChannelHandler("ChatHandler", ch);
+            }
+            else
+                SendBirdClient.RemoveChannelHandler("ChatHandler");
         }
 
         private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages)
@@ -533,12 +534,12 @@ namespace LetterApp.Core.ViewModels
                 if (!await GetChannel())
                     return;
 
+                if (loadMessages)
+                    await LoadRecentMessages(false);
+
                 _messengerService.MarkMessageAsRead(_channel);
 
                 StatusLogic();
-
-                if (loadMessages)
-                    await LoadRecentMessages(false);
 
                 if (_chat?.Messages != null && _chat.Messages.Any(x => x.FailedToSend == true))
                     await RetrySendMessages();
@@ -783,42 +784,49 @@ namespace LetterApp.Core.ViewModels
             NavigationService.ChatOpen(-1);
             SendBirdClient.RemoveChannelHandler("ChatHandler");
 
-            if (_chat?.Messages?.Count > 0)
+            try
             {
-                Realm.Write(() =>
+                if (_chat?.Messages?.Count > 0)
                 {
-                    var lastMessage = _chat.Messages.Last();
-
-                    var userChat = new ChatListUserModel
+                    Realm.Write(() =>
                     {
-                        MemberId = _user.UserId,
-                        MemberName = $"{_user.FirstName} {_user.LastName} - {_user.Position}",
-                        MemberPhoto = _user.Picture,
-                        IsMemberMuted = _chat.MemberMuted,
-                        IsNewMessage = false,
-                        MemberPresence = (int)_chat.MemberPresence,
-                        MemberPresenceConnectionDate = _userChat != null ? _userChat.MemberPresenceConnectionDate : default(DateTime).Ticks,
-                        //TODO LastMessage: Add logic for file and images
-                        LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {lastMessage.MessageData}" : lastMessage.MessageData,
-                        LastMessageDateTimeTicks = lastMessage.MessageDateTime.Ticks,
-                        IsArchived = _chat.MemberArchived,
-                        ArchivedTime = _chat.MemberMuted ? DateTime.Now.Ticks : default(DateTime).Ticks,
-                        UnreadMessagesCount = 0,
-                        MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
-                    };
+                        var lastMessage = _chat.Messages.Last();
 
-                    List<MessagesModel> historyMessages;
+                        var userChat = new ChatListUserModel
+                        {
+                            MemberId = _user.UserId,
+                            MemberName = $"{_user.FirstName} {_user.LastName} - {_user.Position}",
+                            MemberPhoto = _user.Picture,
+                            IsMemberMuted = _chat.MemberMuted,
+                            IsNewMessage = false,
+                            MemberPresence = (int)_chat.MemberPresence,
+                            MemberPresenceConnectionDate = _userChat != null ? _userChat.MemberPresenceConnectionDate : default(DateTime).Ticks,
+                            //TODO LastMessage: Add logic for file and images
+                            LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {lastMessage.MessageData}" : lastMessage.MessageData,
+                            LastMessageDateTimeTicks = lastMessage.MessageDateTime.Ticks,
+                            IsArchived = _chat.MemberArchived,
+                            ArchivedTime = _chat.MemberMuted ? DateTime.Now.Ticks : default(DateTime).Ticks,
+                            UnreadMessagesCount = 0,
+                            MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
+                        };
 
-                    if (_messagesModel?.Count > 0)
-                        historyMessages = _messagesModel?.OrderByDescending(x => x.MessageDateTicks).Take(30).ToList();
-                    else
-                        historyMessages = _userChat?.MessagesList?.OrderByDescending(x => x.MessageDateTicks).Take(30).ToList();
+                        List<MessagesModel> historyMessages;
 
-                    foreach (var msg in historyMessages.ToList())
-                        userChat.MessagesList.Add(msg);
+                        if (_messagesModel?.Count > 0)
+                            historyMessages = _messagesModel?.OrderByDescending(x => x.MessageDateTicks).Take(30).ToList();
+                        else
+                            historyMessages = _userChat?.MessagesList?.OrderByDescending(x => x.MessageDateTicks).Take(30).ToList();
 
-                    Realm.Add(userChat, true);
-                });
+                        foreach (var msg in historyMessages.ToList())
+                            userChat.MessagesList.Add(msg);
+
+                        Realm.Add(userChat, true);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
             }
         }
 

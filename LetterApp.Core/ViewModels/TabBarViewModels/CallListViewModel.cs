@@ -57,8 +57,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         }
         public override async Task Appearing()
         {
-            //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
-            //return;
             if (_users == null || _users.Count == 0)
                 await GetUsers();
 
@@ -150,15 +148,10 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     if (result == null && result.Count == 0)
                         return;
 
-                    Realm.Write(() => {
-                        foreach (var res in result)
-                        {
+                    Realm.Write(() => 
+                    {
+                        foreach (var res in result) {
                             res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
-                            var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
-                            string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
-                            stringSearch = StringUtils.NormalizeString(stringSearch);
-                            res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
-
                             Realm.Add(res, true);
                         }
                     });

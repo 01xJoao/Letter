@@ -32,7 +32,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
            UIApplication.Notifications.ObserveWillEnterForeground(ShowNotifications);
-           UIApplication.Notifications.ObserveWillEnterForeground(RemoveNotifications);
+           UIApplication.Notifications.ObserveDidEnterBackground(RemoveNotifications);
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

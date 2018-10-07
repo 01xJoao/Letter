@@ -45,7 +45,7 @@ namespace LetterApp.iOS.Views.Chat
             ConfigureView();
 
             _viewWillShow = UIApplication.Notifications.ObserveWillEnterForeground(ConnectMessageHandler);
-            _viewWillHide = UIApplication.Notifications.ObserveWillEnterForeground(DisconnectMessageHandler);
+            _viewWillHide = UIApplication.Notifications.ObserveDidEnterBackground(DisconnectMessageHandler);
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -91,6 +91,7 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.TableHeaderView = new UIView(new CGRect(0, 0, 0, 0.1f));
 
             _keyboardViewBottomConstraint.Constant = _keyboardBottomHeight;
+            _tableViewBottomConstraint.Constant = _keyboardAreaView.Frame.Height + _keyboardBottomHeight;
 
             AddStatusInTableView();
 
@@ -219,7 +220,7 @@ namespace LetterApp.iOS.Views.Chat
         private void AnimateTableView(bool showKeyboard)
         {
             _keyboardViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight : _keyboardBottomHeight;
-            _tableViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight + _keyboardAreaView.Frame.Height : _keyboardAreaView.Frame.Height;
+            _tableViewBottomConstraint.Constant = showKeyboard ? _keyboardHeight + _keyboardAreaView.Frame.Height : _keyboardAreaView.Frame.Height + _keyboardBottomHeight;
             UIView.Animate(0.3f, this.View.LayoutIfNeeded);
             ScrollToLastRow();
         }
@@ -392,12 +393,13 @@ namespace LetterApp.iOS.Views.Chat
         {
             _isViewVisible = true;
             ViewModel.LoadMessagesUpdateReceiptCommand.Execute(true);
+            ViewModel.ChatHandlersCommand.Execute(true);
         }
 
         private void DisconnectMessageHandler(object sender, NSNotificationEventArgs e)
         {
             _isViewVisible = false;
-            ViewModel.RemoveChatHandlersCommand.Execute();
+            ViewModel.ChatHandlersCommand.Execute(false);
         }
 
         public override void ViewWillAppear(bool animated)
