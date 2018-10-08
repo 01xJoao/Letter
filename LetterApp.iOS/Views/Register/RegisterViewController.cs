@@ -117,8 +117,8 @@ namespace LetterApp.iOS.Views.Register
         {
             base.ViewDidAppear(animated);
 
-            if (NavigationController?.InteractivePopGestureRecognizer != null)
-                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+            //if (NavigationController?.InteractivePopGestureRecognizer != null)
+                //NavigationController.InteractivePopGestureRecognizer.Enabled = true;
         }
 
         public override void ViewWillDisappear(bool animated)

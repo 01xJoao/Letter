@@ -10,4 +10,9 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string PubNubToken { get; set; }
         public DateTime PubNubTokenExpirationDate { get; set; }
     }
+
+    public class NotificationTokenModel : BaseModel
+    {
+        public string NotificationToken { get; set; }
+    }
 }

@@ -100,7 +100,7 @@ namespace LetterApp.iOS.Helpers
 
             titleLabel.SizeToFit();
 
-            var subtitleLabel = new UILabel(new CGRect(0, 26, 0, 0))
+            var subtitleLabel = new UILabel(new CGRect(0, 25, 0, 0))
             {
                 BackgroundColor = UIColor.Clear,
                 TextColor = Colors.White,

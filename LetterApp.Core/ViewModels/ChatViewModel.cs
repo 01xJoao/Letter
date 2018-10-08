@@ -175,25 +175,10 @@ namespace LetterApp.Core.ViewModels
 
             StatusLogic();
 
-            LoadMessagesAndUpdateReadReceipt(true);
+            LoadMessagesAndUpdateReadReceipt(true, true);
         }
 
-        private async Task GetUserPushToken()
-        {
-            try
-            {
-                var result = await _contactService.GetUserPushToken(_userId);
-
-                if(!string.IsNullOrEmpty(result))
-                    Realm.Write(() => { _user.PushNotificationToken = result; });
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-        }
-
-        private async Task LoadRecentMessages(bool loadOldMessages = false)
+        private async Task LoadRecentMessages(bool loadOldMessages)
         {
             IsLoading = true;
 
@@ -258,77 +243,45 @@ namespace LetterApp.Core.ViewModels
                 {
                     _isLoading = false; 
                     RaisePropertyChanged(nameof(IsLoading));
+
                     return;
                 }
             }
             catch (Exception ex)
             {
-                Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
                 _isLoading = false;
                 RaisePropertyChanged(nameof(IsLoading));
-            }
 
-            if (!loadOldMessages)
-                _chatMessages = null;
-
-            MessagesLogic(_messagesModel, !loadOldMessages);
-
-            bool shouldUpdate = false;
-
-            if (_chat?.Messages?.Count > 0 && _chatMessages?.Count > 0)
-                shouldUpdate = _chat.Messages.Last().MessageId != _chatMessages.Last().MessageId;
-            else
-                shouldUpdate = true;
-
-            _chat.Messages = _chatMessages?.OrderBy(x => x?.MessageDateTime)?.ToList();
-
-            if(shouldUpdate || loadOldMessages)
-                RaisePropertyChanged(nameof(Chat));
-        }
-
-        private async Task<bool> MessageServiceConnection()
-        {
-            Debug.WriteLine("Checking Message Service Connection: " + SendBirdClient.GetConnectionState());
-
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-                return false;
-
-            IsBusy = true;
-
-            var tcs = new TaskCompletionSource<bool>();
-
-            try
-            {
-                if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
-                {
-                    int numberOfTries = 0;
-                    while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
-                    {
-                        Debug.WriteLine("Trying to reconnect to Messenger Services");
-                        await Task.Delay(TimeSpan.FromSeconds(numberOfTries++));
-                    }
-
-                    if(SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
-                        await _messengerService.ConnectMessenger();
-
-                }
-
-                await GetChannel();
-
-                return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
-            }
-            catch (Exception ex)
-            {
                 Ui.Handle(ex as dynamic);
-                return false;
+
+                return;
             }
-            finally
-            {
-                IsBusy = false;
-            }
+
+            //if (!loadOldMessages)
+            //{
+            //    //_chatMessages = null;
+            //    _chat.Messages = new List<ChatMessagesModel>();
+            //}
+            if(_messagesModel?.Count > 0)
+                _chat.Messages = new List<ChatMessagesModel>();
+
+            MessagesLogic(_messagesModel, false);//!loadOldMessages);
+
+            //bool shouldUpdate = false;
+
+            //if (_chat?.Messages?.Count > 0 && _chatMessages?.Count > 0)
+            //    shouldUpdate = _chat.Messages.Last().MessageId != _chatMessages.Last().MessageId;
+            //else
+                //shouldUpdate = true;
+
+            if(_chatMessages?.Count > 0)
+                _chat.Messages = _chatMessages?.OrderBy(x => x?.MessageDateTime)?.ToList();
+
+            //if(shouldUpdate || loadOldMessages)
+                RaisePropertyChanged(nameof(Chat));
+
+            _isLoading = false;
+            RaisePropertyChanged(nameof(IsLoading));
         }
 
         private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages)
@@ -422,7 +375,8 @@ namespace LetterApp.Core.ViewModels
                 _status = string.Empty;
                 RaisePropertyChanged(nameof(Status));
 
-                var result = await _messengerService.SendMessage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}", _user.PushNotificationToken, messageToSend, _sendedMessageDateTime.ToString());
+                var result = await _messengerService.SendMessage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}", 
+                                                                 _user.PushNotificationToken, messageToSend, _sendedMessageDateTime.ToString());
 
                 if(result != null)
                 {
@@ -459,17 +413,6 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
-        private void MessageClickEvent(object sender, long messageId)
-        {
-            if (IsBusy)
-                return;
-
-            var message = SendedMessages.Find(x => x.MessageId == messageId);
-
-            if (message != null)
-                RetrySendMessages();
-        }
-
         private async Task RetrySendMessages()
         {
             try
@@ -503,7 +446,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task FetchOldMessages()
         {
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet ||  _chat?.Messages?.Count < 30)
                 return;
 
             IsBusy = true;
@@ -515,24 +458,7 @@ namespace LetterApp.Core.ViewModels
             IsBusy = false;
         }
 
-        public void ChatHandlers(bool enable = true)
-        {
-            if (enable)
-            {
-                SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
-                {
-                    OnMessageReceived = MessageReceived,
-                    OnTypingStatusUpdated = TypingStatus,
-                    OnReadReceiptUpdated = ReadReceipt
-                };
-
-                SendBirdClient.AddChannelHandler("ChatHandler", ch);
-            }
-            else
-                SendBirdClient.RemoveChannelHandler("ChatHandler");
-        }
-
-        private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages)
+        private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages, bool forceLoad = false)
         {
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                 return;
@@ -543,16 +469,24 @@ namespace LetterApp.Core.ViewModels
             {
                 Debug.WriteLine("LoadMessagesAndUpdateReadReceipt WithLoadMessages:" + SendBirdClient.GetConnectionState());
 
+                bool needsToUpdatedMessages = false;
+
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                 {
+                    needsToUpdatedMessages = true;
                     await Task.Delay(TimeSpan.FromSeconds(2));
                     await MessageServiceConnection();
                 }
 
                 if (!await GetChannel())
+                {
+                    IsBusy = false;
                     return;
+                }
 
-                if (loadMessages)
+                IsBusy = false;
+
+                if ((loadMessages && needsToUpdatedMessages) || forceLoad)
                     await LoadRecentMessages(false);
 
                 _messengerService.MarkMessageAsRead(_channel);
@@ -566,18 +500,14 @@ namespace LetterApp.Core.ViewModels
             {
                 Ui.Handle(ex as dynamic);
             }
-            finally
-            {
-                IsBusy = false;
-            }
         }
 
         private async Task<bool> GetChannel()
         {
             try
             {
-                if (_channel == null)
-                {
+                //if (_channel == null)
+                //{
                     if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                         return false;
 
@@ -585,7 +515,7 @@ namespace LetterApp.Core.ViewModels
 
                     if (_channel == null)
                         _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
-                }
+                //}
 
                 if (_channel.MemberCount < 2)
                 {
@@ -607,6 +537,103 @@ namespace LetterApp.Core.ViewModels
 
             return true;
         }
+        #region MessageServiceConnection
+
+        private async Task<bool> MessageServiceConnection()
+        {
+            Debug.WriteLine("Checking Message Service Connection: " + SendBirdClient.GetConnectionState());
+
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                return false;
+
+            IsBusy = true;
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            try
+            {
+                if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                {
+                    int numberOfTries = 0;
+                    while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
+                    {
+                        Debug.WriteLine("Trying to reconnect to Messenger Services");
+                        await Task.Delay(TimeSpan.FromSeconds(numberOfTries++));
+                    }
+
+                    if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                        await _messengerService.ConnectMessenger();
+
+                }
+
+                await GetChannel();
+
+                return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+                return false;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        #endregion
+
+        #region MessageClickEvent & GetUserPushToken
+
+        private async Task GetUserPushToken()
+        {
+            try
+            {
+                var result = await _contactService.GetUserPushToken(_userId);
+
+                if (result?.StatusCode == 200)
+                    Realm.Write(() => { _user.PushNotificationToken = result.NotificationToken; });
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private void MessageClickEvent(object sender, long messageId)
+        {
+            if (IsBusy)
+                return;
+
+            var message = SendedMessages.Find(x => x.MessageId == messageId);
+
+            if (message != null)
+                RetrySendMessages();
+        }
+
+
+        #endregion
+
+        #region ChatHandlers
+
+        public void ChatHandlers(bool enable = true)
+        {
+            if (enable)
+            {
+                SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler
+                {
+                    OnMessageReceived = MessageReceived,
+                    OnTypingStatusUpdated = TypingStatus,
+                    OnReadReceiptUpdated = ReadReceipt
+                };
+
+                SendBirdClient.AddChannelHandler("ChatHandler", ch);
+            }
+            else
+                SendBirdClient.RemoveChannelHandler("ChatHandler");
+        }
+
+        #endregion
 
         #region Status
 
@@ -614,7 +641,7 @@ namespace LetterApp.Core.ViewModels
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (channel.Url == _channel.Url)
+                if (channel?.Url == _channel?.Url)
                 {
                     _status = channel.IsTyping() ? TypingMessage : string.Empty;
                     StatusLogic();
@@ -633,7 +660,7 @@ namespace LetterApp.Core.ViewModels
         private void MessageReceived(BaseChannel baseChannel, BaseMessage baseMessage)
         {
             MainThread.BeginInvokeOnMainThread(() => {
-
+            
                 Debug.WriteLine("Message Received");
 
                 if (_chat == null)
@@ -643,7 +670,7 @@ namespace LetterApp.Core.ViewModels
 
                 var channel = baseChannel as GroupChannel;
 
-                if (channel?.Url != _channel.Url)
+                if (channel?.Url != _channel?.Url)
                     return;
 
                 var newMessage = new MessagesModel();
@@ -713,6 +740,8 @@ namespace LetterApp.Core.ViewModels
 
         #endregion
 
+        #region CheckConnection
+
         private async Task CheckConnection()
         {
             Connectivity.ConnectivityChanged -= ConnectivityChanged;
@@ -738,6 +767,10 @@ namespace LetterApp.Core.ViewModels
             await LoadMessagesAndUpdateReadReceipt(true);
             ChatHandlers();
         }
+
+        #endregion
+
+        #region NavigationBar
 
         private async Task Call()
         {
@@ -795,6 +828,10 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        #endregion
+
+        #region Close
+
         private async Task CloseView() => await NavigationService.Close(this);
 
         public override async Task Disappearing()
@@ -848,9 +885,15 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        #endregion
+
+        #region CanExecute
+
         private bool CanExecute() => !IsBusy;
         private bool CanExecuteMsg(Tuple<string, MessageType> msg) => !IsBusy;
         private bool CanExecuteLoad(bool arg) => !IsBusy;
+
+        #endregion
 
         #region Resources 
 

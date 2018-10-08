@@ -146,6 +146,9 @@ namespace LetterApp.iOS.Views.Login
 
             _passwordLabel.Alpha = 0;
             _passwordTextField.Text = string.Empty;
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
         }
     }
 }

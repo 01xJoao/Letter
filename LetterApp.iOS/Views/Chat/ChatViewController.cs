@@ -143,7 +143,7 @@ namespace LetterApp.iOS.Views.Chat
             _tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 15f)) { BackgroundColor = UIColor.Clear };
             _statusLabel = new UILabel(new CGRect(0, 2, ScreenWidth, 12)) { TextAlignment = UITextAlignment.Center };
             UILabelExtensions.SetupLabelAppearance(_statusLabel, string.Empty, Colors.GrayLabel, 10f);
-            _tableView.TableFooterView?.AddSubview(_statusLabel);
+            _tableView?.TableFooterView?.AddSubview(_statusLabel);
         }
 
         private void UpdateTableView()
@@ -166,14 +166,20 @@ namespace LetterApp.iOS.Views.Chat
         {
             if (ViewModel?.Chat?.Messages?.Count > 10)
             {
-                _tableView.ScrollToRow(NSIndexPath.FromRowSection(ViewModel.Chat.Messages.Count > 35 
-                                  ? 35 
+                _tableView.ScrollToRow(NSIndexPath.FromRowSection(ViewModel.Chat.Messages.Count > 35 ? 35 
                                   : ViewModel.Chat.Messages.Count/2, 0), UITableViewScrollPosition.Bottom, true);
             }
         }
 
+        private bool _firstTime = true;
         private void OnSource_ScrollTopEvent(object sender, EventArgs e)
         {
+            if(PhoneModelExtensions.IsIphoneX() && _firstTime)
+            {
+                _firstTime = false;
+                return;
+            }
+
             if (ViewModel.FetchOldMessagesCommand.CanExecute())
                 ViewModel.FetchOldMessagesCommand.Execute();
         }
@@ -184,17 +190,19 @@ namespace LetterApp.iOS.Views.Chat
             UpdateTableView();
             var section = _tableView.NumberOfSections();
             var row = _tableView.NumberOfRowsInSection(section - 1);
-            _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, false);
+
+            if(section > 0 && row > 0)
+                _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, false);
         }
 
         private void ShowStatus()
         {
             Debug.WriteLine("STATUS:" + ViewModel.Status);
 
-            if(_tableView.TableFooterView?.Subviews == null || _tableView.TableFooterView.Subviews?.Count() == 0)
+            if(_tableView?.TableFooterView?.Subviews == null || _tableView?.TableFooterView?.Subviews?.Count() == 0)
                 AddStatusInTableView();
 
-            if (_tableView.TableFooterView?.Subviews?.Last() is UILabel label)
+            if (_tableView?.TableFooterView?.Subviews?.Last() is UILabel label)
                 label.Text = ViewModel.Status;
         }
 
@@ -347,7 +355,7 @@ namespace LetterApp.iOS.Views.Chat
 
         private void ScrollToBottom()
         {
-            if (_tableView.ContentSize.Height > _tableView.Bounds.Size.Height)
+            if (_tableView?.ContentSize.Height > _tableView?.Bounds.Size.Height)
             {
                 var offSet = _tableView.ContentSize.Height - _tableView.Bounds.Size.Height;
                 _tableView.SetContentOffset(new CGPoint(0, offSet), true);
@@ -393,13 +401,13 @@ namespace LetterApp.iOS.Views.Chat
         {
             _isViewVisible = true;
             ViewModel.LoadMessagesUpdateReceiptCommand.Execute(true);
-            ViewModel.ChatHandlersCommand.Execute(true);
+            //ViewModel.ChatHandlersCommand.Execute(true);
         }
 
         private void DisconnectMessageHandler(object sender, NSNotificationEventArgs e)
         {
             _isViewVisible = false;
-            ViewModel.ChatHandlersCommand.Execute(false);
+            //ViewModel.ChatHandlersCommand.Execute(false);
         }
 
         public override void ViewWillAppear(bool animated)

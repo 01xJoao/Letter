@@ -147,24 +147,23 @@ namespace LetterApp.iOS
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            AppSettings.MessengerToken = deviceToken.Description.TrimStart('<').TrimEnd('>');
-
+            //AppSettings.MessengerToken = deviceToken.Description.TrimStart('<').TrimEnd('>');
             //Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
             //byte[] deviceTokenBytes = deviceToken.ToArray();
         }
 
-        void HandleIdsAvailableCallback(string playerID, string pushToken) => RegisterTokenInDataBase(playerID);
+        void HandleIdsAvailableCallback(string playerID, string pushToken) => AppSettings.MessengerToken = playerID;
 
-        private async Task RegisterTokenInDataBase(string userToken)
-        {
-            var webService = App.Container.GetInstance<IWebService>();
+        //private async Task RegisterTokenInDataBase(string userToken)
+        //{
+        //    var webService = App.Container.GetInstance<IWebService>();
 
-            try
-            {
-                webService.GetAsync<BaseModel>($"/api/users/registertoken/{userToken}", needsHeaderCheck: true).ConfigureAwait(true);
-            }
-            catch (Exception ex){}
-        }
+        //    try
+        //    {
+        //        webService.GetAsync<BaseModel>($"/api/users/registertoken/{userToken}", needsHeaderCheck: true).ConfigureAwait(true);
+        //    }
+        //    catch (Exception ex){}
+        //}
 
         [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)

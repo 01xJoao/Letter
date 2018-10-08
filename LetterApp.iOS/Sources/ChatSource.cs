@@ -30,7 +30,7 @@ namespace LetterApp.iOS.Sources
         {
             var cell = new UITableViewCell();
 
-            if (indexPath.Row >= _chat.Messages?.Count)
+            if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return cell;
 
             switch (_chat.Messages[indexPath.Row].PresentMessage)
@@ -75,9 +75,8 @@ namespace LetterApp.iOS.Sources
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            if (indexPath.Row >= _chat.Messages?.Count)
+            if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return 0;
-
 
             float cellHeight = 2;
             var message = _chat.Messages[indexPath.Row];

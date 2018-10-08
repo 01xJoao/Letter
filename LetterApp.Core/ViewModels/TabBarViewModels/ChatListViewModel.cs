@@ -176,7 +176,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                         if (result == null)
                             return;
 
-                        userChatModel = new ChatListUserModel
+                        var user = new ChatListUserModel
                         {
                             MemberId = result.UserId,
                             MemberName = $"{result.FirstName} {result.LastName} - {result.Position}",
@@ -184,9 +184,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             IsMemberMuted = false,
                         };
 
-                        Realm.Write(() => Realm.Add(userChatModel));
+                        Realm.Write(() => Realm.Add(user));
                     }
                 }
+
+                userChatModel = _chatUserModel?.Find(x => x.MemberId == msgUserId);
+
+                if (userChatModel == null)
+                    return;
 
                 var newmsg = new MessagesModel
                 {
@@ -196,7 +201,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     MessageSenderId = msg.Sender.UserId,
                     MessageDateTicks = lastMessageDate.Ticks
                 };
-
+                //TODO Fix userChatModel Here
                 Realm.Write(() =>
                 {
                     userChatModel.MemberPresence = 0;

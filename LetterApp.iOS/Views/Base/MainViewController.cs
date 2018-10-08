@@ -90,6 +90,14 @@ namespace LetterApp.iOS.Views.Base
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+        }
+
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);

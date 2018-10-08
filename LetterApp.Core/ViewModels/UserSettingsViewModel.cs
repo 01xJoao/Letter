@@ -66,6 +66,9 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
+                if (!string.IsNullOrEmpty(AppSettings.MessengerToken))
+                    _settingsService.SendPushNotificationToken(AppSettings.MessengerToken);
+
                 resultNotifications = await _settingsService.CheckNotificationPermissions();
             }
             catch (Exception ex)
