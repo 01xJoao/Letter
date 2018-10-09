@@ -107,16 +107,16 @@ namespace LetterApp.Core.ViewModels
 
             var messageNotifications = new DescriptionAndBoolEventModel(MessageNotificationLabel, AppSettings.MessageNotifications, MessageNotificationEvent);
             var callNotifications = new DescriptionAndBoolEventModel(CallNotificationLabel, AppSettings.CallNotifications, CallNotificationEvent);
-            var groupNotifications = new DescriptionAndBoolEventModel(GroupNotificationLabel, AppSettings.GroupNotifications, GroupNotificationEvent);
+            //var groupNotifications = new DescriptionAndBoolEventModel(GroupNotificationLabel, AppSettings.GroupNotifications, GroupNotificationEvent);
 
-            var notificationTypes = new[] { messageNotifications, callNotifications, groupNotifications };
+            var notificationTypes = new[] { messageNotifications, callNotifications };//, groupNotifications };
             SwitchModel = new List<DescriptionAndBoolEventModel>();
             SwitchModel.AddRange(notificationTypes);
 
             RaisePropertyChanged(nameof(UpdateView));
         }
 
-        private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
+        //private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
         private void CallNotificationEvent(object sender, bool value) => AppSettings.CallNotifications = value;
         private void MessageNotificationEvent(object sender, bool value) => _settingsService.OpenSettings();
 
@@ -134,7 +134,7 @@ namespace LetterApp.Core.ViewModels
                         break;
 
                     case CellType.ContactUs:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/contactus");
+                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/contacts");
                         break;
 
                     case CellType.TermsOfService:

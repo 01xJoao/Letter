@@ -28,6 +28,9 @@ namespace LetterApp.iOS.Views.SelectOrganization
                 
             _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
             _closeButton.TouchUpInside += OnCloseButton_TouchUpInside;
+
+            _createOrgButton.TouchUpInside -= OnCreateOrgButton_TouchUpInside;
+            _createOrgButton.TouchUpInside += OnCreateOrgButton_TouchUpInside;
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -82,6 +85,8 @@ namespace LetterApp.iOS.Views.SelectOrganization
             _textField.AutocorrectionType = UITextAutocorrectionType.No;
             _textField.TextContentType = new NSString("");
 
+            UIButtonExtensions.SetupButtonUnderlineAppearance(_createOrgButton, Colors.White, 15f, ViewModel.CreateOrganization);
+
             if (!string.IsNullOrEmpty(ViewModel.EmailDomain))
                 _textField.Text = ViewModel.EmailDomain.ToUpper();
         }
@@ -93,6 +98,11 @@ namespace LetterApp.iOS.Views.SelectOrganization
                 ViewModel.AccessOrgCommand.Execute(_textField.Text);
                 _textField.ResignFirstResponder();
             }
+        }
+
+        private void OnCreateOrgButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.CreateOrganizationCommand.Execute();
         }
 
         public override void ViewWillAppear(bool animated)

@@ -66,6 +66,14 @@ namespace LetterApp.iOS.Views.Register
 
             _source.AgreementToogleEvent -= OnSource_AgreementToogleEvent;
             _source.AgreementToogleEvent += OnSource_AgreementToogleEvent;
+
+            _source.ReadAgreementEvent -= OnSource_ReadAgreementEvent;
+            _source.ReadAgreementEvent += OnSource_ReadAgreementEvent;
+        }
+
+        private void OnSource_ReadAgreementEvent(object sender, EventArgs e)
+        {
+            ViewModel.ReadAgreementCommand.Execute();
         }
 
         private void OnSource_AgreementToogleEvent(object sender, bool userAgreed)
@@ -113,26 +121,24 @@ namespace LetterApp.iOS.Views.Register
                 ViewModel.CloseViewCommand.Execute();
         }
 
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
-            //if (NavigationController?.InteractivePopGestureRecognizer != null)
-                //NavigationController.InteractivePopGestureRecognizer.Enabled = true;
-        }
-
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            this.NavigationController?.SetNavigationBarHidden(true, true);
+
+            if (this.IsMovingFromParentViewController)
+                this.NavigationController?.SetNavigationBarHidden(true, true);
         }
 
         public override void ViewDidDisappear(bool animated)
         {
-            _source?.Dispose();
-            _source = null;
-            MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
+
+            if (this.IsMovingFromParentViewController)
+            {
+                _source?.Dispose();
+                _source = null;
+                MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            }
         }
     }
 }

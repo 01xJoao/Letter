@@ -352,6 +352,10 @@
     "translated": "Entrar"
   },
   {
+    "key": "SelectOrganization_CreateOrg",
+    "translated": "Registar nova organização"
+  },
+  {
     "key": "SelectDivision_PrivateLabel",
     "translated": "Divisões Privadas"
   },

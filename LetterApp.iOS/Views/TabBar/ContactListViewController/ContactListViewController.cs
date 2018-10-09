@@ -439,8 +439,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 {
                     _tabScrollTopConstraint.Constant = 0;
                     UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
-                       () =>
-                       {
+                       () => {
                            _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - _heightForAnimationTab, _barView.Frame.Width, _barView.Frame.Height);
                            this.View.LayoutIfNeeded();
                        }, SetSearchView
@@ -457,7 +456,10 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private void ContactEvent(object sender, Tuple<ContactListViewModel.ContactEventType, int> contact)
         {
             if (ViewModel.ContactCommand.CanExecute(contact))
+            {
+                _search.SearchBar.ResignFirstResponder();
                 ViewModel.ContactCommand.Execute(contact);
+            }
         }
 
         public override void ViewDidLayoutSubviews()
