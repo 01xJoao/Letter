@@ -39,7 +39,10 @@ namespace LetterApp.iOS.Views.ActivateAccount
         private void SetupView()
         {
             if (PhoneModelExtensions.IsIphoneX())
+            {
                 _navigationTopConstraint.Constant = LocalConstants.IphoneXNotchHeight;
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
 
             UIButtonExtensions.SetupButtonAppearance(_button, Colors.White, 16f, ViewModel.SubmitButton);
             UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 15f, ViewModel.ResendCodeButton);

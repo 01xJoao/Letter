@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,6 +15,7 @@
                 <outlet property="_backButton" destination="YXJ-Fm-oUY" id="Gbr-BL-tP2"/>
                 <outlet property="_backHeightConstraint" destination="dsm-yr-OIl" id="iXR-3h-age"/>
                 <outlet property="_backImage" destination="Y9d-gF-26d" id="y8C-S6-Y7C"/>
+                <outlet property="_buttonHeightConstraint" destination="Muz-kl-0p3" id="8yJ-AY-4g8"/>
                 <outlet property="_callButton" destination="uVa-f8-oCl" id="sjq-B5-Un9"/>
                 <outlet property="_callView" destination="f3C-uo-KFG" id="P8H-XG-9Wg"/>
                 <outlet property="_chatButton" destination="m4B-4Y-K9p" id="7Dd-nb-DNA"/>
@@ -49,7 +48,7 @@
                             <rect key="frame" x="13" y="23" width="38" height="38"/>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Gw-TQ-qhd">
-                            <rect key="frame" x="123.5" y="40" width="127" height="127"/>
+                            <rect key="frame" x="124" y="40" width="127" height="127"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="127" id="KJI-Aa-JOL"/>
                                 <constraint firstAttribute="width" secondItem="5Gw-TQ-qhd" secondAttribute="height" id="bmN-54-r9h"/>
@@ -98,7 +97,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="187.5" height="55"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m4B-4Y-K9p">
-                                    <rect key="frame" x="-1" y="0.0" width="188" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="55"/>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -110,10 +109,10 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f3C-uo-KFG">
-                            <rect key="frame" x="187" y="0.0" width="187.5" height="55"/>
+                            <rect key="frame" x="187.5" y="0.0" width="187.5" height="55"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uVa-f8-oCl">
-                                    <rect key="frame" x="-0.5" y="0.0" width="187.5" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="55"/>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

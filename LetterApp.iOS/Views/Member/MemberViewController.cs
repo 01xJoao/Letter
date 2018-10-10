@@ -32,13 +32,14 @@ namespace LetterApp.iOS.Views.Member
                 case nameof(ViewModel.MemberProfileModel):
                     UpdateView();
                     break;
-                default:
-                    break;
             }
         }
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += 20;
+
             _backHeightConstraint.Constant = _backHeightConstraint.Constant + (PhoneModelExtensions.IsIphoneX() ? 20 : 0); 
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;

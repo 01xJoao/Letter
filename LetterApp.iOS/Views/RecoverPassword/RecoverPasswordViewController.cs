@@ -60,7 +60,10 @@ namespace LetterApp.iOS.Views.RecoverPassword
         private void SetupView()
         {
             if (PhoneModelExtensions.IsIphoneX())
+            {
                 _navBarTopConstraint.Constant = LocalConstants.IphoneXNotchHeight;
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
 
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 16f, ViewModel.SubmitButton);
             UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewPassTitle, Colors.Black, 17f, UIFontWeight.Semibold);

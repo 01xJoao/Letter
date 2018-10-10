@@ -72,6 +72,9 @@ namespace LetterApp.iOS.Views.Login
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 14f, ViewModel.SignUpButton);
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
             UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 12f, ViewModel.ForgotPasswordButton);

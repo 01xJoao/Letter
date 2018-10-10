@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="_backgroundView" destination="Jiw-0d-TG2" id="Rs5-pS-CRo"/>
                 <outlet property="_buttonBackgroundView" destination="hzb-lJ-89c" id="rL4-Kg-4vC"/>
+                <outlet property="_buttonHeightConstraint" destination="cFA-9e-abD" id="Qwo-E3-0Yl"/>
                 <outlet property="_closeButton" destination="NTR-Xe-UqO" id="bRp-JJ-zEW"/>
                 <outlet property="_createOrgButton" destination="XEx-nt-bza" id="Sm6-6g-f22"/>
                 <outlet property="_label" destination="6BI-wv-N2C" id="dqt-7V-dTC"/>

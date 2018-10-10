@@ -39,6 +39,9 @@ namespace LetterApp.iOS.Views.Division
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += 20;
+
             this.Title = ViewModel.Division.Name;
             _profileHeaderView.BackgroundColor = Colors.MainBlue;
 

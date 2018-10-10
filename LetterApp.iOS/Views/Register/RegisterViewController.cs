@@ -52,6 +52,9 @@ namespace LetterApp.iOS.Views.Register
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             _buttonView.BackgroundColor = Colors.MainBlue;
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 16f, ViewModel.SubmitButton);
         }

@@ -31,8 +31,6 @@ namespace LetterApp.iOS.Views.ChangePassword
                 case nameof(ViewModel.CleanPassword):
                     CleanCurrentPassword();
                     break;
-                default:
-                    break;
             }
         }
 
@@ -52,6 +50,9 @@ namespace LetterApp.iOS.Views.ChangePassword
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             _view1.BackgroundColor = Colors.ProfileGrayWhiter;
             _view2.BackgroundColor = Colors.ProfileGrayWhiter;
             _view3.BackgroundColor = Colors.ProfileGrayWhiter;

@@ -39,6 +39,9 @@ namespace LetterApp.iOS.Views.Organization
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += 20;
+
             this.View.BackgroundColor = Colors.MainBlue;
             _tableView.BackgroundColor = Colors.MainBlue4;
 

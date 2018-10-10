@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
                 <outlet property="_backgroundView" destination="S0R-hR-3Cs" id="XH8-Qv-2a0"/>
+                <outlet property="_buttonHeightConstraint" destination="KfG-gY-rx2" id="z7i-y9-Me6"/>
                 <outlet property="_buttonView" destination="18F-Jq-Swe" id="e0i-oE-Sl7"/>
                 <outlet property="_emailHeightConstraint" destination="AHY-Vo-2b7" id="FuF-zW-YCb"/>
                 <outlet property="_emailLabel" destination="Aiw-me-Jho" id="cwe-jo-JVx"/>
@@ -39,13 +40,13 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="letter_round_big" translatesAutoresizingMaskIntoConstraints="NO" id="cYJ-ec-IfV">
-                            <rect key="frame" x="0.5" y="65" width="320" height="90"/>
+                            <rect key="frame" x="0.0" y="65" width="320" height="90"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="90" id="4wF-jv-T1g"/>
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oKv-Bx-s8j">
-                            <rect key="frame" x="40" y="200" width="240" height="169.5"/>
+                            <rect key="frame" x="40" y="199.5" width="240" height="169"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aiw-me-Jho">
                                     <rect key="frame" x="0.0" y="0.0" width="31" height="14.5"/>
@@ -86,18 +87,18 @@
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="152-F1-6pt">
-                                    <rect key="frame" x="0.0" y="98" width="239.5" height="1"/>
+                                    <rect key="frame" x="-0.5" y="98" width="240" height="1"/>
                                     <color key="backgroundColor" red="0.63529411759999999" green="0.65098039220000004" blue="0.65098039220000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="0fb-HL-9ms"/>
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tGA-Z3-fVk">
-                                    <rect key="frame" x="193" y="64" width="46" height="30"/>
+                                    <rect key="frame" x="193" y="64.5" width="46" height="30"/>
                                     <state key="normal" title="Button"/>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v38-mR-ipz">
-                                    <rect key="frame" x="96.5" y="139" width="46" height="30"/>
+                                    <rect key="frame" x="97" y="139" width="46" height="30"/>
                                     <state key="normal" title="Button"/>
                                 </button>
                             </subviews>
@@ -126,10 +127,10 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18F-Jq-Swe">
-                            <rect key="frame" x="0.5" y="518" width="320" height="50"/>
+                            <rect key="frame" x="0.0" y="518" width="320" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCQ-Vu-rjA">
-                                    <rect key="frame" x="-0.5" y="-0.5" width="320" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                     <state key="normal" title="Button"/>
                                 </button>
                             </subviews>

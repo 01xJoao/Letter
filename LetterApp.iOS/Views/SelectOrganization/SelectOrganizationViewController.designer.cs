@@ -19,6 +19,9 @@ namespace LetterApp.iOS.Views.SelectOrganization
 		UIKit.UIView _buttonBackgroundView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _buttonHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIButton _closeButton { get; set; }
 
 		[Outlet]
@@ -50,6 +53,11 @@ namespace LetterApp.iOS.Views.SelectOrganization
 				_closeButton = null;
 			}
 
+			if (_createOrgButton != null) {
+				_createOrgButton.Dispose ();
+				_createOrgButton = null;
+			}
+
 			if (_label != null) {
 				_label.Dispose ();
 				_label = null;
@@ -65,9 +73,9 @@ namespace LetterApp.iOS.Views.SelectOrganization
 				_textField = null;
 			}
 
-			if (_createOrgButton != null) {
-				_createOrgButton.Dispose ();
-				_createOrgButton = null;
+			if (_buttonHeightConstraint != null) {
+				_buttonHeightConstraint.Dispose ();
+				_buttonHeightConstraint = null;
 			}
 		}
 	}

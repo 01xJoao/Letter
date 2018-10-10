@@ -68,6 +68,9 @@ namespace LetterApp.iOS.Views.SelectOrganization
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
             _closeButton.TintColor = Colors.White;
             _backgroundView.BackgroundColor = Colors.SelectBlue;
