@@ -78,6 +78,8 @@ namespace LetterApp.iOS.Sources
             if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return 0;
 
+            //TODO Check if text or image
+
             float cellHeight = 4;
             var message = _chat.Messages[indexPath.Row];
             var approximateWidthOfText = _screenWidth - 75;
@@ -96,7 +98,7 @@ namespace LetterApp.iOS.Sources
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 18f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
+                    cellHeight += 17.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
                     break;
             }
 

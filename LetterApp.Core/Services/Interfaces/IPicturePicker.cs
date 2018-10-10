@@ -6,6 +6,6 @@ namespace LetterApp.Core.Services.Interfaces
 {
     public interface IPicturePicker
     {
-        Task<string> GetImageStreamSync();
+        Task<string> GetImageStreamSync(bool resize = true);
     }
 }

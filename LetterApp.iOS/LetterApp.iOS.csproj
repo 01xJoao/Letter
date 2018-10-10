@@ -596,6 +596,7 @@
     <InterfaceDefinition Include="Views\Chat\Cells\FileWithUserCell.xib" />
     <InterfaceDefinition Include="Views\Chat\Cells\DateHeaderCell.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\PictureViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -918,6 +919,10 @@
       <DependentUpon>ShowChatOptionsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Sources\ChatOptionsSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\PictureViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\PictureViewController.designer.cs">
+      <DependentUpon>PictureViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">

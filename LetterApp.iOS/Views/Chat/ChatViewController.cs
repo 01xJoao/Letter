@@ -38,8 +38,7 @@ namespace LetterApp.iOS.Views.Chat
         {
             base.ViewDidLoad();
 
-            _imageView2.Hidden = _imageView3.Hidden = true;
-
+            _imageView3.Hidden = true;
             _tableView.Hidden = true;
 
             ConfigureView();
@@ -106,8 +105,8 @@ namespace LetterApp.iOS.Views.Chat
             _imageView3.Image?.Dispose();
 
             _imageView1.Image = UIImage.FromBundle("keyboard");
-            _imageView2.Image = UIImage.FromBundle("files");
-            _imageView3.Image = UIImage.FromBundle("photo_picker");
+            _imageView2.Image = UIImage.FromBundle("photo_picker");
+            _imageView3.Image = UIImage.FromBundle("files");
 
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;
             _fakeAreaView.BackgroundColor = Colors.KeyboardView;
@@ -308,6 +307,7 @@ namespace LetterApp.iOS.Views.Chat
 
         private void OnButton2_TouchUpInside(object sender, EventArgs e)
         {
+            ViewModel.OpenImagesCommand.Execute();
         }
 
         private void OnButton3_TouchUpInside(object sender, EventArgs e)

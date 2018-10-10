@@ -91,6 +91,16 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
+        public Task<bool> ShowPicture(string image, string send, string cancel)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var pictureView = new PictureViewController(image, send, cancel, val => tcs.TrySetResult(val));
+            pictureView.Show();
+
+            return tcs.Task;
+        }
+
         public void ShowCallStack(string title, List<CallStackModel> calls)
         {
             var callStackView = new CallStackViewController(title, calls);

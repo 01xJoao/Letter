@@ -14,7 +14,7 @@ namespace LetterApp.iOS.Services
         private TaskCompletionSource<string> taskCompletionSource;
         private UIImagePickerController imagePicker;
 
-        public Task<string> GetImageStreamSync()
+        public Task<string> GetImageStreamSync(bool resize)
         {
             imagePicker = new UIImagePickerController
             {
@@ -28,8 +28,16 @@ namespace LetterApp.iOS.Services
             imagePicker.NavigationBar.TintColor = Colors.White;
 
             // Set event handlers
-            imagePicker.FinishedPickingMedia -= OnImagePickerFinishedPickingMedia;
-            imagePicker.FinishedPickingMedia += OnImagePickerFinishedPickingMedia;
+            if (resize)
+            {
+                imagePicker.FinishedPickingMedia -= OnImagePickerFinishedPickingMedia;
+                imagePicker.FinishedPickingMedia += OnImagePickerFinishedPickingMedia;
+            }
+            else
+            {
+                imagePicker.FinishedPickingMedia -= DecreaseImageQuality;
+                imagePicker.FinishedPickingMedia += DecreaseImageQuality;
+            }
 
             imagePicker.Canceled -= OnImagePickerCancelled;
             imagePicker.Canceled += OnImagePickerCancelled;
@@ -44,12 +52,38 @@ namespace LetterApp.iOS.Services
             return taskCompletionSource.Task;
         }
 
+        private void DecreaseImageQuality(object sender, UIImagePickerMediaPickedEventArgs args)
+        {
+            UIImage image = args.EditedImage ?? args.OriginalImage;
+
+            if (image != null)
+            {
+                if(image.Size.Height > 1600)
+                    image = MaxResizeImage(image, (int)image.Size.Height/2, (int)image.Size.Width/2);
+
+                // Convert UIImage to .NET Stream object
+                NSData data = image.AsJPEG(0.75f);
+                //Stream stream = data.AsStream();
+                var base64string = data.GetBase64EncodedString(NSDataBase64EncodingOptions.SixtyFourCharacterLineLength);
+
+                // Set the Stream as the completion of the Task
+                taskCompletionSource.SetResult(base64string);
+            }
+            else
+            {
+                taskCompletionSource.SetResult(null);
+            }
+
+            imagePicker.DismissModalViewController(true);
+        }
+
         private void OnImagePickerFinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs args)
         {
             UIImage image = args.EditedImage ?? args.OriginalImage;
+
             if (image != null)
             {
-                image = MaxResizeImage(image, LocalConstants.Profile_PictureHeight, LocalConstants.Profile_PictureHeight);
+                image = MaxResizeImage(image, LocalConstants.Profile_PictureSize, LocalConstants.Profile_PictureSize);
 
                 // Convert UIImage to .NET Stream object
                 NSData data = image.AsJPEG(0.6f);

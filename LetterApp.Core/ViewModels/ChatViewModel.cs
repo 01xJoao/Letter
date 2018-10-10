@@ -23,6 +23,7 @@ namespace LetterApp.Core.ViewModels
         private readonly IMessengerService _messengerService;
         private readonly IDialogService _dialogService;
         private readonly IAudioService _audioService;
+        private readonly IPicturePicker _picturePicker;
 
         private PreviousMessageListQuery _prevMessageListQuery;
         private GetUsersInDivisionModel _user;
@@ -88,13 +89,46 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _fetchOldMessagesCommand;
         public XPCommand FetchOldMessagesCommand => _fetchOldMessagesCommand ?? (_fetchOldMessagesCommand = new XPCommand(async () => await FetchOldMessages(), CanExecute));
 
-        public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService, IAudioService audioService)
+        private XPCommand _openImagesCommand;
+        public XPCommand OpenImagesCommand => _openImagesCommand ?? (_openImagesCommand = new XPCommand(async () => await OpenImages()));
+
+        private async Task OpenImages()
+        {
+            IsBusy = true;
+
+            try
+            {
+                var result = await _picturePicker.GetImageStreamSync(false);
+
+                if(result != null)
+                {
+                    var res = await _dialogService.ShowPicture(result, SendMessageButton, CancelButton);
+
+                    if(res)
+                    {
+                        await SendMessage(new Tuple<string, MessageType>(result, MessageType.Image), false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+
+        public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService, IAudioService audioService, IPicturePicker picturePicker)
         {
             _divisionService = divisionService;
             _contactService = contactsService;
             _messengerService = messengerService;
             _dialogService = dialogService;
             _audioService = audioService;
+            _picturePicker = picturePicker;
             SetL10NResources();
         }
 
@@ -243,7 +277,6 @@ namespace LetterApp.Core.ViewModels
                 {
                     _isLoading = false; 
                     RaisePropertyChanged(nameof(IsLoading));
-
                     return;
                 }
             }
@@ -251,36 +284,20 @@ namespace LetterApp.Core.ViewModels
             {
                 _isLoading = false;
                 RaisePropertyChanged(nameof(IsLoading));
-
                 Ui.Handle(ex as dynamic);
-
                 return;
             }
 
-            //if (!loadOldMessages)
-            //{
-            //    //_chatMessages = null;
-            //    _chat.Messages = new List<ChatMessagesModel>();
-            //}
             if(_messagesModel?.Count > 0)
                 _chat.Messages = new List<ChatMessagesModel>();
 
-            MessagesLogic(_messagesModel, false);//!loadOldMessages);
-
-            //bool shouldUpdate = false;
-
-            //if (_chat?.Messages?.Count > 0 && _chatMessages?.Count > 0)
-            //    shouldUpdate = _chat.Messages.Last().MessageId != _chatMessages.Last().MessageId;
-            //else
-                //shouldUpdate = true;
+            MessagesLogic(_messagesModel, false);
 
             if(_chatMessages?.Count > 0)
                 _chat.Messages = _chatMessages?.OrderBy(x => x?.MessageDateTime)?.ToList();
-
-            //if(shouldUpdate || loadOldMessages)
-                RaisePropertyChanged(nameof(Chat));
-
+                
             _isLoading = false;
+            RaisePropertyChanged(nameof(Chat));
             RaisePropertyChanged(nameof(IsLoading));
         }
 
@@ -903,12 +920,13 @@ namespace LetterApp.Core.ViewModels
         private string UserNotRegistered => L10N.Localize("ChatList_UserNotRegistered");
         private string SendMessageError => L10N.Localize("ChatList_MessageError");
         private string UserNotFound => L10N.Localize("ChatList_UserNotFound");
-        public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
 
+        public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
         public string SendingMessage => L10N.Localize("Chat_SendingMessage");
         public string TypingMessage => L10N.Localize("Chat_TypingMessage");
         public string SeenMessage => L10N.Localize("Chat_SeenMessage");
         public string SendMessageButton => L10N.Localize("Chat_SendMessage");
+        public string CancelButton => L10N.Localize("Cancel");
 
         private string SeeUserProfile => L10N.Localize("Chat_UserProfile");
         private string UserMuted => L10N.Localize("Chat_UserMuted");
