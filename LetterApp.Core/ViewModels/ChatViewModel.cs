@@ -314,6 +314,8 @@ namespace LetterApp.Core.ViewModels
 
                     if (newMessage.ShowHeaderDate || _chatMessages[_chatMessages.Count - 1].MessageSenderId != message.MessageSenderId)
                         newMessage.PresentMessage = (PresentMessageType)message.MessageType;
+                    else if (DateTime.Compare(_chatMessages[_chatMessages.Count - 1].MessageDateTime.AddHours(1), new DateTime(message.MessageDateTicks)) <= 0 )
+                        newMessage.PresentMessage = (PresentMessageType)message.MessageType;
                     else
                         newMessage.PresentMessage = (PresentMessageType)(message.MessageType + 3);
                 }

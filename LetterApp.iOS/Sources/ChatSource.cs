@@ -78,7 +78,7 @@ namespace LetterApp.iOS.Sources
             if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return 0;
 
-            float cellHeight = 2;
+            float cellHeight = 4;
             var message = _chat.Messages[indexPath.Row];
             var approximateWidthOfText = _screenWidth - 75;
             var size = new CoreGraphics.CGSize(approximateWidthOfText, 1000);
@@ -96,11 +96,11 @@ namespace LetterApp.iOS.Sources
             switch (message.PresentMessage)
             {
                 case PresentMessageType.UserText:
-                    cellHeight += 18.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
+                    cellHeight += 18f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
                     break;
             }
 
-            return estimatedFrame.Height + cellHeight;
+            return (int)estimatedFrame.Height + cellHeight;
         }
 
         [Export("scrollViewDidScroll:")]
