@@ -30,6 +30,9 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             this.View.BackgroundColor = Colors.Black30;
             _sendButton.BackgroundColor = Colors.MainBlue;
 
+            if (PhoneModelExtensions.IsIphoneX())
+                _bottomHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             ImageService.Instance.LoadStream((token) => {
                 return ImageHelper.GetStreamFromImageByte(token, _image);
             }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new RoundedTransformation(5f)).Into(_imageView);

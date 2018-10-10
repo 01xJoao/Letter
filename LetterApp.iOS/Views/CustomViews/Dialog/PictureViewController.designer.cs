@@ -16,6 +16,9 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 		UIKit.UIView _blurView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint _bottomHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIButton _cancelButton { get; set; }
 
 		[Outlet]
@@ -26,6 +29,11 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_blurView != null) {
+				_blurView.Dispose ();
+				_blurView = null;
+			}
+
 			if (_cancelButton != null) {
 				_cancelButton.Dispose ();
 				_cancelButton = null;
@@ -41,9 +49,9 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 				_sendButton = null;
 			}
 
-			if (_blurView != null) {
-				_blurView.Dispose ();
-				_blurView = null;
+			if (_bottomHeightConstraint != null) {
+				_bottomHeightConstraint.Dispose ();
+				_bottomHeightConstraint = null;
 			}
 		}
 	}

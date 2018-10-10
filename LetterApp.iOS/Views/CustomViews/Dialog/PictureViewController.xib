@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PictureViewController">
             <connections>
                 <outlet property="_blurView" destination="Lqx-aP-Naa" id="dhB-bR-pC3"/>
+                <outlet property="_bottomHeightConstraint" destination="Nqd-bh-SjS" id="Pva-xv-EyW"/>
                 <outlet property="_cancelButton" destination="Ni2-qd-l6H" id="fx1-Ko-iZ8"/>
                 <outlet property="_imageView" destination="6AN-Ld-biQ" id="3wr-EU-jPu"/>
                 <outlet property="_sendButton" destination="C3B-qc-C9x" id="E6n-PP-GMs"/>
