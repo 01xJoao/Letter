@@ -147,10 +147,19 @@ namespace LetterApp.Core.ViewModels
 
             string fromDivision = string.Empty;
 
-            _userChat = Realm.Find<ChatListUserModel>(_userId);
-            var users = Realm.All<GetUsersInDivisionModel>();
-            _user = users?.First(x => x.UserId == _userId);
-            _thisUser = Realm.Find<UserModel>(AppSettings.UserId);
+            try
+            {
+                _userChat = Realm.Find<ChatListUserModel>(_userId);
+                var users = Realm.All<GetUsersInDivisionModel>();
+                _user = users?.First(x => x.UserId == _userId);
+                _thisUser = Realm.Find<UserModel>(AppSettings.UserId);
+            }
+            catch (Exception ex)
+            {
+                _dialogService.ShowAlert(UserNotFound, AlertType.Error, 4f);
+                CloseView();
+                return;
+            }
 
             if (_user == null || _thisUser == null)
             {
