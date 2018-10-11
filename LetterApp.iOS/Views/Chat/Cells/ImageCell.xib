@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,11 +18,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="283" height="114.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="I5Z-uk-jys">
-                        <rect key="frame" x="66" y="5" width="177" height="104.5"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="I5Z-uk-jys">
+                        <rect key="frame" x="60" y="5" width="183" height="104.5"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MHN-u8-duc">
-                        <rect key="frame" x="65.5" y="5" width="177" height="104.5"/>
+                        <rect key="frame" x="60" y="5" width="183" height="104.5"/>
                     </button>
                 </subviews>
                 <constraints>
@@ -30,7 +30,7 @@
                     <constraint firstAttribute="bottom" secondItem="I5Z-uk-jys" secondAttribute="bottom" constant="5" id="99g-Kh-Syo"/>
                     <constraint firstItem="MHN-u8-duc" firstAttribute="centerX" secondItem="I5Z-uk-jys" secondAttribute="centerX" id="BqO-uX-pYg"/>
                     <constraint firstItem="MHN-u8-duc" firstAttribute="height" secondItem="I5Z-uk-jys" secondAttribute="height" id="CkR-TK-8Ds"/>
-                    <constraint firstItem="I5Z-uk-jys" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="66" id="MSd-UV-SQH"/>
+                    <constraint firstItem="I5Z-uk-jys" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="60" id="MSd-UV-SQH"/>
                     <constraint firstItem="MHN-u8-duc" firstAttribute="width" secondItem="I5Z-uk-jys" secondAttribute="width" id="aw5-Ag-ZRV"/>
                     <constraint firstItem="MHN-u8-duc" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="5" id="i9b-Ak-oFn"/>
                     <constraint firstAttribute="trailing" secondItem="I5Z-uk-jys" secondAttribute="trailing" constant="40" id="stJ-iW-vBx"/>

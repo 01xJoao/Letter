@@ -155,12 +155,17 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         {
             try
             {
-                if (!(message is UserMessage msg))
+                int msgUserId = 0;
+
+                if (message is UserMessage umsg)
+                    msgUserId = StringUtils.GetUserId(umsg.Sender.UserId);
+                else if (message is FileMessage fmsg)
+                    msgUserId = StringUtils.GetUserId(fmsg.Sender.UserId);
+
+                if (msgUserId == 0)
                     return;
 
-                int msgUserId = StringUtils.GetUserId(msg.Sender.UserId);
-
-                DateTime lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(msg.CreatedAt.ToString())).ToLocalTime();
+                DateTime lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(message.CreatedAt.ToString())).ToLocalTime();
 
                 var userChatModel = _chatUserModel?.Find(x => x.MemberId == msgUserId);
 
@@ -195,18 +200,33 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                 var newmsg = new MessagesModel
                 {
-                    MessageId = msg.MessageId,
-                    MessageType = 0,
-                    MessageData = msg.Message,
-                    MessageSenderId = msg.Sender.UserId,
+                    MessageId = message.MessageId,
                     MessageDateTicks = lastMessageDate.Ticks
                 };
-                //TODO Fix userChatModel Here
+
+                if (message is UserMessage u)
+                {
+                    newmsg.MessageType = 0;
+                    newmsg.MessageData = u.Message;
+                    newmsg.MessageSenderId = u.Sender.UserId;
+                }
+                else if (message is FileMessage m)
+                {
+                    newmsg.MessageType = 1;
+                    newmsg.MessageData = m.Data;
+                    newmsg.MessageSenderId = m.Sender.UserId;
+                }
+
                 Realm.Write(() =>
                 {
                     userChatModel.MemberPresence = 0;
                     userChatModel.MemberPresenceConnectionDate = lastMessageDate.Ticks;
-                    userChatModel.LastMessage = msg.Message;
+
+                    if (message is UserMessage um)
+                        userChatModel.LastMessage = um.Message;
+                    else if (message is FileMessage fm)
+                        userChatModel.LastMessage = SentImage;
+                        
                     userChatModel.LastMessageDateTimeTicks = lastMessageDate.Ticks;
                     userChatModel.IsArchived = false;
                     userChatModel.IsNewMessage = true;
@@ -336,9 +356,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                             if (userInDB == null)
                                 continue;
-
-                            var lastMessage = channel.LastMessage as UserMessage;
-                            var lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(lastMessage.CreatedAt.ToString())).ToLocalTime();
+                                
+                            var lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(channel.LastMessage.CreatedAt.ToString())).ToLocalTime();
                             long userLastSeen = DateTime.Now.AddMilliseconds(-user.LastSeenAt).Ticks;
 
                             var usr = new ChatListUserModel
@@ -350,12 +369,18 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                                 IsNewMessage = channel.UnreadMessageCount > 0,
                                 MemberPresence = user.ConnectionStatus == User.UserConnectionStatus.ONLINE ? 0 : 1,
                                 MemberPresenceConnectionDate = userLastSeen,
-                                LastMessage = lastMessage.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {lastMessage.Message}" : lastMessage.Message,
                                 LastMessageDateTimeTicks = lastMessageDate.Ticks,
                                 IsArchived = userInModel != null && (DateTime.Compare(new DateTime(userInModel.ArchivedTime), lastMessageDate) >= 0 && userInModel.IsArchived),
                                 ArchivedTime = userInModel != null ? userInModel.ArchivedTime : 0,
                                 UnreadMessagesCount = channel.UnreadMessageCount,
                             };
+
+                            if (channel.LastMessage is UserMessage um)
+                                usr.LastMessage = um.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {um.Message}" : um.Message;
+                            else if (channel.LastMessage is FileMessage fm)
+                                usr.LastMessage = fm.Sender.UserId == _thisUserFinalId ? $"{YouChatLabel} {SentImage}" : SentImage;
+                            else
+                                usr.LastMessage = string.Empty;
 
                             if (userInModel != null)
                             {
@@ -489,13 +514,13 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         #region Resources
 
-        public string Title => L10N.Localize("ChatList_Title");
-        public string NoRecentChat => L10N.Localize("ChatList_NoChats");
-        private string YouChatLabel => L10N.Localize("ChatList_You");
-
+        public string Title          => L10N.Localize("ChatList_Title");
+        public string NoRecentChat   => L10N.Localize("ChatList_NoChats");
+        private string YouChatLabel  => L10N.Localize("ChatList_You");
         private string ArchiveAction => L10N.Localize("ChatList_Archive");
-        private string MuteAction => L10N.Localize("ChatList_Mute");
-        private string UnMuteAction => L10N.Localize("ChatList_UnMute");
+        private string MuteAction    => L10N.Localize("ChatList_Mute");
+        private string UnMuteAction  => L10N.Localize("ChatList_UnMute");
+        private string SentImage     => L10N.Localize("ChatList_SentImage");
 
         public enum ChatEventType
         {

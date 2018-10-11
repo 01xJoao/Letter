@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AVFoundation;
 using Com.OneSignal;
 using LetterApp.Core;
+using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using SendBird;
 using Xamarin.Essentials;
@@ -228,22 +230,56 @@ namespace LetterApp.iOS.Services
                 else
                 {
                     tcs.TrySetResult(msg);
-                    SendPushNotification(userId, userName, memberToken, message);
+                    SendPushNotification(userId, userName, memberToken, message, NotificationType.Text);
                 }
             });
 
             return tcs.Task;
         }
 
-        public void SendPushNotification(string userId, string userName, string memberTokenId, string message, bool isCall = false)
+        public Task<FileMessage> SendImage(GroupChannel channel, string userId, string userName, string memberToken, string fileUrl, string date)
+        {
+            var tcs = new TaskCompletionSource<FileMessage>();
+
+            if (channel == null)
+            {
+                tcs.TrySetCanceled();
+                return tcs.Task;
+            }
+
+            var file = new SBFile(fileUrl);
+            channel.SendFileMessage(file, file.FileName, "image/jpeg", (int)file.Length, date, (FileMessage message, SendBirdException e) => { 
+
+                if(e != null)
+                    tcs.TrySetCanceled();
+
+                tcs.TrySetResult(message);
+                SendPushNotification(userId, userName, memberToken, "", NotificationType.Image);
+
+            });
+
+            return tcs.Task;
+        }
+
+        public void SendPushNotification(string userId, string userName, string memberTokenId, string message, NotificationType messagetype)
         {
             Dictionary<string, object> notification;
 
-            if (isCall)
+            if (messagetype == NotificationType.Call)
             {
                 notification = new Dictionary<string, object> 
                 {
-                    ["contents"] = new Dictionary<string, string> { { "en", $"☎️ You missed a call from {message}" }, { "pt", $"☎ Perdeu uma chamada de {message}" } },
+                    ["contents"] = new Dictionary<string, string> { { "en", $"️You missed a call from {userName} ☎" }, { "pt", $"Perdeu uma chamada de {userName} ☎" } },
+                    ["data"] = new Dictionary<string, string> { { "userId", userId } },
+                    ["include_player_ids"] = new List<string> { memberTokenId }
+                };
+            }
+            else if(messagetype == NotificationType.Text)
+            {
+                notification = new Dictionary<string, object>
+                {
+                    ["headings"] = new Dictionary<string, string> { { "en", userName } },
+                    ["contents"] = new Dictionary<string, string> { { "en", message } },
                     ["data"] = new Dictionary<string, string> { { "userId", userId } },
                     ["include_player_ids"] = new List<string> { memberTokenId }
                 };
@@ -252,8 +288,7 @@ namespace LetterApp.iOS.Services
             {
                 notification = new Dictionary<string, object>
                 {
-                    ["headings"] = new Dictionary<string, string> { { "en", userName } },
-                    ["contents"] = new Dictionary<string, string> { { "en", message } },
+                    ["contents"] = new Dictionary<string, string> { { "en", $"{userName} sent a image 📷️" }, { "pt", $"{userName} enviou uma imagem 📷️" } },
                     ["data"] = new Dictionary<string, string> { { "userId", userId } },
                     ["include_player_ids"] = new List<string> { memberTokenId }
                 };

@@ -158,7 +158,7 @@ namespace LetterApp.Core.ViewModels
 
         private void SendFailedCallNotification()
         {
-            _messengerService.SendPushNotification(UserId.ToString(), _thisUserName, _callerPushToken, _thisUserName, true);
+            _messengerService.SendPushNotification(UserId.ToString(), _thisUserName, _callerPushToken, string.Empty, NotificationType.Call);
         }
 
         private bool CanExecute() => !IsBusy;

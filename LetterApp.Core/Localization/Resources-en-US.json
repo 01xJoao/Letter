@@ -928,6 +928,10 @@
     "Translated": "User not found, please check if this user still exists in the contacts tab."
   },
   {
+    "key": "ChatList_SentImage",
+    "Translated": "Sent a Image"
+  },
+  {
     "key": "Chat_Archive",
     "translated": "Archive chat"
   },
@@ -946,5 +950,9 @@
   {
     "key": "Chat_MuteInApp",
     "translated": "Only in-app notifications."
+  },
+  {
+    "key": "Chat_SaveImage",
+    "Translated": "Save Image"
   }
 ]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Foundation;
 using LetterApp.Core.Models;
 using LetterApp.iOS.Helpers;
@@ -32,6 +33,8 @@ namespace LetterApp.iOS.Sources
 
             if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return cell;
+
+            Debug.WriteLine(_chat.Messages[indexPath.Row].PresentMessage);
 
             switch (_chat.Messages[indexPath.Row].PresentMessage)
             {
@@ -78,10 +81,17 @@ namespace LetterApp.iOS.Sources
             if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return 0;
 
-            //TODO Check if text or image
+            var message = _chat.Messages[indexPath.Row];
+
+            Debug.WriteLine(message.MessageData);
+
+            if (message.PresentMessage == PresentMessageType.UserImage || message.PresentMessage == PresentMessageType.Image)
+            {
+                return LocalConstants.Chat_Images + (message.PresentMessage == PresentMessageType.UserImage ? 15 : 0) + 
+                                 (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
+            }
 
             float cellHeight = 4;
-            var message = _chat.Messages[indexPath.Row];
             var approximateWidthOfText = _screenWidth - 75;
             var size = new CoreGraphics.CGSize(approximateWidthOfText, 1000);
 
@@ -95,12 +105,8 @@ namespace LetterApp.iOS.Sources
             var attributes = new UIStringAttributes { Font = UIFont.SystemFontOfSize(14), ParagraphStyle = paragraphStyle };
             var estimatedFrame = new NSString(message.MessageData).GetBoundingRect(size, NSStringDrawingOptions.UsesLineFragmentOrigin, attributes, null);
 
-            switch (message.PresentMessage)
-            {
-                case PresentMessageType.UserText:
-                    cellHeight += 17.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
-                    break;
-            }
+            if(message.PresentMessage == PresentMessageType.UserText)
+                cellHeight += 17.5f + (_chat.Messages[indexPath.Row].ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall);
 
             return (int)estimatedFrame.Height + cellHeight;
         }

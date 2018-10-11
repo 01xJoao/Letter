@@ -17,6 +17,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<List<GroupChannel>> GetAllChannels();
         Task<GroupChannel> GetCurrentChannel(string userId);
         Task<UserMessage> SendMessage(GroupChannel channel, string userId, string userName, string memberToken, string message, string date);
+        Task<FileMessage> SendImage(GroupChannel channel, string userId, string userName, string memberToken, string fileUrl, string date);
         Task<List<User>> CheckUsersInGroupPresence(GroupChannel channel);
         Task<List<BaseMessage>> LoadMessages(PreviousMessageListQuery channelQuery, int messagesCount);
         void RemoveChannel(GroupChannel channel);
@@ -24,6 +25,14 @@ namespace LetterApp.Core.Services.Interfaces
         void TypingMessageEnded(GroupChannel channel);
         void MarkMessageAsRead(GroupChannel channel);
         void SubscribeToNotifications();
-        void SendPushNotification(string userId, string userName, string memberTokenId, string message, bool isCall);
+        void SendPushNotification(string userId, string userName, string memberTokenId, string message, NotificationType notificationType);
+    }
+
+    public enum NotificationType
+    {
+        Text,
+        Image,
+        File,
+        Call
     }
 }

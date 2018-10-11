@@ -17,6 +17,7 @@ namespace LetterApp.Core.Services.Interfaces
         Task<bool> ShowMessageAlert(string photo = "", string name = "", string message = "");
         Task<Tuple<ChatOptions,bool>> ShowChatOptions(string name = "", string photo = "", bool muted = false, string[] resources = null);
         Task<bool> ShowPicture(string image = "", string send = "", string cancel = "");
+        Task<bool> ShowChatImage(string image = "", string save = "");
 
         void StartLoading(LoadingColor color = LoadingColor.Blue);
         void StopLoading();

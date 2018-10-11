@@ -20,6 +20,9 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(ChatMessagesModel message, EventHandler<long> messageEvent, MemberPresence memberPresence)
         {
+            _imageView.Image?.Dispose();
+            _imageView.Image = null;
+
             _messageId = message.MessageId;
             _messageEvent = messageEvent;
 

@@ -900,6 +900,10 @@
     "Translated": "Tu:"
   },
   {
+    "key": "ChatList_SentImage",
+    "Translated": "Enviou uma imagem"
+  },
+  {
     "key": "Chat_SendingMessage",
     "translated": "A enviar..."
   },
@@ -946,5 +950,9 @@
   {
     "key": "Chat_MuteInApp",
     "translated": "Apenas notificações dentro da app."
+  },
+  {
+    "key": "Chat_SaveImage",
+    "Translated": "Guardar Imagem"
   }
 ]

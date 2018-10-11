@@ -32,10 +32,8 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
             if (PhoneModelExtensions.IsIphoneX())
                 _bottomHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
-
-            ImageService.Instance.LoadStream((token) => {
-                return ImageHelper.GetStreamFromImageByte(token, _image);
-            }).ErrorPlaceholder("letter_round_big", ImageSource.CompiledResource).Transform(new RoundedTransformation(5f)).Into(_imageView);
+                
+            ImageService.Instance.LoadFile(_image).Transform(new RoundedTransformation(5f)).Into(_imageView);
 
             UIButtonExtensions.SetupButtonAppearance(_sendButton, Colors.White, 14f, _sendText);
             UIButtonExtensions.SetupButtonAppearance(_cancelButton, Colors.Black, 14f, _cancelText);
@@ -59,14 +57,14 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
         private void OnSendButton_TouchUpInside(object sender, EventArgs e)
         {
-            _buttonAction?.Invoke(true);
             Dismiss();
+            _buttonAction?.Invoke(true);
         }
 
         private void OnCancelButton_TouchUpInside(object sender, EventArgs e)
         {
-            _buttonAction?.Invoke(false);
             Dismiss();
+            _buttonAction?.Invoke(false);
         }
 
         public void Show()

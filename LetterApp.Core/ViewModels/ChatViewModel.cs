@@ -92,35 +92,6 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _openImagesCommand;
         public XPCommand OpenImagesCommand => _openImagesCommand ?? (_openImagesCommand = new XPCommand(async () => await OpenImages()));
 
-        private async Task OpenImages()
-        {
-            IsBusy = true;
-
-            try
-            {
-                var result = await _picturePicker.GetImageStreamSync(false);
-
-                if(result != null)
-                {
-                    var res = await _dialogService.ShowPicture(result, SendMessageButton, CancelButton);
-
-                    if(res)
-                    {
-                        await SendMessage(new Tuple<string, MessageType>(result, MessageType.Image), false);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-
         public ChatViewModel(IContactsService contactsService, IMessengerService messengerService, IDialogService dialogService, IDivisionService divisionService, IAudioService audioService, IPicturePicker picturePicker)
         {
             _divisionService = divisionService;
@@ -263,15 +234,12 @@ namespace LetterApp.Core.ViewModels
 
                             _messagesModel.Add(newMessage);
                         }
-                        else
+                        else if(message is FileMessage mensg)
                         {
-                            if (!(message is FileMessage mensg))
-                                continue;
-
                             var newMessage = new MessagesModel
                             {
                                 MessageId = mensg.MessageId,
-                                MessageType = mensg.Type == "IMAGE" ? 1 : 2,
+                                MessageType = mensg.Type == "image/jpeg" ? 1 : 2,
                                 MessageData = mensg.Url,
                                 MessageSenderId = mensg.Sender.UserId,
                                 MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(message.CreatedAt.ToString())).ToLocalTime().Ticks,
@@ -355,14 +323,38 @@ namespace LetterApp.Core.ViewModels
                 newMessage.Picture = message.MessageSenderId == _finalUserId ? _thisUser.Picture : _user.Picture;
                 newMessage.MessageId = message.MessageId;
                 newMessage.MessageData = message.MessageData;
-                newMessage.MessageType = (MessageType)message.MessageType;
                 newMessage.MessageSenderId = message.MessageSenderId;
                 newMessage.CustomData = message.CustomData;
                 newMessage.MessageDate = $"  •  {dateForMessage}";
                 newMessage.MessageDateTime = massageDate;
+                newMessage.MessageType = (MessageType)message.MessageType;
                 newMessage.ShowPresense = message.MessageSenderId != _finalUserId; 
 
                 _chatMessages.Add(newMessage);
+            }
+        }
+
+        private async Task OpenImages()
+        {
+            IsBusy = true;
+
+            try
+            {
+                var result = await _picturePicker.GetImageFilePath();
+
+                if (result != null)
+                {
+                    if (await _dialogService.ShowPicture(result, SendMessageButton, CancelButton))
+                        await SendMessage(new Tuple<string, MessageType>(result, MessageType.Image), false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -403,27 +395,60 @@ namespace LetterApp.Core.ViewModels
                 _status = string.Empty;
                 RaisePropertyChanged(nameof(Status));
 
-                var result = await _messengerService.SendMessage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}", 
+                BaseMessage result;
+
+                if ((MessageType)fakeMessage.MessageType == MessageType.Text)
+                {
+                    result = await _messengerService.SendMessage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}",
                                                                  _user.PushNotificationToken, messageToSend, _sendedMessageDateTime.ToString());
+                }
+                else
+                {
+                    result = await _messengerService.SendImage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}",
+                                                                 _user.PushNotificationToken, messageToSend, _sendedMessageDateTime.ToString());
+                }
 
                 if(result != null)
                 {
-                    var sendedmsg = SendedMessages.FirstOrDefault(x => new DateTime(x.MessageDateTicks).Date == DateTime.Parse(result.Data).ToLocalTime().Date);
-                    SendedMessages.Remove(sendedmsg);
-
-                    var msg = new MessagesModel
-                    {
-                        MessageId = result.MessageId,
-                        MessageData = result.Message,
-                        MessageType = (int)message.Item2,
-                        MessageSenderId = result.Sender.UserId,
-                        MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(result.CreatedAt.ToString())).ToLocalTime().Ticks
-                    };
-
                     if (_messagesModel == null)
                         _messagesModel = new List<MessagesModel>();
 
-                    _messagesModel.Add(msg);
+                    if ((MessageType)fakeMessage.MessageType == MessageType.Text)
+                    {
+                        var res = result as UserMessage;
+
+                        var sendedmsg = SendedMessages.FirstOrDefault(x => new DateTime(x.MessageDateTicks).Date == DateTime.Parse(res.Data).ToLocalTime().Date);
+                        SendedMessages.Remove(sendedmsg);
+
+                        var msg = new MessagesModel
+                        {
+                            MessageId = res.MessageId,
+                            MessageData = res.Message,
+                            MessageType = (int)message.Item2,
+                            MessageSenderId = res.Sender.UserId,
+                            MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(res.CreatedAt.ToString())).ToLocalTime().Ticks
+                        };
+
+                        _messagesModel.Add(msg);
+                    }
+                    else
+                    {
+                        var res = result as FileMessage;
+
+                        var sendedmsg = SendedMessages.FirstOrDefault(x => new DateTime(x.MessageDateTicks).Date == DateTime.Parse(res.Data).ToLocalTime().Date);
+                        SendedMessages.Remove(sendedmsg);
+
+                        var msg = new MessagesModel
+                        {
+                            MessageId = res.MessageId,
+                            MessageData = res.Data,
+                            MessageType = (int)message.Item2,
+                            MessageSenderId = res.Sender.UserId,
+                            MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(res.CreatedAt.ToString())).ToLocalTime().Ticks
+                        };
+
+                        _messagesModel.Add(msg);
+                    }
                 }
             }
             catch (Exception ex)
@@ -534,16 +559,13 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
-                //if (_channel == null)
-                //{
-                    if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-                        return false;
+                if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                    return false;
 
-                    _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
+                _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
 
-                    if (_channel == null)
-                        _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
-                //}
+                if (_channel == null)
+                    _channel = await _messengerService.CreateChannel(new List<string> { $"{_userId}-{_organizationId}" });
 
                 if (_channel.MemberCount < 2)
                 {
@@ -637,6 +659,25 @@ namespace LetterApp.Core.ViewModels
 
             if (message != null)
                 RetrySendMessages();
+            else
+                OpenChatImage(messageId);
+        }
+
+        private async Task OpenChatImage(long messageId)
+        {
+            try
+            {
+                var image = _chatMessages?.Find(x => x.MessageId == messageId);
+
+                if (image != null)
+                {
+                    await _dialogService.ShowChatImage(image.MessageData, SaveImage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
 
@@ -884,14 +925,17 @@ namespace LetterApp.Core.ViewModels
                             IsNewMessage = false,
                             MemberPresence = (int)_chat.MemberPresence,
                             MemberPresenceConnectionDate = _userChat != null ? _userChat.MemberPresenceConnectionDate : default(DateTime).Ticks,
-                            //TODO LastMessage: Add logic for file and images
-                            LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {lastMessage.MessageData}" : lastMessage.MessageData,
                             LastMessageDateTimeTicks = lastMessage.MessageDateTime.Ticks,
                             IsArchived = _chat.MemberArchived,
                             ArchivedTime = _chat.MemberMuted ? DateTime.Now.Ticks : default(DateTime).Ticks,
                             UnreadMessagesCount = 0,
                             MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
                         };
+
+                        if (lastMessage.PresentMessage == PresentMessageType.UserText)
+                            userChat.LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {lastMessage.MessageData}" : lastMessage.MessageData;
+                        else
+                            userChat.LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
 
                         List<MessagesModel> historyMessages;
 
@@ -929,6 +973,7 @@ namespace LetterApp.Core.ViewModels
         private string UserNotRegistered => L10N.Localize("ChatList_UserNotRegistered");
         private string SendMessageError => L10N.Localize("ChatList_MessageError");
         private string UserNotFound => L10N.Localize("ChatList_UserNotFound");
+        private string SaveImage => L10N.Localize("Chat_SaveImage");
 
         public string TypeSomething => L10N.Localize("OnBoardingViewModel_LetterSlogan");
         public string SendingMessage => L10N.Localize("Chat_SendingMessage");
@@ -943,6 +988,7 @@ namespace LetterApp.Core.ViewModels
         private string SendEmail => L10N.Localize("Division_SendEmail");
         private string Close => L10N.Localize("Chat_Close");
         private string InAppNotifications => L10N.Localize("Chat_MuteInApp");
+        private string SentImage => L10N.Localize("ChatList_SentImage");
 
         private Dictionary<string, string> LocationResources = new Dictionary<string, string>();
         private string TitleDialog => L10N.Localize("ContactDialog_Title");
