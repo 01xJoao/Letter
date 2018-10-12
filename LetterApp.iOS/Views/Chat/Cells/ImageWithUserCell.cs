@@ -89,9 +89,8 @@ namespace LetterApp.iOS.Views.Chat.Cells
             _dateView.Hidden = !chatMessagesModel.ShowHeaderDate;
             _dateViewHeightConstraint.Constant = chatMessagesModel.ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall;
 
-            ImageService.Instance.LoadUrl(chatMessagesModel.MessageData).
-                       ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Retry(3, 200)
-                       .DownSample((int)_pictureImage.Frame.Width, (int)LocalConstants.Chat_Images, allowUpscale: true).Transform(new RoundedTransformation(15)).Into(_pictureImage);
+            ImageService.Instance.LoadUrl(chatMessagesModel.MessageData).Retry(3, 200).DownSample((int)_pictureImage.Frame.Width, (int)LocalConstants.Chat_Images, allowUpscale: true)
+                        .Transform(new RoundedTransformation(15)).Into(_pictureImage);
 
             if (chatMessagesModel.FailedToSend)
             {
