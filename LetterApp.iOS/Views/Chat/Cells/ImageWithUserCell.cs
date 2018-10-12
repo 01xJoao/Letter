@@ -91,7 +91,7 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
             ImageService.Instance.LoadUrl(chatMessagesModel.MessageData).
                        ErrorPlaceholder("warning_image", ImageSource.CompiledResource).Retry(3, 200)
-                       .DownSample((int)_pictureImage.Frame.Width, allowUpscale: true).Transform(new RoundedTransformation(15)).Into(_pictureImage);
+                       .DownSample((int)_pictureImage.Frame.Width, (int)LocalConstants.Chat_Images, allowUpscale: true).Transform(new RoundedTransformation(15)).Into(_pictureImage);
 
             if (chatMessagesModel.FailedToSend)
             {
