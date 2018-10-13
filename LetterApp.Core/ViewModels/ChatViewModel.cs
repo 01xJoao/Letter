@@ -36,6 +36,7 @@ namespace LetterApp.Core.ViewModels
         public string MemberName;
         public string MemberDetails;
         public bool NewMessageAlert;
+        private bool _isPickingImage;
 
         private ChatModel _chat;
         public ChatModel Chat
@@ -112,6 +113,9 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task Appearing()
         {
+            if (_isPickingImage)
+                return;
+
             ChatHandlers();
             CheckConnection();
             NavigationService.ChatOpen(_userId);
@@ -341,6 +345,7 @@ namespace LetterApp.Core.ViewModels
         private async Task OpenImages()
         {
             IsBusy = true;
+            _isPickingImage = true;
 
             try
             {
@@ -359,6 +364,7 @@ namespace LetterApp.Core.ViewModels
             finally
             {
                 IsBusy = false;
+                _isPickingImage = false;
             }
         }
 
@@ -455,17 +461,26 @@ namespace LetterApp.Core.ViewModels
                         _messagesModel.Add(msg);
                     }
 
-                    Realm.Write(() => 
+                    if (_userChat == null)
                     {
-                        var newMessage = _messagesModel.Last();
+                        SaveChat();
+                        _userChat = Realm.Find<ChatListUserModel>(_userId);
+                    }
 
-                        _userChat?.MessagesList?.Add(newMessage);
+                    if (_userChat != null)
+                    {
+                        Realm.Write(() =>
+                        {
+                            var newMessage = _messagesModel.Last();
 
-                        if ((MessageType)newMessage.MessageType == MessageType.Text)
-                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
-                        else
-                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
-                    });
+                            _userChat.MessagesList.Add(newMessage);
+
+                            if ((MessageType)newMessage.MessageType == MessageType.Text)
+                                _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
+                            else
+                                _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
+                        });
+                    }
 
                     Debug.WriteLine("Send Message Successefully:" + SendedMessages?.Count);
                 }
@@ -811,25 +826,35 @@ namespace LetterApp.Core.ViewModels
 
                 MessagesLogic(new List<MessagesModel> { newMessage }, true);
 
-                Realm.Write(() => 
-                { 
-                    _userChat?.MessagesList?.Add(newMessage);
-
-                    if ((MessageType)newMessage.MessageType == MessageType.Text)
-                        _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
-                    else
-                        _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
-                });
-
+             
                 _chat.Messages = _chatMessages;
                 RaisePropertyChanged(nameof(Chat));
-
                 _status = string.Empty;
 
-                RaisePropertyChanged("Status");
-                RaisePropertyChanged("NewMessageAlert");
+                RaisePropertyChanged(nameof(Status));
+                RaisePropertyChanged(nameof(NewMessageAlert));
 
                 _audioService.PlayReceivedMessage();
+
+                if (_userChat == null)
+                {
+                    SaveChat();
+                    _userChat = Realm.Find<ChatListUserModel>(_userId);
+                }
+
+                if (_userChat != null)
+                {
+                    Realm.Write(() =>
+                    {
+                        _userChat.MessagesList.Add(newMessage);
+
+                        if ((MessageType)newMessage.MessageType == MessageType.Text)
+                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
+                        else
+                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
+                    });
+                }
+
             });
         }
 
@@ -976,6 +1001,9 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task Disappearing()
         {
+            if (_isPickingImage)
+                return;
+
             NavigationService.ChatOpen(-1);
             SendBirdClient.RemoveChannelHandler("ChatHandler");
             await SaveChat();
