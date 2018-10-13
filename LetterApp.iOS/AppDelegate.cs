@@ -122,7 +122,6 @@ namespace LetterApp.iOS
             return true;
         }
 
-        //TODO This might need to be changed when implementing chat
         [Export("application:continueUserActivity:restorationHandler:")]
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
         {

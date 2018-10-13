@@ -105,7 +105,7 @@ namespace LetterApp.iOS.Views.Chat
             _imageView3.Image?.Dispose();
 
             _imageView1.Image = UIImage.FromBundle("keyboard");
-            _imageView2.Image = UIImage.FromBundle("photo_picker");
+            _imageView2.Image = UIImage.FromBundle("image_picker");
             _imageView3.Image = UIImage.FromBundle("files");
 
             _keyboardAreaView.BackgroundColor = Colors.KeyboardView;

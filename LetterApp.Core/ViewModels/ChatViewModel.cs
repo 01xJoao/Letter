@@ -64,6 +64,8 @@ namespace LetterApp.Core.ViewModels
 
         public object ScrollToMiddle { get; private set; }
         public List<MessagesModel> SendedMessages = new List<MessagesModel>();
+        private List<ChatMessagesModel> _failedMessages = new List<ChatMessagesModel>();
+        private bool _isSendingFailedMessage = false;
 
         private XPCommand<Tuple<string, MessageType>> _sendMessageCommand;
         public XPCommand<Tuple<string, MessageType>> SendMessageCommand => _sendMessageCommand ?? (_sendMessageCommand = new XPCommand<Tuple<string, MessageType>>(async (msg) => await SendMessage(msg), CanExecuteMsg));
@@ -142,8 +144,8 @@ namespace LetterApp.Core.ViewModels
             MemberName = $"{_user?.FirstName} {_user?.LastName}";
             MemberDetails = _user?.Position;
 
-            if(string.IsNullOrEmpty(_user.PushNotificationToken))
-                GetUserPushToken();
+            //if(string.IsNullOrEmpty(_user.PushNotificationToken))
+            GetUserPushToken();
 
             if (_thisUser.Divisions.Count > 1)
             {
@@ -189,7 +191,8 @@ namespace LetterApp.Core.ViewModels
 
             StatusLogic();
 
-            LoadMessagesAndUpdateReadReceipt(true, true);
+            await LoadMessagesAndUpdateReadReceipt(true, true);
+            await SaveChat();
         }
 
         private async Task LoadRecentMessages(bool loadOldMessages)
@@ -328,7 +331,8 @@ namespace LetterApp.Core.ViewModels
                 newMessage.MessageDate = $"  •  {dateForMessage}";
                 newMessage.MessageDateTime = massageDate;
                 newMessage.MessageType = (MessageType)message.MessageType;
-                newMessage.ShowPresense = message.MessageSenderId != _finalUserId; 
+                newMessage.ShowPresense = message.MessageSenderId != _finalUserId;
+                newMessage.IsFakeMessage = message.IsFakeMessage;
 
                 _chatMessages.Add(newMessage);
             }
@@ -379,6 +383,7 @@ namespace LetterApp.Core.ViewModels
                     MessageType = (int)message.Item2,
                     MessageSenderId = _finalUserId,
                     MessageDateTicks = _sendedMessageDateTime.ToLocalTime().Ticks,
+                    IsFakeMessage = true
                 };
 
                 MessagesLogic(new List<MessagesModel> { fakeMessage }, true);
@@ -449,17 +454,38 @@ namespace LetterApp.Core.ViewModels
 
                         _messagesModel.Add(msg);
                     }
+
+                    Realm.Write(() => 
+                    {
+                        var newMessage = _messagesModel.Last();
+
+                        _userChat?.MessagesList?.Add(newMessage);
+
+                        if ((MessageType)newMessage.MessageType == MessageType.Text)
+                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
+                        else
+                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
+                    });
+
+                    Debug.WriteLine("Send Message Successefully:" + SendedMessages?.Count);
                 }
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
 
-                foreach (var messageId in SendedMessages) {
-                    _chat.Messages.Last(x => x.MessageId == messageId.MessageId).FailedToSend = true;
-                }
+                if (_failedMessages?.Count == 0)
+                    _dialogService.ShowAlert(SendMessageError, AlertType.Error, 4f);
 
-                _dialogService.ShowAlert(SendMessageError, AlertType.Error, 4f);
+                foreach (var messageId in SendedMessages) {
+                    var msg = _chat.Messages.FindLast(x => x.MessageId == messageId.MessageId);
+
+                    if (msg != null)
+                    {
+                        msg.FailedToSend = true;
+                        _failedMessages.Add(msg);
+                    }
+                }
 
                 if (!sendingFailedMessages)
                     RaisePropertyChanged(nameof(Chat));
@@ -468,25 +494,25 @@ namespace LetterApp.Core.ViewModels
 
         private async Task RetrySendMessages()
         {
+            if (!_isSendingFailedMessage)
+                _isSendingFailedMessage = true;
+            else
+                return;
+
             try
             {
                 if (await MessageServiceConnection())
                 {
-                    var listMsg = new List<MessagesModel>();
-                    foreach (var msg in SendedMessages) { listMsg.Add(msg); }
+                    SendedMessages = new List<MessagesModel>();
 
-                    foreach(var msg in listMsg)
+                    foreach(var msg in _failedMessages) 
                     {
-                        SendedMessages.Remove(msg);
-                        await SendMessage(new Tuple<string, MessageType>(msg.MessageData, (MessageType)msg.MessageType), true);
+                        await SendMessage(new Tuple<string, MessageType>(msg.MessageData, msg.MessageType), true);
+                        await Task.Delay(200);
+                        _chat.Messages.Remove(msg);
                     }
 
-                    foreach(var msg in listMsg)
-                    {
-                        _chat.Messages.Remove(_chat.Messages.Find(x => x.MessageId == msg.MessageId));
-                    }
-
-                    listMsg = null;
+                    _failedMessages = new List<ChatMessagesModel>();
 
                     RaisePropertyChanged(nameof(Chat));
                 }
@@ -494,6 +520,10 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _isSendingFailedMessage = false;
             }
         }
 
@@ -520,8 +550,6 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
-                Debug.WriteLine("LoadMessagesAndUpdateReadReceipt WithLoadMessages:" + SendBirdClient.GetConnectionState());
-
                 bool needsToUpdatedMessages = false;
 
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
@@ -537,7 +565,15 @@ namespace LetterApp.Core.ViewModels
                     return;
                 }
 
-                IsBusy = false;
+                _failedMessages = new List<ChatMessagesModel>();
+
+                foreach (var failedMessage in _chat?.Messages?.Where(x => x.FailedToSend == true)?.ToList())
+                {
+                    _failedMessages.Add(failedMessage);
+                }
+
+                if (_failedMessages.Count == 0)
+                    IsBusy = false;
 
                 if ((loadMessages && needsToUpdatedMessages) || forceLoad)
                     await LoadRecentMessages(false);
@@ -546,12 +582,23 @@ namespace LetterApp.Core.ViewModels
 
                 StatusLogic();
 
-                if (_chat?.Messages != null && _chat.Messages.Any(x => x.FailedToSend == true))
+                foreach (var failmsg in _failedMessages) {
+                    _chat?.Messages.Add(failmsg);
+                }
+
+                if (_failedMessages.Count > 0)
+                {
+                    RaisePropertyChanged(nameof(Chat));
                     await RetrySendMessages();
+                }
             }
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -608,15 +655,14 @@ namespace LetterApp.Core.ViewModels
                     while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
                     {
                         Debug.WriteLine("Trying to reconnect to Messenger Services");
-                        await Task.Delay(TimeSpan.FromSeconds(numberOfTries++));
+                        await Task.Delay(TimeSpan.FromSeconds(2));
                     }
 
                     if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                         await _messengerService.ConnectMessenger();
 
+                    await GetChannel();
                 }
-
-                await GetChannel();
 
                 return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
             }
@@ -652,13 +698,15 @@ namespace LetterApp.Core.ViewModels
 
         private void MessageClickEvent(object sender, long messageId)
         {
-            if (IsBusy)
-                return;
-
-            var message = SendedMessages.Find(x => x.MessageId == messageId);
+            var message = _failedMessages.Find(x => x.MessageId == messageId);
 
             if (message != null)
+            {
+                if (IsBusy)
+                    return;
+
                 RetrySendMessages();
+            }
             else
                 OpenChatImage(messageId);
         }
@@ -667,11 +715,11 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
-                var image = _chatMessages?.Find(x => x.MessageId == messageId);
+                var mensagem = _chatMessages?.Find(x => x.MessageId == messageId);
 
-                if (image != null)
+                if (mensagem?.MessageType == MessageType.Image)
                 {
-                    await _dialogService.ShowChatImage(image.MessageData, SaveImage);
+                    await _dialogService.ShowChatImage(mensagem.MessageData, SaveImage);
                 }
             }
             catch (Exception ex)
@@ -752,8 +800,26 @@ namespace LetterApp.Core.ViewModels
                     newMessage.MessageSenderId = msg.Sender.UserId;
                     newMessage.MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(msg.CreatedAt.ToString())).ToLocalTime().Ticks;
                 }
+                else if(baseMessage is FileMessage m)
+                {
+                    newMessage.MessageId = m.MessageId;
+                    newMessage.MessageType = 1;
+                    newMessage.MessageData = m.Url;
+                    newMessage.MessageSenderId = m.Sender.UserId;
+                    newMessage.MessageDateTicks = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(m.CreatedAt.ToString())).ToLocalTime().Ticks;
+                }
 
                 MessagesLogic(new List<MessagesModel> { newMessage }, true);
+
+                Realm.Write(() => 
+                { 
+                    _userChat?.MessagesList?.Add(newMessage);
+
+                    if ((MessageType)newMessage.MessageType == MessageType.Text)
+                        _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
+                    else
+                        _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
+                });
 
                 _chat.Messages = _chatMessages;
                 RaisePropertyChanged(nameof(Chat));
@@ -833,6 +899,11 @@ namespace LetterApp.Core.ViewModels
 
         private async Task ConnectionOn()
         {
+            if (IsBusy)
+                return;
+
+            Debug.WriteLine("CONNECTIONON---------");
+
             await LoadMessagesAndUpdateReadReceipt(true);
             ChatHandlers();
         }
@@ -907,12 +978,16 @@ namespace LetterApp.Core.ViewModels
         {
             NavigationService.ChatOpen(-1);
             SendBirdClient.RemoveChannelHandler("ChatHandler");
+            await SaveChat();
+        }
 
+        private async Task SaveChat()
+        {
             try
             {
                 if (_chat?.Messages?.Count > 0)
                 {
-                    Realm.Write(() =>
+                    Realm?.Write(() =>
                     {
                         var lastMessage = _chat.Messages.Last();
 
@@ -932,7 +1007,7 @@ namespace LetterApp.Core.ViewModels
                             MemberSeenMyLastMessage = _chat.MemberSeenMyLastMessage,
                         };
 
-                        if (lastMessage.PresentMessage == PresentMessageType.UserText)
+                        if (lastMessage.MessageType == MessageType.Text)
                             userChat.LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {lastMessage.MessageData}" : lastMessage.MessageData;
                         else
                             userChat.LastMessage = _chat.Messages.Last().MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
@@ -947,7 +1022,7 @@ namespace LetterApp.Core.ViewModels
                         foreach (var msg in historyMessages.ToList())
                             userChat.MessagesList.Add(msg);
 
-                        Realm.Add(userChat, true);
+                        Realm?.Add(userChat, true);
                     });
                 }
             }

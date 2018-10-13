@@ -41,7 +41,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public string[] Actions;
 
         private bool _badgeForChat;
-        public bool BadgeForChat 
+        public bool BadgeForChat
         {
             get => _badgeForChat;
             set => SetProperty(ref _badgeForChat, value);
@@ -61,7 +61,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     ? _chatListSearch?.OrderByDescending(x => x.LastMessageDateTime).ToList()
                     : _chatList?.OrderByDescending(x => x.LastMessageDateTime).ToList();
             }
-            set 
+            set
             {
                 SetProperty(ref _chatList, value);
                 _chatListSearch = value;
@@ -81,8 +81,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public XPCommand<Tuple<ChatEventType, int>> RowActionCommand => _rowActionCommand ?? (_rowActionCommand = new XPCommand<Tuple<ChatEventType, int>>(RowAction));
 
         private XPCommand<bool> _chowNotificationsCommand;
-        public XPCommand<bool> ShowNotificationsCommand => _chowNotificationsCommand ?? (_chowNotificationsCommand = new XPCommand<bool>((value) => _showNotifications = value));
-
+        public XPCommand<bool> ShowNotificationsCommand => _chowNotificationsCommand ?? (_chowNotificationsCommand = new XPCommand<bool>((value) => SetNotifications(value)));
 
         public ChatListViewModel(IContactsService contactsService, IMessengerService messagerService, IDialogService dialogService)
         {
@@ -189,7 +188,22 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                             IsMemberMuted = false,
                         };
 
-                        Realm.Write(() => Realm.Add(user));
+                        Realm.Write(() => Realm.Add(user, true));
+
+                        _chatUserModel.Add(user);
+                    }
+                    else
+                    {
+                        var user = new ChatListUserModel
+                        {
+                            MemberId = res.UserId,
+                            MemberName = $"{res.FirstName} {res.LastName} - {res.Position}",
+                            MemberPhoto = res.Picture,
+                            IsMemberMuted = false,
+                        };
+
+                        Realm.Write(() => Realm.Add(user, true));
+                        _chatUserModel.Add(user);
                     }
                 }
 
@@ -285,6 +299,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     await NavigationService.NavigateAsync<ChatViewModel, int>(member.MemberId);
                 }
             }
+        }
+
+        private async Task SetNotifications(bool value)
+        {
+            if (value)
+                await Task.Delay(2000);
+
+            _showNotifications = value;
         }
 
         private void UpdateChatList(bool updated = false)

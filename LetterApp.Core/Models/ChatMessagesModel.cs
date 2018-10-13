@@ -18,6 +18,7 @@ namespace LetterApp.Core.Models
         public bool FailedToSend { get; set; }
         public bool ShowHeaderDate { get; set; }
         public string HeaderDate { get; set; }
+        public bool IsFakeMessage { get; set; }
     }
 
     public enum MessageType 

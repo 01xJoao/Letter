@@ -33,9 +33,7 @@ namespace LetterApp.iOS.Sources
 
             if (_chat?.Messages == null || indexPath.Row >= _chat.Messages?.Count)
                 return cell;
-
-            Debug.WriteLine(_chat.Messages[indexPath.Row].PresentMessage);
-
+                
             switch (_chat.Messages[indexPath.Row].PresentMessage)
             {
                 case PresentMessageType.UserText:
@@ -82,8 +80,6 @@ namespace LetterApp.iOS.Sources
                 return 0;
 
             var message = _chat.Messages[indexPath.Row];
-
-            Debug.WriteLine(message.MessageData);
 
             if (message.PresentMessage == PresentMessageType.UserImage || message.PresentMessage == PresentMessageType.Image)
             {

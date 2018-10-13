@@ -45,7 +45,7 @@ namespace LetterApp.iOS.Helpers
             {
                 view.Hidden = false;
                 _lottieAnimation = LOTAnimationView.AnimationNamed(animationName);
-                _lottieAnimation.Frame = new CGRect(0, 0, 50, 50);
+                _lottieAnimation.Frame = new CGRect(0, 0, view.Frame.Width, view.Frame.Height);
                 view.AddSubview(_lottieAnimation);
                 _lottieAnimation.LoopAnimation = true;
                 _lottieAnimation.Hidden = false;

@@ -36,7 +36,7 @@ namespace LetterApp.iOS.Views.Loading
             base.ViewDidLayoutSubviews();
 
             _loadingView.Hidden = true;
-            _loadingView.Frame = new CGRect(0, 0, 65, 65);
+            _loadingView.Frame = new CGRect(0, 0, 50, 50);
             var imageLoadingCenter = _loadingView.Center;
             imageLoadingCenter.X = this.View.Bounds.GetMidX();
             imageLoadingCenter.Y = this.View.Frame.Height / 1.25f;

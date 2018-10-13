@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
@@ -12,8 +13,8 @@ namespace LetterApp.iOS.Views.Chat.Cells
     public partial class ImageWithUserCell : UITableViewCell
     {
         private string _picture;
-        private long _messageId;
         private EventHandler<long> _messageEvent;
+        private ChatMessagesModel _chatMessagesModel;
 
         public static readonly NSString Key = new NSString("ImageWithUserCell");
         public static readonly UINib Nib = UINib.FromName("ImageWithUserCell", NSBundle.MainBundle);
@@ -21,13 +22,14 @@ namespace LetterApp.iOS.Views.Chat.Cells
 
         public void Configure(ChatMessagesModel chatMessagesModel, EventHandler<long> messageEvent, MemberPresence memberPresence)
         {
+            _chatMessagesModel = chatMessagesModel;
+
             _imageView.Image?.Dispose();
             _imageView.Image = null;
 
             _pictureImage.Image?.Dispose();
             _pictureImage.Image = null;
 
-            _messageId = chatMessagesModel.MessageId;
             _messageEvent = messageEvent;
 
             var nameAttr = new UIStringAttributes
@@ -89,13 +91,12 @@ namespace LetterApp.iOS.Views.Chat.Cells
             _dateView.Hidden = !chatMessagesModel.ShowHeaderDate;
             _dateViewHeightConstraint.Constant = chatMessagesModel.ShowHeaderDate ? LocalConstants.Chat_HeaderDateBig : LocalConstants.Chat_HeaderDateSmall;
 
-            ImageService.Instance.LoadUrl(chatMessagesModel.MessageData).Retry(3, 200).DownSample((int)_pictureImage.Frame.Width, (int)LocalConstants.Chat_Images, allowUpscale: true)
-                        .Transform(new RoundedTransformation(15)).Into(_pictureImage);
+            SetImages();
 
             if (chatMessagesModel.FailedToSend)
             {
                 _pictureImage.Layer.BorderColor = Colors.Red.CGColor;
-                _pictureImage.Layer.BorderWidth = 2f;
+                _pictureImage.Layer.BorderWidth = 5f;
                 _pictureImage.Layer.MasksToBounds = false;
             }
 
@@ -103,9 +104,30 @@ namespace LetterApp.iOS.Views.Chat.Cells
             _pictureButton.TouchUpInside += OnPictureButton_TouchUpInside;
         }
 
+        private async Task SetImages()
+        {
+            try
+            {
+                if (!_chatMessagesModel.IsFakeMessage)
+                {
+                    ImageService.Instance.LoadUrl(_chatMessagesModel.MessageData).Retry(3, 200).DownSample((int)_pictureImage.Frame.Width, (int)_imageView.Frame.Height, false)
+                            .LoadingPlaceholder("image_loading.gif", ImageSource.CompiledResource).DownSampleMode(InterpolationMode.Low).Transform(new RoundedTransformation(15)).Into(_pictureImage);
+                }
+                else
+                {
+                    ImageService.Instance.LoadFile(_chatMessagesModel.MessageData).Retry(3, 200).DownSample((int)_pictureImage.Frame.Width, (int)_imageView.Frame.Height, false)
+                            .LoadingPlaceholder("image_loading.gif", ImageSource.CompiledResource).DownSampleMode(InterpolationMode.Low).Transform(new RoundedTransformation(15)).Into(_pictureImage);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private void OnPictureButton_TouchUpInside(object sender, EventArgs e)
         {
-            _messageEvent?.Invoke(this, _messageId);
+            _messageEvent?.Invoke(this, _chatMessagesModel.MessageId);
         }
 
         private void CleanString(IScheduledWork obj)

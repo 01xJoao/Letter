@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FFImageLoading;
 using FFImageLoading.Work;
 using LetterApp.iOS.Helpers;
@@ -34,7 +35,10 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             if (PhoneModelExtensions.IsIphoneX())
                 _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
 
-            ImageService.Instance.LoadUrl(_image).ErrorPlaceholder("connection", ImageSource.CompiledResource).Retry(3, 200).Into(_imageView);
+            if(Uri.IsWellFormedUriString(_image, UriKind.Absolute))
+                ImageService.Instance.LoadUrl(_image).Retry(3, 200).Into(_imageView);
+            else
+                ImageService.Instance.LoadFile(_image).Retry(3, 200).Into(_imageView);
 
             UIButtonExtensions.SetupButtonAppearance(_saveButton, Colors.Black, 15f, _saveText);
             _saveButton.Hidden = true;
