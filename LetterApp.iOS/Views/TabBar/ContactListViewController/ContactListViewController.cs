@@ -22,7 +22,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private UIView _barView;
         private UIPageViewController _pageViewController;
         private List<XBoardPageViewController> _viewControllers;
-        private UIPanGestureRecognizer gesture = new UIPanGestureRecognizer();
+        private UIPanGestureRecognizer _tableViewGesture = new UIPanGestureRecognizer();
         private UISearchController _search;
         private UIViewController _visibleViewController;
         private UITextField _textFieldInsideSearchBar;
@@ -85,7 +85,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             this.AddChildViewController(_pageViewController);
             _pageView.AddSubview(_pageViewController.View);
 
-            gesture.AddTarget(() => HandleDrag(gesture));
+            _tableViewGesture.AddTarget(() => HandleDrag(_tableViewGesture));
                      
             this.View.AddSubview(_barView);
             this.View.BringSubviewToFront(_barView);
@@ -359,7 +359,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             var alreadyHasGesture = false;
             foreach (var ges in _tableViews[_currentPageViewIndex].GestureRecognizers)
             {
-                if (ges == gesture)
+                if (ges == _tableViewGesture)
                 {
                     alreadyHasGesture = true;
                     break;
@@ -367,9 +367,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             }
 
             if (!alreadyHasGesture)
-                _tableViews[_currentPageViewIndex].AddGestureRecognizer(gesture);
+                _tableViews[_currentPageViewIndex].AddGestureRecognizer(_tableViewGesture);
             else if (alreadyHasGesture && shouldRemove)
-                _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(gesture);
+                _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(_tableViewGesture);
         }
 
         [Export("scrollViewDidScroll:")]

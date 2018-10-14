@@ -22,6 +22,7 @@ namespace LetterApp.iOS.Views.Chat
         private nfloat _keyboardBottomHeight = PhoneModelExtensions.IsIphoneX() ? UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom : 0;
         private UILabel _statusLabel;
         private UITapGestureRecognizer _tableViewTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
+        private UIPanGestureRecognizer _tableViewSwipeGesture = new UIPanGestureRecognizer();
         private UIScrollView _tableScrollView;
         private NSObject _viewWillShow;
         private NSObject _viewWillHide;
@@ -95,6 +96,8 @@ namespace LetterApp.iOS.Views.Chat
             AddStatusInTableView();
 
             _tableViewTapGesture.AddTarget(HandleTableDragGesture);
+            _tableViewSwipeGesture.AddTarget(HandleTableDragGesture);
+
             _tableScrollView = _tableView as UIScrollView;
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
@@ -212,6 +215,7 @@ namespace LetterApp.iOS.Views.Chat
                 if (keyboardState)
                 {
                     _tableView.AddGestureRecognizer(_tableViewTapGesture);
+                    _tableView.AddGestureRecognizer(_tableViewSwipeGesture);
                     _keyboardHeight = (int)keybordEvent.FrameEnd.Height;
                 }
                 _keyboardState = keyboardState;
@@ -235,6 +239,7 @@ namespace LetterApp.iOS.Views.Chat
         private void HandleTableDragGesture()
         {
             _textView.ResignFirstResponder();
+            _tableView.RemoveGestureRecognizer(_tableViewSwipeGesture);
             _tableView.RemoveGestureRecognizer(_tableViewTapGesture);
         }
 
