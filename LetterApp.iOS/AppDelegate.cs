@@ -106,15 +106,6 @@ namespace LetterApp.iOS
             notificationCenter = UNUserNotificationCenter.Current;
             notificationCenter.Delegate = this;
             notificationCenter.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound,(bool granted, NSError arg2) => {
-
-                if(granted)
-                {
-                    Debug.WriteLine("NOTIFICATIONS GRANTED!!!!");
-                }
-                else
-                {
-                    Debug.WriteLine("NOTIFICATIONS NOT GRANTED!!");
-                }
             });
 
             application.RegisterForRemoteNotifications();
@@ -250,9 +241,18 @@ namespace LetterApp.iOS
             Debug.WriteLine(message);
         }
 
-        public override void OnResignActivation(UIApplication application) { }
-        public override void DidEnterBackground(UIApplication application) { }
-        public override void WillEnterForeground(UIApplication application) { }
+        public override void OnResignActivation(UIApplication application) {}
+        public override void DidEnterBackground(UIApplication application) {}
+        public override void WillEnterForeground(UIApplication application) 
+        { 
+            using(var center = UNUserNotificationCenter.Current)
+            {
+                center.RemoveAllDeliveredNotifications();
+                center.RemoveAllPendingNotificationRequests();
+            }
+
+            UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+        }
         public override void OnActivated(UIApplication application) { }
         public override void WillTerminate(UIApplication application) { }
 

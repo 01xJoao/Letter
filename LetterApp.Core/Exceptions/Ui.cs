@@ -20,8 +20,8 @@ namespace LetterApp.Core.Exceptions
         {
             RavenService.Raven.Capture(new SentryEvent(e));
 
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet){}
+                //DialogService.ShowAlert(e.ToString(), AlertType.Error);
             else
                 Handle(new NoInternetException());
         }

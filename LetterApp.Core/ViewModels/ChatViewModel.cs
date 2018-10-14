@@ -78,7 +78,15 @@ namespace LetterApp.Core.ViewModels
         public XPCommand<bool> TypingCommand => _typingCommand ?? (_typingCommand = new XPCommand<bool>(TypingStatus));
 
         private XPCommand<bool> _loadMessagesUpdateReceiptCommand;
-        public XPCommand<bool> LoadMessagesUpdateReceiptCommand => _loadMessagesUpdateReceiptCommand ?? (_loadMessagesUpdateReceiptCommand = new XPCommand<bool>(async (val) => await LoadMessagesAndUpdateReadReceipt(val), CanExecuteLoad));
+        public XPCommand<bool> LoadMessagesUpdateReceiptCommand => _loadMessagesUpdateReceiptCommand ?? (_loadMessagesUpdateReceiptCommand = new XPCommand<bool>(async (val) =>
+        {
+            if (!IsBusy)
+            {
+                IsBusy = true;
+                await Task.Delay(1000);
+                await LoadMessagesAndUpdateReadReceipt(val, true);
+            }
+        }, CanExecuteLoad));
 
         private XPCommand<bool> _chatHandlersCommand;
         public XPCommand<bool> ChatHandlersCommand => _chatHandlersCommand ?? (_chatHandlersCommand = new XPCommand<bool>(ChatHandlers));
@@ -148,7 +156,6 @@ namespace LetterApp.Core.ViewModels
             MemberName = $"{_user?.FirstName} {_user?.LastName}";
             MemberDetails = _user?.Position;
 
-            //if(string.IsNullOrEmpty(_user.PushNotificationToken))
             GetUserPushToken();
 
             if (_thisUser.Divisions.Count > 1)
@@ -196,7 +203,7 @@ namespace LetterApp.Core.ViewModels
             StatusLogic();
 
             await LoadMessagesAndUpdateReadReceipt(true, true);
-            await SaveChat();
+            SaveChat();
         }
 
         private async Task LoadRecentMessages(bool loadOldMessages)
@@ -461,26 +468,7 @@ namespace LetterApp.Core.ViewModels
                         _messagesModel.Add(msg);
                     }
 
-                    if (_userChat == null)
-                    {
-                        SaveChat();
-                        _userChat = Realm.Find<ChatListUserModel>(_userId);
-                    }
-
-                    if (_userChat != null)
-                    {
-                        Realm.Write(() =>
-                        {
-                            var newMessage = _messagesModel.Last();
-
-                            _userChat.MessagesList.Add(newMessage);
-
-                            if ((MessageType)newMessage.MessageType == MessageType.Text)
-                                _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
-                            else
-                                _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
-                        });
-                    }
+                    SaveLastMessage();
 
                     Debug.WriteLine("Send Message Successefully:" + SendedMessages?.Count);
                 }
@@ -836,25 +824,7 @@ namespace LetterApp.Core.ViewModels
 
                 _audioService.PlayReceivedMessage();
 
-                if (_userChat == null)
-                {
-                    SaveChat();
-                    _userChat = Realm.Find<ChatListUserModel>(_userId);
-                }
-
-                if (_userChat != null)
-                {
-                    Realm.Write(() =>
-                    {
-                        _userChat.MessagesList.Add(newMessage);
-
-                        if ((MessageType)newMessage.MessageType == MessageType.Text)
-                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
-                        else
-                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
-                    });
-                }
-
+                SaveLastMessage(newMessage);
             });
         }
 
@@ -926,9 +896,7 @@ namespace LetterApp.Core.ViewModels
         {
             if (IsBusy)
                 return;
-
-            Debug.WriteLine("CONNECTIONON---------");
-
+                
             await LoadMessagesAndUpdateReadReceipt(true);
             ChatHandlers();
         }
@@ -982,7 +950,7 @@ namespace LetterApp.Core.ViewModels
                         break;
                     case ChatOptions.ArchiveChat:
                         _chat.MemberArchived = true;
-                        CloseView();
+                        await CloseView();
                         break;
                 }
 
@@ -1006,10 +974,42 @@ namespace LetterApp.Core.ViewModels
 
             NavigationService.ChatOpen(-1);
             SendBirdClient.RemoveChannelHandler("ChatHandler");
-            await SaveChat();
+            SaveChat();
         }
 
-        private async Task SaveChat()
+        private void SaveLastMessage(MessagesModel newMessage = null)
+        {
+            try
+            {
+                if (_userChat == null)
+                {
+                    SaveChat();
+                    _userChat = Realm.Find<ChatListUserModel>(_userId);
+                }
+
+                if (_userChat != null)
+                {
+                    Realm.Write(() =>
+                    {
+                        if (newMessage == null)
+                            newMessage = _messagesModel.Last();
+
+                        _userChat?.MessagesList?.Add(newMessage);
+
+                        if ((MessageType)newMessage.MessageType == MessageType.Text)
+                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {newMessage.MessageData}" : newMessage.MessageData;
+                        else
+                            _userChat.LastMessage = newMessage.MessageSenderId == _finalUserId ? $"{YouChatLabel} {SentImage}" : SentImage;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private void SaveChat()
         {
             try
             {
