@@ -243,9 +243,21 @@ namespace LetterApp.iOS
 
         public override void OnResignActivation(UIApplication application) {}
         public override void DidEnterBackground(UIApplication application) {}
+
         public override void WillEnterForeground(UIApplication application) 
-        { 
-            using(var center = UNUserNotificationCenter.Current)
+        {
+            CleanNotifications();
+        }
+        public override void OnActivated(UIApplication application) 
+        {
+            CleanNotifications();
+        }
+
+        public override void WillTerminate(UIApplication application) { }
+
+        private void CleanNotifications()
+        {
+            using (var center = UNUserNotificationCenter.Current)
             {
                 center.RemoveAllDeliveredNotifications();
                 center.RemoveAllPendingNotificationRequests();
@@ -253,8 +265,6 @@ namespace LetterApp.iOS
 
             UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
         }
-        public override void OnActivated(UIApplication application) { }
-        public override void WillTerminate(UIApplication application) { }
 
         #region sinch
 
