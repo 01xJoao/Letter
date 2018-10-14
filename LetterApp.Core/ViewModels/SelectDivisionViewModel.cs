@@ -184,6 +184,11 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        public override async Task Disappearing()
+        {
+            _dialogService.StopLoading();
+        }
+
         private bool CanExecute() => !IsBusy;
         private bool CanExecute(object obj) => !IsBusy;
 

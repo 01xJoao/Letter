@@ -169,6 +169,11 @@ namespace LetterApp.Core.ViewModels
             await NavigationService.Close(this);
         }
 
+        public override async Task Disappearing()
+        {
+            _dialogService.StopLoading();
+        }
+
         private bool CanExecute() => !IsBusy;
 
         #region Resources

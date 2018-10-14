@@ -20,25 +20,41 @@ namespace LetterApp.Core.Exceptions
         {
             RavenService.Raven.Capture(new SentryEvent(e));
 
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet){}
-                //DialogService.ShowAlert(e.ToString(), AlertType.Error);
-            else
-                Handle(new NoInternetException());
+            //if (Connectivity.NetworkAccess == NetworkAccess.Internet){}
+            //    //DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            //else
+                ////Handle(new NoInternetException());
         }
 
         public static void Handle(WrongCredentialsException e)
         {
-            DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            RavenService.Raven.Capture(new SentryEvent(e));
+
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
+
+            #if DEBUG
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            #endif
         }
 
         public static void Handle(SessionTimeoutException e)
         {
-            DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            RavenService.Raven.Capture(new SentryEvent(e));
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
+
+            #if DEBUG
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            #endif
         }
 
         public static void Handle(FeatureNotSupportedException e)
         {
+            RavenService.Raven.Capture(new SentryEvent(e));
             DialogService.ShowAlert(CodeNull, AlertType.Error);
+
+            #if DEBUG
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            #endif
         }
 
         public static void Handle(NoInternetException e)
