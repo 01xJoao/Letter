@@ -22,7 +22,7 @@ namespace LetterApp.iOS.Views.Chat
         private nfloat _keyboardBottomHeight = PhoneModelExtensions.IsIphoneX() ? UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom : 0;
         private UILabel _statusLabel;
         private UITapGestureRecognizer _tableViewTapGesture = new UITapGestureRecognizer { CancelsTouchesInView = false };
-        private UIPanGestureRecognizer _tableViewSwipeGesture = new UIPanGestureRecognizer();
+        private UIPanGestureRecognizer _tableViewSwipeGesture = new UIPanGestureRecognizer { CancelsTouchesInView = false };
         private UIScrollView _tableScrollView;
         private NSObject _viewWillShow;
         private NSObject _viewWillHide;
