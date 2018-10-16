@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AVFoundation;
 using Com.OneSignal;
 using LetterApp.Core;
-using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using SendBird;
 using Xamarin.Essentials;
@@ -41,18 +39,24 @@ namespace LetterApp.iOS.Services
                 {
                     Debug.WriteLine("Connecting to SendBird...");
 
-                    SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
+                    if (!SendBirdClient.Reconnect())
                     {
-                        if (e != null)
-                            tcs.TrySetCanceled();
-                        else
+                        SendBirdClient.Connect(AppSettings.UserAndOrganizationIds, (User user, SendBirdException e) =>
                         {
-                            Debug.WriteLine("Connected to Sendbird Services");
-                            tcs.TrySetResult(true);
-
-                            //RegisterMessengerToken();
-                        }
-                    });
+                            if (e != null)
+                                tcs.TrySetCanceled();
+                            else
+                            {
+                                Debug.WriteLine("Connected to Sendbird Services");
+                                tcs.TrySetResult(true);
+                                //RegisterMessengerToken();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        tcs.TrySetResult(true);
+                    }
                 }
                 else
                 {
@@ -271,7 +275,9 @@ namespace LetterApp.iOS.Services
                 {
                     ["contents"] = new Dictionary<string, string> { { "en", $"️You missed a call from {userName} ☎" }, { "pt", $"Perdeu uma chamada de {userName} ☎" } },
                     ["data"] = new Dictionary<string, string> { { "userId", userId } },
-                    ["include_player_ids"] = new List<string> { memberTokenId }
+                    ["include_player_ids"] = new List<string> { memberTokenId },
+                    ["ios_badgeType"] = "Increase",
+                    ["ios_badgeCount"] = 1
                 };
             }
             else if(messagetype == NotificationType.Text)
@@ -281,7 +287,9 @@ namespace LetterApp.iOS.Services
                     ["headings"] = new Dictionary<string, string> { { "en", userName } },
                     ["contents"] = new Dictionary<string, string> { { "en", message } },
                     ["data"] = new Dictionary<string, string> { { "userId", userId } },
-                    ["include_player_ids"] = new List<string> { memberTokenId }
+                    ["include_player_ids"] = new List<string> { memberTokenId },
+                    ["ios_badgeType"] = "Increase",
+                    ["ios_badgeCount"] = 1
                 };
             }
             else
@@ -290,7 +298,9 @@ namespace LetterApp.iOS.Services
                 {
                     ["contents"] = new Dictionary<string, string> { { "en", $"{userName} sent a image 📷️" }, { "pt", $"{userName} enviou uma imagem 📷️" } },
                     ["data"] = new Dictionary<string, string> { { "userId", userId } },
-                    ["include_player_ids"] = new List<string> { memberTokenId }
+                    ["include_player_ids"] = new List<string> { memberTokenId },
+                    ["ios_badgeType"] = "Increase",
+                    ["ios_badgeCount"] = 1
                 };
             }
 

@@ -60,7 +60,7 @@ namespace LetterApp.iOS
             SendBird.SendBirdClient.Init("46497603-C6C5-4E64-9E05-DCCAF5ED66D1");
             OneSignal.Current.StartInit("0c3dc7b8-fabf-4449-ab16-e07d2091eb47").InFocusDisplaying(OSInFocusDisplayOption.None).EndInit();
 
-            Push = Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Development);
+            Push = Sinch.ManagedPushWithAPSEnvironment(SINAPSEnvironment.Production);
             Push.WeakDelegate = this;
             Push.SetDesiredPushTypeAutomatically();
 
@@ -143,17 +143,6 @@ namespace LetterApp.iOS
         }
 
         void HandleIdsAvailableCallback(string playerID, string pushToken) => AppSettings.MessengerToken = playerID;
-
-        //private async Task RegisterTokenInDataBase(string userToken)
-        //{
-        //    var webService = App.Container.GetInstance<IWebService>();
-
-        //    try
-        //    {
-        //        webService.GetAsync<BaseModel>($"/api/users/registertoken/{userToken}", needsHeaderCheck: true).ConfigureAwait(true);
-        //    }
-        //    catch (Exception ex){}
-        //}
 
         [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
@@ -242,7 +231,10 @@ namespace LetterApp.iOS
         }
 
         public override void OnResignActivation(UIApplication application) {}
-        public override void DidEnterBackground(UIApplication application) {}
+        public override void DidEnterBackground(UIApplication application) 
+        {
+            CleanNotifications();
+        }
 
         public override void WillEnterForeground(UIApplication application) 
         {
@@ -253,7 +245,10 @@ namespace LetterApp.iOS
             CleanNotifications();
         }
 
-        public override void WillTerminate(UIApplication application) { }
+        public override void WillTerminate(UIApplication application) 
+        {
+            CleanNotifications();
+        }
 
         private void CleanNotifications()
         {

@@ -31,7 +31,7 @@
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <LangVersion>Latest</LangVersion>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchSdkVersion>11.4</MtouchSdkVersion>
+    <MtouchSdkVersion>12.0</MtouchSdkVersion>
     <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
@@ -41,14 +41,14 @@
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>LetterProvisionProfile</CodesignProvision>
+    <CodesignProvision>LetterDestribution</CodesignProvision>
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
@@ -58,13 +58,13 @@
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>LetterProvisionProfile</CodesignProvision>
+    <CodesignProvision>LetterDestribution</CodesignProvision>
     <LangVersion>Latest</LangVersion>
     <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
@@ -208,8 +208,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchImage.launchimage\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline%402x.png" />
@@ -413,6 +411,15 @@
     <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\load_image.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Notification%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Notification%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Spotlight%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Spotlight%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\SpotlightBig%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\SpotlightBig%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -945,6 +952,11 @@
       <Project>{848E6633-3205-4E4B-BAF3-7A61FC5631EC}</Project>
       <Name>LetterApp.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LetterNotificationService\LetterNotificationService.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{EE8BB25F-8B17-41E5-A7A7-462591611BA8}</Project>
+      <Name>LetterNotificationService</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\loading.json" />
@@ -962,6 +974,10 @@
     <BundleResource Include="Resources\message_sent.mp3" />
     <BundleResource Include="Resources\paperplane_loading.json" />
     <BundleResource Include="Resources\image_loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

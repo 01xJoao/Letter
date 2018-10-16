@@ -83,8 +83,8 @@ namespace LetterApp.Core.ViewModels
             if (!IsBusy)
             {
                 IsBusy = true;
-                await Task.Delay(1000);
-                await LoadMessagesAndUpdateReadReceipt(val, true);
+                await Task.Delay(200);
+                await LoadMessagesAndUpdateReadReceipt(val, val);
             }
         }, CanExecuteLoad));
 
@@ -215,6 +215,14 @@ namespace LetterApp.Core.ViewModels
             if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
             {
                 if(!await MessageServiceConnection())
+                {
+                    IsLoading = false;
+                    return;
+                }
+            }
+            else
+            {
+                if (!await GetChannel())
                 {
                     IsLoading = false;
                     return;
@@ -558,7 +566,7 @@ namespace LetterApp.Core.ViewModels
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                 {
                     needsToUpdatedMessages = true;
-                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    //await Task.Delay(TimeSpan.FromSeconds(2));
                     await MessageServiceConnection();
                 }
 
@@ -575,8 +583,8 @@ namespace LetterApp.Core.ViewModels
                     _failedMessages.Add(failedMessage);
                 }
 
-                if (_failedMessages.Count == 0)
-                    IsBusy = false;
+                //if (_failedMessages.Count == 0)
+                    //IsBusy = false;
 
                 if ((loadMessages && needsToUpdatedMessages) || forceLoad)
                     await LoadRecentMessages(false);
@@ -609,8 +617,17 @@ namespace LetterApp.Core.ViewModels
         {
             try
             {
+                if (_channel != null)
+                    return true;
+
                 if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                     return false;
+
+                if(SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CLOSED || 
+                   SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CLOSING)
+                {
+                    await _messengerService.ConnectMessenger();
+                }
 
                 _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
 
@@ -654,20 +671,24 @@ namespace LetterApp.Core.ViewModels
             {
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                 {
-                    int numberOfTries = 0;
-                    while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
-                    {
-                        Debug.WriteLine("Trying to reconnect to Messenger Services");
-                        await Task.Delay(TimeSpan.FromSeconds(2));
-                    }
+                    //int numberOfTries = 0;
+                    //while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
+                    //{
+                    //    Debug.WriteLine("Trying to reconnect to Messenger Services");
+                    //    await Task.Delay(TimeSpan.FromSeconds(2));
+                    //}
 
-                    if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
-                        await _messengerService.ConnectMessenger();
+                    //if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
+                    await _messengerService.ConnectMessenger();
 
-                    await GetChannel();
+                    //SendBirdClient.Reconnect();
+
+                    if (!await GetChannel())
+                        return false;
                 }
 
-                return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
+                return true;
+                //return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
             }
             catch (Exception ex)
             {
