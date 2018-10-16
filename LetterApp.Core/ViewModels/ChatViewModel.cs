@@ -123,6 +123,8 @@ namespace LetterApp.Core.ViewModels
         {
             if (_isPickingImage)
                 return;
+               
+            IsBusy = true;
 
             ChatHandlers();
             CheckConnection();
@@ -156,7 +158,10 @@ namespace LetterApp.Core.ViewModels
             MemberName = $"{_user?.FirstName} {_user?.LastName}";
             MemberDetails = _user?.Position;
 
-            GetUserPushToken();
+            if (string.IsNullOrEmpty(_user?.PushNotificationToken))
+                await GetUserPushToken();
+            else 
+                GetUserPushToken();
 
             if (_thisUser.Divisions.Count > 1)
             {
@@ -204,6 +209,8 @@ namespace LetterApp.Core.ViewModels
 
             await LoadMessagesAndUpdateReadReceipt(true, true);
             SaveChat();
+
+            IsBusy = false;
         }
 
         private async Task LoadRecentMessages(bool loadOldMessages)
@@ -722,15 +729,10 @@ namespace LetterApp.Core.ViewModels
 
         private void MessageClickEvent(object sender, long messageId)
         {
-            var message = _failedMessages.Find(x => x.MessageId == messageId);
+            //var message = _failedMessages.Find(x => x.MessageId == messageId);
 
-            if (message != null)
-            {
-                if (IsBusy)
-                    return;
-
+            if (_chat.Messages.Any(x => x.FailedToSend == true) && IsBusy == false)
                 RetrySendMessages();
-            }
             else
                 OpenChatImage(messageId);
         }
