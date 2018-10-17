@@ -137,7 +137,6 @@ namespace LetterApp.iOS
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            //AppSettings.MessengerToken = deviceToken.Description.TrimStart('<').TrimEnd('>');
             //Debug.WriteLine("Registered For Remote Notifications with Token " + deviceToken?.Description);
             //byte[] deviceTokenBytes = deviceToken.ToArray();
         }
@@ -147,13 +146,12 @@ namespace LetterApp.iOS
         [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
         {
-            if(application.ApplicationState != UIApplicationState.Active)
+            if(application.ApplicationState == UIApplicationState.Background)
             {
                 var info = userInfo["custom"] as NSDictionary;
                 var info1 = info["a"] as NSDictionary;
                 var userId = info1["userId"].ToString();
                 bool result = int.TryParse(userId, out int user);
-
                 var navigationService = App.Container.GetInstance<IXNavigationService>();
 
                 if (result && navigationService.ChatOpen() != user)
@@ -192,13 +190,6 @@ namespace LetterApp.iOS
                     InitSinchClientWithUserId(AppSettings.UserAndOrganizationIds);
 
                 Client.RelayRemotePushNotificationPayload(callInfo);
-
-                //if (callType == "SIN_INCOMING_CALL")
-                //{
-                //    var callInfo = payload["sin"].ToString();
-                //    var caller = Client.RelayRemotePushNotificationPayload(callInfo);
-                //    //CallProviderDelegate.ReportIncomingCall(new NSUuid(), caller.CallResult);
-                //}
             }
         }
 

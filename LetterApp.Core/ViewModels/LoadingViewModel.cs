@@ -23,9 +23,12 @@ namespace LetterApp.Core.ViewModels
         private IStatusCodeService _statusCodeService;
         private ISettingsService _settingsService;
         private IMessengerService _mesengersService;
+        private IContactsService _contactsService;
 
-        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService, IMessengerService mesengersService)
+        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, 
+                                ISettingsService settingsService, IMessengerService mesengersService, IContactsService contactsService)
         {
+            _contactsService = contactsService;
             _settingsService = settingsService;
             _authService = authService;
             _dialogService = dialogService;
@@ -42,9 +45,7 @@ namespace LetterApp.Core.ViewModels
                 if (AppSettings.IsUserLogged)
                     await CheckUser();
                 else
-                {
                     await NavigationService.NavigateAsync<OnBoardingViewModel, object>(null);
-                }
             }
             catch (Exception ex)
             {
@@ -65,6 +66,7 @@ namespace LetterApp.Core.ViewModels
                         await Logout();
                         return;
                     }
+
                     AppSettings.UserId = userCheck.UserID;
 
                     var user = RealmUtils.UpdateUser(Realm, userCheck);
@@ -75,9 +77,12 @@ namespace LetterApp.Core.ViewModels
                         AppSettings.UserAndOrganizationIds = $"{AppSettings.UserId}-{AppSettings.OrganizationId}";
                         UpdateSinchClient = true;
 
-                        //_mesengersService.InitializeMessenger();
-                        //_mesengersService.ConnectMessenger();
+                        await _mesengersService.ConnectMessenger();
+                        //await GetUsers();
                     }
+
+                    if (!string.IsNullOrEmpty(AppSettings.MessengerToken))
+                        _settingsService.SendPushNotificationToken(AppSettings.MessengerToken);
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;
@@ -132,6 +137,30 @@ namespace LetterApp.Core.ViewModels
                         await Logout();
                 }
 
+                Ui.Handle(ex as dynamic);
+            }
+        }
+
+        private async Task GetUsers()
+        {
+            try
+            {
+                var result = await _contactsService.GetUsersFromAllDivisions();
+
+                if (result == null && result.Count == 0)
+                    return;
+
+                Realm.Write(() =>
+                {
+                    foreach (var res in result)
+                    {
+                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+                        Realm.Add(res, true);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
                 Ui.Handle(ex as dynamic);
             }
         }

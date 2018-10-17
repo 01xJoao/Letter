@@ -27,7 +27,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
         private bool _showNotifications = true;
-        private bool _initializing = true;
+        //private bool _initializing = true;
 
         public bool _isLoading;
         public bool IsLoading
@@ -95,32 +95,32 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         public override async Task Appearing()
         {
+            IsLoading = true;
+
             _users = Realm.All<GetUsersInDivisionModel>().ToList();
             UpdateChatList();
 
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-                return;
-
-            if (_initializing)
             {
-                await GetUsers();
-                _initializing = false;
+                IsLoading = false;
+                return;
             }
 
             if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
             {
                 try
                 {
-                    if (await _messagerService.ConnectMessenger()) 
-                        UpdateMessengerService();   
+                    if (SendBirdClient.Reconnect())
+                        await UpdateMessengerService();
                 }
                 catch (Exception ex)
                 {
+                    IsLoading = false;
                     Ui.Handle(ex as dynamic);
                 }
             }
             else
-                UpdateMessengerService();
+                await UpdateMessengerService();
         }
 
         private async Task GetUsers()
@@ -345,8 +345,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
             if (DateTime.Now >= _updateFrequence)
             {
-                if (_updateFrequence == default(DateTime))
-                    IsLoading = true;
+                //if (_updateFrequence == default(DateTime))
+                    //IsLoading = true;
 
                 var newChatList = new List<ChatListUserModel>();
 
@@ -378,7 +378,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
                             if (userInDB == null)
                                 continue;
-                                
+
                             var lastMessageDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(channel.LastMessage.CreatedAt.ToString())).ToLocalTime();
                             long userLastSeen = DateTime.Now.AddMilliseconds(-user.LastSeenAt).Ticks;
 
@@ -414,8 +414,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                         }
                     }
 
-                    Realm.Write(() => {
-                        foreach(var chat in newChatList)
+                    Realm.Write(() =>
+                    {
+                        foreach (var chat in newChatList)
                         {
                             Realm.Add(chat, true);
                         }
@@ -439,6 +440,8 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     _updateFrequence = DateTime.Now.AddMinutes(4);
                 }
             }
+            else
+                IsLoading = false;
         }
 
         private async Task OpenContacts()

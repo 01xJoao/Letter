@@ -40,7 +40,7 @@ namespace LetterApp.iOS.Views.Chat
             base.ViewDidLoad();
 
             _imageView3.Hidden = true;
-            _tableView.Hidden = true;
+            _tableView.Alpha = 0;
 
             ConfigureView();
 
@@ -375,7 +375,8 @@ namespace LetterApp.iOS.Views.Chat
             if (row > 0 && section > 0)
                 _tableView.ScrollToRow(NSIndexPath.FromRowSection(row - 1, section - 1), UITableViewScrollPosition.Top, false);
 
-            _tableView.Hidden = false;
+            if(_tableView.Alpha == 0)
+                Animations.Fade(_tableView, true);
         }
 
         private void LoadingAnimation(bool animate)

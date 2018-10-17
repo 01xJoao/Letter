@@ -68,22 +68,25 @@ namespace LetterApp.iOS.Views.Chat.Cells
                 CustomUIExtensions.RoundView(_imageView);
             }
 
-            switch (memberPresence)
+            if (message.ShowPresense)
             {
-                case MemberPresence.Online:
-                    _presenceView.BackgroundColor = Colors.UserOnline;
-                    _presenceView.Hidden = false;
-                    break;
-                case MemberPresence.Recent:
-                    _presenceView.BackgroundColor = Colors.UserRecent;
-                    _presenceView.Hidden = false;
-                    break;
-                case MemberPresence.Offline:
-                    _presenceView.Hidden = true;
-                    break;
+                switch (memberPresence)
+                {
+                    case MemberPresence.Online:
+                        _presenceView.BackgroundColor = Colors.UserOnline;
+                        _presenceView.Hidden = false;
+                        break;
+                    case MemberPresence.Recent:
+                        _presenceView.BackgroundColor = Colors.UserRecent;
+                        _presenceView.Hidden = false;
+                        break;
+                    case MemberPresence.Offline:
+                        _presenceView.Hidden = true;
+                        break;
+                }
             }
-
-            _presenceView.Hidden = !message.ShowPresense;
+            else
+                _presenceView.Hidden = true;
 
             CustomUIExtensions.RoundView(_presenceView);
             _presenceView.Layer.BorderWidth = 1f;

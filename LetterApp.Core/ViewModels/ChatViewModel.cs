@@ -83,6 +83,7 @@ namespace LetterApp.Core.ViewModels
             if (!IsBusy)
             {
                 IsBusy = true;
+                RaisePropertyChanged(nameof(IsLoading));
                 await Task.Delay(200);
                 await LoadMessagesAndUpdateReadReceipt(val, val);
             }
@@ -121,7 +122,7 @@ namespace LetterApp.Core.ViewModels
 
         public override async Task Appearing()
         {
-            if (_isPickingImage)
+            if (_isPickingImage || IsBusy || IsLoading)
                 return;
                
             IsBusy = true;
@@ -281,15 +282,13 @@ namespace LetterApp.Core.ViewModels
                 }
                 else
                 {
-                    _isLoading = false; 
-                    RaisePropertyChanged(nameof(IsLoading));
+                    IsLoading = false;
                     return;
                 }
             }
             catch (Exception ex)
             {
-                _isLoading = false;
-                RaisePropertyChanged(nameof(IsLoading));
+                IsLoading = false;
                 Ui.Handle(ex as dynamic);
                 return;
             }
@@ -302,9 +301,7 @@ namespace LetterApp.Core.ViewModels
             if(_chatMessages?.Count > 0)
                 _chat.Messages = _chatMessages?.OrderBy(x => x?.MessageDateTime)?.ToList();
                 
-            _isLoading = false;
             RaisePropertyChanged(nameof(Chat));
-            RaisePropertyChanged(nameof(IsLoading));
         }
 
         private void MessagesLogic(IList<MessagesModel> messagesList, bool shouldKeepOldMessages)
@@ -512,36 +509,42 @@ namespace LetterApp.Core.ViewModels
 
         private async Task RetrySendMessages()
         {
-            if (!_isSendingFailedMessage)
+            if (_isSendingFailedMessage == false)
+            {
                 _isSendingFailedMessage = true;
-            else
-                return;
+                IsBusy = true;
 
-            try
-            {
-                if (await MessageServiceConnection())
+                try
                 {
-                    SendedMessages = new List<MessagesModel>();
+                    await _messengerService.ConnectMessenger();
 
-                    foreach(var msg in _failedMessages) 
+                    if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
                     {
-                        await SendMessage(new Tuple<string, MessageType>(msg.MessageData, msg.MessageType), true);
-                        await Task.Delay(200);
-                        _chat.Messages.Remove(msg);
+                        SendedMessages = new List<MessagesModel>();
+
+                        var failedMessageList = _failedMessages.ToList();
+
+                        foreach (var msg in failedMessageList)
+                        {
+                            _failedMessages.Remove(msg);
+                            _chat.Messages.Remove(msg);
+                            await Task.Delay(200);
+                            await SendMessage(new Tuple<string, MessageType>(msg.MessageData, msg.MessageType), true);
+                        }
+
+                        RaisePropertyChanged(nameof(Chat));
                     }
-
-                    _failedMessages = new List<ChatMessagesModel>();
-
-                    RaisePropertyChanged(nameof(Chat));
                 }
-            }
-            catch (Exception ex)
-            {
-                Ui.Handle(ex as dynamic);
-            }
-            finally
-            {
-                _isSendingFailedMessage = false;
+                catch (Exception ex)
+                {
+                    Ui.Handle(ex as dynamic);
+                }
+                finally
+                {
+                    _isSendingFailedMessage = false;
+                    IsLoading = false;
+                    IsBusy = false;
+                }
             }
         }
 
@@ -562,7 +565,10 @@ namespace LetterApp.Core.ViewModels
         private async Task LoadMessagesAndUpdateReadReceipt(bool loadMessages, bool forceLoad = false)
         {
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                IsLoading = false;
                 return;
+            }
 
             IsBusy = true;
 
@@ -573,7 +579,6 @@ namespace LetterApp.Core.ViewModels
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                 {
                     needsToUpdatedMessages = true;
-                    //await Task.Delay(TimeSpan.FromSeconds(2));
                     await MessageServiceConnection();
                 }
 
@@ -585,13 +590,9 @@ namespace LetterApp.Core.ViewModels
 
                 _failedMessages = new List<ChatMessagesModel>();
 
-                foreach (var failedMessage in _chat?.Messages?.Where(x => x.FailedToSend == true)?.ToList())
-                {
+                foreach (var failedMessage in _chat?.Messages?.Where(x => x.FailedToSend == true)?.ToList()) {
                     _failedMessages.Add(failedMessage);
                 }
-
-                //if (_failedMessages.Count == 0)
-                    //IsBusy = false;
 
                 if ((loadMessages && needsToUpdatedMessages) || forceLoad)
                     await LoadRecentMessages(false);
@@ -607,6 +608,8 @@ namespace LetterApp.Core.ViewModels
                 if (_failedMessages.Count > 0)
                 {
                     RaisePropertyChanged(nameof(Chat));
+                    IsLoading = true;
+                    await Task.Delay(2000);
                     await RetrySendMessages();
                 }
             }
@@ -616,6 +619,7 @@ namespace LetterApp.Core.ViewModels
             }
             finally
             {
+                IsLoading = false;
                 IsBusy = false;
             }
         }
@@ -629,12 +633,15 @@ namespace LetterApp.Core.ViewModels
 
                 if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                     return false;
-
+                    
                 if(SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CLOSED || 
                    SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CLOSING)
                 {
+                    await Task.Delay(2000);
                     await _messengerService.ConnectMessenger();
                 }
+
+                Debug.WriteLine("Getting Channel");
 
                 _channel = await _messengerService.GetCurrentChannel($"{_userId}-{_organizationId}");
 
@@ -657,6 +664,8 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+                await CloseView();
+                return false;
             }
 
             return true;
@@ -678,24 +687,13 @@ namespace LetterApp.Core.ViewModels
             {
                 if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                 {
-                    //int numberOfTries = 0;
-                    //while (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.CONNECTING && numberOfTries < 5)
-                    //{
-                    //    Debug.WriteLine("Trying to reconnect to Messenger Services");
-                    //    await Task.Delay(TimeSpan.FromSeconds(2));
-                    //}
-
-                    //if (SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN)
                     await _messengerService.ConnectMessenger();
-
-                    //SendBirdClient.Reconnect();
 
                     if (!await GetChannel())
                         return false;
                 }
 
                 return true;
-                //return SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN;
             }
             catch (Exception ex)
             {
@@ -729,10 +727,11 @@ namespace LetterApp.Core.ViewModels
 
         private void MessageClickEvent(object sender, long messageId)
         {
-            //var message = _failedMessages.Find(x => x.MessageId == messageId);
-
-            if (_chat.Messages.Any(x => x.FailedToSend == true) && IsBusy == false)
+            if (_failedMessages.Count > 0 && IsBusy == false)
+            {
+                IsLoading = true;
                 RetrySendMessages();
+            }
             else
                 OpenChatImage(messageId);
         }

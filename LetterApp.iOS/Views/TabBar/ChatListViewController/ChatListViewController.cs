@@ -254,9 +254,7 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
             base.ViewWillAppear(animated);
 
             if (AppSettings.BadgeForChat > 0)
-            {
                 CleanBadge();
-            }
 
             HasChats(ViewModel?.ChatList?.Count > 0);
 
@@ -265,6 +263,12 @@ namespace LetterApp.iOS.Views.TabBar.ChatListViewController
                 _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
                 this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
             }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            LoadingAnimation(ViewModel.IsLoading);
         }
 
         public override void ViewWillDisappear(bool animated)
