@@ -83,6 +83,7 @@ namespace LetterApp.Core.ViewModels
             if (!IsBusy)
             {
                 IsBusy = true;
+                _isLoading = val;
                 RaisePropertyChanged(nameof(IsLoading));
                 await Task.Delay(200);
                 await LoadMessagesAndUpdateReadReceipt(val, val);
@@ -389,8 +390,6 @@ namespace LetterApp.Core.ViewModels
 
         private async Task SendMessage(Tuple<string, MessageType> message, bool sendingFailedMessages = false)
         {
-            await MessageServiceConnection();
-
             string messageToSend = message.Item1;
 
             while(messageToSend.EndsWith(Environment.NewLine)) {
@@ -427,6 +426,9 @@ namespace LetterApp.Core.ViewModels
 
                 BaseMessage result;
 
+                if(SendBirdClient.GetConnectionState() != SendBirdClient.ConnectionState.OPEN && Connectivity.NetworkAccess == NetworkAccess.Internet)
+                    await WaitForConnection();
+
                 if ((MessageType)fakeMessage.MessageType == MessageType.Text)
                 {
                     result = await _messengerService.SendMessage(_channel, _thisUser.UserID.ToString(), $"{_thisUser.FirstName} {_thisUser.LastName}",
@@ -447,7 +449,9 @@ namespace LetterApp.Core.ViewModels
                     {
                         var res = result as UserMessage;
 
-                        var sendedmsg = SendedMessages.FirstOrDefault(x => new DateTime(x.MessageDateTicks).Date == DateTime.Parse(res.Data).ToLocalTime().Date);
+                        var msgTime = DateTime.Parse(res.Data).ToLocalTime().ToString("d hh:mm:ss");
+
+                        var sendedmsg = SendedMessages.LastOrDefault(x => new DateTime(x.MessageDateTicks).ToString("d hh:mm:ss") == msgTime);
                         SendedMessages.Remove(sendedmsg);
 
                         var msg = new MessagesModel
@@ -460,12 +464,24 @@ namespace LetterApp.Core.ViewModels
                         };
 
                         _messagesModel.Add(msg);
+
+                        if (_chat.Messages.Last().MessageDateTime.ToString("d hh:mm:ss") != msgTime && sendingFailedMessages == false)
+                        {
+                            if(!_chat.Messages.Any(x => x.MessageId == res.MessageId))
+                            {
+                                MessagesLogic(new List<MessagesModel> { fakeMessage }, true);
+                                _chat.Messages = _chatMessages;
+                                RaisePropertyChanged(nameof(SendedMessages));
+                            }
+                        }
                     }
                     else
                     {
                         var res = result as FileMessage;
 
-                        var sendedmsg = SendedMessages.FirstOrDefault(x => new DateTime(x.MessageDateTicks).Date == DateTime.Parse(res.Data).ToLocalTime().Date);
+                        var msgTime = DateTime.Parse(res.Data).ToLocalTime().ToString("d hh:mm:ss");
+
+                        var sendedmsg = SendedMessages.LastOrDefault(x => new DateTime(x.MessageDateTicks).ToString("d hh:mm:ss") == msgTime);
                         SendedMessages.Remove(sendedmsg);
 
                         var msg = new MessagesModel
@@ -478,6 +494,16 @@ namespace LetterApp.Core.ViewModels
                         };
 
                         _messagesModel.Add(msg);
+
+                        if (_chat.Messages.Last().MessageDateTime.ToString("d hh:mm:ss") != msgTime && sendingFailedMessages == false)
+                        {
+                            if (!_chat.Messages.Any(x => x.MessageId == res.MessageId))
+                            {
+                                MessagesLogic(new List<MessagesModel> { fakeMessage }, true);
+                                _chat.Messages = _chatMessages;
+                                RaisePropertyChanged(nameof(SendedMessages));
+                            }
+                        }
                     }
 
                     SaveLastMessage();
@@ -506,6 +532,33 @@ namespace LetterApp.Core.ViewModels
                     RaisePropertyChanged(nameof(Chat));
             }
         }
+
+        #region Messenger Sender Handler
+
+        TaskCompletionSource<bool> _messengerReconnectHandler;
+
+        private Task WaitForConnection()
+        {
+            _messengerReconnectHandler = new TaskCompletionSource<bool>();
+
+            try
+            {
+               _messengerService.ConnectMessenger();
+
+                //if (SendBirdClient.GetConnectionState() == SendBirdClient.ConnectionState.OPEN)
+                    //_messengerReconnectHandler.TrySetResult(true);
+            }
+            catch (Exception ex) {}
+
+            return _messengerReconnectHandler.Task;
+        }
+
+        private void MessengerReconnected()
+        {
+            _messengerReconnectHandler?.TrySetResult(true);
+        }
+
+        #endregion
 
         private async Task RetrySendMessages()
         {
@@ -769,10 +822,19 @@ namespace LetterApp.Core.ViewModels
                     OnReadReceiptUpdated = ReadReceipt
                 };
 
+                SendBirdClient.ConnectionHandler cch = new SendBirdClient.ConnectionHandler
+                {
+                    OnReconnectSucceeded = MessengerReconnected
+                };
+
                 SendBirdClient.AddChannelHandler("ChatHandler", ch);
+                SendBirdClient.AddConnectionHandler("ChatConnectionHandler", cch);
             }
             else
+            {
                 SendBirdClient.RemoveChannelHandler("ChatHandler");
+                SendBirdClient.RemoveConnectionHandler("ChatConnectionHandler");
+            }
         }
 
         #endregion
@@ -910,7 +972,7 @@ namespace LetterApp.Core.ViewModels
             {
                 _chat.MemberPresence = MemberPresence.Offline;
                 RaisePropertyChanged(nameof(Chat));
-                SendBirdClient.RemoveChannelHandler("ChatHandler");
+                ChatHandlers(false);
             }
         }
 
@@ -995,7 +1057,7 @@ namespace LetterApp.Core.ViewModels
                 return;
 
             NavigationService.ChatOpen(-1);
-            SendBirdClient.RemoveChannelHandler("ChatHandler");
+            ChatHandlers(false);
             SaveChat();
         }
 

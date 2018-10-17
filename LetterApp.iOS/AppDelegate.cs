@@ -33,6 +33,7 @@ namespace LetterApp.iOS
         public ActiveCallManager CallManager { get; set; }
         public ProviderDelegate CallProviderDelegate { get; set; }
         private ActiveCall _call;
+        private bool _inbackGround;
 
         private UNUserNotificationCenter notificationCenter;
 
@@ -143,12 +144,32 @@ namespace LetterApp.iOS
 
         void HandleIdsAvailableCallback(string playerID, string pushToken) => AppSettings.MessengerToken = playerID;
 
-        [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
-        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        //[Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
+        //public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        //{
+        //    if(application.ApplicationState == UIApplicationState.Active)
+        //    {
+        //        var info = userInfo["custom"] as NSDictionary;
+        //        var info1 = info["a"] as NSDictionary;
+        //        var userId = info1["userId"].ToString();
+        //        bool result = int.TryParse(userId, out int user);
+        //        var navigationService = App.Container.GetInstance<IXNavigationService>();
+
+        //        if (result && navigationService.ChatOpen() != user)
+        //        {
+        //            navigationService.PopToRoot(false);
+        //            navigationService.NavigateAsync<ChatViewModel, int>(user);
+        //        }
+        //    }
+        //}
+
+        
+        [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
+        public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
         {
-            if(application.ApplicationState == UIApplicationState.Background)
+            if (_inbackGround)
             {
-                var info = userInfo["custom"] as NSDictionary;
+                var info = response.Notification.Request.Content.UserInfo["custom"] as NSDictionary;
                 var info1 = info["a"] as NSDictionary;
                 var userId = info1["userId"].ToString();
                 bool result = int.TryParse(userId, out int user);
@@ -160,6 +181,8 @@ namespace LetterApp.iOS
                     navigationService.NavigateAsync<ChatViewModel, int>(user);
                 }
             }
+
+            completionHandler?.Invoke();
         }
 
         private void InitSinchClientWithUserId(string userId)
@@ -221,9 +244,14 @@ namespace LetterApp.iOS
             Debug.WriteLine(message);
         }
 
-        public override void OnResignActivation(UIApplication application) {}
+        public override void OnResignActivation(UIApplication application) 
+        {
+            Debug.WriteLine("DID ENTER OnResign:" + application.ApplicationState);
+        }
         public override void DidEnterBackground(UIApplication application) 
         {
+            _inbackGround = true;
+
             CleanNotifications();
         }
 

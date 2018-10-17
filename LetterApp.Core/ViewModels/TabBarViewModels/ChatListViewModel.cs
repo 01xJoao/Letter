@@ -27,7 +27,6 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private string _thisUserFinalId => AppSettings.UserAndOrganizationIds;
         private bool _isSearching;
         private bool _showNotifications = true;
-        //private bool _initializing = true;
 
         public bool _isLoading;
         public bool IsLoading
@@ -340,14 +339,14 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
 
         private async Task UpdateMessengerService()
         {
-            if (_users == null || _users.Count == 0 || Connectivity.NetworkAccess != NetworkAccess.Internet)
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                IsLoading = false;
                 return;
+            }
 
             if (DateTime.Now >= _updateFrequence)
             {
-                //if (_updateFrequence == default(DateTime))
-                    //IsLoading = true;
-
                 var newChatList = new List<ChatListUserModel>();
 
                 try
@@ -434,9 +433,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 }
                 finally
                 {
-                    if (_updateFrequence == default(DateTime))
-                        IsLoading = false;
-
+                    IsLoading = false;
                     _updateFrequence = DateTime.Now.AddMinutes(4);
                 }
             }
