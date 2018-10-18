@@ -23,12 +23,10 @@ namespace LetterApp.Core.ViewModels
         private IStatusCodeService _statusCodeService;
         private ISettingsService _settingsService;
         private IMessengerService _mesengersService;
-        private IContactsService _contactsService;
 
         public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, 
-                                ISettingsService settingsService, IMessengerService mesengersService, IContactsService contactsService)
+                                ISettingsService settingsService, IMessengerService mesengersService)
         {
-            _contactsService = contactsService;
             _settingsService = settingsService;
             _authService = authService;
             _dialogService = dialogService;
@@ -78,7 +76,6 @@ namespace LetterApp.Core.ViewModels
                         UpdateSinchClient = true;
 
                         await _mesengersService.ConnectMessenger();
-                        //await GetUsers();
                     }
 
                     if (!string.IsNullOrEmpty(AppSettings.MessengerToken))
@@ -137,30 +134,6 @@ namespace LetterApp.Core.ViewModels
                         await Logout();
                 }
 
-                Ui.Handle(ex as dynamic);
-            }
-        }
-
-        private async Task GetUsers()
-        {
-            try
-            {
-                var result = await _contactsService.GetUsersFromAllDivisions();
-
-                if (result == null && result.Count == 0)
-                    return;
-
-                Realm.Write(() =>
-                {
-                    foreach (var res in result)
-                    {
-                        res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
-                        Realm.Add(res, true);
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
                 Ui.Handle(ex as dynamic);
             }
         }

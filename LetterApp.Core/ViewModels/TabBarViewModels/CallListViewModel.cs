@@ -152,6 +152,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     {
                         foreach (var res in result) {
                             res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+
+                            var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                            string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+                            stringSearch = StringUtils.NormalizeString(stringSearch);
+                            res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
+
                             Realm.Add(res, true);
                         }
                     });
