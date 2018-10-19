@@ -86,8 +86,7 @@ namespace LetterApp.iOS
             {
                 if (audio.RecordPermission != AVAudioSessionRecordPermission.Granted)
                 {
-                    audio.RequestRecordPermission((granted) =>
-                    {
+                    audio.RequestRecordPermission((granted) => {
                         RegisterRemotePushNotifications(application);
                     });
                 }

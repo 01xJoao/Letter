@@ -39,11 +39,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to the camera to take photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to photos.</string>
+	<string>Enable Letter to access your camera roll so you can upload and send photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This app needs access to microphone.</string>
+	<string>To enable calls within the application we need you to grant access to the microphone.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app needs access to the photo gallery.</string>
+	<string>Enable Letter to access your camera roll so you can upload and send photos.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Needs Calendar Permission</string>
 	<key>NSAppTransportSecurity</key>
@@ -58,10 +58,6 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-	<key>Custom Property</key>
-	<true/>
-	<key>Custom Property1</key>
-	<string></string>
 	<key>OneSignal_app_groups_key</key>
 	<string>group.com.LetterMessenger.Letter</string>
 	<key>OneSignal_disable_badge_clearing</key>

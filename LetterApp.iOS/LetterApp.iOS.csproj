@@ -545,6 +545,7 @@
     <Folder Include="Resources\Assets.xcassets\Image_picker.imageset\" />
     <Folder Include="Resources\Assets.xcassets\image_picker.imageset\" />
     <Folder Include="Resources\Assets.xcassets\load_image.imageset\" />
+    <Folder Include="Resources\pt.lproj\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -974,6 +975,7 @@
     <BundleResource Include="Resources\message_sent.mp3" />
     <BundleResource Include="Resources\paperplane_loading.json" />
     <BundleResource Include="Resources\image_loading.gif" />
+    <BundleResource Include="Resources\pt.lproj\InfoPlist.strings" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
