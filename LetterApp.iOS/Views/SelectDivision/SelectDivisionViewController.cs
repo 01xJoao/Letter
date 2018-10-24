@@ -117,10 +117,12 @@ namespace LetterApp.iOS.Views.SelectDivision
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
 
             if (NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
                 NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+            }
 
         }
 
