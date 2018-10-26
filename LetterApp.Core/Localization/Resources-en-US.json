@@ -153,7 +153,7 @@
   },
   {
     "key": "OnBoardingViewModel_SignUp",
-    "translated": "Sign Up"
+    "translated": "Sign Up for free"
   },
   {
     "key": "MainViewModel_ChatTab",
@@ -185,7 +185,7 @@
   },
   {
     "key": "LoginViewModel_SignUpButton",
-    "translated": "First time using Letter? Sign Up!"
+    "translated": "First time using Letter? Sign Up for free!"
   },
   {
     "key": "LoginViewModel_SignInButton",
@@ -333,7 +333,7 @@
   },
   {
     "key": "SelectOrganization_TitleLabel",
-    "translated": "Enter organization name or email you want to join:"
+    "translated": "Enter the organization name or email you want to join:"
   },
   {
     "key": "SelectOrganization_TextHint",
@@ -353,7 +353,7 @@
   },
   {
     "key": "SelectOrganization_CreateOrg",
-    "translated": "Register a new organization"
+    "translated": "Register a new organization for free!"
   },
   {
     "key": "SelectDivision_PrivateLabel",
@@ -537,7 +537,7 @@
   },
   {
     "key": "UserSettings_CreateOrgLabel",
-    "translated": "Create your own organization"
+    "translated": "Register an organization for free"
   },
   {
     "key": "UserSettings_SignOutLabel",

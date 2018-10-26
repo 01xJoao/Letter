@@ -153,7 +153,7 @@
   },
   {
     "key": "OnBoardingViewModel_SignUp",
-    "translated": "Criar Conta"
+    "translated": "Criar conta gratuita"
   },
   {
     "key": "MainViewModel_ChatTab",
@@ -185,7 +185,7 @@
   },
   {
     "key": "LoginViewModel_SignUpButton",
-    "translated": "Primeira vêz a usar Letter? Crie uma conta!"
+    "translated": "Primeira vêz a usar Letter? Crie uma conta gratuita!"
   },
   {
     "key": "LoginViewModel_SignInButton",
@@ -353,7 +353,7 @@
   },
   {
     "key": "SelectOrganization_CreateOrg",
-    "translated": "Registar nova organização"
+    "translated": "Registar nova organização gratuitamente!"
   },
   {
     "key": "SelectDivision_PrivateLabel",
