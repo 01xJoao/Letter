@@ -43,7 +43,7 @@
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
-    <MtouchArch>ARM64</MtouchArch>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
     <CodesignProvision>LetterNotificationExtension</CodesignProvision>
