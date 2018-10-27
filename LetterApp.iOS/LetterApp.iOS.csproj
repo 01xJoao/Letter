@@ -50,6 +50,7 @@
     <MtouchVerbosity></MtouchVerbosity>
     <CodesignProvision>LetterDestribution</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <BuildIpa>true</BuildIpa>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>

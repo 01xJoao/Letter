@@ -23,7 +23,7 @@ namespace LetterApp.Core.Services
         private static IRavenService _ravenService;
         private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
-        private static readonly string _basePath = @"https://www.lettermessenger.com/api/";
+        private static readonly string _basePath = @"http://www.lettermessenger.com/api/";
 
         private HttpClient _httpClient;
         private HttpClient HttpClient => _httpClient ?? (_httpClient = new HttpClient(new RetryHandler(new HttpClientHandler())){ BaseAddress = new Uri(_basePath) });
