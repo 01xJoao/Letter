@@ -117,7 +117,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task ReadAgreement()
         {
-            await BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/termsofservice");
+            await BrowserUtils.OpenWebsite("https://www.lettermessenger.com/support/termsofservice");
         }
 
         private bool CheckForm(UserRegistrationRequestModel user)

@@ -134,15 +134,15 @@ namespace LetterApp.Core.ViewModels
                         break;
 
                     case CellType.ContactUs:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/contacts");
+                        BrowserUtils.OpenWebsite("https://www.lettermessenger.com/support/contacts");
                         break;
 
                     case CellType.TermsOfService:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/termsofservice");
+                        BrowserUtils.OpenWebsite("https://www.lettermessenger.com/support/termsofservice");
                         break;
 
                     case CellType.CreateOrganization:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/organizations");
+                        BrowserUtils.OpenWebsite("https://www.lettermessenger.com/organizations");
                         break;
 
                     case CellType.SignOut:

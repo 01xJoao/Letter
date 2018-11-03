@@ -96,7 +96,7 @@ namespace LetterApp.Core.ViewModels
 
         private async Task OpenCreateOrganization()
         {
-            await BrowserUtils.OpenWebsite("http://www.lettermessenger.com");
+            await BrowserUtils.OpenWebsite("https://www.lettermessenger.com");
         }
 
         private async Task CloseView()
