@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnBoardingViewController">
             <connections>
+                <outlet property="_buttonHeightConstraint" destination="gaY-L4-XRe" id="cWd-la-Ddy"/>
                 <outlet property="_pageContainer" destination="gXS-Ww-8Pr" id="e4i-9I-GXP"/>
                 <outlet property="_pageControl" destination="POh-fG-fqA" id="rcF-H7-hMc"/>
                 <outlet property="_pageParent" destination="0T5-QP-zDq" id="56j-xG-uFy"/>
@@ -28,13 +29,13 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="POh-fG-fqA">
-                            <rect key="frame" x="168" y="500" width="39" height="37"/>
+                            <rect key="frame" x="168" y="505" width="39" height="37"/>
                         </pageControl>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zCF-ch-YQq">
-                            <rect key="frame" x="0.0" y="612" width="375" height="55"/>
+                            <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PLs-uj-xXC">
-                                    <rect key="frame" x="-0.5" y="0.0" width="375" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <state key="normal" title="Button"/>
                                 </button>
@@ -43,20 +44,20 @@
                             <constraints>
                                 <constraint firstItem="PLs-uj-xXC" firstAttribute="centerX" secondItem="zCF-ch-YQq" secondAttribute="centerX" id="Qsj-Yf-RQv"/>
                                 <constraint firstItem="PLs-uj-xXC" firstAttribute="height" secondItem="zCF-ch-YQq" secondAttribute="height" id="TDJ-hl-acL"/>
-                                <constraint firstAttribute="height" constant="55" id="gaY-L4-XRe"/>
+                                <constraint firstAttribute="height" constant="50" id="gaY-L4-XRe"/>
                                 <constraint firstItem="PLs-uj-xXC" firstAttribute="centerY" secondItem="zCF-ch-YQq" secondAttribute="centerY" id="q63-EY-BJt"/>
                                 <constraint firstItem="PLs-uj-xXC" firstAttribute="width" secondItem="zCF-ch-YQq" secondAttribute="width" id="ucs-mf-FfQ"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NLM-64-HCU">
-                            <rect key="frame" x="164" y="562" width="46" height="30"/>
+                            <rect key="frame" x="164.5" y="567" width="46" height="30"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" title="Button">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0T5-QP-zDq">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="505"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                     </subviews>

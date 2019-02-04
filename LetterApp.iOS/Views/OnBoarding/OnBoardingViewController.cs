@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -14,7 +13,6 @@ namespace LetterApp.iOS.Views.OnBoarding
     public partial class OnBoardingViewController : XViewController<OnBoardingViewModel>, IRootView
     {
         private UIPageViewController _pageViewController;
-        private OnBoardPageDataSource _onBoardPageSource;
 
         public OnBoardingViewController() : base("OnBoardingViewController", null) {}
 
@@ -23,6 +21,9 @@ namespace LetterApp.iOS.Views.OnBoarding
             base.ViewDidLoad();
 
             SetupView();
+
+            _signUpButton.TouchUpInside -= OnSignUpButton_TouchUpInside;
+            _signUpButton.TouchUpInside += OnSignUpButton_TouchUpInside;
 
             _signInButton.TouchUpInside -= OnSignInButton_TouchUpInside;
             _signInButton.TouchUpInside += OnSignInButton_TouchUpInside;
@@ -36,8 +37,8 @@ namespace LetterApp.iOS.Views.OnBoarding
                 new BoardPageViewController(2, ViewModel.CallTitle, ViewModel.CallSubtitle, "board_chat")
             };
 
-            _onBoardPageSource = new OnBoardPageDataSource(viewControllers);
-            _pageViewController.DataSource = _onBoardPageSource;
+            var onBoardPageSource = new PageSource(viewControllers);
+            _pageViewController.DataSource = onBoardPageSource;
             _pageViewController.SetViewControllers(new UIViewController[] { viewControllers.FirstOrDefault() }, UIPageViewControllerNavigationDirection.Forward, false, null);
 
             this.AddChildViewController(_pageViewController);
@@ -51,11 +52,21 @@ namespace LetterApp.iOS.Views.OnBoarding
 
         private void DidTransition(object sender, UIPageViewFinishedAnimationEventArgs e)
         {
-            if(e.Finished)
+            if(e.Completed)
             {
                 var viewController = _pageViewController.ViewControllers[0] as XBoardPageViewController;
                 _pageControl.CurrentPage = viewController.Index;
             }
+        }
+
+        private void OnSignUpButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.OpenRegisterViewCommand.Execute();
+        }
+
+        private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.OpenLoginViewCommand.Execute();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -66,18 +77,13 @@ namespace LetterApp.iOS.Views.OnBoarding
 
         private void SetupView()
         {
-            var underlineAttr = new UIStringAttributes { UnderlineStyle = NSUnderlineStyle.Single, ForegroundColor = UIColor.White, Font = UIFont.SystemFontOfSize(16) };
-            _signInButton.SetAttributedTitle(new NSAttributedString(ViewModel.SignIn, underlineAttr), UIControlState.Normal);
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
 
-            UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 17, ViewModel.SignUp);
-
+            UIButtonExtensions.SetupButtonUnderlineAppearance(_signInButton, Colors.White, 16f, ViewModel.SignIn);
+            UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 16f, ViewModel.SignUp);
             _pageParent.BackgroundColor = Colors.MainBlue;
             _pageContainer.BackgroundColor = Colors.MainBlue;
-        }
-
-        private void OnSignInButton_TouchUpInside(object sender, EventArgs e)
-        {
-            ViewModel.OpenInformationViewCommand.Execute(this);
         }
 
 		public override void ViewWillAppear(bool animated)

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="155" id="cxk-wN-pdQ" customClass="OrganizationDetailCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="153"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="152.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FjT-Eq-TQw">
+                        <rect key="frame" x="20" y="15" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wd3-tt-gwo">
+                        <rect key="frame" x="20" y="44" width="70" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="wd3-tt-gwo" secondAttribute="height" id="SLH-9Z-xLh"/>
+                            <constraint firstAttribute="width" constant="70" id="oNO-gh-g4a"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEV-dQ-Jul">
+                        <rect key="frame" x="20" y="122" width="70" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="isu-fK-p6r">
+                        <rect key="frame" x="20" y="44" width="70" height="98.5"/>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="FjT-Eq-TQw" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="15" id="4nB-cf-KxM"/>
+                    <constraint firstItem="isu-fK-p6r" firstAttribute="bottom" secondItem="DEV-dQ-Jul" secondAttribute="bottom" id="CTH-DW-Sw9"/>
+                    <constraint firstItem="DEV-dQ-Jul" firstAttribute="top" secondItem="wd3-tt-gwo" secondAttribute="bottom" constant="8" id="OMg-vv-nUW"/>
+                    <constraint firstItem="isu-fK-p6r" firstAttribute="top" secondItem="wd3-tt-gwo" secondAttribute="top" id="OZ8-M3-VMe"/>
+                    <constraint firstItem="DEV-dQ-Jul" firstAttribute="trailing" secondItem="wd3-tt-gwo" secondAttribute="trailing" id="QcR-an-MHC"/>
+                    <constraint firstItem="isu-fK-p6r" firstAttribute="leading" secondItem="wd3-tt-gwo" secondAttribute="leading" id="Vrb-XC-SSd"/>
+                    <constraint firstItem="isu-fK-p6r" firstAttribute="trailing" secondItem="wd3-tt-gwo" secondAttribute="trailing" id="b7b-Ru-oZf"/>
+                    <constraint firstItem="wd3-tt-gwo" firstAttribute="leading" secondItem="FjT-Eq-TQw" secondAttribute="leading" id="fnC-TZ-3Aj"/>
+                    <constraint firstItem="DEV-dQ-Jul" firstAttribute="centerX" secondItem="wd3-tt-gwo" secondAttribute="centerX" id="gWG-yG-RG9"/>
+                    <constraint firstItem="FjT-Eq-TQw" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="20" id="sK9-9c-teZ"/>
+                    <constraint firstItem="wd3-tt-gwo" firstAttribute="top" secondItem="FjT-Eq-TQw" secondAttribute="bottom" constant="8" id="vcd-dv-dpW"/>
+                    <constraint firstItem="DEV-dQ-Jul" firstAttribute="leading" secondItem="wd3-tt-gwo" secondAttribute="leading" id="zJv-If-5Wk"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="_button" destination="isu-fK-p6r" id="cFI-NP-q6I"/>
+                <outlet property="_imageView" destination="wd3-tt-gwo" id="t4X-47-nP5"/>
+                <outlet property="_label" destination="DEV-dQ-Jul" id="hlc-Jv-OLr"/>
+                <outlet property="_sectionLabel" destination="FjT-Eq-TQw" id="fos-FP-H6I"/>
+            </connections>
+            <point key="canvasLocation" x="25" y="106.5"/>
+        </tableViewCell>
+    </objects>
+</document>

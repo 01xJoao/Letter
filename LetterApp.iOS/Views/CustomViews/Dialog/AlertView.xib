@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1" customClass="AlertView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xRq-5W-cle">
+                    <rect key="frame" x="-0.5" y="0.0" width="375" height="40"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zx0-1d-adk">
+                    <rect key="frame" x="341" y="9" width="22" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="22" id="PpC-TS-833"/>
+                        <constraint firstAttribute="height" constant="22" id="Tip-LR-TLI"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kb5-Ar-bkz">
+                    <rect key="frame" x="10" y="11.5" width="355" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Kb5-Ar-bkz" firstAttribute="centerY" secondItem="zx0-1d-adk" secondAttribute="centerY" id="6Ab-WL-M4i"/>
+                <constraint firstItem="xRq-5W-cle" firstAttribute="height" secondItem="1" secondAttribute="height" id="8PS-vl-5Nb"/>
+                <constraint firstItem="Kb5-Ar-bkz" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="A9n-eD-S4c"/>
+                <constraint firstItem="xRq-5W-cle" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="DBX-AI-ACy"/>
+                <constraint firstAttribute="trailing" secondItem="zx0-1d-adk" secondAttribute="trailing" constant="12" id="FSS-E7-tcO"/>
+                <constraint firstItem="xRq-5W-cle" firstAttribute="width" secondItem="1" secondAttribute="width" id="djB-hb-JSo"/>
+                <constraint firstItem="xRq-5W-cle" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="jYT-XK-PHs"/>
+                <constraint firstItem="zx0-1d-adk" firstAttribute="centerY" secondItem="xRq-5W-cle" secondAttribute="centerY" id="kKL-O8-EtO"/>
+                <constraint firstAttribute="trailing" secondItem="Kb5-Ar-bkz" secondAttribute="trailing" constant="10" id="vJU-Bv-Luu"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="_backgroundView" destination="xRq-5W-cle" id="aTP-LV-qd9"/>
+                <outlet property="_closeButton" destination="zx0-1d-adk" id="hz6-Pa-iYY"/>
+                <outlet property="_titleLabel" destination="Kb5-Ar-bkz" id="5MV-iC-iFk"/>
+            </connections>
+            <point key="canvasLocation" x="24.5" y="-262"/>
+        </view>
+    </objects>
+</document>

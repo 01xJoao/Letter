@@ -1,14 +1,958 @@
 ﻿[
   {
+    "key": "Code_Null",
+    "translated": "Ocorreu um problema, tente novamente."
+  },
+  {
+    "key": "Code_E101",
+    "translated": "Email ou palavra-passe inválido, tente novamente."
+  },
+  {
+    "key": "Code_E102",
+    "translated": "A conta ainda não foi ativada, por favor ativa a sua conta."
+  },
+  {
+    "key": "Code_E103",
+    "translated": "A sua conta foi desativada."
+  },
+  {
+    "key": "Code_E104",
+    "translated": "Nenhum utilizador associado a este email."
+  },
+  {
+    "key": "Code_E105",
+    "translated": "Ocorreu um problema, tente novamente."
+  },
+  {
+    "key": "Code_E106",
+    "translated": "Código de verificação errado, tente novamente ou peça um novo."
+  },
+  {
+    "key": "Code_E107",
+    "translated": "Nenhuma divisão encontrada com este código."
+  },
+  {
+    "key": "Code_E108",
+    "translated": "O seu domínio de email não é válido para esta divisão."
+  },
+  {
+    "key": "Code_E109",
+    "translated": "Palavra-passe errada, tente novamente."
+  },
+  {
+    "key": "Code_E110",
+    "translated": "Este email já está em uso."
+  },
+  {
+    "key": "Code_E111",
+    "translated": "Código de activação errado, tente novamente ou peça um novo."
+  },
+  {
+    "key": "Code_E112",
+    "translated": "Organização não encontrada."
+  },
+  {
+    "key": "Code_E113",
+    "translated": "O seu email não é válido nesta organização."
+  },
+  {
+    "key": "Code_E114",
+    "translated": "Esta organização não tem nenhuma divisão, tente novamente mais tarde."
+  },
+  {
+    "key": "Code_E115",
+    "translated": "Código de acesso errado."
+  },
+  {
+    "key": "Code_E116",
+    "translated": "Nenhuma posição encontrada."
+  },
+  {
+    "key": "Code_E117",
+    "translated": "Você já está registado nesta divisão."
+  },
+  {
+    "key": "Code_E118",
+    "translated": "Você está banido desta organização."
+  },
+  {
+    "key": "Code_E119",
+    "translated": "O seu pedido de acesso já está sobre revisão, por favor aguarde."
+  },
+  {
+    "key": "Code_E120",
+    "translated": "Você está banido desta divisão."
+  },
+  {
+    "key": "Code_E121",
+    "translated": "Palavra-passe errada, tente novamente."
+  },
+  {
+    "key": "Code_S201",
+    "translated": "Palavra-passe alterada com sucesso."
+  },
+  {
+    "key": "Code_S202",
+    "translated": "Registo completo."
+  },
+  {
+    "key": "Code_S203",
+    "translated": "Nova posição definida."
+  },
+  {
+    "key": "Code_S204",
+    "translated": "Actualizado"
+  },
+  {
+    "key": "Code_S205",
+    "translated": "A sua conta foi apagada."
+  },
+  {
+    "key": "Code_S206",
+    "translated": "Você saiu de uma divisão."
+  },
+  {
+    "key": "Code_S207",
+    "translated": "A sua conta foi criada com sucesso! \n Foi-lhe enviado um email com o código de activação."
+  },
+  {
+    "key": "Code_S208",
+    "translated": "Você saiu da organização."
+  },
+  {
+    "key": "Dialogs_InternetException",
+    "translated": "Não há ligação à internet."
+  },
+  {
     "key": "OnBoardingViewModel_LetterHelloWorld",
-    "translated": "Bem-vindo ao Letter!"
+    "translated": "Bem-vindo ao Letter"
+  },
+  {
+    "key": "OnBoardingViewModel_LetterSlogan",
+    "translated": "Escreva algo..."
   },
   {
     "key": "OnBoardingViewModel_Register",
-    "translated": "Registar"
+    "translated": "Registo"
+  },
+  {
+    "key": "OnBoardingViewModel_RegisterSubtitle",
+    "translated": "Registe-se com o email da sua organização e fique com acesso imediato a todos os seus colegas!"
   },
   {
     "key": "OnBoardingViewModel_Call",
-    "translated": "Mensagens & Chamadas"
+    "translated": "Escreva ou Telefone"
+  },
+  {
+    "key": "OnBoardingViewModel_CallSubtitle",
+    "translated": "Envie mensagens instantâneas ou telefone gratuitamente!"
+  },
+  {
+    "key": "OnBoardingViewModel_SignIn",
+    "translated": "Já tem conta? Entre Aqui"
+  },
+  {
+    "key": "OnBoardingViewModel_SignUp",
+    "translated": "Criar conta gratuita"
+  },
+  {
+    "key": "MainViewModel_ChatTab",
+    "translated": "Conversas"
+  },
+  {
+    "key": "MainViewModel_CallTab",
+    "translated": "Chamadas"
+  },
+  {
+    "key": "MainViewModel_ContactTab",
+    "translated": "Contactos"
+  },
+  {
+    "key": "MainViewModel_ProfileTab",
+    "translated": "Perfil"
+  },
+  {
+    "key": "LoginViewModel_EmailLabel",
+    "translated": "Endereço email"
+  },
+  {
+    "key": "LoginViewModel_PasswordLabel",
+    "translated": "Palavra-passe"
+  },
+  {
+    "key": "LoginViewModel_ForgotPassButton",
+    "translated": "Recuperar palavra-passe"
+  },
+  {
+    "key": "LoginViewModel_SignUpButton",
+    "translated": "Primeira vêz a usar Letter? Crie uma conta gratuita!"
+  },
+  {
+    "key": "LoginViewModel_SignInButton",
+    "translated": "Entrar"
+  },
+  {
+    "key": "LoginViewModel_EnterEmail",
+    "translated": "Insira o endereço de email"
+  },
+  {
+    "key": "LoginViewModel_EmailHint",
+    "translated": "Endereço email"
+  },
+  {
+    "key": "LoginViewModel_SendCode",
+    "translated": "Enviar"
+  },
+  {
+    "key": "LoginViewModel_ActivateCode",
+    "translated": "Tem de activar a sua conta. Verifique o seu email ou peça um novo código de activação."
+  },
+  {
+    "key": "LoginViewModel_InvalidEmail",
+    "translated": "O seu email não aparenta ser válido."
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassTitle",
+    "translated": "Nova palavra-passe"
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassAgainTitle",
+    "translated": "Repetir a nova palavra-passe"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailAddress",
+    "translated": "Endereço de email"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ConfirmPass",
+    "translated": "Confirme a palavra-passe"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Code",
+    "translated": "Código de verificação"
+  },
+  {
+    "key": "RecoverPasswordViewModel_RequestAgain",
+    "translated": "Peça novo código"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Submit",
+    "translated": "Submeter"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ShowButton",
+    "translated": "Mostrar"
+  },
+  {
+    "key": "RecoverPasswordViewModel_HideButton",
+    "translated": "Esconder"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailConfirmation",
+    "translated": "Foi enviado um email com o código de verificação. (Verifique a pasta de SPAM)"
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordMatch",
+    "translated": "As palavras-passe não coincidem."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordWeak",
+    "translated": "Palavra-passe não é suficiente forte. \n Deverá ter no mínimo 8 caracteres."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordChanged",
+    "translated": "Palavra-passe alterada com sucesso! \n Inicie sessão."
+  },
+  {
+    "key": "RegisterViewModel_FirstName",
+    "translated": "Primeiro nome"
+  },
+  {
+    "key": "RegisterViewModel_LastName",
+    "translated": "Último nome"
+  },
+  {
+    "key": "RegisterViewModel_PhoneNumber",
+    "translated": "Número de telémovel"
+  },
+  {
+    "key": "RegisterViewModel_Agreement",
+    "translated": "Ao criar uma conta, está a aceitar os <u> Termos de Utilização </u> a <u> Política de Privacidade </u>, e confirma que tem mais de 18 anos."
+  },
+  {
+    "key": "RegisterViewModel_Title",
+    "translated": "Criar Conta"
+  },
+  {
+    "key": "RegisterViewModel_CreateAccountButton",
+    "translated": "Aceitar & Criar Conta"
+  },
+  {
+    "key": "RegisterViewModel_EmptyForm",
+    "translated": "Por favor preencha todos os campos."
+  },
+  {
+    "key": "RegisterViewModel_UserAgreement",
+    "translated": "Você deve aceitar os Termos e Condições."
+  },
+  {
+    "key": "RegisterViewModel_InvalidString",
+    "translated": "Números e símbolos (como !@#$?%) apenas são permitidos no campo da palavra-passe."
+  },
+  {
+    "key": "RegisterViewModel_DamnEmojis",
+    "translated": "Por favor não insira emojis."
+  },
+  {
+    "key": "ActivateAccountViewModel_Title",
+    "translated": "Activar Conta"
+  },
+  {
+    "key": "ActivateAccountViewModel_Submit",
+    "translated": "Submeter"
+  },
+  {
+    "key": "ActivateAccountViewModel_PlaceHolder",
+    "translated": "Código de activação"
+  },
+  {
+    "key": "ActivateAccountViewModel_ResendCodeButton",
+    "translated": "Reenviar código"
+  },
+  {
+    "key": "ActivateAccountViewModel_ActivateLabel",
+    "translated": "Você tem de activar a sua conta. \n Não encontra o email? Já verificou na pasta de SPAM?"
+  },
+  {
+    "key": "ActivateAccountViewModel_ActivationCompleted",
+    "translated": "A sua conta foi activada! \n Inicie sessão."
+  },
+  {
+    "key": "SelectOrganization_AccessButton",
+    "translated": "Aceder"
+  },
+  {
+    "key": "SelectOrganization_TitleLabel",
+    "translated": "Insira o nome ou email da organização que pretende aceder:"
+  },
+  {
+    "key": "SelectOrganization_TextHint",
+    "translated": "Insira a organização..."
+  },
+  {
+    "key": "SelectOrganization_Organization",
+    "translated": "Organização"
+  },
+  {
+    "key": "SelectOrganization_AccessHint",
+    "translated": "Código de acesso"
+  },
+  {
+    "key": "SelectOrganization_EnterButton",
+    "translated": "Entrar"
+  },
+  {
+    "key": "SelectOrganization_CreateOrg",
+    "translated": "Registar nova organização gratuitamente"
+  },
+  {
+    "key": "SelectDivision_PrivateLabel",
+    "translated": "Divisões Privadas"
+  },
+  {
+    "key": "SelectDivision_PublicLabel",
+    "translated": "Divisões Publicas"
+  },
+  {
+    "key": "SelectDivision_InsertText",
+    "translated": "Código de acesso"
+  },
+  {
+    "key": "SelectDivision_SubmitButton",
+    "translated": "Entrar"
+  },
+  {
+    "key": "SelectDivision_LeaveOrganization",
+    "translated": "Sair da Organização"
+  },
+  {
+    "key": "SelectDivision_TitleLabel",
+    "translated": "Selecionar Divisão"
+  },
+  {
+    "key": "SelectDivision_TitleMainLabel",
+    "translated": "Selecionar Divisão Principal"
+  },
+  {
+    "key": "SelectDivision_EmailLabel",
+    "translated": "Email:"
+  },
+  {
+    "key": "SelectDivision_MembersLabel",
+    "translated": "Utilizadores"
+  },
+  {
+    "key": "SelectDivision_DescriptionLabel",
+    "translated": "Descrição:"
+  },
+  {
+    "key": "SelectPosition_TitleLabel",
+    "translated": "Selecione a sua posição"
+  },
+  {
+    "key": "SelectPosition_Select",
+    "translated": "Selecionar"
+  },
+  {
+    "key": "SelectPosition_SelectPosition",
+    "translated": "Posição"
+  },
+  {
+    "key": "Pending_Title",
+    "translated": "Conta"
+  },
+  {
+    "key": "Pending_Subtitle",
+    "translated": "A sua conta \n está em revisão"
+  },
+  {
+    "key": "Pending_Description",
+    "translated": "Você receberá um email de confirmação."
+  },
+  {
+    "key": "Pending_Help",
+    "translated": "Precisa de ajuda?"
+  },
+  {
+    "key": "Pending_LeaveButton",
+    "translated": "Sair da divisão"
+  },
+  {
+    "key": "Pending_LogoutButton",
+    "translated": "Terminar sessão"
+  },
+  {
+    "key": "Pending_ContinueButton",
+    "translated": "Continuar"
+  },
+  {
+    "key": "Pending_Updated",
+    "translated": "A sua conta está em revisão."
+  },
+  {
+    "key": "DialogLogout_Question",
+    "translated": "Você pretende terminar sessão?"
+  },
+  {
+    "key": "DialogLogout_Button",
+    "translated": "Terminar sessão"
+  },
+  {
+    "key": "DialogOrganization_Question",
+    "translated": "Você pretende sair da organização?"
+  },
+  {
+    "key": "DialogDelete_Question",
+    "translated": "Você pretende apagar a sua conta?"
+  },
+  {
+    "key": "UserProfile_DescriptionHint",
+    "translated": "Descreva-se em 40 caracteres."
+  },
+  {
+    "key": "UserProfile_Role",
+    "translated": "Posição"
+  },
+  {
+    "key": "UserProfile_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "UserProfile_Mobile",
+    "translated": "Contacto"
+  },
+  {
+    "key": "UserProfile_Divisions",
+    "translated": "Divisões"
+  },
+  {
+    "key": "UserProfile_SettingImage",
+    "translated": "A definir nova imagem."
+  },
+  {
+    "key": "UserSettings_SettingsTitle",
+    "translated": "Definições"
+  },
+  {
+    "key": "UserSettings_AccountSection",
+    "translated": "Conta"
+  },
+  {
+    "key": "UserSettings_NotificationsSection",
+    "translated": "Notificações"
+  },
+  {
+    "key": "UserSettings_InformationSection",
+    "translated": "Informação"
+  },
+  {
+    "key": "UserSettings_DangerZoneSection",
+    "translated": "Zona Perigosa"
+  },
+  {
+    "key": "UserSettings_PhoneNumberLabel",
+    "translated": "Número de telemóvel"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsLabel",
+    "translated": "Permitir telefonemas"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsDescription",
+    "translated": "Quando ligado, utilizadores podem ver o seu número e telefonar."
+  },
+  {
+    "key": "UserSettings_PasswordLabel",
+    "translated": "Palavra-Passe"
+  },
+  {
+    "key": "UserSettings_MessageLabel",
+    "translated": "Notificações de mensagens"
+  },
+  {
+    "key": "UserSettings_CallLabel",
+    "translated": "Notificações de telefonemas"
+  },
+  {
+    "key": "UserSettings_GroupLabel",
+    "translated": "Notificações de grupo"
+  },
+  {
+    "key": "UserSettings_ContactUsLabel",
+    "translated": "Contate-nos"
+  },
+  {
+    "key": "UserSettings_TermsOfService",
+    "translated": "Termos de serviço"
+  },
+  {
+    "key": "UserSettings_CreateOrgLabel",
+    "translated": "Registar nova organização gratuitamente"
+  },
+  {
+    "key": "UserSettings_SignOutLabel",
+    "translated": "Terminar sessão"
+  },
+  {
+    "key": "UserSettings_LeaveDivisionLabel",
+    "translated": "Sair da divisão"
+  },
+  {
+    "key": "UserSettings_LeaveOrgLabel",
+    "translated": "Sair da organização"
+  },
+  {
+    "key": "UserSettings_DeleteAccountLabel",
+    "translated": "Apagar conta"
+  },
+  {
+    "key": "UserSettings_CellNumber",
+    "translated": "Número de telemóvel errado."
+  },
+  {
+    "key": "ChangePassword_Title",
+    "translated": "Palavra-Passe"
+  },
+  {
+    "key": "ChangePassword_CurrentPass",
+    "translated": "Palavra-passe atual"
+  },
+  {
+    "key": "ChangePassword_Change",
+    "translated": "Alterar palavra-passe"
+  },
+  {
+    "key": "ChangePassword_Changed",
+    "translated": "Palavra-passe alterada."
+  },
+  {
+    "key": "UserSettings_Confirm",
+    "translated": "Insira a palavra-passe para confirmar."
+  },
+  {
+    "key": "LeaveDivision_Title",
+    "translated": "Divisões"
+  },
+  {
+    "key": "LeaveDivison_Leave",
+    "translated": "Sair"
+  },
+  {
+    "key": "LeaveDivison_LeaveQuestion",
+    "translated": "Sair da divisão: "
+  },
+  {
+    "key": "Division_Title",
+    "translated": "Divisão"
+  },
+  {
+    "key": "Division_Members",
+    "translated": "Membros"
+  },
+  {
+    "key": "Division_Organization",
+    "translated": "Organização"
+  },
+  {
+    "key": "Division_Address",
+    "translated": "Endereço"
+  },
+  {
+    "key": "Division_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Division_Mobile",
+    "translated": "Contacto"
+  },
+  {
+    "key": "Division_Call",
+    "translated": "Telefonar"
+  },
+  {
+    "key": "Division_SendEmail",
+    "translated": "Enviar email"
+  },
+  {
+    "key": "Division_NoDescription",
+    "translated": "Esta divisão não tem nenhuma descrição."
+  },
+  {
+    "key": "Organization_Call",
+    "translated": "Telefonar"
+  },
+  {
+    "key": "Organization_SendEmail",
+    "translated": "Enviar email"
+  },
+  {
+    "key": "Organization_NoDescription",
+    "translated": "A organização não tem nenhuma descrição"
+  },
+  {
+    "key": "Organization_Members",
+    "translated": "Membros"
+  },
+  {
+    "key": "Organization_Divisions",
+    "translated": "Divisões"
+  },
+  {
+    "key": "Organization_Address",
+    "translated": "Endereço"
+  },
+  {
+    "key": "Organization_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Organization_Mobile",
+    "translated": "Contacto"
+  },
+  {
+    "key": "Contacts_Title",
+    "translated": "Contactos"
+  },
+  {
+    "key": "Contacts_NewCall",
+    "translated": "Nova Chamada"
+  },
+  {
+    "key": "Contacts_NewChat",
+    "translated": "Nova Conversa"
+  },
+  {
+    "key": "Contacts_DialogTitle",
+    "translated": "Filtrar Contactos"
+  },
+  {
+    "key": "Contacts_DialogSwitchLabel",
+    "translated": "Filtrar utlizadores por divisão principal"
+  },
+  {
+    "key": "Contacts_DialogDescription",
+    "translated": "Se ligado, cada utilizador apenas aparecerá na respectiva divisão principal, e não em todas as divisões a que ele pertence."
+  },
+  {
+    "key": "Contacts_DialogButton",
+    "translated": "Filtrar"
+  },
+  {
+    "key": "Contacts_Search",
+    "translated": "Procurar por nome, email, posição..."
+  },
+  {
+    "key": "Contacts_DialogFilterByName",
+    "translated": "Filtrar utilizadores por nome"
+  },
+  {
+    "key": "Contacts_DialogFilterByNameDescription",
+    "translated": "Se desligado, os utilizadores são agrupados por posição."
+  },
+  {
+    "key": "Member_NoDescription",
+    "translated": "O utilizador não tem nenhuma descrição."
+  },
+  {
+    "key": "Member_Call",
+    "translated": "Telefonar"
+  },
+  {
+    "key": "Member_Chat",
+    "translated": "Conversar"
+  },
+  {
+    "key": "Call_Letter",
+    "translated": "Áudio Letter"
+  },
+  {
+    "key": "Call_Calling",
+    "translated": "A ligar..."
+  },
+  {
+    "key": "Call_IsCalling",
+    "translated": "A conectar..."
+  },
+  {
+    "key": "Call_Speaker",
+    "translated": "Altifalante"
+  },
+  {
+    "key": "Call_Mute",
+    "translated": "Sem som"
+  },
+  {
+    "key": "Call_Accept",
+    "translated": "Aceitar"
+  },
+  {
+    "key": "Call_Decline",
+    "translated": "Recusar"
+  },
+  {
+    "key": "Call_Connecting",
+    "translated": "A Connectar..."
+  },
+  {
+    "key": "Call_Anonym",
+    "translated": "Desconhecido"
+  },
+  {
+    "key": "Call_MicAlert",
+    "translated": "Permissões de microfone são necessárias."
+  },
+  {
+    "key": "Calls_CallActionInfo",
+    "translated": "Info"
+  },
+  {
+    "key": "Calls_CallStackTitle",
+    "translated": "Chamadas"
+  },
+  {
+    "key": "Call_OpenSettingsAlert",
+    "translated": "Abrir Definições"
+  },
+  {
+    "key": "Call_FailedCall",
+    "translated": "☎ Perdeu uma chamada de"
+  },
+  {
+    "key": "ContactDialog_Title",
+    "translated": "Faça uma chamada"
+  },
+  {
+    "key": "ContactDialog_TitleLetter",
+    "translated": "Chamada via letter"
+  },
+  {
+    "key": "ContactDialog_DescriptionLetter",
+    "translated": "É gratuíto, necessário conexão à internet"
+  },
+  {
+    "key": "ContactDialog_TitlePhone",
+    "translated": "Chamada via telefone"
+  },
+  {
+    "key": "ContactDialog_DescriptionPhone",
+    "translated": "Taxas de chamadas podem ser aplicadas"
+  },
+  {
+    "key": "date_Monday",
+    "translated": "Segunda"
+  },
+  {
+    "key": "date_Tuesday",
+    "translated": "Terça"
+  },
+  {
+    "key": "date_Wednesday",
+    "translated": "Quarta"
+  },
+  {
+    "key": "date_Thursday",
+    "translated": "Quinta"
+  },
+  {
+    "key": "date_Friday",
+    "translated": "Sexta"
+  },
+  {
+    "key": "date_Saturday",
+    "translated": "Sábado"
+  },
+  {
+    "key": "date_Sunday",
+    "translated": "Domingo"
+  },
+  {
+    "key": "date_Seconds",
+    "translated": " segundos atrás"
+  },
+  {
+    "key": "date_Minute",
+    "translated": "1 minuto atrás"
+  },
+  {
+    "key": "date_Minutes",
+    "translated": " minutos atrás"
+  },
+  {
+    "key": "date_Hour",
+    "translated": "1 hora atrás"
+  },
+  {
+    "key": "date_Hours",
+    "translated": " horas atrás"
+  },
+  {
+    "key": "date_Today",
+    "translated": "Hoje"
+  },
+  {
+    "key": "date_Yesterday",
+    "translated": "Ontem"
+  },
+  {
+    "key": "Call_Incoming",
+    "translated": "Recebida"
+  },
+  {
+    "key": "Call_Outgoing",
+    "translated": "Efetuada"
+  },
+  {
+    "key": "Call_Missed",
+    "translated": "Perdida"
+  },
+  {
+    "key": "Delete",
+    "translated": "Eliminar"
+  },
+  {
+    "key": "Cancel",
+    "translated": "Cancelar"
+  },
+  {
+    "key": "Calls_NoRecentCalls",
+    "translated": "Sem chamadas recentes"
+  },
+  {
+    "key": "Contacts_NoContacts",
+    "translated": "Sem Contactos"
+  },
+  {
+    "key": "Contacts_NoResults",
+    "translated": "Sem Resultados"
+  },
+  {
+    "key": "ChatList_Title",
+    "translated": "Conversas"
+  },
+  {
+    "key": "ChatList_NoChats",
+    "translated": "Começa uma nova conversa"
+  },
+  {
+    "key": "ChatList_Archive",
+    "translated": "Arquivar"
+  },
+  {
+    "key": "ChatList_Mute",
+    "translated": "Silêncio"
+  },
+  {
+    "key": "ChatList_UnMute",
+    "translated": "Alertar"
+  },
+  {
+    "key": "ChatList_You",
+    "Translated": "Tu:"
+  },
+  {
+    "key": "ChatList_SentImage",
+    "Translated": "Enviou uma imagem"
+  },
+  {
+    "key": "Chat_SendingMessage",
+    "translated": "A enviar..."
+  },
+  {
+    "key": "Chat_TypingMessage",
+    "translated": "A escrever..."
+  },
+  {
+    "key": "Chat_SeenMessage",
+    "Translated": "Vista"
+  },
+  {
+    "key": "Chat_SendMessage",
+    "Translated": "Enviar"
+  },
+  {
+    "key": "ChatList_UserNotRegistered",
+    "Translated": "Este utilizador ainda não terminou o registo."
+  },
+  {
+    "key": "ChatList_MessageError",
+    "Translated": "Erro no envio, clica na mensagem para tentar novamente."
+  },
+  {
+    "key": "ChatList_UserNotFound",
+    "Translated": "Utilizador não encontrado, por favor verifique se utilizador existe nos contactos."
+  },
+  {
+    "key": "Chat_Archive",
+    "translated": "Arquivar conversa"
+  },
+  {
+    "key": "Chat_UserMuted",
+    "translated": "Conversa silenciada"
+  },
+  {
+    "key": "Chat_UserProfile",
+    "translated": "Ver perfil de utilizador"
+  },
+  {
+    "key": "Chat_Close",
+    "translated": "Fechar"
+  },
+  {
+    "key": "Chat_MuteInApp",
+    "translated": "Apenas notificações dentro da app."
+  },
+  {
+    "key": "Chat_SaveImage",
+    "Translated": "Guardar Imagem"
   }
 ]

@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="SimpleInjector" Version="4.3.0" />
-    <PackageReference Include="Xamarin.Essentials" Version="0.6.0-preview" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Xam.Plugin.Media" Version="4.0.0.4-beta" />
-    <PackageReference Include="Realm" Version="3.0.0" />
+    <PackageReference Include="Realm" Version="3.2.1" />
     <PackageReference Include="SharpRaven" Version="2.4.0" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
+    <PackageReference Include="Xamarin.Essentials" Version="0.10.0-preview" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
@@ -26,9 +26,9 @@
     <Folder Include="Services\Interfaces\" />
     <Folder Include="ViewModels\Abstractions\" />
     <Folder Include="ViewModels\TabBarViewModels\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="AppSettings.cs" />
+    <Folder Include="Models\Cells\" />
+    <Folder Include="Models\Generic\" />
+    <Folder Include="AgoraIO\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Localization\Resources-en-US.json" />
@@ -37,5 +37,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Localization\Resources-en-US.json" />
     <EmbeddedResource Include="Localization\Resources-pt-PT.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\Tools\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SendBird">
+      <HintPath>..\Tools\SendBird.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

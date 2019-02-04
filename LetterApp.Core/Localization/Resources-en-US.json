@@ -1,79 +1,103 @@
 ﻿[
   {
+    "key": "Code_Null",
+    "translated": "Something went very wrong, try again."
+  },
+  {
     "key": "Code_E101",
-    "translated": "Wrong Email or Password, try again"
+    "translated": "Email or password is invalid, try again."
   },
   {
     "key": "Code_E102",
-    "translated": "Account not yet activated, please activate your account"
+    "translated": "Account is not yet active, please activate your account."
   },
   {
     "key": "Code_E103",
-    "translated": "Your account has been desactivated"
+    "translated": "Your account has been desactivated."
   },
   {
     "key": "Code_E104",
-    "translated": "No user associated with this email"
+    "translated": "No user associated with this email."
   },
   {
     "key": "Code_E105",
-    "translated": "Something went wrong, please try again"
+    "translated": "Something went wrong, please try again."
   },
   {
     "key": "Code_E106",
-    "translated": "Wrong verification code, try again or request a new one"
+    "translated": "Wrong verification code, try again or request a new one."
   },
   {
     "key": "Code_E107",
-    "translated": "No division found with this code"
+    "translated": "No division found with this code."
   },
   {
     "key": "Code_E108",
-    "translated": "Your email domain is not valid for this division"
+    "translated": "Your email domain is not valid for this division."
   },
   {
     "key": "Code_E109",
-    "translated": "Wrong password, try again"
+    "translated": "Wrong password, try again."
   },
   {
     "key": "Code_E110",
-    "translated": "Email already in use"
+    "translated": "Email already in use."
   },
   {
     "key": "Code_E111",
-    "translated": "Wrong activation code, try again or request a new one"
+    "translated": "Wrong activation code, try again or request a new one."
   },
   {
     "key": "Code_E112",
-    "translated": "Organization not found"
+    "translated": "Organization not found."
   },
   {
     "key": "Code_E113",
-    "translated": "Your email domain is not valid in this organization"
+    "translated": "Your email domain is not valid in this organization."
   },
   {
     "key": "Code_E114",
-    "translated": "Organization has no divisions, try again later"
+    "translated": "Organization has no divisions, try again later."
   },
   {
     "key": "Code_E115",
-    "translated": "Wrong access code"
+    "translated": "Wrong access code."
   },
   {
     "key": "Code_E116",
-    "translated": "No positions found"
+    "translated": "No roles found."
+  },
+  {
+    "key": "Code_E117",
+    "translated": "You are already in this division."
+  },
+  {
+    "key": "Code_E118",
+    "translated": "You are banned from this organization."
+  },
+  {
+    "key": "Code_E119",
+    "translated": "Your access request is already under review."
+  },
+  {
+    "key": "Code_E120",
+    "translated": "You are banned from this division."
+  },
+  {
+    "key": "Code_E121",
+    "translated": "Wrong Password."
   },
   {
     "key": "Code_S201",
-    "translated": "Password successfully changed"
+    "translated": "Password successfully changed."
   },
   {
     "key": "Code_S202",
-    "translated": "Registration completed"
+    "translated": "Registration completed."
   },
   {
     "key": "Code_S203",
-    "translated": "New position defined"
+    "translated": "New role set."
   },
   {
     "key": "Code_S204",
@@ -81,11 +105,23 @@
   },
   {
     "key": "Code_S205",
-    "translated": "Your account was been deactivated"
+    "translated": "Your account has been deleted."
   },
   {
     "key": "Code_S206",
-    "translated": "You left a division"
+    "translated": "You left a division."
+  },
+  {
+    "key": "Code_S207",
+    "translated": "Account successfully created! \n An email with an activation code was sent."
+  },
+  {
+    "key": "Code_S208",
+    "translated": "You left the organization."
+  },
+  {
+    "key": "Dialogs_InternetException",
+    "translated": "No internet connection."
   },
   {
     "key": "OnBoardingViewModel_LetterHelloWorld",
@@ -109,7 +145,7 @@
   },
   {
     "key": "OnBoardingViewModel_CallSubtitle",
-    "translated": "Send private messages or call someone for free!"
+    "translated": "Send instant messages or call someone for free!"
   },
   {
     "key": "OnBoardingViewModel_SignIn",
@@ -117,7 +153,7 @@
   },
   {
     "key": "OnBoardingViewModel_SignUp",
-    "translated": "Sign Up"
+    "translated": "Sign Up for free"
   },
   {
     "key": "MainViewModel_ChatTab",
@@ -134,5 +170,789 @@
   {
     "key": "MainViewModel_ProfileTab",
     "translated": "Profile"
+  },
+  {
+    "key": "LoginViewModel_EmailLabel",
+    "translated": "Email address"
+  },
+  {
+    "key": "LoginViewModel_PasswordLabel",
+    "translated": "Password"
+  },
+  {
+    "key": "LoginViewModel_ForgotPassButton",
+    "translated": "Forgot password?"
+  },
+  {
+    "key": "LoginViewModel_SignUpButton",
+    "translated": "First time using Letter? Sign Up for free!"
+  },
+  {
+    "key": "LoginViewModel_SignInButton",
+    "translated": "Sign In"
+  },
+  {
+    "key":  "LoginViewModel_EnterEmail",
+    "translated": "Enter your email address"
+  },
+  {
+    "key": "LoginViewModel_EmailHint",
+    "translated": "Email"
+  },
+  {
+    "key": "LoginViewModel_SendCode",
+    "translated": "Send"
+  },
+  {
+    "key": "LoginViewModel_ActivateCode",
+    "translated": "You need to activate your account. \n Check your email or request a new activation code."
+  },
+  {
+    "key": "LoginViewModel_InvalidEmail",
+    "translated": "Your email does not appear to be valid."
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassTitle",
+    "translated": "New password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_NewPassAgainTitle",
+    "translated": "Repeat new password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailAddress",
+    "translated": "Email address"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ConfirmPass",
+    "translated": "Confirm password"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Code",
+    "translated": "Verification code"
+  },
+  { 
+    "key": "RecoverPasswordViewModel_RequestAgain",
+    "translated": "Request again"
+  },
+  {
+    "key": "RecoverPasswordViewModel_Submit",
+    "translated": "Submit"
+  },
+  {
+    "key": "RecoverPasswordViewModel_ShowButton",
+    "translated": "Show"
+  },
+  {
+    "key": "RecoverPasswordViewModel_HideButton",
+    "translated": "Hide"
+  },
+  {
+    "key": "RecoverPasswordViewModel_EmailConfirmation",
+    "translated": "An email with a verification code was sent. \n (Please check your SPAM folder)"
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordMatch",
+    "translated": "Passwords don't match."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordWeak",
+    "translated": "Password not strong enought. \n Must be at least 8 characters long."
+  },
+  {
+    "key": "RecoverPasswordViewModel_PasswordChanged",
+    "translated": "Password changed successfully! \n Please Sign In."
+  },
+  {
+    "key": "RegisterViewModel_FirstName",
+    "translated": "First name"
+  },
+  {
+    "key": "RegisterViewModel_LastName",
+    "translated": "Last name"
+  },
+  {
+    "key": "RegisterViewModel_PhoneNumber",
+    "translated": "Phone number"
+  },
+  {
+    "key": "RegisterViewModel_Agreement",
+    "translated": "By creating an account, you agree to <u>Letter's User Agreement</u> and <u>Privacy Policy</u>, and confirm that you're at least 18 years old."
+  },
+  {
+    "key": "RegisterViewModel_Title",
+    "translated": "Create Account"
+  },
+  {
+    "key": "RegisterViewModel_CreateAccountButton",
+    "translated": "Agree & Create Account"
+  },
+  {
+    "key": "RegisterViewModel_EmptyForm",
+    "translated": "Please fill in all the fields."
+  },
+  {
+    "key": "RegisterViewModel_UserAgreement",
+    "translated": "You must accept the Terms and Conditions."
+  },
+  {
+    "key": "RegisterViewModel_InvalidString",
+    "translated": "Numbers and symbols (like !@#$?%) are only accepted on the password field."
+  },
+  {
+    "key": "RegisterViewModel_DamnEmojis",
+    "translated": "Please don't insert emojis 😘"
+  },
+  {
+    "key": "ActivateAccountViewModel_Title",
+    "translated": "Activate Account"
+  },
+  {
+    "key": "ActivateAccountViewModel_Submit",
+    "translated": "Submit"
+  },
+  {
+    "key": "ActivateAccountViewModel_PlaceHolder",
+    "translated": "Activation code"
+  },
+  {
+    "key": "ActivateAccountViewModel_ResendCodeButton",
+    "translated": "Resend code"
+  },
+  {
+    "key": "ActivateAccountViewModel_ActivateLabel",
+    "translated": "You need to activate your account. \n Missing the email? Have you checked your Spam folder?"
+  },
+  {
+    "key": "ActivateAccountViewModel_ActivationCompleted",
+    "translated": "Your account has been activated! \n Please Sign In."
+  },
+  {
+    "key": "SelectOrganization_AccessButton",
+    "translated": "Access"
+  },
+  {
+    "key": "SelectOrganization_TitleLabel",
+    "translated": "Enter the organization name or email you want to join:"
+  },
+  {
+    "key": "SelectOrganization_TextHint",
+    "translated": "Type organization..."
+  },
+  {
+    "key": "SelectOrganization_Organization",
+    "translated": "Organization"
+  },
+  {
+    "key": "SelectOrganization_AccessHint",
+    "translated": "Access Code"
+  },
+  {
+    "key": "SelectOrganization_EnterButton",
+    "translated": "Enter"
+  },
+  {
+    "key": "SelectOrganization_CreateOrg",
+    "translated": "Register an organization for free!"
+  },
+  {
+    "key": "SelectDivision_PrivateLabel",
+    "translated": "Private Divisions"
+  },
+  {
+    "key": "SelectDivision_PublicLabel",
+    "translated": "Public Divisions"
+  },
+  {
+    "key": "SelectDivision_InsertText",
+    "translated": "Access code"
+  },
+  {
+    "key": "SelectDivision_SubmitButton",
+    "translated": "Join"
+  },
+  {
+    "key": "SelectDivision_LeaveOrganization",
+    "translated": "Leave Organization"
+  },
+  {
+    "key": "SelectDivision_TitleLabel",
+    "translated": "Select Division"
+  },
+  {
+    "key": "SelectDivision_TitleMainLabel",
+    "translated": "Select Main Division"
+  },
+  {
+    "key": "SelectDivision_EmailLabel",
+    "translated": "Email:"
+  },
+  {
+    "key": "SelectDivision_MembersLabel",
+    "translated": "Users"
+  },
+  {
+    "key": "SelectDivision_DescriptionLabel",
+    "translated": "Description:"
+  },
+  {
+    "key": "SelectPosition_TitleLabel",
+    "translated": "Select your role"
+  },
+  {
+    "key": "SelectPosition_Select",
+    "translated": "Select"
+  },
+  {
+    "key": "SelectPosition_SelectPosition",
+    "translated": "Role"
+  },
+  {
+    "key": "Pending_Title",
+    "translated": "Account"
+  },
+  {
+    "key": "Pending_Subtitle",
+    "translated": "Your account is \n pending for approval"
+  },
+  {
+    "key": "Pending_Description",
+    "translated": "Your will receive an confirmation email."
+  },
+  {
+    "key": "Pending_Help",
+    "translated": "Need help?"
+  },
+  {
+    "key": "Pending_LeaveButton",
+    "translated": "Leave division"
+  },
+  {
+    "key": "Pending_LogoutButton",
+    "translated": "Sign out"
+  },
+  {
+    "key": "Pending_ContinueButton",
+    "translated": "Continue"
+  },
+  {
+    "key": "Pending_Updated",
+    "translated": "Your account is under review."
+  },
+  {
+    "key": "DialogLogout_Question",
+    "translated": "Do you want to sign out?"
+  },
+  {
+    "key": "DialogLogout_Button",
+    "translated": "Sign Out"
+  },
+  {
+    "key": "DialogOrganization_Question",
+    "translated": "Do you want to leave the organization?"
+  },
+  {
+    "key": "DialogDelete_Question",
+    "translated": "Do you want to delete your account?"
+  },
+  {
+    "key": "UserProfile_DescriptionHint",
+    "translated": "Describe yourself in 40 characters."
+  },
+  {
+    "key": "UserProfile_Role",
+    "translated": "Role"
+  },
+  {
+    "key": "UserProfile_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "UserProfile_Mobile",
+    "translated": "Mobile"
+  },
+  {
+    "key": "UserProfile_Divisions",
+    "translated":  "Divisions"
+  },
+  {
+    "key": "UserProfile_SettingImage",
+    "translated":  "Setting up new image"
+  },
+  {
+    "key": "UserSettings_SettingsTitle",
+    "translated": "Settings"
+  },
+  {
+    "key": "UserSettings_AccountSection",
+    "translated": "Account"
+  },
+  {
+    "key": "UserSettings_NotificationsSection",
+    "translated": "Notifications"
+  },
+  {
+    "key": "UserSettings_InformationSection",
+    "translated": "Information"
+  },
+  {
+    "key": "UserSettings_DangerZoneSection",
+    "translated": "Danger Zone"
+  },
+  {
+    "key": "UserSettings_PhoneNumberLabel",
+    "translated": "Phone number"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsLabel",
+    "translated": "Allow phone calls"
+  },
+  {
+    "key": "UserSettings_AllowPhoneCallsDescription",
+    "translated": "When on, users can see your phone number and call you."
+  },
+  {
+    "key": "UserSettings_PasswordLabel",
+    "translated": "Password"
+  },
+  {
+    "key": "UserSettings_MessageLabel",
+    "translated": "Message notifications"
+  },
+  {
+    "key": "UserSettings_CallLabel",
+    "translated": "Call notifications"
+  },
+  {
+    "key": "UserSettings_GroupLabel",
+    "translated": "Group notifications"
+  },
+  {
+    "key": "UserSettings_ContactUsLabel",
+    "translated": "Contact us"
+  },
+  {
+    "key": "UserSettings_TermsOfService",
+    "translated": "Terms of service"
+  },
+  {
+    "key": "UserSettings_CreateOrgLabel",
+    "translated": "Register an organization for free"
+  },
+  {
+    "key": "UserSettings_SignOutLabel",
+    "translated": "Sign out"
+  },
+  {
+    "key": "UserSettings_LeaveDivisionLabel",
+    "translated": "Leave divisions"
+  },
+  {
+    "key": "UserSettings_LeaveOrgLabel",
+    "translated": "Leave organization"
+  },
+  {
+    "key": "UserSettings_DeleteAccountLabel",
+    "translated": "Delete account"
+  },
+  {
+    "key": "UserSettings_CellNumber",
+    "translated":  "Invalid phone number."
+  },
+  {
+    "key": "ChangePassword_Title",
+    "translated": "Password"
+  },
+  {
+    "key": "ChangePassword_CurrentPass",
+    "translated": "Current password"
+  },
+  {
+    "key": "ChangePassword_Change",
+    "translated": "Change password"
+  },
+  {
+    "key": "ChangePassword_Changed",
+    "translated": "Password changed."
+  },
+  {
+    "key": "UserSettings_Confirm",
+    "translated": "Enter password to confirm."
+  },
+  {
+    "key": "LeaveDivision_Title",
+    "translated":  "Divisions"
+  },
+  {
+    "key": "LeaveDivison_Leave",
+    "translated":  "Leave"
+  },
+  {
+    "key": "LeaveDivison_LeaveQuestion",
+    "translated": "Leave division: "
+  },
+  {
+    "key": "Division_Title",
+    "translated": "Division"
+  },
+  {
+    "key": "Division_Members",
+    "translated": "Members"
+  },
+  {
+    "key": "Division_Organization",
+    "translated": "Organization"
+  },
+  {
+    "key": "Division_Address",
+    "translated": "Address"
+  },
+  {
+    "key": "Division_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Division_Mobile",
+    "translated": "Phone number"
+  },
+  {
+    "key": "Division_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Division_SendEmail",
+    "translated": "Send email"
+  },
+  {
+    "key": "Division_NoDescription",
+    "translated":  "The division doesn't have any description."
+  },
+  {
+    "key": "Organization_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Organization_SendEmail",
+    "translated": "Send email"
+  },
+  {
+    "key": "Organization_NoDescription",
+    "translated": "The organization doesn't have any description."
+  },
+  {
+    "key": "Organization_Members",
+    "translated": "Members"
+  },
+  {
+    "key": "Organization_Divisions",
+    "translated": "Divisions"
+  },
+  {
+    "key": "Organization_Address",
+    "translated": "Address"
+  },
+  {
+    "key": "Organization_Email",
+    "translated": "Email"
+  },
+  {
+    "key": "Organization_Mobile",
+    "translated": "Phone number"
+  },
+  {
+    "key": "Contacts_Title",
+    "translated": "Contacts"
+  },
+  {
+    "key": "Contacts_DialogTitle",
+    "translated": "Filter Contacts"
+  },
+  {
+    "key": "Contacts_NewCall",
+    "translated": "New Call"
+  },
+  {
+    "key": "Contacts_NewChat",
+    "translated": "New Chat"
+  },
+  {
+    "key": "Contacts_DialogSwitchLabel",
+    "translated": "Filter users by main division"
+  },
+  {
+    "key": "Contacts_DialogDescription",
+    "translated": "When on, users will only appear in their main division, and not in all divisions they are members of."
+  },
+  {
+    "key": "Contacts_DialogButton",
+    "translated": "Filter"
+  },
+  {
+    "key": "Contacts_Search",
+    "translated": "Search by name, email, role..."
+  },
+  {
+    "key": "Contacts_DialogFilterByName",
+    "translated": "Filter users by name"
+  },
+  {
+    "key": "Contacts_DialogFilterByNameDescription",
+    "translated": "When off, users are grouped by role."
+  },
+  {
+    "key": "Member_NoDescription",
+    "translated": "The user doesn't have any description."
+  },
+  {
+    "key": "Member_Call",
+    "translated": "Call"
+  },
+  {
+    "key": "Member_Chat",
+    "translated": "Chat"
+  },
+  {
+    "key": "Call_Letter",
+    "translated": "Letter Audio"
+  },
+  {
+    "key": "Call_Calling",
+    "translated": "Ringing..."
+  },
+  {
+    "key": "Call_IsCalling",
+    "translated": "is calling..."
+  },
+  {
+    "key": "Call_Speaker",
+    "translated": "Speaker"     
+  },
+  {
+    "key": "Call_Mute",
+    "translated": "Mute"
+  },
+  {
+    "key": "Call_Accept",
+    "translated": "Accept"
+  },
+  {
+    "key": "Call_Decline",
+    "translated": "Decline"
+  },
+  {
+    "key": "Call_Connecting",
+    "translated": "Connecting..."
+  },
+  {
+    "key": "Call_Anonym",
+    "translated": "Unknown Caller"
+  },
+  {
+    "key": "Call_MicAlert",
+    "translated": "Microphone permissions are required."
+  },
+  {
+    "key": "Call_OpenSettingsAlert",
+    "translated": "Open settings"
+  },
+  {
+    "key": "Call_FailedCall",
+    "translated": "☎️ You missed a call from"
+  },
+  {
+    "key": "Calls_CallActionInfo",
+    "translated": "Info"
+  },
+  {
+    "key": "Calls_CallStackTitle",
+    "translated": "Calls"
+  },
+  {
+    "key": "ContactDialog_Title",
+    "translated": "Make a call"
+  },
+  {
+    "key": "ContactDialog_TitleLetter",
+    "translated": "Letter call"
+  },
+  {
+    "key": "ContactDialog_DescriptionLetter",
+    "translated": "It's free, internet connection is necessary"
+  },
+  {
+    "key": "ContactDialog_TitlePhone",
+    "translated": "Phone call"
+  },
+  {
+    "key": "ContactDialog_DescriptionPhone",
+    "translated": "Call charges may apply"
+  },
+  {
+    "key": "date_Monday",
+    "translated": "Monday"
+  },
+  {
+    "key": "date_Tuesday",
+    "translated": "Tuesday"
+  },
+  {
+    "key": "date_Wednesday",
+    "translated": "Wednesday"
+  },
+  {
+    "key": "date_Thursday",
+    "translated": "Thursday"
+  },
+  {
+    "key": "date_Friday",
+    "translated": "Friday"
+  },
+  {
+    "key": "date_Saturday",
+    "translated": "Saturday"
+  },
+  {
+    "key": "date_Sunday",
+    "translated": "Sunday"
+  },
+  {
+    "key": "date_Seconds",
+    "translated": " seconds ago"
+  },
+  {
+    "key": "date_Minute",
+    "translated": "1 minute ago"
+  },
+  {
+    "key": "date_Minutes",
+    "translated": " minutes ago"
+  },
+  {
+    "key": "date_Hour",
+    "translated": "1 hour ago"
+  },
+  {
+    "key": "date_Hours",
+    "translated": " hours ago"
+  },
+  {
+    "key": "date_Today",
+    "translated": "Today"
+  },
+  {
+    "key": "date_Yesterday",
+    "translated": "Yesterday"
+  },
+  {
+    "key": "Call_Incoming",
+    "translated": "Incoming"
+  },
+  {
+    "key": "Call_Outgoing",
+    "translated": "Outgoing"
+  },
+  {
+    "key": "Call_Missed",
+    "translated": "Missed"
+  },
+  {
+    "key": "Delete",
+    "translated": "Delete"
+  },
+  {
+    "key": "Cancel",
+    "translated": "Cancel"
+  },
+  {
+    "key": "Calls_NoRecentCalls",
+    "translated": "No recent calls"
+  },
+  {
+    "key": "Contacts_NoContacts",
+    "translated": "No Contacts"
+  },
+  {
+    "key": "Contacts_NoResults",
+    "translated": "No Results"
+  },
+  {
+    "key": "ChatList_Title",
+    "translated": "Chats"
+  },
+  {
+    "key": "ChatList_NoChats",
+    "translated": "Start a new chat"
+  },
+  {
+    "key": "ChatList_Archive",
+    "translated": "Archive"
+  },
+  {
+    "key": "ChatList_Mute",
+    "translated": "Mute"
+  },
+  {
+    "key": "ChatList_UnMute",
+    "translated": "Unmute"
+  },
+  {
+    "key": "ChatList_You",
+    "Translated": "You:"
+  },
+  {
+    "key": "Chat_SendingMessage",
+    "translated": "Sending..."
+  },
+  {
+    "key": "Chat_TypingMessage",
+    "translated": "Typing..."
+  },
+  {
+    "key": "Chat_SeenMessage",
+    "Translated": "Seen"
+  },
+  {
+    "key": "Chat_SendMessage",
+    "Translated": "Send"
+  },
+  {
+    "key": "ChatList_UserNotRegistered",
+    "Translated": "This user has not yet finish the registration."
+  },
+  {
+    "key": "ChatList_MessageError",
+    "Translated": "Message sent failed, click on the message to try again."
+  },
+  {
+    "key": "ChatList_UserNotFound",
+    "Translated": "User not found, please check if this user still exists in the contacts tab."
+  },
+  {
+    "key": "ChatList_SentImage",
+    "Translated": "Sent a Image"
+  },
+  {
+    "key": "Chat_Archive",
+    "translated": "Archive chat"
+  },
+  {
+    "key": "Chat_UserMuted",
+    "translated": "Chat muted"
+  },
+  {
+    "key": "Chat_UserProfile",
+    "translated": "See user profile"
+  },
+  {
+    "key": "Chat_Close",
+    "translated": "Close"
+  },
+  {
+    "key": "Chat_MuteInApp",
+    "translated": "Only in-app notifications."
+  },
+  {
+    "key": "Chat_SaveImage",
+    "Translated": "Save Image"
   }
 ]

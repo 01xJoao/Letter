@@ -10,6 +10,6 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public string Email { get; set; }
         public bool RequiresAccessCode { get; set; }
         public bool RequiresUserDomain { get; set; }
-        public List<DivisionModel> Divisions {get;set;}
+        public List<DivisionModel> Divisions { get; set; }
     }
 }

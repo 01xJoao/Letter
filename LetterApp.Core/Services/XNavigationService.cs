@@ -53,5 +53,7 @@ namespace LetterApp.Core.Services
 
         public abstract Task NavigatePlatformAsync<TViewModel, TMyObject>(TMyObject data) where TViewModel : class, IXViewModel;
         public abstract Task Close<TViewModel>(TViewModel viewModel) where TViewModel : class, IXViewModel;
+        public abstract Task PopToRoot(bool animated);
+        public abstract int ChatOpen(int userId);
     }
 }

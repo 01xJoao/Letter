@@ -22,7 +22,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <IOSDebuggerPort>61746</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
@@ -30,6 +30,9 @@
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <LangVersion>Latest</LangVersion>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchSdkVersion>12.0</MtouchSdkVersion>
+    <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -38,15 +41,17 @@
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
-    <MtouchArch>ARM64</MtouchArch>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignProvision>LetterDestribution</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <BuildIpa>true</BuildIpa>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -57,12 +62,13 @@
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,20 +78,19 @@
     <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <CodesignKey>iPhone Developer</CodesignKey>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-    <MtouchFastDev>true</MtouchFastDev>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <IOSDebuggerPort>13666</IOSDebuggerPort>
     <MtouchLink>SdkOnly</MtouchLink>
-    <MtouchArch>ARM64</MtouchArch>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <CodesignProvision>pleaseWorkPLEASE</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -95,14 +100,8 @@
     <Reference Include="MBProgressHUD">
       <HintPath>..\packages\mbprogresshud.0.9.2.0\lib\Xamarin.iOS\MBProgressHUD.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Media">
-      <HintPath>..\packages\Xam.Plugin.Media.4.0.0.4-beta\lib\xamarinios10\Plugin.Media.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Essentials">
-      <HintPath>..\packages\Xamarin.Essentials.0.6.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
@@ -113,38 +112,86 @@
     <Reference Include="WebP.Touch">
       <HintPath>..\packages\WebP.Touch.1.0.8\lib\Xamarin.iOS10\WebP.Touch.dll</HintPath>
     </Reference>
-    <Reference Include="FFImageLoading">
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.3.6\lib\Xamarin.iOS10\FFImageLoading.dll</HintPath>
-    </Reference>
-    <Reference Include="FFImageLoading.Platform">
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.3.6\lib\Xamarin.iOS10\FFImageLoading.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="FFImageLoading.Transformations">
-      <HintPath>..\packages\Xamarin.FFImageLoading.Transformations.2.3.6\lib\Xamarin.iOS10\FFImageLoading.Transformations.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Permissions">
-      <HintPath>..\packages\Plugin.Permissions.3.0.0.12-beta\lib\xamarinios10\Plugin.Permissions.dll</HintPath>
-    </Reference>
     <Reference Include="Realm.DataBinding">
       <HintPath>..\packages\Realm.DataBinding.1.2.0\lib\Xamarin.iOS10\Realm.DataBinding.dll</HintPath>
     </Reference>
-    <Reference Include="Remotion.Linq">
-      <HintPath>..\packages\Remotion.Linq.2.1.2\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="Realm">
-      <HintPath>..\packages\Realm.Database.3.0.0\lib\netstandard1.4\Realm.dll</HintPath>
-    </Reference>
-    <Reference Include="Realm.Sync">
-      <HintPath>..\packages\Realm.3.0.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration.ConfigurationManager">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
     <Reference Include="SharpRaven">
       <HintPath>..\packages\SharpRaven.2.4.0\lib\netstandard2.0\SharpRaven.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Permissions">
+      <HintPath>..\packages\Plugin.Permissions.3.0.0.12\lib\xamarinios10\Plugin.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq">
+      <HintPath>..\packages\Remotion.Linq.2.2.0\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Lottie.iOS">
+      <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.AccessControl">
+      <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\netstandard2.0\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions">
+      <HintPath>..\packages\System.Security.Permissions.4.5.0\lib\netstandard2.0\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration.ConfigurationManager">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading">
+      <HintPath>..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Platform">
+      <HintPath>..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Transformations">
+      <HintPath>..\packages\Xamarin.FFImageLoading.Transformations.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.Transformations.dll</HintPath>
+    </Reference>
+    <Reference Include="Tavis.UriTemplates">
+      <HintPath>..\packages\Tavis.UriTemplates.1.1.1\lib\netstandard1.0\Tavis.UriTemplates.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.4.3.1\lib\netstandard1.5\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media">
+      <HintPath>..\packages\Xam.Plugin.Media.4.0.1.5\lib\xamarinios10\Plugin.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="SinchBinding">
+      <HintPath>..\packages\JoaoPalma.Sinch.Voice.iOS.3.12.5.3\lib\xamarinios10\SinchBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="SendBird">
+      <HintPath>..\Tools\SendBird.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\Tools\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GetiOSModel">
+      <HintPath>..\packages\dannycabrera.GetiOSModel.1.5.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm">
+      <HintPath>..\packages\Realm.Database.3.2.1\lib\netstandard1.4\Realm.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm.Sync">
+      <HintPath>..\packages\Realm.3.2.1\lib\netstandard1.4\Realm.Sync.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.5.1\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Com.OneSignal.Abstractions">
+      <HintPath>..\packages\Com.OneSignal.3.2.1\lib\Xamarin.iOS10\Com.OneSignal.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Com.OneSignal">
+      <HintPath>..\packages\Com.OneSignal.3.2.1\lib\Xamarin.iOS10\Com.OneSignal.dll</HintPath>
+    </Reference>
+    <Reference Include="OneSignal.iOS.Binding">
+      <HintPath>..\packages\Com.OneSignal.3.2.1\lib\Xamarin.iOS10\OneSignal.iOS.Binding.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.0.11.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Agora.Full.iOS">
+      <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.3.1\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +202,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call_selected.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts_selected.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats_selected.imageset\Group.png" />
@@ -164,8 +210,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchImage.launchimage\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline%402x.png" />
@@ -176,10 +220,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_contacts.imageset\contacts%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user-outline.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_call.imageset\call%403x.png" />
@@ -206,6 +246,182 @@
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\letter_round_big.imageset\letter_round_big%401x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\user_selected%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_full.imageset\Checkbox_full%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\checkbox_empty.imageset\check_box_empty%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_round_medium.imageset\lettermedium%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\settings.imageset\settings%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\logo_curved.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\logo_curved%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_curved.imageset\logo_curved%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\update.imageset\baseline_update_black_24pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_picture.imageset\picture%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\warning_image.imageset\warning_image%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\add_photo.imageset\photoadd%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\arrow_right.imageset\arrow_gray%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\members.imageset\users%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\user_chat.imageset\chat%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\search.imageset\Shape%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\clear.imageset\baseline_clear_white_18pt_3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\contacts_filter.imageset\filter%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\new_call.imageset\ic_call_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\end_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\end_call.imageset\endcall.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\decline_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\decline_call.imageset\decline.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\accept_call.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\accept_call.imageset\accept.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_on.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_on.imageset\speaker_on.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_off.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\speaker_off.imageset\speaker_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_on.imageset\micro_on.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\micro_off.imageset\micro_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_cellular.imageset\telephone-symbol-button.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\organization_noimage.imageset\organization_noimage.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\division_noimage.imageset\division_noimage.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\profile_noimage.imageset\profile_noimage2.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\no_calls.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\no_contacts.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\call.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-33.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-66.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-99.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-99-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-33-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-66-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\norecentchats.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\volume_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\connection.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\connection.imageset\connect.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\load_image.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Notification%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Notification%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Spotlight%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Spotlight%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\SpotlightBig%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\SpotlightBig%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -237,6 +453,101 @@
     <Folder Include="Resources\Assets.xcassets\board_chat.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round.imageset\" />
     <Folder Include="Resources\Assets.xcassets\letter_round_big.imageset\" />
+    <Folder Include="Views\Login\" />
+    <Folder Include="Views\CustomViews\Dialog\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_black.imageset\" />
+    <Folder Include="Views\Register\" />
+    <Folder Include="Views\RecoverPassword\" />
+    <Folder Include="Resources\Assets.xcassets\close_black_big.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white_big.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\tabbar_profile_selected.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_black.imageset\" />
+    <Folder Include="Views\Register\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\checkbox_full.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\checkbox_empty.imageset\" />
+    <Folder Include="Views\CustomViews\Cells\" />
+    <Folder Include="Views\ActivateAccount\" />
+    <Folder Include="Resources\Assets.xcassets\letter_round_medium.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\back_black.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\back_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\settings.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\add_circle.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\close_white.imageset\" />
+    <Folder Include="Views\SelectOrganization\" />
+    <Folder Include="Views\SelectDivision\" />
+    <Folder Include="Views\SelectPosition\" />
+    <Folder Include="Views\PendingApproval\" />
+    <Folder Include="Views\SelectDivision\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\dropdown_black.imageset\" />
+    <Folder Include="Models\" />
+    <Folder Include="Resources\Assets.xcassets\letter_curved.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\update.imageset\" />
+    <Folder Include="Views\TabBar\UserProfileViewController\Cells\" />
+    <Folder Include="Views\CustomViews\ProfileDivision\" />
+    <Folder Include="Resources\Assets.xcassets\add_picture.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\add_photo.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\warning_image.imageset\" />
+    <Folder Include="Views\UserSettings\" />
+    <Folder Include="Views\Division\" />
+    <Folder Include="Resources\en.Iproj\" />
+    <Folder Include="Views\UserSettings\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\arrow_right.imageset\" />
+    <Folder Include="Views\ChangePassword\" />
+    <Folder Include="Views\LeaveDivision\" />
+    <Folder Include="Views\LeaveDivision\Cells\" />
+    <Folder Include="Views\Division\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\members.imageset\" />
+    <Folder Include="Views\Organization\" />
+    <Folder Include="Views\Organization\Cells\" />
+    <Folder Include="Views\CustomViews\TabBarView\" />
+    <Folder Include="Views\TabBar\ContactListViewController\PageViewController\" />
+    <Folder Include="Views\TabBar\ContactListViewController\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\user_chat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\search.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\clear.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\contacts_filter.imageset\" />
+    <Folder Include="Views\Member\" />
+    <Folder Include="Resources\Assets.xcassets\new_call.imageset\" />
+    <Folder Include="Views\TabBar\CallListViewController\Cells\" />
+    <Folder Include="AgoraIO\" />
+    <Folder Include="Views\Call\" />
+    <Folder Include="Resources\Assets.xcassets\end_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\decline_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\accept_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\speaker_on.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\speaker_off.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\micro_on.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\micro_off.imageset\" />
+    <Folder Include="CallKit\" />
+    <Folder Include="Resources\Assets.xcassets\call_cellular.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\profile_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\division_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\organization_noimage.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\recent_calls.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\no_contacts.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_voip.imageset\" />
+    <Folder Include="Views\TabBar\ChatListViewController\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\nochats.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\newchat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\silent.imageset\" />
+    <Folder Include="Views\Chat\" />
+    <Folder Include="Resources\Assets.xcassets\call_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\call_white_small.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\call_white_medium.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\options.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\keyboard.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\keyboard_active.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\files.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\photo_picker.imageset\" />
+    <Folder Include="Views\Chat\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\connection.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\Image_picker.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\image_picker.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\load_image.imageset\" />
+    <Folder Include="Resources\pt.lproj\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -247,6 +558,67 @@
     <InterfaceDefinition Include="Views\OnBoarding\BoardPageViewController.xib" />
     <InterfaceDefinition Include="Views\OnBoarding\OnBoardingViewController.xib" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <InterfaceDefinition Include="Views\Login\LoginViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\AlertView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\InputTextViewController.xib" />
+    <InterfaceDefinition Include="Views\RecoverPassword\RecoverPasswordViewController.xib" />
+    <InterfaceDefinition Include="Views\Register\RegisterViewController.xib" />
+    <InterfaceDefinition Include="Views\Register\Cells\AgreementCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\MainButtonCell.xib" />
+    <InterfaceDefinition Include="Views\ActivateAccount\ActivateAccountViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\HeaderCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\TextFieldCell.xib" />
+    <InterfaceDefinition Include="Views\SelectOrganization\SelectOrganizationViewController.xib" />
+    <InterfaceDefinition Include="Views\SelectDivision\SelectDivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\SelectDivision\Cells\DivisionCell.xib" />
+    <InterfaceDefinition Include="Views\SelectDivision\Cells\LineSeparatorCell.xib" />
+    <InterfaceDefinition Include="Views\SelectDivision\Cells\InsertDivisionFieldCell.xib" />
+    <InterfaceDefinition Include="Views\SelectDivision\Cells\LeaveOrganizationCell.xib" />
+    <InterfaceDefinition Include="Views\SelectDivision\Cells\TitleHeader.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\InformationViewController.xib" />
+    <InterfaceDefinition Include="Views\SelectPosition\SelectPositionViewController.xib" />
+    <InterfaceDefinition Include="Views\PendingApproval\PendingApprovalViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\QuestionViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\DivisionView.xib" />
+    <InterfaceDefinition Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\UserSettingsViewController.xib" />
+    <InterfaceDefinition Include="Views\Division\DivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\Cells\PhoneNumberCell.xib" />
+    <InterfaceDefinition Include="Views\UserSettings\Cells\AllowPhoneCallsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\SwitchCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\LabelWithArrowCell.xib" />
+    <InterfaceDefinition Include="Views\ChangePassword\ChangePasswordViewController.xib" />
+    <InterfaceDefinition Include="Views\LeaveDivision\LeaveDivisionViewController.xib" />
+    <InterfaceDefinition Include="Views\LeaveDivision\Cells\LeaveDivisionCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\DetailsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Cells\DivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\Division\Cells\DivisionHeaderCell.xib" />
+    <InterfaceDefinition Include="Views\Division\Cells\OrganizationDetailCell.xib" />
+    <InterfaceDefinition Include="Views\Organization\OrganizationViewController.xib" />
+    <InterfaceDefinition Include="Views\Organization\Cells\OrganizationDivisionsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\TabBarView\TabBarView.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\FilterContactsViewController.xib" />
+    <InterfaceDefinition Include="Views\Member\MemberViewController.xib" />
+    <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\CallStackViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
+    <InterfaceDefinition Include="Views\Chat\ChatViewController.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\MessageCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\LabelCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\FileCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ImageCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ImageWithUserCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\FileWithUserCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\DateHeaderCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\PictureViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ShowImageViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -298,22 +670,322 @@
     <Compile Include="Views\OnBoarding\OnBoardingViewController.designer.cs">
       <DependentUpon>OnBoardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sources\OnBoardPageDataSource.cs" />
+    <Compile Include="Sources\PageSource.cs" />
     <Compile Include="Helpers\Animations.cs" />
     <Compile Include="Helpers\UIButtonExtensions.cs" />
     <Compile Include="Helpers\UITextFieldExtensions.cs" />
     <Compile Include="Helpers\UILabelExtensions.cs" />
     <Compile Include="Helpers\LocalConstants.cs" />
+    <Compile Include="Views\Login\LoginViewController.cs" />
+    <Compile Include="Views\Login\LoginViewController.designer.cs">
+      <DependentUpon>LoginViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertView.cs" />
+    <Compile Include="Views\CustomViews\Dialog\AlertView.designer.cs">
+      <DependentUpon>AlertView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Dialog\InputTextViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\InputTextViewController.designer.cs">
+      <DependentUpon>InputTextViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.cs" />
+    <Compile Include="Views\RecoverPassword\RecoverPasswordViewController.designer.cs">
+      <DependentUpon>RecoverPasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\UIViewAnimationExtensions.cs" />
+    <Compile Include="Views\Register\RegisterViewController.cs" />
+    <Compile Include="Views\Register\RegisterViewController.designer.cs">
+      <DependentUpon>RegisterViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Sources\RegisterSource.cs" />
+    <Compile Include="Views\Register\Cells\AgreementCell.cs" />
+    <Compile Include="Views\Register\Cells\AgreementCell.designer.cs">
+      <DependentUpon>AgreementCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\MainButtonCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\MainButtonCell.designer.cs">
+      <DependentUpon>MainButtonCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ActivateAccount\ActivateAccountViewController.cs" />
+    <Compile Include="Views\ActivateAccount\ActivateAccountViewController.designer.cs">
+      <DependentUpon>ActivateAccountViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\RecoverPasswordSource.cs" />
+    <Compile Include="Views\CustomViews\Cells\HeaderCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\HeaderCell.designer.cs">
+      <DependentUpon>HeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\TextFieldCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\TextFieldCell.designer.cs">
+      <DependentUpon>TextFieldCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\PhoneModelExtensions.cs" />
+    <Compile Include="Views\SelectOrganization\SelectOrganizationViewController.cs" />
+    <Compile Include="Views\SelectOrganization\SelectOrganizationViewController.designer.cs">
+      <DependentUpon>SelectOrganizationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectDivision\SelectDivisionViewController.cs" />
+    <Compile Include="Views\SelectDivision\SelectDivisionViewController.designer.cs">
+      <DependentUpon>SelectDivisionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\SelectDivisionsSource.cs" />
+    <Compile Include="Views\SelectDivision\Cells\DivisionCell.cs" />
+    <Compile Include="Views\SelectDivision\Cells\DivisionCell.designer.cs">
+      <DependentUpon>DivisionCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectDivision\Cells\LineSeparatorCell.cs" />
+    <Compile Include="Views\SelectDivision\Cells\LineSeparatorCell.designer.cs">
+      <DependentUpon>LineSeparatorCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectDivision\Cells\InsertDivisionFieldCell.cs" />
+    <Compile Include="Views\SelectDivision\Cells\InsertDivisionFieldCell.designer.cs">
+      <DependentUpon>InsertDivisionFieldCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectDivision\Cells\LeaveOrganizationCell.cs" />
+    <Compile Include="Views\SelectDivision\Cells\LeaveOrganizationCell.designer.cs">
+      <DependentUpon>LeaveOrganizationCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Views\SelectDivision\Cells\TitleHeader.cs" />
+    <Compile Include="Views\SelectDivision\Cells\TitleHeader.designer.cs">
+      <DependentUpon>TitleHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Dialog\InformationViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\InformationViewController.designer.cs">
+      <DependentUpon>InformationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectPosition\SelectPositionViewController.cs" />
+    <Compile Include="Views\SelectPosition\SelectPositionViewController.designer.cs">
+      <DependentUpon>SelectPositionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PendingApproval\PendingApprovalViewController.cs" />
+    <Compile Include="Views\PendingApproval\PendingApprovalViewController.designer.cs">
+      <DependentUpon>PendingApprovalViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PositionsPickerModel.cs" />
+    <Compile Include="Views\CustomViews\Dialog\QuestionViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\QuestionViewController.designer.cs">
+      <DependentUpon>QuestionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\DivisionView.designer.cs">
+      <DependentUpon>DivisionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\UserProfileSource.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.cs" />
+    <Compile Include="Views\TabBar\UserProfileViewController\Cells\ProfileHeaderView.designer.cs">
+      <DependentUpon>ProfileHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserSettings\UserSettingsViewController.cs" />
+    <Compile Include="Views\UserSettings\UserSettingsViewController.designer.cs">
+      <DependentUpon>UserSettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Division\DivisionViewController.cs" />
+    <Compile Include="Views\Division\DivisionViewController.designer.cs">
+      <DependentUpon>DivisionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PicturePicker.cs" />
+    <Compile Include="Views\UserSettings\Cells\PhoneNumberCell.cs" />
+    <Compile Include="Views\UserSettings\Cells\PhoneNumberCell.designer.cs">
+      <DependentUpon>PhoneNumberCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserSettings\Cells\AllowPhoneCallsCell.cs" />
+    <Compile Include="Views\UserSettings\Cells\AllowPhoneCallsCell.designer.cs">
+      <DependentUpon>AllowPhoneCallsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\SwitchCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\SwitchCell.designer.cs">
+      <DependentUpon>SwitchCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\LabelWithArrowCell.designer.cs">
+      <DependentUpon>LabelWithArrowCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\UserSettingsSource.cs" />
+    <Compile Include="Views\ChangePassword\ChangePasswordViewController.cs" />
+    <Compile Include="Views\ChangePassword\ChangePasswordViewController.designer.cs">
+      <DependentUpon>ChangePasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.cs" />
+    <Compile Include="Views\LeaveDivision\LeaveDivisionViewController.designer.cs">
+      <DependentUpon>LeaveDivisionViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeaveDivision\Cells\LeaveDivisionCell.cs" />
+    <Compile Include="Views\LeaveDivision\Cells\LeaveDivisionCell.designer.cs">
+      <DependentUpon>LeaveDivisionCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\LeaveDivisionSource.cs" />
+    <Compile Include="Views\CustomViews\Cells\DetailsCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\DetailsCell.designer.cs">
+      <DependentUpon>DetailsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Cells\DivisionsCell.cs" />
+    <Compile Include="Views\CustomViews\Cells\DivisionsCell.designer.cs">
+      <DependentUpon>DivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Division\Cells\DivisionHeaderCell.cs" />
+    <Compile Include="Views\Division\Cells\DivisionHeaderCell.designer.cs">
+      <DependentUpon>DivisionHeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\DivisionSource.cs" />
+    <Compile Include="Views\Division\Cells\OrganizationDetailCell.cs" />
+    <Compile Include="Views\Division\Cells\OrganizationDetailCell.designer.cs">
+      <DependentUpon>OrganizationDetailCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Organization\OrganizationViewController.cs" />
+    <Compile Include="Views\Organization\OrganizationViewController.designer.cs">
+      <DependentUpon>OrganizationViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\OrganizationSource.cs" />
+    <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.cs" />
+    <Compile Include="Views\Organization\Cells\OrganizationDivisionsCell.designer.cs">
+      <DependentUpon>OrganizationDivisionsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.cs" />
+    <Compile Include="Views\CustomViews\ProfileDivision\OrganizationDivisionsView.designer.cs">
+      <DependentUpon>OrganizationDivisionsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\TabBarView\TabBarView.cs" />
+    <Compile Include="Views\CustomViews\TabBarView\TabBarView.designer.cs">
+      <DependentUpon>TabBarView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\PageViewController\ContactPageViewController.designer.cs">
+      <DependentUpon>ContactPageViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.cs" />
+    <Compile Include="Views\TabBar\ContactListViewController\Cells\ContactsCell.designer.cs">
+      <DependentUpon>ContactsCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ContactsSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\FilterContactsViewController.designer.cs">
+      <DependentUpon>FilterContactsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Member\MemberViewController.cs" />
+    <Compile Include="Views\Member\MemberViewController.designer.cs">
+      <DependentUpon>MemberViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\MemberSource.cs" />
+    <Compile Include="Sources\CallSource.cs" />
+    <Compile Include="AgoraIO\AgoraRtcDelegate.cs" />
+    <Compile Include="Views\Call\CallViewController.cs" />
+    <Compile Include="Views\Call\CallViewController.designer.cs">
+      <DependentUpon>CallViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CallKit\ActiveCall.cs" />
+    <Compile Include="CallKit\ActiveCallManager.cs" />
+    <Compile Include="CallKit\ProviderDelegate.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ContactViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ContactViewController.designer.cs">
+      <DependentUpon>ContactViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.cs" />
+    <Compile Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.designer.cs">
+      <DependentUpon>CallHistoryCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\MessengerService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\CallStackViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\CallStackViewController.designer.cs">
+      <DependentUpon>CallStackViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\CallStackSource.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.designer.cs">
+      <DependentUpon>ChatCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatListSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.designer.cs">
+      <DependentUpon>ChatAlertViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\ChatViewController.cs" />
+    <Compile Include="Views\Chat\ChatViewController.designer.cs">
+      <DependentUpon>ChatViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\MessageCell.cs" />
+    <Compile Include="Views\Chat\Cells\MessageCell.designer.cs">
+      <DependentUpon>MessageCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\LabelCell.cs" />
+    <Compile Include="Views\Chat\Cells\LabelCell.designer.cs">
+      <DependentUpon>LabelCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\FileCell.cs" />
+    <Compile Include="Views\Chat\Cells\FileCell.designer.cs">
+      <DependentUpon>FileCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\ImageCell.cs" />
+    <Compile Include="Views\Chat\Cells\ImageCell.designer.cs">
+      <DependentUpon>ImageCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatSource.cs" />
+    <Compile Include="Views\Chat\Cells\ImageWithUserCell.cs" />
+    <Compile Include="Views\Chat\Cells\ImageWithUserCell.designer.cs">
+      <DependentUpon>ImageWithUserCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\FileWithUserCell.cs" />
+    <Compile Include="Views\Chat\Cells\FileWithUserCell.designer.cs">
+      <DependentUpon>FileWithUserCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\DateHeaderCell.cs" />
+    <Compile Include="Views\Chat\Cells\DateHeaderCell.designer.cs">
+      <DependentUpon>DateHeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AudioService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.designer.cs">
+      <DependentUpon>ShowChatOptionsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatOptionsSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\PictureViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\PictureViewController.designer.cs">
+      <DependentUpon>PictureViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Dialog\ShowImageViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ShowImageViewController.designer.cs">
+      <DependentUpon>ShowImageViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
       <Project>{848E6633-3205-4E4B-BAF3-7A61FC5631EC}</Project>
       <Name>LetterApp.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LetterNotificationService\LetterNotificationService.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{EE8BB25F-8B17-41E5-A7A7-462591611BA8}</Project>
+      <Name>LetterNotificationService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\loading.json" />
+    <BundleResource Include="Resources\loading_white.json" />
+    <BundleResource Include="Resources\en.Iproj\InfoPList.strings" />
+    <BundleResource Include="Resources\iphone_call.mp3" />
+    <BundleResource Include="Resources\waiting_call.aiff" />
+    <BundleResource Include="Resources\ringback.wav" />
+    <BundleResource Include="Resources\EndCallSound.wav" />
+    <BundleResource Include="Resources\progress_refresh.json" />
+    <BundleResource Include="Resources\progress_animation.json" />
+    <BundleResource Include="Resources\load_blue.json" />
+    <BundleResource Include="Resources\load_white.json" />
+    <BundleResource Include="Resources\message_received.mp3" />
+    <BundleResource Include="Resources\message_sent.mp3" />
+    <BundleResource Include="Resources\paperplane_loading.json" />
+    <BundleResource Include="Resources\image_loading.gif" />
+    <BundleResource Include="Resources\pt.lproj\InfoPlist.strings" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
-  <Import Project="..\packages\Realm.Database.3.0.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.0.0\build\Realm.Database.targets')" />
-  <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
+  <Import Project="..\packages\Realm.Database.3.2.1\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.2.1\build\Realm.Database.targets')" />
+  <Import Project="..\packages\Realm.3.2.1\build\Realm.targets" Condition="Exists('..\packages\Realm.3.2.1\build\Realm.targets')" />
+  <Import Project="..\packages\Fody.3.2.13\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.13\build\Fody.targets')" />
 </Project>

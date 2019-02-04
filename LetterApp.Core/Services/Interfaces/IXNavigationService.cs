@@ -9,5 +9,7 @@ namespace LetterApp.Core.Services.Interfaces
         void Initialize();
         Task NavigateAsync<TViewModel, TObject>(TObject data) where TViewModel : class, IXViewModel;
         Task Close<TViewModel>(TViewModel viewModel) where TViewModel : class, IXViewModel;
+        Task PopToRoot(bool animated);
+        int ChatOpen(int userId = 0);
     }
 }

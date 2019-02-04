@@ -128,7 +128,7 @@ namespace LetterApp.iOS.Helpers
             );
         }
 
-        public static void SlideVerticaly(this UIView view, bool isIn, bool fromTop, double duration = 0.3, Action onFinished = null)
+        public static void SlideVerticaly(this UIView view, bool isIn, bool fromTop, double duration = 0.3, Action onFinished = null, float delay = 0)
         {
             var minAlpha = (nfloat)0.0f;
             var maxAlpha = (nfloat)1.0f;
@@ -137,7 +137,7 @@ namespace LetterApp.iOS.Helpers
 
             view.Alpha = isIn ? minAlpha : maxAlpha;
             view.Transform = isIn ? minTransform : maxTransform;
-            UIView.Animate(duration, 0, UIViewAnimationOptions.CurveEaseInOut,
+            UIView.Animate(duration, delay, UIViewAnimationOptions.CurveEaseInOut,
                 () => {
                     view.Alpha = isIn ? maxAlpha : minAlpha;
                     view.Transform = isIn ? maxTransform : minTransform;
@@ -162,6 +162,22 @@ namespace LetterApp.iOS.Helpers
                 },
                 onFinished
             );
+        }
+
+        public static void AnimateBackground(UIView bgView, nfloat value)
+        {
+            UIView.Animate(0.3f, 0, UIViewAnimationOptions.BeginFromCurrentState, () =>
+            {
+                bgView.Frame = new CGRect(bgView.Frame.X, bgView.Frame.Y - value, bgView.Frame.Width, bgView.Frame.Height);
+            }, null);
+        }
+
+        public static void BackgroundToDefault(UIView bgView, CGRect defaultPosition)
+        {
+            UIView.Animate(0.3f, 0, UIViewAnimationOptions.BeginFromCurrentState, () =>
+            {
+                bgView.Frame = defaultPosition;
+            }, null);
         }
     }
 }

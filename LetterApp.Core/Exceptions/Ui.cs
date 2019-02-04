@@ -1,8 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using SharpRaven.Data;
+using Xamarin.Essentials;
 
 namespace LetterApp.Core.Exceptions
 {
@@ -14,44 +15,74 @@ namespace LetterApp.Core.Exceptions
         private static IRavenService _ravenService;
         private static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
+
         public static void Handle(TaskCanceledException e)
         {
             RavenService.Raven.Capture(new SentryEvent(e));
 
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            //if (Connectivity.NetworkAccess == NetworkAccess.Internet){}
+            //    //DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            //else
+                ////Handle(new NoInternetException());
         }
 
         public static void Handle(WrongCredentialsException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            RavenService.Raven.Capture(new SentryEvent(e));
+
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
+
+            #if DEBUG
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            #endif
         }
 
         public static void Handle(SessionTimeoutException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            RavenService.Raven.Capture(new SentryEvent(e));
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
+
+            #if DEBUG
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            #endif
+        }
+
+        public static void Handle(FeatureNotSupportedException e)
+        {
+            RavenService.Raven.Capture(new SentryEvent(e));
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
+
+            #if DEBUG
+                DialogService.ShowAlert(e.ToString(), AlertType.Error);
+            #endif
         }
 
         public static void Handle(NoInternetException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            if(!AppSettings.UserNoInternetNotified)
+            {
+                DialogService.ShowAlert(L10N.Localize("Dialogs_InternetException"), AlertType.Error);
+                AppSettings.UserNoInternetNotified = true;
+            }
         }
 
         public static void Handle(ServerErrorException e)
         {
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            RavenService.Raven.Capture(new SentryEvent(e));
+            DialogService.ShowAlert(CodeNull, AlertType.Error);
         }
 
         public static void Handle(Exception e)
         {
-            //if (!Plugin.Connectivity.CrossConnectivity.Current.IsConnected)
-            //{
-            //    Dialogs.ShowAlert(UiMessages.NoInternetErrorMessage, UiMessages.NoInternetErrorTitle);
-            //    return;
-            //}
+            RavenService.Raven.Capture(new SentryEvent(e));
 
             #if DEBUG
-            DialogService.ShowAlert(nameof(e), e.ToString());
+            DialogService.ShowAlert(e.ToString(), AlertType.Error);
             #endif
         }
+
+        #region Resources
+        static string CodeNull => L10N.Localize("Code_E105");
+        #endregion
     }
 }

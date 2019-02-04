@@ -1,0 +1,2 @@
+﻿NSPhotoLibraryUsageDescription = "Permita Letter aceder ao seu rolo da câmera para que possa enviar fotos.";
+NSMicrophoneUsageDescription = "Para habilitar chamadas dentro da aplicação, precisamos que permita acesso ao microfone.";

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="38" id="cxk-wN-pdQ" customClass="FileCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="38"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="37.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7d7-EM-Rel">
+                        <rect key="frame" x="66" y="5" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="azR-ew-ibK"/>
+                            <constraint firstAttribute="width" constant="24" id="nfM-fU-bLb"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8W0-PH-OND">
+                        <rect key="frame" x="100" y="8" width="205" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VJv-dX-8CV">
+                        <rect key="frame" x="66" y="0.0" width="239" height="34"/>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="8W0-PH-OND" firstAttribute="centerY" secondItem="7d7-EM-Rel" secondAttribute="centerY" id="KPb-J1-w2I"/>
+                    <constraint firstItem="VJv-dX-8CV" firstAttribute="trailing" secondItem="8W0-PH-OND" secondAttribute="trailing" id="Nax-jP-IsE"/>
+                    <constraint firstItem="8W0-PH-OND" firstAttribute="leading" secondItem="7d7-EM-Rel" secondAttribute="trailing" constant="10" id="bgP-A8-sou"/>
+                    <constraint firstItem="VJv-dX-8CV" firstAttribute="top" secondItem="7d7-EM-Rel" secondAttribute="top" constant="-5" id="cNf-Tt-HLd"/>
+                    <constraint firstItem="7d7-EM-Rel" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="66" id="gU3-Su-uRl"/>
+                    <constraint firstItem="7d7-EM-Rel" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="5" id="ibS-kv-l5T"/>
+                    <constraint firstItem="VJv-dX-8CV" firstAttribute="bottom" secondItem="7d7-EM-Rel" secondAttribute="bottom" constant="5" id="pE1-b4-tq1"/>
+                    <constraint firstAttribute="trailing" secondItem="8W0-PH-OND" secondAttribute="trailing" constant="15" id="q4Q-CI-ioO"/>
+                    <constraint firstItem="VJv-dX-8CV" firstAttribute="leading" secondItem="7d7-EM-Rel" secondAttribute="leading" id="wdr-6c-E1L"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="_button" destination="VJv-dX-8CV" id="uSD-oG-JwD"/>
+                <outlet property="_imageView" destination="7d7-EM-Rel" id="1OT-vJ-LeK"/>
+                <outlet property="_label" destination="8W0-PH-OND" id="Tnt-fb-eII"/>
+            </connections>
+            <point key="canvasLocation" x="25" y="49"/>
+        </tableViewCell>
+    </objects>
+</document>

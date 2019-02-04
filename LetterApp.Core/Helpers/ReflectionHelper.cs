@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace LetterApp.Core.Helpers
 {
@@ -48,9 +51,47 @@ namespace LetterApp.Core.Helpers
             return model;
         }
 
+        public static bool HasEmptyOrNullValues(object myObject)
+        {   
+            foreach (PropertyInfo pi in myObject.GetType().GetProperties())
+            {
+                if (pi.PropertyType == typeof(string))
+                {
+                    string value = (string)pi.GetValue(myObject);
+                    if (string.IsNullOrEmpty(value))
+                        return true;
+                }
+            }
+            return false;
+        }
+
         public static bool IsNull(this object T)
         {
             return T == null;
         } 
+
+        public static List<List<T>> SeparateInLists<T>(List<T> source, string orderBy)
+        {
+            PropertyInfo property = typeof(T).GetProperty(orderBy);
+
+            if (property == null)
+                return null;
+
+            return source
+                .GroupBy(s => property)
+                .OrderBy(g => g.Key)
+                .Select(g => g.ToList())
+                .ToList();
+        }
+
+        //public List<List<GetUsersInDivisionModel>> SeparateInLists(List<GetUsersInDivisionModel> source)
+        //{
+        //    return source
+        //        .OrderBy(o => o.FirstName)
+        //        .GroupBy(s => s.DivisionId)
+        //        .OrderBy(g => g.Key)
+        //        .Select(g => g.ToList())
+        //        .ToList();
+        //}
     }
 }

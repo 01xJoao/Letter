@@ -14,8 +14,9 @@ namespace LetterApp.iOS.Services
 {
     public class XiOSNavigationService : XNavigationService
     {
-        private RootViewController RootViewController;
+        public RootViewController RootViewController;
         private UINavigationController MasterNavigationController;
+        private int _openChatId;
 
         public override Task NavigatePlatformAsync<TViewModel, TObject>(TObject data)
         {
@@ -24,6 +25,8 @@ namespace LetterApp.iOS.Services
                 var viewController = CreateViewControllerForViewModel<TViewModel, TObject>(data);
                 ShowView(viewController);
             });
+
+            Debug.WriteLine($"Task Completed: NavigatePlatformAsync");
 
             return Task.CompletedTask;
         }
@@ -39,15 +42,7 @@ namespace LetterApp.iOS.Services
             var xVC = viewController as IXiOSView;
 
             if (xVC != null && !data.IsNull())
-            {
-                if(data is UIViewController controller)
-                {
-                    controller.HidesBottomBarWhenPushed = true;
-                    MasterNavigationController = controller.NavigationController;
-                }
-                else
-                    xVC.ParameterData = data; 
-            }
+                xVC.ParameterData = data;
 
             return viewController;
         }
@@ -56,16 +51,33 @@ namespace LetterApp.iOS.Services
         {
             if (viewController is IRootView)
             {
+                if (viewController is MainViewController)
+                {
+                    var xVC = viewController as IXiOSView;
+                    var index = xVC.ParameterData == null ? 0 : (int)xVC.ParameterData;
+                    var viewC = viewController as MainViewController;
+                    viewC.SetVisibleView(index);
+                }
+
+                Debug.WriteLine($"ViewController is a Root Controller");
                 SetRootViewController(viewController);
             }
             else
             {
                 var presentViewProperty = viewController?.GetType()?.GetProperty("ShowAsPresentView");
+                bool showAsModal = (bool)presentViewProperty?.GetValue(viewController);
 
-                if ((bool)presentViewProperty?.GetValue(viewController))
+                if(MasterNavigationController == null)
+                {
+                    Debug.WriteLine($"MasterNavigationController is null");
+                    SetRootViewController(new MainViewController());
+                }
+                if (showAsModal)
                     MasterNavigationController.PresentViewController(viewController, true, null);
                 else
                     MasterNavigationController.PushViewController(viewController, true);
+
+                Debug.WriteLine($"{viewController} was Pushed/Presented");
             }
         }
 
@@ -86,12 +98,15 @@ namespace LetterApp.iOS.Services
         {
             if(RootViewController == null)
             {
+                Debug.WriteLine($"RootViewController is null");
+
                 using(var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                 {
-                    RootViewController = appDelegate.Window.RootViewController as RootViewController;
+                    RootViewController = appDelegate.RootController;
+                    MasterNavigationController = RootViewController.NavigationController;
                 }
             }
-
+            Debug.WriteLine($"{viewController} added to RootViewController");
             RootViewController.AddViewToRoot(viewController);
         }
 
@@ -106,6 +121,17 @@ namespace LetterApp.iOS.Services
                 select type;
 
             return controllers;
+        }
+
+        public override Task PopToRoot(bool animated)
+        {
+            MasterNavigationController.PopToRootViewController(animated);
+            return Task.CompletedTask;
+        }
+
+        public override int ChatOpen(int userId)
+        {
+            return userId == 0 ? _openChatId : (_openChatId = userId);
         }
     }
 }

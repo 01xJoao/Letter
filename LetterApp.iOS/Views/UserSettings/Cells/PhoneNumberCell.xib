@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="cxk-wN-pdQ" customClass="PhoneNumberCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.59999999999999998" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WhY-5q-eL9">
+                        <rect key="frame" x="20" y="12" width="147" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" adjustsFontForContentSizeCategory="YES" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-6N-dd1">
+                        <rect key="frame" x="170" y="13.5" width="130" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="130" id="n7S-FA-Fsp"/>
+                        </constraints>
+                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="dhA-6N-dd1" firstAttribute="centerY" secondItem="WhY-5q-eL9" secondAttribute="centerY" id="3hh-lg-MTw"/>
+                    <constraint firstAttribute="trailing" secondItem="dhA-6N-dd1" secondAttribute="trailing" constant="20" id="NTR-de-hai"/>
+                    <constraint firstItem="WhY-5q-eL9" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="UvT-mq-R0L"/>
+                    <constraint firstItem="dhA-6N-dd1" firstAttribute="leading" secondItem="WhY-5q-eL9" secondAttribute="trailing" constant="3" id="ujx-Ot-xon"/>
+                    <constraint firstItem="WhY-5q-eL9" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="20" id="z18-lo-mQL"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="_label" destination="WhY-5q-eL9" id="xhA-Ve-dEb"/>
+                <outlet property="_textField" destination="dhA-6N-dd1" id="PIR-sA-GTv"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

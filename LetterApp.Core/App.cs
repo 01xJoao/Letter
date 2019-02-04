@@ -19,10 +19,15 @@ namespace LetterApp.Core
             NavigationService.NavigateAsync<LoadingViewModel, object>(null);
         }
 
+        public static void StartCall(int callerId)
+        {
+             NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(callerId, false));
+        }
+
         public static void Initialize()
         {
-            InitializeDatabase();
             InitializeIoC();
+            //InitializeDatabase();
         }
 
         public static void InitializeIoC()
@@ -70,7 +75,7 @@ namespace LetterApp.Core
         private static void InitializeDatabase()
         {
             //Update SchemaVersion if necessary
-            var config = new RealmConfiguration() { SchemaVersion = 0 };
+            var config = new RealmConfiguration() { SchemaVersion = 1 };
             Realm.GetInstance(config);
         }
     }

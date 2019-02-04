@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using LetterApp.Core.Services.Interfaces;
+using SharpRaven.Data;
 
 namespace LetterApp.Core.Helpers
 {
@@ -10,6 +12,9 @@ namespace LetterApp.Core.Helpers
     {
         private const int MaxRetries = 3;
         private readonly TimeSpan RetryTimeout = TimeSpan.FromSeconds(1);
+
+        public static IRavenService _ravenService;
+        public static IRavenService RavenService => _ravenService ?? (_ravenService = App.Container.GetInstance<IRavenService>());
 
         public RetryHandler(HttpMessageHandler innerHandler) : base(innerHandler) { }
 
@@ -25,7 +30,7 @@ namespace LetterApp.Core.Helpers
 
                 await Task.Delay(RetryTimeout, cancellationToken).ConfigureAwait(false);
             }
-
+            RavenService.Raven.Capture(new SentryEvent(new Exception("Retry Handler Exeception")));
             return null;
         }
     }
