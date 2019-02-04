@@ -59,6 +59,10 @@ namespace LetterApp.iOS.Helpers
 
         public static void AddViewToKeyboard(UITextField textField, UIButton button, UIColor buttonColor)
         {
+            //TODO This should be checked if necessary in a iOS 10 Physical Device
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                return;
+
             UIToolbar toolbar = new UIToolbar(new RectangleF(0f, 0f, 0f, 50f));
             toolbar.Translucent = false;
             toolbar.BarTintColor = buttonColor;

@@ -38,6 +38,18 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
 
 
         [Outlet]
+        UIKit.UILabel _filterByNameDescription { get; set; }
+
+
+        [Outlet]
+        UIKit.UILabel _filterByNameLabel { get; set; }
+
+
+        [Outlet]
+        UIKit.UISwitch _filterByNameSwitch { get; set; }
+
+
+        [Outlet]
         UIKit.UISwitch _switch { get; set; }
 
 
@@ -78,6 +90,21 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             if (_descriptionLabel != null) {
                 _descriptionLabel.Dispose ();
                 _descriptionLabel = null;
+            }
+
+            if (_filterByNameDescription != null) {
+                _filterByNameDescription.Dispose ();
+                _filterByNameDescription = null;
+            }
+
+            if (_filterByNameLabel != null) {
+                _filterByNameLabel.Dispose ();
+                _filterByNameLabel = null;
+            }
+
+            if (_filterByNameSwitch != null) {
+                _filterByNameSwitch.Dispose ();
+                _filterByNameSwitch = null;
             }
 
             if (_switch != null) {

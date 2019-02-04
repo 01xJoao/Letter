@@ -24,7 +24,12 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
+        private XPCommand _createOrganizationCommand;
+        public XPCommand CreateOrganizationCommand => _createOrganizationCommand ?? (_createOrganizationCommand = new XPCommand(async () => await OpenCreateOrganization()));
+
         public string EmailDomain { get; private set; }
+
+        public bool RegisterUser { get; private set; }
 
         public SelectOrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
         {
@@ -50,11 +55,16 @@ namespace LetterApp.Core.ViewModels
                 if(organization?.StatusCode == 200)
                 {
                     if (!organization.RequiresAccessCode)
+                    {
+                        AppSettings.OrganizationId = organization.OrganizationID;
+                        AppSettings.UserAndOrganizationIds = $"{AppSettings.UserId}-{AppSettings.OrganizationId}";
+                        RaisePropertyChanged(nameof(RegisterUser));
                         await NavigationService.NavigateAsync<SelectPositionViewModel, int>(organization.OrganizationID);
+                    }
                     else
                     {
                         IsBusy = false;
-                        var result = await _dialogService.ShowTextInput(organizationLabel, organization.Name, string.Empty, EnterButton, AccessHint, InputType.Text);
+                        var result = await _dialogService.ShowTextInput(OrganizationLabel, organization.Name, string.Empty, EnterButton, AccessHint, InputType.Text);
 
                         if(!string.IsNullOrEmpty(result))
                         {
@@ -84,6 +94,11 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task OpenCreateOrganization()
+        {
+            await BrowserUtils.OpenWebsite("https://www.lettermessenger.com");
+        }
+
         private async Task CloseView()
         {
             var result = await _dialogService.ShowQuestion(QuestionLabel, QuestionButton, QuestionType.Bad);
@@ -104,7 +119,8 @@ namespace LetterApp.Core.ViewModels
         public string TitleLabel            => L10N.Localize("SelectOrganization_TitleLabel");
         public string AccessButton          => L10N.Localize("SelectOrganization_AccessButton");
         public string OrganizationHint      => L10N.Localize("SelectOrganization_TextHint");
-        private string organizationLabel    => L10N.Localize("SelectOrganization_Organization");
+        public string CreateOrganization    => L10N.Localize("SelectOrganization_CreateOrg");
+        private string OrganizationLabel    => L10N.Localize("SelectOrganization_Organization");
         private string AccessHint           => L10N.Localize("SelectOrganization_AccessHint");
         private string EnterButton          => L10N.Localize("SelectOrganization_EnterButton");
         private string QuestionLabel        => L10N.Localize("DialogLogout_Question");

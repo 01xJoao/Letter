@@ -16,6 +16,7 @@ namespace LetterApp.iOS.Services
     {
         public RootViewController RootViewController;
         private UINavigationController MasterNavigationController;
+        private int _openChatId;
 
         public override Task NavigatePlatformAsync<TViewModel, TObject>(TObject data)
         {
@@ -50,7 +51,6 @@ namespace LetterApp.iOS.Services
         {
             if (viewController is IRootView)
             {
-
                 if (viewController is MainViewController)
                 {
                     var xVC = viewController as IXiOSView;
@@ -127,6 +127,11 @@ namespace LetterApp.iOS.Services
         {
             MasterNavigationController.PopToRootViewController(animated);
             return Task.CompletedTask;
+        }
+
+        public override int ChatOpen(int userId)
+        {
+            return userId == 0 ? _openChatId : (_openChatId = userId);
         }
     }
 }

@@ -9,6 +9,9 @@ namespace LetterApp.iOS.Helpers
     {
         public static Task<Stream> GetStreamFromImageByte(CancellationToken ct, string image)
         {
+            if (image == null)
+                return null;
+
             byte[] imageInBytes = Convert.FromBase64String(image);
             TaskCompletionSource<Stream> tcs = new TaskCompletionSource<Stream>();
             tcs.TrySetResult(new MemoryStream(imageInBytes));

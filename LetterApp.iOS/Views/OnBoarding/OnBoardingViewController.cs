@@ -77,6 +77,9 @@ namespace LetterApp.iOS.Views.OnBoarding
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             UIButtonExtensions.SetupButtonUnderlineAppearance(_signInButton, Colors.White, 16f, ViewModel.SignIn);
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 16f, ViewModel.SignUp);
             _pageParent.BackgroundColor = Colors.MainBlue;

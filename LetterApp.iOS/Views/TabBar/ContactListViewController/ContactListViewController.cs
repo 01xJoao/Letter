@@ -14,7 +14,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 {
-    public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating
+    public partial class ContactListViewController : XViewController<ContactListViewModel>, IUIScrollViewDelegate, IUISearchResultsUpdating, IUIGestureRecognizerDelegate
     {
         public override bool ShowAsPresentView => true;
 
@@ -22,7 +22,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private UIView _barView;
         private UIPageViewController _pageViewController;
         private List<XBoardPageViewController> _viewControllers;
-        private UIPanGestureRecognizer gesture = new UIPanGestureRecognizer();
+        private UIPanGestureRecognizer _tableViewGesture = new UIPanGestureRecognizer();
         private UISearchController _search;
         private UIViewController _visibleViewController;
         private UITextField _textFieldInsideSearchBar;
@@ -49,19 +49,25 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _separatorView.BackgroundColor = Colors.GrayDividerContacts;
             _separatorView.Hidden = true;
 
-            if (!ViewModel.IsPresentViewForCalls)
+            if (ViewModel.IsPresentingCustomView == ContactListViewModel.ContactsType.All)
             {
                 this.Title = ViewModel.Title;
-                this.NavigationController.NavigationBar.PrefersLargeTitles = true;
-                this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
-                this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "contacts_filter", OpenFilter);
+
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                {
+                    this.NavigationController.NavigationBar.PrefersLargeTitles = false;
+                    this.NavigationItem.LargeTitleDisplayMode = UINavigationItemLargeTitleDisplayMode.Never;
+                }
+
+                this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "contacts_filter", OpenFilter, false);
 
                 _presentView.Hidden = true;
                 _presentViewHeightConstraint.Constant = 0;
             }
             else
             {
-                UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewCallTitle, Colors.Black, 17f, UIFontWeight.Semibold);
+                UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.IsPresentingCustomView == ContactListViewModel.ContactsType.Call ? ViewModel.NewCallTitle : ViewModel.NewChatTitle,
+                                                       Colors.Black, 17f, UIFontWeight.Semibold);
                 UIButtonExtensions.SetupButtonAppearance(_cancelButton, _cancelButton.TintColor, 17f, ViewModel.Cancel);
 
                 _cancelButton.TitleLabel.Lines = 1;
@@ -79,30 +85,20 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             this.AddChildViewController(_pageViewController);
             _pageView.AddSubview(_pageViewController.View);
 
-            gesture.AddTarget(() => HandleDrag(gesture));
+            _tableViewGesture.AddTarget(() => HandleDrag(_tableViewGesture));
                      
             this.View.AddSubview(_barView);
             this.View.BringSubviewToFront(_barView);
 
             ConfigureView();
 
-            _search = new UISearchController(searchResultsController: null) {
-                DimsBackgroundDuringPresentation = false,    
-            };
-
+            _search = new UISearchController(searchResultsController: null) { DimsBackgroundDuringPresentation = false };
             _search.SearchBar.TintColor = Colors.White;
             _search.SearchBar.BarStyle = UIBarStyle.Black;
 
             _textFieldInsideSearchBar = _search.SearchBar.ValueForKey(new NSString("searchField")) as UITextField;
-            _textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
             _textFieldInsideSearchBar.ReturnKeyType = UIReturnKeyType.Done;
             _textFieldInsideSearchBar.ClearButtonMode = UITextFieldViewMode.Never;
-
-            var backgroundField = _textFieldInsideSearchBar.Subviews[0];
-            backgroundField.Alpha = 0f;
-
-            _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
-            _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("clear"), UISearchBarIcon.Clear, UIControlState.Normal);
 
             _search.SearchBar.OnEditingStarted -= OnSearchBar_OnEditingStarted;
             _search.SearchBar.OnEditingStarted += OnSearchBar_OnEditingStarted;
@@ -114,8 +110,27 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             _search.SearchBar.CancelButtonClicked += OnSearchBar_CancelButtonClicked;
 
             _search.SearchResultsUpdater = this;
-            this.DefinesPresentationContext = true;
-            this.NavigationItem.SearchController = _search;
+
+            if(UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                _textFieldInsideSearchBar.Text = ViewModel.SearchLabel;
+                _textFieldInsideSearchBar.Subviews[0].Alpha = 0.07f;
+
+                _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("search"), UISearchBarIcon.Search, UIControlState.Normal);
+                _search.SearchBar.SetImageforSearchBarIcon(UIImage.FromBundle("clear"), UISearchBarIcon.Clear, UIControlState.Normal);
+
+                this.DefinesPresentationContext = true;
+                this.NavigationItem.SearchController = _search;
+            }
+            else
+            {
+                this.DefinesPresentationContext = false;
+                _search.HidesNavigationBarDuringPresentation = false;
+                _search.SearchBar.BarStyle = UIBarStyle.Default;
+
+                if(_tableViews?.Count > 0)
+                    _tableViews.FirstOrDefault().TableHeaderView = _search.SearchBar;
+            }
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -171,14 +186,13 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         {
             if (ViewModel.ContactLists.Contacts.Count == 0)
                 return;
-            
-            //Page
+
             _viewControllers = new List<XBoardPageViewController>();
 
             int divisionView = 0;
             foreach (var divisionList in ViewModel.ContactLists.Contacts)
             {
-                var division = new ContactPageViewController(divisionView, divisionList, ContactEvent, ViewModel.IsPresentViewForCalls);
+                var division = new ContactPageViewController(divisionView, divisionList, ContactEvent, ViewModel.IsPresentingCustomView, ViewModel.IsFilteredByName);
                 _viewControllers.Add(division);
                 divisionView++;
             }
@@ -217,8 +231,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             UpdatePageView();
 
             _totalTabs = ViewModel.ContactTab.Count;
-            float screenWidth = (float)UIScreen.MainScreen.Bounds.Width;
-            var sizeForTab = screenWidth / _totalTabs;
+            var sizeForTab = _viewSize / _totalTabs;
             sizeForTab = sizeForTab < LocalConstants.Contacts_TabMinWidth ? LocalConstants.Contacts_TabMinWidth : sizeForTab;
 
             if ((int)sizeForTab == (int)LocalConstants.Contacts_TabMinWidth)
@@ -248,7 +261,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             _tabBarViewHeightConstraint.Constant = _totalTabs <= 1 ? LocalConstants.Contacts_TabMinHeight : LocalConstants.Contacts_TabHeight;
 
-            if(!ViewModel.IsPresentViewForCalls)
+            if(ViewModel.IsPresentingCustomView == ContactListViewModel.ContactsType.All)
                 _barView.Frame = new CGRect(0, _isSearchActive ? _heightForAnimationTab + _tabScrollView.Frame.Height - 2 : _tabBarViewHeightConstraint.Constant - 2, sizeForTab, 2);
             else
                 _barView.Frame = new CGRect(0, _presentViewHeightConstraint.Constant + _tabScrollView.Frame.Height - 2, sizeForTab, 2);
@@ -267,7 +280,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             _pageViewController.SetViewControllers(new UIViewController[]
             {
-                viewControllerVisible != null ? viewControllerVisible : _viewControllers.FirstOrDefault()
+                viewControllerVisible ??_viewControllers.FirstOrDefault()
             }, visibleTab > _currentPageViewIndex ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse, 
                                                    visibleTab != _currentPageViewIndex, DidFinishAnimating);
             
@@ -285,9 +298,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
             foreach(var subview in _tabScrollView.Subviews)
             {
-                var tabView = subview as TabBarView;
-
-                if (tabView != null)
+                if (subview is TabBarView tabView)
                 {
                     if (tabView.Division.IsSelected == true)
                         tabView.Division.IsSelected = false;
@@ -306,9 +317,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                         _tabCenter = (float)tabView.Center.X;
 
                         if (_disableUnderline)
-                            _tabScrollView.SetContentOffset(new CGPoint(tabView.Center.X - _viewSize/2, 0), true);
+                            _tabScrollView.SetContentOffset(new CGPoint(tabView.Center.X - _viewSize / 2, 0), true);
                     }
-                    
+
                     tabView.Configure(tabView.Division, _disableUnderline);
                 }
             }
@@ -342,10 +353,13 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void SetGestureRecognizer(bool shouldRemove = false)
         {
+            if (_tableViews == null)
+                return;
+
             var alreadyHasGesture = false;
             foreach (var ges in _tableViews[_currentPageViewIndex].GestureRecognizers)
             {
-                if (ges == gesture)
+                if (ges == _tableViewGesture)
                 {
                     alreadyHasGesture = true;
                     break;
@@ -353,9 +367,9 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
             }
 
             if (!alreadyHasGesture)
-                _tableViews[_currentPageViewIndex].AddGestureRecognizer(gesture);
+                _tableViews[_currentPageViewIndex].AddGestureRecognizer(_tableViewGesture);
             else if (alreadyHasGesture && shouldRemove)
-                _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(gesture);
+                _tableViews[_currentPageViewIndex].RemoveGestureRecognizer(_tableViewGesture);
         }
 
         [Export("scrollViewDidScroll:")]
@@ -389,7 +403,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
 
         private void OnSearchBar_OnEditingStarted(object sender, EventArgs e)
         {
-            if(!_isSearchActive)
+            if(!_isSearchActive && UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
                 _tabScrollTopConstraint.Constant = _heightForAnimationTab;
                 _pageView.SetNeedsLayout();
@@ -421,13 +435,16 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
                 _isKeyboardVisible = false;
                 _isSearchActive = false;
 
-                _tabScrollTopConstraint.Constant = 0;
-                UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
-                   () => {
-                       _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - _heightForAnimationTab, _barView.Frame.Width, _barView.Frame.Height);
-                       this.View.LayoutIfNeeded();
-                }, SetSearchView
-               );
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                {
+                    _tabScrollTopConstraint.Constant = 0;
+                    UIView.Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseInOut,
+                       () => {
+                           _barView.Frame = new CGRect(_barView.Frame.X, _barView.Frame.Y - _heightForAnimationTab, _barView.Frame.Width, _barView.Frame.Height);
+                           this.View.LayoutIfNeeded();
+                       }, SetSearchView
+                   );
+                }
             }
         }
 
@@ -439,7 +456,10 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         private void ContactEvent(object sender, Tuple<ContactListViewModel.ContactEventType, int> contact)
         {
             if (ViewModel.ContactCommand.CanExecute(contact))
+            {
+                _search.SearchBar.ResignFirstResponder();
                 ViewModel.ContactCommand.Execute(contact);
+            }
         }
 
         public override void ViewDidLayoutSubviews()
@@ -451,23 +471,47 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            NavigationItem.HidesSearchBarWhenScrolling = false;
 
-            if (ViewModel.IsPresentViewForCalls)
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                NavigationItem.HidesSearchBarWhenScrolling = false;
+
+            if (ViewModel.IsPresentingCustomView != ContactListViewModel.ContactsType.All)
                 UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
+
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
-            this.NavigationItem.HidesSearchBarWhenScrolling = true;
-            this.NavigationItem.SearchController.SearchBar.EndEditing(true);
 
-            if (this.IsMovingFromParentViewController && ViewModel.IsPresentViewForCalls)
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                this.NavigationItem.HidesSearchBarWhenScrolling = true;
+                this.NavigationItem.SearchController.SearchBar.EndEditing(true);
+            }
+
+            if (this.IsMovingFromParentViewController && ViewModel.IsPresentingCustomView != ContactListViewModel.ContactsType.All)
             {
                 MemoryUtility.ReleaseUIViewWithChildren(this.View);
             }
+
+            if(_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+        }
+
+
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }

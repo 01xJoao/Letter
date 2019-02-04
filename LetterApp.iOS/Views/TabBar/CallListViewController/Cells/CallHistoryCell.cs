@@ -37,7 +37,7 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController.Cells
                 Font = UIFont.SystemFontOfSize(14, call.ShouldAlert ? UIFontWeight.Semibold : UIFontWeight.Regular)
             };
 
-            var letterCount = call.CallerInfo.IndexOf("·");
+            var letterCount = call.CallerInfo.IndexOf("-") + 1;
 
             var customString = new NSMutableAttributedString(call.CallerInfo);
             customString.SetAttributes(nameAttr.Dictionary, new NSRange(0, letterCount));

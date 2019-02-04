@@ -17,7 +17,7 @@ namespace LetterApp.Core.Helpers
         }
 
         //https://stackoverflow.com/questions/11/calculate-relative-time-in-c-sharp
-        public static string CallsDateString(DateTime date)
+        public static string TimePassed(DateTime date)
         {
             var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
             double delta = Math.Abs(ts.TotalSeconds);
@@ -46,6 +46,45 @@ namespace LetterApp.Core.Helpers
             if (delta > 48 * HOUR && delta < 144 * HOUR || date.Date.AddDays(2) == DateTime.Now.Date)
                 return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
                 
+            return date.Date.ToShortDateString();
+        }
+
+        public static string DateForMessages(DateTime date)
+        {
+            var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
+            double delta = Math.Abs(ts.TotalSeconds);
+
+            if (date.Year != DateTime.Now.Year)
+                return date.Date.ToShortDateString();
+
+            if (date.Date == DateTime.Now.Date || delta <= 18 * HOUR)
+                return L10N.Locale() == "en-US" ? date.ToString("hh:mm tt") : date.ToString("HH:mm");
+
+            if (delta > 48 * HOUR && delta < 144 * HOUR || date.Date.AddDays(1) == DateTime.Now.Date)
+                return date.ToString("ddd");
+
+            string month = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(date.Month);
+
+            return L10N.Locale() == "en-US" ? $"{month} {date.Day}" : $"{date.Day} {month}";
+        }
+
+        public static string DateForChatHeader(DateTime date)
+        {
+            var ts = new TimeSpan(DateTime.Now.Ticks - date.Ticks);
+            double delta = Math.Abs(ts.TotalSeconds);
+            
+            if (date.Date == DateTime.Now.Date)
+                return L10N.Localize("date_Today");
+
+            if (date.Date.AddDays(1) == DateTime.Now.Date)
+                return L10N.Localize("date_Yesterday");
+
+            if (date.Date.AddDays(2) == DateTime.Now.Date || delta < 144 * HOUR)
+                return L10N.Localize($"date_{date.DayOfWeek.ToString()}");
+
+            if (date.Date.Year == DateTime.Now.Year)
+                return L10N.Locale() == "en-US" ? date.ToString("MMM dd") : date.ToString("dd MMM");
+
             return date.Date.ToShortDateString();
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Airbnb.Lottie;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -73,6 +72,9 @@ namespace LetterApp.iOS.Views.Login
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             UIButtonExtensions.SetupButtonAppearance(_signUpButton, Colors.MainBlue, 14f, ViewModel.SignUpButton);
             UIButtonExtensions.SetupButtonAppearance(_signInButton, Colors.White, 16f, ViewModel.SignInButton);
             UIButtonExtensions.SetupButtonAppearance(_forgotPassButton, Colors.MainBlue, 12f, ViewModel.ForgotPasswordButton);
@@ -87,7 +89,7 @@ namespace LetterApp.iOS.Views.Login
             UITextFieldExtensions.SetupField(this.View, 0, ViewModel.EmailLabel, _emailTextField, _emailLineView, _emailHeightConstraint, _emailLabel, UIReturnKeyType.Next, keyboardButton);
             
             _passwordTextField.SecureTextEntry = true;
-            _passwordWithConstraint.Constant = (UIScreen.MainScreen.Bounds.Width - 80) - (_forgotPassButton.Frame.Width + 7);
+            _passwordWithConstraint.Constant = (ScreenWidth - 80) - (_forgotPassButton.Frame.Width + 7);
             UITextFieldExtensions.SetupField(this.View, 1, ViewModel.PasswordLabel, _passwordTextField, _passwordLineView, _passwordHeightConstraint, _passwordLabel, UIReturnKeyType.Default, keyboardButton);
 
             _emailTextField.KeyboardType = UIKeyboardType.EmailAddress;
@@ -102,7 +104,7 @@ namespace LetterApp.iOS.Views.Login
 
         private void Loading()
         {
-             UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
+             UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _signInButton, ViewModel.SignInButton, ViewModel.IsSigningIn);
         }
 
         private void InvalidMail()
@@ -111,12 +113,12 @@ namespace LetterApp.iOS.Views.Login
             _emailLineView.BackgroundColor = Colors.Red;  
         } 
 
-        public override void OnKeyboardNotification(bool changeKeyboardState)
+        public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool changeKeyboardState)
         {
             if (ShouldAnimateView() && keyboardViewState != changeKeyboardState)
             {
                 keyboardViewState = changeKeyboardState;
-                UIViewAnimationExtensions.AnimateBackgroundView(this.View, LocalConstants.Login_HeightAnimation, keyboardViewState);
+                UIViewAnimationExtensions.AnimateView(this.View, LocalConstants.Login_HeightAnimation, keyboardViewState);
             }
         }
 
@@ -124,10 +126,7 @@ namespace LetterApp.iOS.Views.Login
         {
             var viewsInScreen = UIApplication.SharedApplication.KeyWindow.Subviews;
 
-            if ((viewsInScreen.Length == 1 || viewsInScreen.Last().Frame != this.View.Frame) && ViewIsVisible)
-                return true;
-
-            return false;
+            return (viewsInScreen.Length == 1 || viewsInScreen.Last().Frame != this.View.Frame) && ViewIsVisible;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -136,11 +135,23 @@ namespace LetterApp.iOS.Views.Login
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.Default;
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+
             _passwordLabel.Alpha = 0;
             _passwordTextField.Text = string.Empty;
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
         }
     }
 }

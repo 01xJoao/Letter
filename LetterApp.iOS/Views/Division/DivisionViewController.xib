@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,6 +13,7 @@
             <connections>
                 <outlet property="_button1" destination="DDD-k1-JOn" id="7mr-tJ-PMB"/>
                 <outlet property="_button2" destination="SyK-s8-Aj8" id="KBP-Gz-9iO"/>
+                <outlet property="_buttonHeightConstraint" destination="jUg-IQ-UlI" id="Dik-Au-LcW"/>
                 <outlet property="_buttonView1" destination="qRs-yP-wxa" id="LTQ-eb-skd"/>
                 <outlet property="_buttonView2" destination="0HC-hc-z6L" id="atu-Sd-Id1"/>
                 <outlet property="_descriptionLabel" destination="feE-v0-2de" id="opY-HL-yiE"/>
@@ -101,7 +100,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="187.5" height="55"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DDD-k1-JOn">
-                                    <rect key="frame" x="-1" y="0.0" width="188" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="55"/>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -113,10 +112,10 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0HC-hc-z6L">
-                            <rect key="frame" x="187" y="0.0" width="187.5" height="55"/>
+                            <rect key="frame" x="187.5" y="0.0" width="187.5" height="55"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SyK-s8-Aj8">
-                                    <rect key="frame" x="-0.5" y="0.0" width="187.5" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="55"/>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

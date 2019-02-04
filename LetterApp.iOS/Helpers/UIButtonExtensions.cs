@@ -7,19 +7,50 @@ namespace LetterApp.iOS.Helpers
 {
     public static class UIButtonExtensions
     {
-        public static UIBarButtonItem SetupImageBarButton(nfloat size, string imageName, EventHandler onTouchEvent)
+        public static UIBarButtonItem SetupImageBarButton(nfloat size, string imageName, EventHandler onTouchEvent, bool isBackButton = true)
         {
             var button = new UIButton(new CGRect(0, 0, size, size)) { ContentMode = UIViewContentMode.ScaleAspectFit };
             button.AddConstraint(NSLayoutConstraint.Create(button, NSLayoutAttribute.Width, NSLayoutRelation.Equal, 1, size));
             button.AddConstraint(NSLayoutConstraint.Create(button, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, size));
             button.SetImage(UIImage.FromBundle(imageName), UIControlState.Normal);
             button.SetTitle(string.Empty, UIControlState.Normal);
+            button.ContentEdgeInsets = new UIEdgeInsets(0, isBackButton ? -size/2 : 0, 0, isBackButton ? 0 : -size/2);
 
             button.TouchUpInside -= onTouchEvent;
             button.TouchUpInside += onTouchEvent;
 
             return new UIBarButtonItem(button);
         }
+
+        public static UIBarButtonItem SetupBarWithTwoButtons(nfloat size, string imageName, EventHandler onTouchEvent)
+        {
+            var button = new UIButton(new CGRect(0, 0, size, size)) { ContentMode = UIViewContentMode.ScaleAspectFit };
+            button.AddConstraint(NSLayoutConstraint.Create(button, NSLayoutAttribute.Width, NSLayoutRelation.Equal, 1, size/1.5f));
+            button.AddConstraint(NSLayoutConstraint.Create(button, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, size));
+            button.SetImage(UIImage.FromBundle(imageName), UIControlState.Normal);
+            button.SetTitle(string.Empty, UIControlState.Normal);
+            button.ContentEdgeInsets = new UIEdgeInsets(0, 0, 0, -5);
+
+            button.TouchUpInside -= onTouchEvent;
+            button.TouchUpInside += onTouchEvent;
+
+            return new UIBarButtonItem(button);
+        }
+
+        //public static UIBarButtonItem SetupImageBarSecondButton(nfloat size, string imageName, EventHandler onTouchEvent)
+        //{
+        //    var button = new UIButton(new CGRect(0, 0, size, size)) { ContentMode = UIViewContentMode.ScaleAspectFit };
+        //    button.AddConstraint(NSLayoutConstraint.Create(button, NSLayoutAttribute.Width, NSLayoutRelation.Equal, 1, size));
+        //    button.AddConstraint(NSLayoutConstraint.Create(button, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, size));
+        //    button.SetImage(UIImage.FromBundle(imageName), UIControlState.Normal);
+        //    button.SetTitle(string.Empty, UIControlState.Normal);
+        //    button.ContentEdgeInsets = new UIEdgeInsets(0, 0, 0, 0);
+
+        //    button.TouchUpInside -= onTouchEvent;
+        //    button.TouchUpInside += onTouchEvent;
+
+        //    return new UIBarButtonItem(button);
+        //}
 
         public static UIBarButtonItem SetupTextBarButton(nfloat size, string textButton, EventHandler onTouchEvent, UIColor color = null)
         {

@@ -19,5 +19,10 @@ namespace LetterApp.Core.Services
         {
             return await _webService.GetAsync<List<GetUsersInDivisionModel>>("users/divisions", needsHeaderCheck: true).ConfigureAwait(false);
         }
+
+        public async Task<NotificationTokenModel> GetUserPushToken(int userId)
+        {
+            return await _webService.GetAsync<NotificationTokenModel>($"users/gettoken/{userId}", needsHeaderCheck: true).ConfigureAwait(false);
+        }
     }
 }

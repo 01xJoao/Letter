@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LetterApp.Core.Localization;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Helpers;
 using UIKit;
@@ -42,6 +41,8 @@ namespace LetterApp.iOS.Views.CustomViews.Dialog
             _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
             _closeButton.ContentMode = UIViewContentMode.ScaleAspectFit;
             _closeButton.TintColor = Colors.Black;
+
+            _separatorView.BackgroundColor = Colors.AlertDividerColor;
 
             _button1.TouchUpInside -= OnButton1_TouchUpInside;
             _button1.TouchUpInside += OnButton1_TouchUpInside;

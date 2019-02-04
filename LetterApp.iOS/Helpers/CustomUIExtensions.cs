@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using CoreGraphics;
 using UIKit;
 
@@ -28,6 +29,16 @@ namespace LetterApp.iOS.Helpers
             view.Layer.ShadowOpacity = 4f;
             view.Layer.ShadowOffset = new CGSize(0.5f, 0.5f);
             view.Layer.ShadowRadius = 6f;
+        }
+
+        public static void ViewShadowForChatPupUp(UIView view)
+        {
+            view.ClipsToBounds = false;
+            view.Layer.ShadowColor = Colors.Black.ColorWithAlpha(0.2f).CGColor;
+            view.Layer.ShadowOpacity = 2f;
+            view.Layer.ShadowOffset = new CGSize(0.5f, 0.5f);
+            view.Layer.ShadowRadius = 2f;
+            view.Layer.CornerRadius = 4f;
         }
 
         public static void ImageShadow(UIView view)
@@ -63,11 +74,69 @@ namespace LetterApp.iOS.Helpers
             view.Layer.MasksToBounds = true;
         }
 
+        public static void CornerView(UIView view, int cornerSize)
+        {
+            view.Layer.CornerRadius = cornerSize;
+            view.ClipsToBounds = true;
+        }
+
+
         public static void BorderView(UIView view)
         {
             view.Layer.CornerRadius = view.Frame.Height / 2;
             view.Layer.BorderColor = Colors.MainBlue.CGColor;
             view.Layer.BorderWidth = 1f;
+        }
+
+        public static UIView SetupNavigationBarWithSubtitle(string title, string subtitle, nfloat maxSize)
+        {
+            var titleLabel = new UILabel(new CGRect(0, 2, 0, 0))
+            {
+                BackgroundColor = UIColor.Clear,
+                TextColor = Colors.White,
+                Font = UIFont.BoldSystemFontOfSize(17),
+                Text = title,
+                LineBreakMode = UILineBreakMode.MiddleTruncation
+            };
+
+            titleLabel.SizeToFit();
+
+            var subtitleLabel = new UILabel(new CGRect(0, 25, 0, 0))
+            {
+                BackgroundColor = UIColor.Clear,
+                TextColor = Colors.White,
+                Font = UIFont.SystemFontOfSize(12),
+                Text = subtitle,
+                LineBreakMode = UILineBreakMode.MiddleTruncation
+            };
+
+            subtitleLabel.SizeToFit();
+
+            if(titleLabel.Frame.Width > maxSize)
+                titleLabel.Frame = new CGRect(titleLabel.Frame.X, titleLabel.Frame.Y, maxSize, titleLabel.Frame.Height);
+
+            if (subtitleLabel.Frame.Width > maxSize)
+                subtitleLabel.Frame = new CGRect(subtitleLabel.Frame.X, subtitleLabel.Frame.Y, maxSize, subtitleLabel.Frame.Height);
+
+            var titleView = new UIView(new CGRect(0, 0, Math.Max(titleLabel.Frame.Size.Width, subtitleLabel.Frame.Size.Width), 32));
+
+            titleView.AddSubview(titleLabel);
+            titleView.AddSubview(subtitleLabel);
+
+            var widthDiff = subtitleLabel.Frame.Size.Width - titleLabel.Frame.Size.Width;
+
+            if(widthDiff < 0)
+            {
+                var newX = widthDiff / 2;
+                subtitleLabel.Frame = new CGRect(Math.Abs(newX), subtitleLabel.Frame.Y, subtitleLabel.Frame.Width, subtitleLabel.Frame.Height);
+            }
+            else
+            {
+                var newX = widthDiff / 2;
+                titleLabel.Frame = new CGRect(Math.Abs(newX), titleLabel.Frame.Y, titleLabel.Frame.Width, titleLabel.Frame.Height);
+            }
+
+            return titleView;
         }
     }
 }

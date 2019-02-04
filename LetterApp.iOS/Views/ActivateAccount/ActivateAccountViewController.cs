@@ -38,6 +38,12 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+            {
+                _navigationTopConstraint.Constant = LocalConstants.IphoneXNotchHeight;
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
+
             UIButtonExtensions.SetupButtonAppearance(_button, Colors.White, 16f, ViewModel.SubmitButton);
             UIButtonExtensions.SetupButtonAppearance(_requestCodeButton, Colors.MainBlue, 15f, ViewModel.ResendCodeButton);
             UILabelExtensions.SetupLabelAppearance(_activateLabel, ViewModel.ActivateLabel, Colors.GrayDivider, 14f);
@@ -71,7 +77,7 @@ namespace LetterApp.iOS.Views.ActivateAccount
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _button, ViewModel.SubmitButton, ViewModel.IsActivating);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _button, ViewModel.SubmitButton, ViewModel.IsActivating);
         }
 
         private void OnRequestCodeButton_TouchUpInside(object sender, EventArgs e)

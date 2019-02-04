@@ -23,22 +23,28 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(AuthTokenExpirationDate), value);
         }
 
-        public static string PubNubToken
+        public static string MessengerToken
         {
-            get => Preferences.Get(nameof(PubNubToken), string.Empty);
-            set => Preferences.Set(nameof(PubNubToken), value);
-        }
-
-        public static long PubNubTokenExpirationDate
-        {
-            get => Preferences.Get(nameof(PubNubTokenExpirationDate), default(DateTime).Ticks);
-            set => Preferences.Set(nameof(PubNubTokenExpirationDate), value);
+            get => Preferences.Get(nameof(MessengerToken), string.Empty);
+            set => Preferences.Set(nameof(MessengerToken), value);
         }
 
         public static int UserId
         {
             get => Preferences.Get(nameof(UserId), 0);
             set => Preferences.Set(nameof(UserId), value);
+        }
+
+        public static int OrganizationId
+        {
+            get => Preferences.Get(nameof(OrganizationId), 0);
+            set => Preferences.Set(nameof(OrganizationId), value);
+        }
+
+        public static string UserAndOrganizationIds
+        {
+            get => Preferences.Get(nameof(UserAndOrganizationIds), string.Empty);
+            set => Preferences.Set(nameof(UserAndOrganizationIds), value);
         }
 
         public static string UserEmail
@@ -77,10 +83,16 @@ namespace LetterApp.Core
             set => Preferences.Set(nameof(UserNoInternetNotified), value);
         }
 
-        public static bool FilteredMembers
+        public static bool FilterByMainDivision
         {
-            get => Preferences.Get(nameof(FilteredMembers), false);
-            set => Preferences.Set(nameof(FilteredMembers), value);
+            get => Preferences.Get(nameof(FilterByMainDivision), false);
+            set => Preferences.Set(nameof(FilterByMainDivision), value);
+        }
+
+        public static bool FilterByName
+        {
+            get => Preferences.Get(nameof(FilterByName), true);
+            set => Preferences.Set(nameof(FilterByName), value);
         }
 
         public static int BadgeForChat
@@ -100,15 +112,17 @@ namespace LetterApp.Core
             Preferences.Remove(nameof(IsUserLogged));
             Preferences.Remove(nameof(AuthToken));
             Preferences.Remove(nameof(AuthTokenExpirationDate));
-            Preferences.Remove(nameof(PubNubToken));
-            Preferences.Remove(nameof(PubNubTokenExpirationDate));
+            //Preferences.Remove(nameof(MessengerToken));
             Preferences.Remove(nameof(MainMenuAllowed));
             Preferences.Remove(nameof(UserId));
             Preferences.Remove(nameof(MessageNotifications));
             Preferences.Remove(nameof(CallNotifications));
             Preferences.Remove(nameof(GroupNotifications));
             Preferences.Remove(nameof(UserNoInternetNotified));
-            Preferences.Remove(nameof(FilteredMembers));
+            Preferences.Remove(nameof(FilterByMainDivision));
+            Preferences.Remove(nameof(FilterByName));
+            Preferences.Remove(nameof(OrganizationId));
+            Preferences.Remove(nameof(UserAndOrganizationIds));
 
             Preferences.Remove(nameof(BadgeForChat));
             Preferences.Remove(nameof(BadgeForCalls));

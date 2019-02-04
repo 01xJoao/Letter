@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PictureViewController">
+            <connections>
+                <outlet property="_blurView" destination="Lqx-aP-Naa" id="dhB-bR-pC3"/>
+                <outlet property="_bottomHeightConstraint" destination="Nqd-bh-SjS" id="Pva-xv-EyW"/>
+                <outlet property="_cancelButton" destination="Ni2-qd-l6H" id="fx1-Ko-iZ8"/>
+                <outlet property="_imageView" destination="6AN-Ld-biQ" id="3wr-EU-jPu"/>
+                <outlet property="_sendButton" destination="C3B-qc-C9x" id="E6n-PP-GMs"/>
+                <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="2">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lqx-aP-Naa">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6AN-Ld-biQ">
+                    <rect key="frame" x="5" y="44.5" width="310" height="379"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C3B-qc-C9x">
+                    <rect key="frame" x="5" y="465" width="310" height="50"/>
+                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="T8S-yv-akJ"/>
+                    </constraints>
+                    <state key="normal" title="Send">
+                        <color key="titleColor" red="0.97389492099999997" green="1" blue="0.96909464540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ni2-qd-l6H">
+                    <rect key="frame" x="5" y="520" width="310" height="45"/>
+                    <color key="backgroundColor" red="0.97389492099999997" green="1" blue="0.96909464540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="x6o-5s-b11"/>
+                    </constraints>
+                    <state key="normal" title="Cancel">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="6AN-Ld-biQ" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="0No-os-KyD"/>
+                <constraint firstAttribute="trailing" secondItem="C3B-qc-C9x" secondAttribute="trailing" constant="5" id="AGz-Sh-vaI"/>
+                <constraint firstItem="C3B-qc-C9x" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="5" id="BVv-5v-UAw"/>
+                <constraint firstItem="Ni2-qd-l6H" firstAttribute="top" secondItem="C3B-qc-C9x" secondAttribute="bottom" constant="5" id="Cgm-nm-xD4"/>
+                <constraint firstItem="6AN-Ld-biQ" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" constant="-50" id="DT4-Wk-7KO"/>
+                <constraint firstItem="6AN-Ld-biQ" firstAttribute="width" secondItem="2" secondAttribute="width" multiplier="6/6.2" id="EVF-6Q-MLF"/>
+                <constraint firstAttribute="bottom" secondItem="Ni2-qd-l6H" secondAttribute="bottom" constant="3" id="Nqd-bh-SjS"/>
+                <constraint firstItem="Lqx-aP-Naa" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="U0v-BD-9as"/>
+                <constraint firstItem="Ni2-qd-l6H" firstAttribute="trailing" secondItem="C3B-qc-C9x" secondAttribute="trailing" id="aA8-30-giO"/>
+                <constraint firstItem="Lqx-aP-Naa" firstAttribute="width" secondItem="2" secondAttribute="width" id="dLt-Ov-0D7"/>
+                <constraint firstItem="Lqx-aP-Naa" firstAttribute="height" secondItem="2" secondAttribute="height" id="en3-8X-u3Q"/>
+                <constraint firstItem="Lqx-aP-Naa" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="iDT-ZJ-7jC"/>
+                <constraint firstItem="Ni2-qd-l6H" firstAttribute="leading" secondItem="C3B-qc-C9x" secondAttribute="leading" id="oNa-T4-0DE"/>
+                <constraint firstItem="6AN-Ld-biQ" firstAttribute="height" secondItem="2" secondAttribute="height" multiplier="1/1.5" id="qp3-vw-kDt"/>
+            </constraints>
+            <point key="canvasLocation" x="24.375" y="50.70422535211268"/>
+        </view>
+    </objects>
+</document>

@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,7 +15,6 @@
                 <outlet property="_buttonPicker" destination="PPw-3p-XB1" id="sAv-Pf-t36"/>
                 <outlet property="_buttonPickerView" destination="Jtm-VY-FtS" id="ffa-sl-bC3"/>
                 <outlet property="_buttonView" destination="boZ-CS-7ew" id="AVU-kN-a8c"/>
-                <outlet property="_loadingView" destination="htE-Hh-XIB" id="1Nc-it-MNl"/>
                 <outlet property="_picker" destination="vTe-ud-4RX" id="r4Y-Lj-9Y4"/>
                 <outlet property="_pickerImage" destination="KpR-TS-o8P" id="mtY-QS-eGj"/>
                 <outlet property="_pickerLabel" destination="WH2-UJ-GYJ" id="ZqO-y3-OUh"/>
@@ -111,21 +109,11 @@
                         <constraint firstAttribute="trailing" secondItem="vTe-ud-4RX" secondAttribute="trailing" id="sKk-YG-DuN"/>
                     </constraints>
                 </view>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htE-Hh-XIB">
-                    <rect key="frame" x="137.5" y="283" width="100" height="100"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="100" id="g7e-qg-iA0"/>
-                        <constraint firstAttribute="width" secondItem="htE-Hh-XIB" secondAttribute="height" id="zfE-zV-rKT"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="htE-Hh-XIB" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="CgJ-qp-rFa"/>
                 <constraint firstItem="5eo-1m-EL9" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="Pws-xJ-AAo"/>
                 <constraint firstItem="5eo-1m-EL9" firstAttribute="width" secondItem="2" secondAttribute="width" id="all-ft-EnW"/>
-                <constraint firstItem="htE-Hh-XIB" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="g3f-x1-z7m"/>
                 <constraint firstItem="5eo-1m-EL9" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="k4v-uP-W1h"/>
                 <constraint firstItem="5eo-1m-EL9" firstAttribute="height" secondItem="2" secondAttribute="height" id="mZU-VW-58B"/>
             </constraints>

@@ -153,7 +153,7 @@
   },
   {
     "key": "OnBoardingViewModel_SignUp",
-    "translated": "Criar Conta"
+    "translated": "Criar conta gratuita"
   },
   {
     "key": "MainViewModel_ChatTab",
@@ -185,7 +185,7 @@
   },
   {
     "key": "LoginViewModel_SignUpButton",
-    "translated": "Primeira vêz a usar Letter? Crie uma conta!"
+    "translated": "Primeira vêz a usar Letter? Crie uma conta gratuita!"
   },
   {
     "key": "LoginViewModel_SignInButton",
@@ -350,6 +350,10 @@
   {
     "key": "SelectOrganization_EnterButton",
     "translated": "Entrar"
+  },
+  {
+    "key": "SelectOrganization_CreateOrg",
+    "translated": "Registar nova organização gratuitamente"
   },
   {
     "key": "SelectDivision_PrivateLabel",
@@ -533,7 +537,7 @@
   },
   {
     "key": "UserSettings_CreateOrgLabel",
-    "translated": "Criar uma organização"
+    "translated": "Registar nova organização gratuitamente"
   },
   {
     "key": "UserSettings_SignOutLabel",
@@ -664,6 +668,10 @@
     "translated": "Nova Chamada"
   },
   {
+    "key": "Contacts_NewChat",
+    "translated": "Nova Conversa"
+  },
+  {
     "key": "Contacts_DialogTitle",
     "translated": "Filtrar Contactos"
   },
@@ -682,6 +690,14 @@
   {
     "key": "Contacts_Search",
     "translated": "Procurar por nome, email, posição..."
+  },
+  {
+    "key": "Contacts_DialogFilterByName",
+    "translated": "Filtrar utilizadores por nome"
+  },
+  {
+    "key": "Contacts_DialogFilterByNameDescription",
+    "translated": "Se desligado, os utilizadores são agrupados por posição."
   },
   {
     "key": "Member_NoDescription",
@@ -736,8 +752,20 @@
     "translated": "Permissões de microfone são necessárias."
   },
   {
+    "key": "Calls_CallActionInfo",
+    "translated": "Info"
+  },
+  {
+    "key": "Calls_CallStackTitle",
+    "translated": "Chamadas"
+  },
+  {
     "key": "Call_OpenSettingsAlert",
     "translated": "Abrir Definições"
+  },
+  {
+    "key": "Call_FailedCall",
+    "translated": "☎ Perdeu uma chamada de"
   },
   {
     "key": "ContactDialog_Title",
@@ -846,5 +874,85 @@
   {
     "key": "Contacts_NoResults",
     "translated": "Sem Resultados"
+  },
+  {
+    "key": "ChatList_Title",
+    "translated": "Conversas"
+  },
+  {
+    "key": "ChatList_NoChats",
+    "translated": "Começa uma nova conversa"
+  },
+  {
+    "key": "ChatList_Archive",
+    "translated": "Arquivar"
+  },
+  {
+    "key": "ChatList_Mute",
+    "translated": "Silêncio"
+  },
+  {
+    "key": "ChatList_UnMute",
+    "translated": "Alertar"
+  },
+  {
+    "key": "ChatList_You",
+    "Translated": "Tu:"
+  },
+  {
+    "key": "ChatList_SentImage",
+    "Translated": "Enviou uma imagem"
+  },
+  {
+    "key": "Chat_SendingMessage",
+    "translated": "A enviar..."
+  },
+  {
+    "key": "Chat_TypingMessage",
+    "translated": "A escrever..."
+  },
+  {
+    "key": "Chat_SeenMessage",
+    "Translated": "Vista"
+  },
+  {
+    "key": "Chat_SendMessage",
+    "Translated": "Enviar"
+  },
+  {
+    "key": "ChatList_UserNotRegistered",
+    "Translated": "Este utilizador ainda não terminou o registo."
+  },
+  {
+    "key": "ChatList_MessageError",
+    "Translated": "Erro no envio, clica na mensagem para tentar novamente."
+  },
+  {
+    "key": "ChatList_UserNotFound",
+    "Translated": "Utilizador não encontrado, por favor verifique se utilizador existe nos contactos."
+  },
+  {
+    "key": "Chat_Archive",
+    "translated": "Arquivar conversa"
+  },
+  {
+    "key": "Chat_UserMuted",
+    "translated": "Conversa silenciada"
+  },
+  {
+    "key": "Chat_UserProfile",
+    "translated": "Ver perfil de utilizador"
+  },
+  {
+    "key": "Chat_Close",
+    "translated": "Fechar"
+  },
+  {
+    "key": "Chat_MuteInApp",
+    "translated": "Apenas notificações dentro da app."
+  },
+  {
+    "key": "Chat_SaveImage",
+    "Translated": "Guardar Imagem"
   }
 ]

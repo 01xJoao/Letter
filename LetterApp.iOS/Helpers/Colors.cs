@@ -1,5 +1,4 @@
-﻿using System;
-using UIKit;
+﻿using UIKit;
 
 namespace LetterApp.iOS.Helpers
 {
@@ -34,5 +33,16 @@ namespace LetterApp.iOS.Helpers
         public static UIColor GrayDividerContacts => UIColor.FromRGB(225, 225, 225);    
         public static UIColor CallDetail => UIColor.FromRGB(148, 148, 148);
         public static UIColor DescriptionCall => UIColor.FromRGB(143, 143, 143);
+        public static UIColor AlertDividerColor => UIColor.FromRGB(230, 230, 230);
+        public static UIColor MessageTextColor => UIColor.FromRGB(102, 102, 102);
+        public static UIColor BlackChatName => UIColor.FromRGB(9, 9, 9);
+        public static UIColor ChatDivider => UIColor.FromRGB(226, 225, 228);
+        public static UIColor UserOnline => UIColor.FromRGB(66, 179, 26);
+        public static UIColor UserRecent => UIColor.FromRGB(255, 171, 29);
+        public static UIColor ChatPopUp => UIColor.FromRGB(250, 250, 251);
+        public static UIColor UnreadCount => UIColor.FromRGB(0, 111, 170);
+        public static UIColor KeyboardView => UIColor.FromRGB(246, 246, 246);
+        public static UIColor SenderButton => UIColor.FromRGB(17, 116, 175);
+        public static UIColor ChatDate => UIColor.FromRGB(105, 105, 105);
     }
 }

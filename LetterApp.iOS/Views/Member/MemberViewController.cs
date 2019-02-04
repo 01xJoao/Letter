@@ -1,12 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using CallKit;
 using FFImageLoading;
 using FFImageLoading.Transformations;
 using FFImageLoading.Work;
-using Foundation;
 using LetterApp.Core.ViewModels;
-using LetterApp.iOS.CallKit;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
@@ -35,13 +32,14 @@ namespace LetterApp.iOS.Views.Member
                 case nameof(ViewModel.MemberProfileModel):
                     UpdateView();
                     break;
-                default:
-                    break;
             }
         }
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += 20;
+
             _backHeightConstraint.Constant = _backHeightConstraint.Constant + (PhoneModelExtensions.IsIphoneX() ? 20 : 0); 
 
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
@@ -91,7 +89,7 @@ namespace LetterApp.iOS.Views.Member
 
         private void OnChatButton_TouchUpInside(object sender, EventArgs e)
         {
-            
+            ViewModel.ChatCommand.Execute();
         }
 
         private void OnBackButton_TouchUpInside(object sender, EventArgs e)
@@ -103,6 +101,12 @@ namespace LetterApp.iOS.Views.Member
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            this.NavigationController.SetNavigationBarHidden(true, true);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
             this.NavigationController.SetNavigationBarHidden(false, false);
             this.NavigationController.NavigationBar.Hidden = true;
         }
@@ -110,9 +114,7 @@ namespace LetterApp.iOS.Views.Member
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-
             this.NavigationController.SetNavigationBarHidden(true, false);
-            this.NavigationController.NavigationBar.Hidden = false;
         }
 
         public override void ViewDidDisappear(bool animated)

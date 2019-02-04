@@ -65,9 +65,8 @@ namespace LetterApp.Core.ViewModels
                 if(result.StatusCode == 200)
                 {
                     await SecureStorage.SetAsync("password", value.Item2);
-
                     await CloseView();
-                    await Task.Delay(TimeSpan.FromSeconds(0.3));
+                    await Task.Delay(TimeSpan.FromSeconds(0.3f));
                     _dialogService.ShowAlert(PasswordChanged, AlertType.Success, 5f);
                 }
                 else

@@ -12,6 +12,7 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 {
     public partial class ContactsCell : UITableViewCell
     {
+        private ContactsType _showContactType;
         private int _userId;
         private string _picture;
         private EventHandler<Tuple<ContactEventType, int>> _contactEventHandler;
@@ -19,12 +20,13 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
         public static readonly UINib Nib = UINib.FromName("ContactsCell", NSBundle.MainBundle);
         protected ContactsCell(IntPtr handle) : base(handle) {}
 
-        public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler, bool showOnlyCalls)
+        public void Configure(GetUsersInDivisionModel user, EventHandler<Tuple<ContactEventType, int>> contactEventHandler, ContactsType showContactType)
         {
             _imageView.Image?.Dispose();
             _chatImage.Image?.Dispose();
             _callImage.Image?.Dispose();
 
+            _showContactType = showContactType;
             _userId = user.UserId;
             _contactEventHandler = contactEventHandler;
 
@@ -50,19 +52,32 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
             _callButton.TouchUpInside -= OnCallButton_TouchUpInside;
             _callButton.TouchUpInside += OnCallButton_TouchUpInside;
 
-            if(!showOnlyCalls)
-            {
-                _chatImage.Image = UIImage.FromBundle("user_chat");
 
-                _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
-                _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
-            }
-            else
-            {
-                _chatImage.Hidden = true;
-                _chatButton.Hidden = true;
-            }
+            _chatImage.Image = UIImage.FromBundle("user_chat");
 
+            _chatButton.TouchUpInside -= OnChatButton_TouchUpInside;
+            _chatButton.TouchUpInside += OnChatButton_TouchUpInside;
+
+            switch (showContactType)
+            {
+                case ContactsType.All:
+                    _chatButton.Hidden = false;
+                    _chatImage.Hidden = false;
+                    _callImage.Hidden = false;
+                    _callButton.Hidden = false;
+                    break;
+                case ContactsType.Call:
+                    _chatButton.Hidden = true;
+                    _chatImage.Hidden = true;
+                    break;
+                case ContactsType.Chat:
+                    _chatButton.Hidden = true;
+                    _chatImage.Hidden = true;
+                    _callImage.Image = UIImage.FromBundle("user_chat");
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void CleanString(IScheduledWork obj)
@@ -77,7 +92,10 @@ namespace LetterApp.iOS.Views.TabBar.ContactListViewController.Cells
 
         private void OnCallButton_TouchUpInside(object sender, EventArgs e)
         {
-            _contactEventHandler?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.Call, _userId));
+            if(_showContactType != ContactsType.Chat)
+                _contactEventHandler?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.Call, _userId));
+            else
+                _contactEventHandler?.Invoke(this, new Tuple<ContactEventType, int>(ContactEventType.Chat, _userId));
         }
     }
 }

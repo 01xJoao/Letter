@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LetterApp.Core.Exceptions;
@@ -7,7 +6,6 @@ using LetterApp.Core.Helpers;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Core.ViewModels.TabBarViewModels;
-using LetterApp.Models.DTO.ReceivedModels;
 
 namespace LetterApp.Core.ViewModels
 {
@@ -24,18 +22,21 @@ namespace LetterApp.Core.ViewModels
         private IDialogService _dialogService;
         private IStatusCodeService _statusCodeService;
         private ISettingsService _settingsService;
+        private IMessengerService _mesengersService;
 
-        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, ISettingsService settingsService)
+        public LoadingViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusCodeService, 
+                                ISettingsService settingsService, IMessengerService mesengersService)
         {
             _settingsService = settingsService;
             _authService = authService;
             _dialogService = dialogService;
             _statusCodeService = statusCodeService;
+            _mesengersService = mesengersService;
         }
 
         public override async Task InitializeAsync()
         {
-            await Task.Delay(TimeSpan.FromSeconds(0.3));
+            await Task.Delay(TimeSpan.FromSeconds(0.5f));
 
             try
             {
@@ -64,13 +65,21 @@ namespace LetterApp.Core.ViewModels
                         return;
                     }
 
-                    bool updateSinch = AppSettings.UserId == 0;
-
                     AppSettings.UserId = userCheck.UserID;
+
                     var user = RealmUtils.UpdateUser(Realm, userCheck);
 
-                    if (updateSinch)
+                    if (user?.OrganizationID > 0)
+                    {
+                        AppSettings.OrganizationId = (int)user.OrganizationID;
+                        AppSettings.UserAndOrganizationIds = $"{AppSettings.UserId}-{AppSettings.OrganizationId}";
                         UpdateSinchClient = true;
+
+                        await _mesengersService.ConnectMessenger();
+                    }
+
+                    if (!string.IsNullOrEmpty(AppSettings.MessengerToken))
+                        _settingsService.SendPushNotificationToken(AppSettings.MessengerToken);
 
                     bool userIsActiveInDivision = false;
                     bool anyDivisionActive = false;

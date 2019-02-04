@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LetterApp.Core.Services.Interfaces;
 using Realms;
-using SharpRaven;
-using SharpRaven.Data;
 
 namespace LetterApp.Core.ViewModels.Abstractions
 {
@@ -16,7 +12,6 @@ namespace LetterApp.Core.ViewModels.Abstractions
         protected static IXNavigationService NavigationService = _navigationService ?? (_navigationService = App.Container.GetInstance<IXNavigationService>());
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private static readonly PropertyChangedEventArgs AllPropertiesChanged = new PropertyChangedEventArgs(string.Empty);
 
         private Realm _realm;
         public Realm Realm
@@ -52,11 +47,13 @@ namespace LetterApp.Core.ViewModels.Abstractions
 
         public virtual Task Appearing() => Task.CompletedTask;
 
+        public virtual Task Appeared() => Task.CompletedTask;
+
         public virtual Task Disappearing() => Task.CompletedTask;
 
         protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(storage, value)) 
+            if (Equals(storage, value)) 
                 return false;
 
             storage = value;

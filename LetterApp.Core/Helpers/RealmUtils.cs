@@ -88,7 +88,7 @@ namespace LetterApp.Core.Helpers
             string fullname = string.Empty;
 
             if (caller != null)
-                fullname = $"{caller?.FirstName} {caller?.LastName}";
+                fullname = $"{caller?.FirstName} {caller?.LastName} - {caller?.Position}";
             else
                 fullname = L10N.Localize("Call_Anonym");
 
@@ -104,6 +104,20 @@ namespace LetterApp.Core.Helpers
             #endif
 
             realm.Write(() => realm.Add(call));
+        }
+
+        public static void CleanContactsAndCalls()
+        {
+            #if DEBUG
+                var realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+            #else
+                var realm = Realm.GetInstance();
+            #endif
+
+            realm.Write(() => {
+                realm.RemoveAll<CallModel>();
+                realm.RemoveAll<GetUsersInDivisionModel>();
+            });
         }
     }
 }

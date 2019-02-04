@@ -7,11 +7,16 @@ using LetterApp.iOS.Views.TabBar.ContactListViewController;
 using LetterApp.iOS.Views.TabBar.UserProfileViewController;
 using LetterApp.iOS.Helpers;
 using LetterApp.Core;
+using Foundation;
+using System;
 
 namespace LetterApp.iOS.Views.Base
 {
     public class MainViewController : XTabBarViewController<MainViewModel>, IRootView
     {
+        //private NSObject _willEnterForeGround;
+        //private NSObject _didEnterBackGround;
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -20,6 +25,9 @@ namespace LetterApp.iOS.Views.Base
             TabBar.Layer.MasksToBounds = false;
             TabBar.BackgroundImage = new UIImage();
             TabBar.ShadowImage = new UIImage();
+
+            //_willEnterForeGround = UIApplication.Notifications.ObserveWillEnterForeground(ConnectToService);
+            //_didEnterBackGround = UIApplication.Notifications.ObserveDidEnterBackground(DisconnectFromService);
 
             this.ViewControllers = new[]
             {
@@ -31,6 +39,16 @@ namespace LetterApp.iOS.Views.Base
 
             this.CustomizableViewControllers = null;
         }
+
+        //private void ConnectToService(object sender, NSNotificationEventArgs e)
+        //{
+        //    ViewModel.MessengerServiceCommand.Execute(true);
+        //}
+
+        //private void DisconnectFromService(object sender, NSNotificationEventArgs e)
+        //{
+        //    ViewModel.MessengerServiceCommand.Execute(false);
+        //}
 
         public void SetVisibleView(int index)
         {
@@ -52,8 +70,12 @@ namespace LetterApp.iOS.Views.Base
             vc.TabBarItem.SelectedImage = UIImage.FromBundle($"{imageName}_selected").ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
             vc.TabBarItem.SetTitleTextAttributes(new UITextAttributes { TextColor = Colors.TabBarNotSelected }, UIControlState.Normal);
             vc.TabBarItem.SetTitleTextAttributes(new UITextAttributes { TextColor = Colors.MainBlue }, UIControlState.Selected);
-            vc.TabBarItem.ImageInsets = new UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0);
-            vc.TabBarItem.TitlePositionAdjustment = new UIOffset(0, -2);
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                vc.TabBarItem.ImageInsets = new UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0);
+                vc.TabBarItem.TitlePositionAdjustment = new UIOffset(0, -2);
+            }
 
             if (position == 0 && AppSettings.BadgeForChat > 0)
                 vc.TabBarItem.BadgeValue = AppSettings.BadgeForChat.ToString();
@@ -66,6 +88,25 @@ namespace LetterApp.iOS.Views.Base
         {
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            //if (this.IsMovingFromParentViewController)
+            //{
+            //    _willEnterForeGround?.Dispose();
+            //    _didEnterBackGround?.Dispose();
+            //}
         }
     }
 }

@@ -8,5 +8,6 @@ namespace LetterApp.Core.Services.Interfaces
     public interface IContactsService
     {
         Task<List<GetUsersInDivisionModel>> GetUsersFromAllDivisions();
+        Task<NotificationTokenModel> GetUserPushToken(int userId);
     }
 }

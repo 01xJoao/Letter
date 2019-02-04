@@ -30,9 +30,17 @@ namespace LetterApp.iOS.Views.CustomViews.ProfileDivision
             }
             else
             {
-                ImageService.Instance.LoadStream((token) => {
-                    return ImageHelper.GetStreamFromImageByte(token, _division.Picture);
-                }).ErrorPlaceholder("division_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+                if (!string.IsNullOrEmpty(_division.Picture))
+                {
+                    ImageService.Instance.LoadStream((token) => {
+                        return ImageHelper.GetStreamFromImageByte(token, _division.Picture);
+                    }).ErrorPlaceholder("division_noimage", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_imageView);
+                }
+                else
+                {
+                    CustomUIExtensions.RoundView(_imageView);
+                    _imageView.Image = UIImage.FromBundle("division_noimage");
+                }
 
                 _label.Hidden = false;
                 UILabelExtensions.SetupLabelAppearance(_label, _division.Name, Colors.ProfileGray, 13f);

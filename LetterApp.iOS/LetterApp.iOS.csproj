@@ -22,7 +22,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <IOSDebuggerPort>61746</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
@@ -31,7 +31,8 @@
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <LangVersion>Latest</LangVersion>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchSdkVersion>11.4</MtouchSdkVersion>
+    <MtouchSdkVersion>12.0</MtouchSdkVersion>
+    <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -40,15 +41,17 @@
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignProvision>LetterDestribution</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <BuildIpa>true</BuildIpa>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -65,6 +68,7 @@
     <MtouchVerbosity></MtouchVerbosity>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <LangVersion>Latest</LangVersion>
+    <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,19 +78,19 @@
     <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer: Joao Palma (KJNN6NN5JT)</CodesignKey>
+    <CodesignKey>iPhone Developer</CodesignKey>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <IOSDebuggerPort>13666</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity></MtouchVerbosity>
     <LangVersion>Latest</LangVersion>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignProvision>pleaseWorkPLEASE</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -123,12 +127,6 @@
     <Reference Include="Lottie.iOS">
       <HintPath>..\packages\Com.Airbnb.iOS.Lottie.2.5.4\lib\xamarinios10\Lottie.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="GetiOSModel">
-      <HintPath>..\packages\dannycabrera.GetiOSModel.1.4.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="System.Security.AccessControl">
       <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\netstandard2.0\System.Security.AccessControl.dll</HintPath>
     </Reference>
@@ -137,9 +135,6 @@
     </Reference>
     <Reference Include="System.Configuration.ConfigurationManager">
       <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="FFImageLoading">
       <HintPath>..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.dll</HintPath>
@@ -150,15 +145,6 @@
     <Reference Include="FFImageLoading.Transformations">
       <HintPath>..\packages\Xamarin.FFImageLoading.Transformations.2.4.3.840\lib\Xamarin.iOS10\FFImageLoading.Transformations.dll</HintPath>
     </Reference>
-    <Reference Include="Realm">
-      <HintPath>..\packages\Realm.Database.3.1.0\lib\netstandard1.4\Realm.dll</HintPath>
-    </Reference>
-    <Reference Include="Realm.Sync">
-      <HintPath>..\packages\Realm.3.1.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Agora.Full.iOS">
-      <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.2.3\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
-    </Reference>
     <Reference Include="Tavis.UriTemplates">
       <HintPath>..\packages\Tavis.UriTemplates.1.1.1\lib\netstandard1.0\Tavis.UriTemplates.dll</HintPath>
     </Reference>
@@ -168,11 +154,44 @@
     <Reference Include="Plugin.Media">
       <HintPath>..\packages\Xam.Plugin.Media.4.0.1.5\lib\xamarinios10\Plugin.Media.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Essentials">
-      <HintPath>..\packages\Xamarin.Essentials.0.10.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
-    </Reference>
     <Reference Include="SinchBinding">
-      <HintPath>..\packages\JoaoPalma.Sinch.iOS.3.12.5\lib\xamarinios10\SinchBinding.dll</HintPath>
+      <HintPath>..\packages\JoaoPalma.Sinch.Voice.iOS.3.12.5.3\lib\xamarinios10\SinchBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="SendBird">
+      <HintPath>..\Tools\SendBird.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\Tools\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GetiOSModel">
+      <HintPath>..\packages\dannycabrera.GetiOSModel.1.5.0\lib\xamarinios10\GetiOSModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm">
+      <HintPath>..\packages\Realm.Database.3.2.1\lib\netstandard1.4\Realm.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm.Sync">
+      <HintPath>..\packages\Realm.3.2.1\lib\netstandard1.4\Realm.Sync.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.5.1\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Com.OneSignal.Abstractions">
+      <HintPath>..\packages\Com.OneSignal.3.2.1\lib\Xamarin.iOS10\Com.OneSignal.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Com.OneSignal">
+      <HintPath>..\packages\Com.OneSignal.3.2.1\lib\Xamarin.iOS10\Com.OneSignal.dll</HintPath>
+    </Reference>
+    <Reference Include="OneSignal.iOS.Binding">
+      <HintPath>..\packages\Com.OneSignal.3.2.1\lib\Xamarin.iOS10\OneSignal.iOS.Binding.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.0.11.0-preview\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Agora.Full.iOS">
+      <HintPath>..\packages\Xamarin.Agora.Full.iOS.2.3.1\lib\Xamarin.iOS10\Xamarin.Agora.Full.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -191,8 +210,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_chats.imageset\Group%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Group%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchImage.launchimage\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline.png" />
     <ImageAsset Include="Resources\Assets.xcassets\tabbar_profile.imageset\user-outline%402x.png" />
@@ -256,9 +273,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\add_circle.imageset\circle_add%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\Close_BLACK%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_black.imageset\left_black%403x.png" />
@@ -266,9 +280,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\back_white.imageset\left_white_24px%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\Close_white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle.png" />
     <ImageAsset Include="Resources\Assets.xcassets\dropdown_black.imageset\Triangle%402x.png" />
@@ -347,6 +358,70 @@
     <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\recent_calls.imageset\no_calls.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\no_contacts.imageset\no_contacts.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\letter_voip.imageset\call.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-33.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-66.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_black.imageset\icons8-multiplicação-filled-99.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-99-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-33-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\close_white.imageset\icons8-multiplicação-filled-66-white.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\newchat.imageset\write%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\nochats.imageset\norecentchats.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\silent.imageset\volume_off.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white.imageset\calls%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_small.imageset\phone-call%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\call_white_medium.imageset\phone-ca%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard.imageset\ic_keyboard_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\keyboard_active.imageset\ic_keyboard_active_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\files.imageset\ic_attach_file_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\photo_picker.imageset\ic_camera_alt_black_24px%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\options.imageset\chat_options%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\connection.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\connection.imageset\connect.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\image_picker.imageset\image_picker%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\load_image.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Notification%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Notification%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Spotlight%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Spotlight%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\SpotlightBig%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\SpotlightBig%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -452,6 +527,27 @@
     <Folder Include="Resources\Assets.xcassets\organization_noimage.imageset\" />
     <Folder Include="Resources\Assets.xcassets\recent_calls.imageset\" />
     <Folder Include="Resources\Assets.xcassets\no_contacts.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_call.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\letter_voip.imageset\" />
+    <Folder Include="Views\TabBar\ChatListViewController\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\nochats.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\newchat.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\silent.imageset\" />
+    <Folder Include="Views\Chat\" />
+    <Folder Include="Resources\Assets.xcassets\call_white.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\call_white_small.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\call_white_medium.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\options.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\keyboard.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\keyboard_active.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\files.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\photo_picker.imageset\" />
+    <Folder Include="Views\Chat\Cells\" />
+    <Folder Include="Resources\Assets.xcassets\connection.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\Image_picker.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\image_picker.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\load_image.imageset\" />
+    <Folder Include="Resources\pt.lproj\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\Loading\LoadingViewController.xib" />
@@ -509,6 +605,20 @@
     <InterfaceDefinition Include="Views\Call\CallViewController.xib" />
     <InterfaceDefinition Include="Views\CustomViews\Dialog\ContactViewController.xib" />
     <InterfaceDefinition Include="Views\TabBar\CallListViewController\Cells\CallHistoryCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\CallStackViewController.xib" />
+    <InterfaceDefinition Include="Views\TabBar\ChatListViewController\Cells\ChatCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ChatAlertViewController.xib" />
+    <InterfaceDefinition Include="Views\Chat\ChatViewController.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\MessageCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\LabelCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\FileCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ImageCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\ImageWithUserCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\FileWithUserCell.xib" />
+    <InterfaceDefinition Include="Views\Chat\Cells\DateHeaderCell.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\PictureViewController.xib" />
+    <InterfaceDefinition Include="Views\CustomViews\Dialog\ShowImageViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -777,11 +887,78 @@
       <DependentUpon>CallHistoryCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\MessengerService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\CallStackViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\CallStackViewController.designer.cs">
+      <DependentUpon>CallStackViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\CallStackSource.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.cs" />
+    <Compile Include="Views\TabBar\ChatListViewController\Cells\ChatCell.designer.cs">
+      <DependentUpon>ChatCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatListSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ChatAlertViewController.designer.cs">
+      <DependentUpon>ChatAlertViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\ChatViewController.cs" />
+    <Compile Include="Views\Chat\ChatViewController.designer.cs">
+      <DependentUpon>ChatViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\MessageCell.cs" />
+    <Compile Include="Views\Chat\Cells\MessageCell.designer.cs">
+      <DependentUpon>MessageCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\LabelCell.cs" />
+    <Compile Include="Views\Chat\Cells\LabelCell.designer.cs">
+      <DependentUpon>LabelCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\FileCell.cs" />
+    <Compile Include="Views\Chat\Cells\FileCell.designer.cs">
+      <DependentUpon>FileCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\ImageCell.cs" />
+    <Compile Include="Views\Chat\Cells\ImageCell.designer.cs">
+      <DependentUpon>ImageCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatSource.cs" />
+    <Compile Include="Views\Chat\Cells\ImageWithUserCell.cs" />
+    <Compile Include="Views\Chat\Cells\ImageWithUserCell.designer.cs">
+      <DependentUpon>ImageWithUserCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\FileWithUserCell.cs" />
+    <Compile Include="Views\Chat\Cells\FileWithUserCell.designer.cs">
+      <DependentUpon>FileWithUserCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Chat\Cells\DateHeaderCell.cs" />
+    <Compile Include="Views\Chat\Cells\DateHeaderCell.designer.cs">
+      <DependentUpon>DateHeaderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AudioService.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ShowChatOptionsViewController.designer.cs">
+      <DependentUpon>ShowChatOptionsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\ChatOptionsSource.cs" />
+    <Compile Include="Views\CustomViews\Dialog\PictureViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\PictureViewController.designer.cs">
+      <DependentUpon>PictureViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomViews\Dialog\ShowImageViewController.cs" />
+    <Compile Include="Views\CustomViews\Dialog\ShowImageViewController.designer.cs">
+      <DependentUpon>ShowImageViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterApp.Core\LetterApp.Core.csproj">
       <Project>{848E6633-3205-4E4B-BAF3-7A61FC5631EC}</Project>
       <Name>LetterApp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LetterNotificationService\LetterNotificationService.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{EE8BB25F-8B17-41E5-A7A7-462591611BA8}</Project>
+      <Name>LetterNotificationService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -792,10 +969,23 @@
     <BundleResource Include="Resources\waiting_call.aiff" />
     <BundleResource Include="Resources\ringback.wav" />
     <BundleResource Include="Resources\EndCallSound.wav" />
+    <BundleResource Include="Resources\progress_refresh.json" />
+    <BundleResource Include="Resources\progress_animation.json" />
+    <BundleResource Include="Resources\load_blue.json" />
+    <BundleResource Include="Resources\load_white.json" />
+    <BundleResource Include="Resources\message_received.mp3" />
+    <BundleResource Include="Resources\message_sent.mp3" />
+    <BundleResource Include="Resources\paperplane_loading.json" />
+    <BundleResource Include="Resources\image_loading.gif" />
+    <BundleResource Include="Resources\pt.lproj\InfoPlist.strings" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Realm.Database.3.1.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.1.0\build\Realm.Database.targets')" />
-  <Import Project="..\packages\Realm.3.1.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.1.0\build\Realm.targets')" />
-  <Import Project="..\packages\Fody.3.1.7\build\Fody.targets" Condition="Exists('..\packages\Fody.3.1.7\build\Fody.targets')" />
+  <Import Project="..\packages\Realm.Database.3.2.1\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.3.2.1\build\Realm.Database.targets')" />
+  <Import Project="..\packages\Realm.3.2.1\build\Realm.targets" Condition="Exists('..\packages\Realm.3.2.1\build\Realm.targets')" />
+  <Import Project="..\packages\Fody.3.2.13\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.13\build\Fody.targets')" />
 </Project>

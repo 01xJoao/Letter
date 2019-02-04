@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using CoreGraphics;
+using Foundation;
 using LetterApp.Core;
 using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.iOS.Helpers;
@@ -11,7 +12,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.CallListViewController
 {
-    public partial class CallListViewController : XViewController<CallListViewModel>
+    public partial class CallListViewController : XViewController<CallListViewModel>, IUIGestureRecognizerDelegate
     {
         private UIImageView _noRecentCallsImage = new UIImageView(UIImage.FromBundle("recent_calls"));
         private UILabel _noRecentCallsLabel = new UILabel();
@@ -45,8 +46,9 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
         private void ConfigureView()
         {
             this.Title = ViewModel.Title;
-            this.NavigationController.NavigationBar.PrefersLargeTitles = true;
-            this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(20f, "new_call", OpenContacts);
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                this.NavigationController.NavigationBar.PrefersLargeTitles = true;
+            this.NavigationItem.RightBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "new_call", OpenContacts, false);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
         }
 
@@ -77,7 +79,7 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
         {
             HasHistoryCalls(true);
 
-            var source = new CallSource(_tableView, ViewModel.CallHistory, ViewModel.Delete);
+            var source = new CallSource(_tableView, ViewModel.CallHistory, ViewModel.Delete, ViewModel.CallActionInfo);
 
             _tableView.Source = source;
 
@@ -90,7 +92,15 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
             source.DeleteCallEvent -= OnSource_DeleteCallEvent;
             source.DeleteCallEvent += OnSource_DeleteCallEvent;
 
+            source.CallStackEvent -= OnSource_CallStackEvent;
+            source.CallStackEvent += OnSource_CallStackEvent;
+
             _tableView.ReloadData();
+        }
+
+        private void OnSource_CallStackEvent(object sender, int call)
+        {
+            ViewModel.CallStackCommand.Execute(call);
         }
 
         public void HasHistoryCalls(bool value)
@@ -132,8 +142,6 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
                 {
                     if (appDelegate.RootController?.CurrentViewController is MainViewController)
                     {
-                        //var view = appDelegate.RootController.CurrentViewController as MainViewController;
-
                         using (var view = appDelegate.RootController.CurrentViewController as MainViewController)
                         {
                             if (view.TabBar.Items.Any())
@@ -142,12 +150,29 @@ namespace LetterApp.iOS.Views.TabBar.CallListViewController
                     }
                 }
             }
+
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
+
+            if (_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+        }
+
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }

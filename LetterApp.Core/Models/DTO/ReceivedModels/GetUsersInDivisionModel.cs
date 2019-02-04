@@ -18,5 +18,6 @@ namespace LetterApp.Models.DTO.ReceivedModels
         public int DivisionId { get; set; }
         public int MainDivisionId { get; set; }
         public string SearchContainer { get; set; }
+        public string PushNotificationToken { get; set; }
     }
 }

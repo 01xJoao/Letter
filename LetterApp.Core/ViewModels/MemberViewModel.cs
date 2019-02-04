@@ -32,6 +32,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _callCommand;
         public XPCommand CallCommand => _callCommand ?? (_callCommand = new XPCommand(async () => await Call()));
 
+        private XPCommand _chatCommand;
+        public XPCommand ChatCommand => _chatCommand ?? (_chatCommand = new XPCommand(async () => await Chat()));
+
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
@@ -52,6 +55,10 @@ namespace LetterApp.Core.ViewModels
         {
             _memberProfileModel = Realm.Find<MembersProfileModel>(_userId);
             SetupModels(_memberProfileModel);
+
+            if (_memberProfileModel == null)
+                _dialogService.StartLoading();
+
             try
             {
                 var result = await _memberService.GetMemberProfile(_userId);
@@ -76,6 +83,10 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _dialogService.StopLoading();
             }
         }
 
@@ -148,9 +159,19 @@ namespace LetterApp.Core.ViewModels
             }
         }
 
+        private async Task Chat()
+        {
+            await NavigationService.NavigateAsync<ChatViewModel, int>(_memberProfileModel.UserID);
+        }
+
         private async Task CloseView()
         {
             await NavigationService.Close(this);
+        }
+
+        public override async Task Disappearing()
+        {
+            _dialogService.StopLoading();
         }
 
         private bool CanExecute() => !IsBusy;

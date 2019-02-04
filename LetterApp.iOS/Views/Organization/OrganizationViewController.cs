@@ -19,7 +19,6 @@ namespace LetterApp.iOS.Views.Organization
         {
             base.ViewDidLoad();
 
-            Loading(true);
             _tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
@@ -38,14 +37,10 @@ namespace LetterApp.iOS.Views.Organization
             }
         }
 
-        private void Loading(bool showLoading)
-        {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading", this.View, _imageView, showLoading);
-        }
-
         private void SetupView()
         {
-            Loading(false);
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += 20;
 
             this.View.BackgroundColor = Colors.MainBlue;
             _tableView.BackgroundColor = Colors.MainBlue4;
@@ -92,7 +87,7 @@ namespace LetterApp.iOS.Views.Organization
         {
             base.ViewWillAppear(animated);
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.White };
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_white", CloseView);
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "back_white", CloseView);
             this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.MainBlue;
             this.NavigationController.NavigationBar.Translucent = false;

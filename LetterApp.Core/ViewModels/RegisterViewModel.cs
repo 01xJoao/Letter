@@ -32,7 +32,10 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
         private XPCommand<bool> _openRegisterViewCommand;
-        public XPCommand<bool> AgreementToogleCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand<bool>((agreed) => AgreementToogle(agreed)));
+        public XPCommand<bool> AgreementToogleCommand => _openRegisterViewCommand ?? (_openRegisterViewCommand = new XPCommand<bool>(AgreementToogle));
+
+        private XPCommand _readAgreementCommand;
+        public XPCommand ReadAgreementCommand => _readAgreementCommand ?? (_readAgreementCommand = new XPCommand(async () => await ReadAgreement()));
 
         public RegisterViewModel(IAuthenticationService authService, IDialogService dialogService, IStatusCodeService statusService, ISettingsService settingsService)
         {
@@ -110,6 +113,11 @@ namespace LetterApp.Core.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private async Task ReadAgreement()
+        {
+            await BrowserUtils.OpenWebsite("https://www.lettermessenger.com/support/termsofservice");
         }
 
         private bool CheckForm(UserRegistrationRequestModel user)

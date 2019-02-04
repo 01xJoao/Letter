@@ -83,7 +83,6 @@ namespace LetterApp.Core.ViewModels
                     AppSettings.IsUserLogged = true;
                     UserEmail = value.Item1;
                     await SecureStorage.SetAsync("password", value.Item2);
-
                     await NavigationService.NavigateAsync<LoadingViewModel, object>(null);
                 }
                 else if (currentUser.StatusCode == 102)

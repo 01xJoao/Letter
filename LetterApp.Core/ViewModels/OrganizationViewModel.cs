@@ -15,7 +15,8 @@ namespace LetterApp.Core.ViewModels
 {
     public class OrganizationViewModel : XViewModel<int>
     {
-        private IOrganizationService _organizationService;
+        private readonly IDialogService _dialogService;
+        private readonly IOrganizationService _organizationService;
 
         private int _organizationId;
 
@@ -39,8 +40,9 @@ namespace LetterApp.Core.ViewModels
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
 
-        public OrganizationViewModel(IOrganizationService organizationService) 
+        public OrganizationViewModel(IOrganizationService organizationService, IDialogService dialogService) 
         {
+            _dialogService = dialogService;
             _organizationService = organizationService;
         }
 
@@ -53,6 +55,9 @@ namespace LetterApp.Core.ViewModels
         {
             _organization = Realm.Find<OrganizationModel>(_organizationId);
             SetupModels(_organization);
+
+            if(_organization == null)
+                _dialogService.StartLoading();
 
             try
             {
@@ -77,6 +82,10 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _dialogService.StopLoading();
             }
         }
 
@@ -150,6 +159,11 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             await NavigationService.Close(this);
+        }
+
+        public override async Task Disappearing()
+        {
+            _dialogService.StopLoading();
         }
 
         private bool CanExecute() => !IsBusy;

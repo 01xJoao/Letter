@@ -27,13 +27,6 @@ namespace LetterApp.Core.ViewModels
             set => SetProperty(ref _divisions, value);
         }
 
-        private bool _isLoading = true;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
-        }
-
         private XPCommand<DivisionModel> _showDivisionInformationCommand;
         public XPCommand<DivisionModel> ShowDivisionInformationCommand => _showDivisionInformationCommand ?? (_showDivisionInformationCommand = new XPCommand<DivisionModel>(async (division) => await ShowDivisionInfo(division), CanExecute));
 
@@ -68,6 +61,7 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
+                _dialogService.StartLoading(LoadingColor.White);
                 Divisions = await _organizationService.GetDivisions(_organizationId);
             }
             catch (Exception ex)
@@ -77,12 +71,15 @@ namespace LetterApp.Core.ViewModels
             finally
             {
                 IsBusy = false;
-                IsLoading = false;
+                _dialogService.StopLoading();
             }
         }
 
         private async Task VerifyDivisionCode(string code)
         {
+            if (string.IsNullOrEmpty(code))
+                return;
+
             IsBusy = true;
 
             try
@@ -145,6 +142,9 @@ namespace LetterApp.Core.ViewModels
 
                 if (result.StatusCode == 208)
                 {
+                    AppSettings.OrganizationId = 0;
+                    AppSettings.UserAndOrganizationIds = string.Empty;
+                    _settingsService.Logout();
                     await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
                     await NavigationService.PopToRoot(true);
                     _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(result.StatusCode), AlertType.Success);
@@ -182,6 +182,11 @@ namespace LetterApp.Core.ViewModels
             {
                 await NavigationService.Close(this);
             }
+        }
+
+        public override async Task Disappearing()
+        {
+            _dialogService.StopLoading();
         }
 
         private bool CanExecute() => !IsBusy;

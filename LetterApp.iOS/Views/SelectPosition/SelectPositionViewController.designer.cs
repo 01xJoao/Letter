@@ -30,10 +30,6 @@ namespace LetterApp.iOS.Views.SelectPosition
 
 
         [Outlet]
-        UIKit.UIView _loadingView { get; set; }
-
-
-        [Outlet]
         UIKit.UIPickerView _picker { get; set; }
 
 
@@ -76,11 +72,6 @@ namespace LetterApp.iOS.Views.SelectPosition
             if (_buttonView != null) {
                 _buttonView.Dispose ();
                 _buttonView = null;
-            }
-
-            if (_loadingView != null) {
-                _loadingView.Dispose ();
-                _loadingView = null;
             }
 
             if (_picker != null) {

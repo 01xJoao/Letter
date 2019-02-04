@@ -11,12 +11,14 @@ using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 using LetterApp.Models.DTO.ReceivedModels;
 using Xamarin.Essentials;
+using static LetterApp.Core.ViewModels.TabBarViewModels.ContactListViewModel;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
     public class CallListViewModel : XViewModel
     {
         private readonly IDialogService _dialogService;
+        private readonly IContactsService _contactsService;
 
         public bool NoCalls { get; private set; }
 
@@ -44,21 +46,19 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         private XPCommand<int> _deleteCallCommand;
         public XPCommand<int> DeleteCallCommand => _deleteCallCommand ?? (_deleteCallCommand = new XPCommand<int>(DeleteCall));
 
-        public CallListViewModel(IDialogService dialogService) 
+        private XPCommand<int> _callStackCommand;
+        public XPCommand<int> CallStackCommand => _callStackCommand ?? (_callStackCommand = new XPCommand<int>(ShowCallStack));
+
+        public CallListViewModel(IContactsService contactsService, IDialogService dialogService) 
         {
+            _contactsService = contactsService;
             _dialogService = dialogService;
             SetL10NResources();
         }
-
-        public override async Task InitializeAsync()
-        {
-            _users = Realm.All<GetUsersInDivisionModel>().ToList();
-        }
-
         public override async Task Appearing()
         {
-            //if (_callHistory != null && _calls != null && _callHistory.Count == _calls.Count)
-            //return;
+            if (_users == null || _users.Count == 0)
+                await GetUsers();
 
             _callHistory = new List<CallHistoryModel>();
 
@@ -79,7 +79,7 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     //if (lastCall.HasSuccess == call.Success && (int)lastCall.CallType == call.CallType)
                     //{
-                    lastCall.CallDateText = DateUtils.CallsDateString(date);
+                    lastCall.CallDateText = DateUtils.TimePassed(date);
                     lastCall.CallStack.Add(call.CallId);
                     lastCall.CallCountAndType = call.CallType == 0 ? $"{Call_Outgoing} ({lastCall.CallStack.Count()})" :
                         call.Success ? $"{Call_Incoming} ({lastCall.CallStack.Count()})" : $"{Call_Missed} ({lastCall.CallStack.Count()})";
@@ -101,12 +101,12 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 {
                     CallerId = call.CallerId,
                     CallDate = date,
-                    CallDateText = DateUtils.CallsDateString(date),
+                    CallDateText = DateUtils.TimePassed(date),
                     CallType = call.CallType == 0 ? CallType.Outgoing : CallType.Incoming,
                     CallCountAndType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
                     HasSuccess = call.Success,
                     ShouldAlert = call.IsNew && !call.Success && call.CallType == 1,
-                    CallerInfo = $"{user.FirstName} {user.LastName} · {user.Position}",
+                    CallerInfo = $"{user.FirstName} {user.LastName} - {user.Position}",
                     CallerPicture = user.Picture
                 };
 
@@ -133,6 +133,42 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                     }
                 }
             });
+        }
+
+        private async Task GetUsers()
+        {
+            try
+            {
+                _users = Realm.All<GetUsersInDivisionModel>().ToList();
+
+                if (_users.Count == 0)
+                {
+                    var result = await _contactsService.GetUsersFromAllDivisions();
+
+                    if (result == null && result.Count == 0)
+                        return;
+
+                    Realm.Write(() => 
+                    {
+                        foreach (var res in result) {
+                            res.UniqueKey = $"{res.UserId}+{res.DivisionId}";
+
+                            var contacNumber = res.ShowNumber ? res?.ContactNumber : string.Empty;
+                            string[] stringSearch = { res?.FirstName?.ToLower(), res?.LastName?.ToLower(), res?.Position?.ToLower() };
+                            stringSearch = StringUtils.NormalizeString(stringSearch);
+                            res.SearchContainer = $"{stringSearch[0]}, {stringSearch[1]}, {stringSearch[2]}, {contacNumber} {res?.Email?.ToLower()}";
+
+                            Realm.Add(res, true);
+                        }
+                    });
+
+                    _users = Realm.All<GetUsersInDivisionModel>().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Ui.Handle(ex as dynamic);
+            }
         }
 
         private void DeleteCall(int index)
@@ -163,9 +199,36 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
                 RaisePropertyChanged(nameof(NoCalls));
         }
 
+        private void ShowCallStack(int callId)
+        {
+            var listCallStack = new List<CallStackModel>();
+            List<string> callStackIds = new List<string>(); 
+
+            foreach (string callID in _callHistory[callId]?.CallStack)
+            {
+                var call = _calls.Find(x => x.CallId == callID);
+
+                if (call != null)
+                {
+                    var callStack = new CallStackModel
+                    {
+                        CallType = call.CallType == 0 ? Call_Outgoing : call.Success ? Call_Incoming : Call_Missed,
+                        Date = new DateTime(call.CallDate).ToShortTimeString(),
+                        Successful = call.Success
+                    };
+
+                    listCallStack.Add(callStack);
+                }
+            }
+
+            listCallStack.Reverse();
+
+            _dialogService.ShowCallStack(_callHistory[callId]?.CallDate.ToLongDateString(), listCallStack);
+        }
+
         private void OpenContactList()
         {
-            NavigationService.NavigateAsync<ContactListViewModel, bool>(true);
+            NavigationService.NavigateAsync<ContactListViewModel, ContactsType>(ContactsType.Call);
         }
 
         private void OpenCallerProfile(int user)
@@ -208,6 +271,9 @@ namespace LetterApp.Core.ViewModels.TabBarViewModels
         public string Title => L10N.Localize("MainViewModel_CallTab");
         public string Delete => L10N.Localize("Delete");
         public string NoRecentCalls => L10N.Localize("Calls_NoRecentCalls");
+
+        public string CallActionInfo => L10N.Localize("Calls_CallActionInfo");
+        //public string CallStackTitle => L10N.Localize("Calls_CallStackTitle");
 
         private string Call_Incoming => L10N.Localize("Call_Incoming");
         private string Call_Outgoing => L10N.Localize("Call_Outgoing");

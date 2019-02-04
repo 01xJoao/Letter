@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using CoreGraphics;
+using Foundation;
 using LetterApp.Core.ViewModels.TabBarViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Sources;
@@ -9,7 +10,7 @@ using UIKit;
 
 namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
 {
-    public partial class UserProfileViewController : XViewController<UserProfileViewModel>
+    public partial class UserProfileViewController : XViewController<UserProfileViewModel>, IUIGestureRecognizerDelegate
     {
         public UserProfileViewController() : base("UserProfileViewController", null) {}
 
@@ -56,10 +57,32 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController
             _tableView.ReloadData();
         }
 
+        IUIGestureRecognizerDelegate _navigationGesture;
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+
+            if (this.NavigationController?.InteractivePopGestureRecognizer != null)
+            {
+                _navigationGesture = this.NavigationController.InteractivePopGestureRecognizer.Delegate;
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = null;
+            }
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
             this.HidesBottomBarWhenPushed = false;
+
+            if (_navigationGesture != null)
+                this.NavigationController.InteractivePopGestureRecognizer.Delegate = _navigationGesture;
+        }
+
+        [Export("gestureRecognizerShouldBegin:")]
+        public bool ShouldBegin(UIGestureRecognizer recognizer)
+        {
+            return false;
         }
     }
 }

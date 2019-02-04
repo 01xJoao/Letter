@@ -20,11 +20,12 @@ namespace LetterApp.iOS
             InitializePlatformServices();
             App.Start();
 
+            AppSettings.UserNoInternetNotified = false;
             StatusBarColor(Connectivity.NetworkAccess == NetworkAccess.Internet);
 
             Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-   }
+        }
 
         private static void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
@@ -33,9 +34,7 @@ namespace LetterApp.iOS
 
         private static void StatusBarColor(bool hasInternet)
         {
-            var statusBar = UIApplication.SharedApplication?.ValueForKey((NSString)"statusBarWindow")?.ValueForKey((NSString)"statusBar") as UIView;
-
-            if(statusBar != null)
+            if (UIApplication.SharedApplication?.ValueForKey((NSString)"statusBarWindow")?.ValueForKey((NSString)"statusBar") is UIView statusBar)
             {
                 if (!hasInternet)
                     statusBar.BackgroundColor = Colors.Red;
@@ -51,7 +50,9 @@ namespace LetterApp.iOS
         {
             UINavigationBar.Appearance.BarTintColor = Colors.BlueSetup;
             UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes() { TextColor = Colors.White });
-            UINavigationBar.Appearance.LargeTitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White, Shadow = CustomUIExtensions.TextShadow() };
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                UINavigationBar.Appearance.LargeTitleTextAttributes = new UIStringAttributes { ForegroundColor = Colors.White, Shadow = CustomUIExtensions.TextShadow() };
         }
 
         private static void RegisterPlatformServices()

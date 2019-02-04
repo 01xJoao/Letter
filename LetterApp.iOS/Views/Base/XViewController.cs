@@ -13,6 +13,8 @@ namespace LetterApp.iOS.Views.Base
         public TViewModel ViewModel { get; private set; }
         public object ParameterData { get; set; }
         public virtual bool ShowAsPresentView => false;
+        public virtual bool DismissKeyboardOnTap => true;
+        public int ScreenWidth => (int)UIScreen.MainScreen.Bounds.Width;
 
         public XViewController(string nibName, NSBundle bundle) : base(nibName, bundle) { }
 
@@ -40,9 +42,16 @@ namespace LetterApp.iOS.Views.Base
             if (HandlesKeyboardNotifications)
                 RegisterForKeyboardNotifications(true);
 
-            DismissKeyboardOnBackgroundTap();
+            if(DismissKeyboardOnTap)
+                DismissKeyboardOnBackgroundTap();
 
             base.ViewWillAppear(animated);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            ViewModel.Appeared();
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -70,8 +79,8 @@ namespace LetterApp.iOS.Views.Base
         {
             if(shouldRegister)
             {
-                _keyboardWillShow = UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(true));
-                _keyboardWillHide = UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(false));
+                _keyboardWillShow = UIKeyboard.Notifications.ObserveWillShow((sender, e) => OnKeyboardNotification(e, true));
+                _keyboardWillHide = UIKeyboard.Notifications.ObserveWillHide((sender, e) => OnKeyboardNotification(e, false));
             }
             else
             {
@@ -80,9 +89,9 @@ namespace LetterApp.iOS.Views.Base
             }
         }
 
-        public virtual void OnKeyboardNotification(bool changeKeyboardState) 
+        public virtual void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool keyboardState)
         {
-            KeyboardIsVisible = changeKeyboardState;
+            KeyboardIsVisible = keyboardState;
         }
 
         protected void DismissKeyboardOnBackgroundTap()

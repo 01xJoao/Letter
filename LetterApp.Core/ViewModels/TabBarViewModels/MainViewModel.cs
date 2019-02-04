@@ -1,22 +1,52 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using LetterApp.Core.Helpers.Commands;
 using LetterApp.Core.Localization;
+using LetterApp.Core.Services.Interfaces;
 using LetterApp.Core.ViewModels.Abstractions;
 
 namespace LetterApp.Core.ViewModels.TabBarViewModels
 {
     public class MainViewModel : XViewModel
     {
-        private XPCommand<string> _callCommand;
-        public XPCommand<string> CallCommand => _callCommand ?? (_callCommand = new XPCommand<string>(async (userId) => await Call(userId)));
+        private readonly IMessengerService _messengerService;
 
-        private async Task Call(string userId)
+        private XPCommand<bool> _messengerServiceCommand;
+        public XPCommand<bool> MessengerServiceCommand => _messengerServiceCommand ?? (_messengerServiceCommand = new XPCommand<bool>(async (connect) => await MessengerService(connect), CanExecute));
+
+        public MainViewModel(IMessengerService messengerService)
         {
-            await NavigationService.NavigateAsync<CallViewModel, Tuple<int, bool>>(new Tuple<int, bool>(Int32.Parse(userId), false));
+            _messengerService = messengerService;
         }
 
-        public MainViewModel() {}
+        public override async Task InitializeAsync()
+        {
+            _messengerService.SubscribeToNotifications();
+        }
+
+        private async Task MessengerService(bool connect)
+        {
+            //if (connect)
+            //{
+            //    await Task.Delay(TimeSpan.FromSeconds(0.5f));
+            //    await _messengerService.ConnectMessenger();
+            //}
+            //else
+                //_messengerService.DisconnectMessenger();
+        }
+
+        //private void CheckConnection()
+        //{
+        //    Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+        //    Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        //}
+
+        //private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        //{
+        //    if (e.NetworkAccess == NetworkAccess.Internet)
+        //        MessengerService(true);
+        //}
+
+        private bool CanExecute(bool connect) => !IsBusy;
 
         #region resources
 

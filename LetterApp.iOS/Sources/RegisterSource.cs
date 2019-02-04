@@ -19,7 +19,8 @@ namespace LetterApp.iOS.Sources
         private UITableView _tableView;
         private List<FormModel> _formModels;
         private string _agreement;
-        public EventHandler<bool> AgreementToogleEvent;
+        public event EventHandler<bool> AgreementToogleEvent;
+        public event EventHandler ReadAgreementEvent;
 
         public RegisterSource(UITableView tableView, UIView backgroundView, List<FormModel> formModels, string agreement)
         {
@@ -55,7 +56,7 @@ namespace LetterApp.iOS.Sources
 
                 case (int)Sections.Agreement:
                     var agreementCell = tableView.DequeueReusableCell(AgreementCell.Key) as AgreementCell;
-                    agreementCell.Configure(_agreement, AgreementToogleEvent);
+                    agreementCell.Configure(_agreement, AgreementToogleEvent, ReadAgreementEvent);
                     cell = agreementCell;
                     break;
             }

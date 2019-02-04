@@ -66,6 +66,9 @@ namespace LetterApp.Core.ViewModels
 
             try
             {
+                if (!string.IsNullOrEmpty(AppSettings.MessengerToken))
+                    _settingsService.SendPushNotificationToken(AppSettings.MessengerToken);
+
                 resultNotifications = await _settingsService.CheckNotificationPermissions();
             }
             catch (Exception ex)
@@ -104,16 +107,16 @@ namespace LetterApp.Core.ViewModels
 
             var messageNotifications = new DescriptionAndBoolEventModel(MessageNotificationLabel, AppSettings.MessageNotifications, MessageNotificationEvent);
             var callNotifications = new DescriptionAndBoolEventModel(CallNotificationLabel, AppSettings.CallNotifications, CallNotificationEvent);
-            var groupNotifications = new DescriptionAndBoolEventModel(GroupNotificationLabel, AppSettings.GroupNotifications, GroupNotificationEvent);
+            //var groupNotifications = new DescriptionAndBoolEventModel(GroupNotificationLabel, AppSettings.GroupNotifications, GroupNotificationEvent);
 
-            var notificationTypes = new[] { messageNotifications, callNotifications, groupNotifications };
+            var notificationTypes = new[] { messageNotifications, callNotifications };//, groupNotifications };
             SwitchModel = new List<DescriptionAndBoolEventModel>();
             SwitchModel.AddRange(notificationTypes);
 
             RaisePropertyChanged(nameof(UpdateView));
         }
 
-        private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
+        //private void GroupNotificationEvent(object sender, bool value) => AppSettings.GroupNotifications = value;
         private void CallNotificationEvent(object sender, bool value) => AppSettings.CallNotifications = value;
         private void MessageNotificationEvent(object sender, bool value) => _settingsService.OpenSettings();
 
@@ -131,15 +134,15 @@ namespace LetterApp.Core.ViewModels
                         break;
 
                     case CellType.ContactUs:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/contactus");
+                        BrowserUtils.OpenWebsite("https://www.lettermessenger.com/support/contacts");
                         break;
 
                     case CellType.TermsOfService:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/support/termsofservice");
+                        BrowserUtils.OpenWebsite("https://www.lettermessenger.com/support/termsofservice");
                         break;
 
                     case CellType.CreateOrganization:
-                        BrowserUtils.OpenWebsite("http://www.lettermessenger.com/organizations");
+                        BrowserUtils.OpenWebsite("https://www.lettermessenger.com/organizations");
                         break;
 
                     case CellType.SignOut:
@@ -218,8 +221,12 @@ namespace LetterApp.Core.ViewModels
 
                     if(res.StatusCode == 208)
                     {
-                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
+                        AppSettings.OrganizationId = 0;
+                        AppSettings.UserAndOrganizationIds = string.Empty;
+                        _settingsService.Logout();
                         await NavigationService.Close(this);
+                        await NavigationService.NavigateAsync<SelectOrganizationViewModel, object>(null);
+                        await Task.Delay(TimeSpan.FromSeconds(0.3f));
                         _dialogService.ShowAlert(_statusCodeService.GetStatusCodeDescription(res.StatusCode), AlertType.Success);
                     }
                     else

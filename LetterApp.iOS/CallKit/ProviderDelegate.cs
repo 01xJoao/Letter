@@ -63,7 +63,7 @@ namespace LetterApp.iOS.CallKit
                 MaximumCallGroups = 1,
                 MaximumCallsPerCallGroup = 1,
                 SupportedHandleTypes = new NSSet<NSNumber>((NSNumber)(int)CXHandleType.Generic),
-                IconTemplateImageData = UIImage.FromBundle("letter_logo").AsPNG()
+                IconTemplateImageData = UIImage.FromBundle("letter_voip").AsPNG()
             };
 
             Provider = new CXProvider(Configuration);
@@ -85,8 +85,9 @@ namespace LetterApp.iOS.CallKit
 
             if (activeCall == null)
                 return;
+                
+            SINCall = Client.CallClient.CallUserWithId($"{activeCall.CallerId.ToString()}-{AppSettings.OrganizationId}");
 
-            SINCall = Client.CallClient.CallUserWithId(activeCall.CallerId.ToString());
             activeCall.SINCall = SINCall;
             activeCall.StartCall();
 
@@ -137,6 +138,9 @@ namespace LetterApp.iOS.CallKit
 
             CallManager.Calls.Remove(call);
 
+            if(call.IsOutgoing && !call.IsConnected)
+                _callViewController?.ViewModel?.SendPushFailedCallCommand?.Execute();
+
             provider.ReportConnectedOutgoingCall(call.UUID, NSDate.Now);
             action.Fulfill();
         }
@@ -176,14 +180,21 @@ namespace LetterApp.iOS.CallKit
             Client.CallClient.WeakDelegate = this;
         }
 
-        public void ReportIncomingCall(NSUuid uuid, ISINCallNotificationResult handle)
+        public ActiveCall ReportIncomingCall(NSUuid uuid, ISINCall handle)
         {
-            if (CallManager.Calls.LastOrDefault() != null)
-                return;
+            if(CallManager.Calls.LastOrDefault() != null)
+                return null;
+                
+            var callerId = StringUtils.GetUserId(handle.RemoteUserId);
 
-            var callerId = Int32.Parse(handle.RemoteUserId);
+            if (callerId == 0)
+                return null;
+
             var callerName = RealmUtils.GetCallerName(callerId);
 
+            ActiveCall call = new ActiveCall(uuid, callerName, callerId, false, handle, true);
+
+          
             var update = new CXCallUpdate();
             update.RemoteHandle = new CXHandle(CXHandleType.Generic, callerName);
             update.SupportsDtmf = true;
@@ -195,59 +206,63 @@ namespace LetterApp.iOS.CallKit
             Provider.ReportNewIncomingCall(uuid, update, (error) =>
             {
                 if (error == null)
-                    CallManager.Calls.Add(new ActiveCall(uuid, callerName, callerId, false, SINCall, true));
+                {
+                 
+                    CallManager.Calls.Add(call);
+                }
                 else
                 {
                     Console.WriteLine("Error: {0}", error);
-                    AgoraCallEnded();
+                    //AgoraCallEnded();
                 }
             });
+
+            return call;
         }
 
         #endregion
 
-        #region SINClientDelegate Methods
+        //#region SINClientDelegate Methods
 
-        [Export("client:willReceiveIncomingCall:")]
-        public void WillReceiveIncomingCall(ISINCallClient client, ISINCall call)
-        {
-            var xcall = CallManager.Calls.LastOrDefault();
+        //[Export("client:willReceiveIncomingCall:")]
+        //public void WillReceiveIncomingCall(ISINCallClient client, ISINCall call)
+        //{
+        //    var xcall = CallManager.Calls.LastOrDefault();
 
-            if (xcall == null)
-            {
-                _comesFromBackground = true;
-                SINCall = call;
-            }
-            else
-            {
-                if (xcall.IsConnected)
-                    call.Hangup();
-                else
-                    SINCall = call;
-            }
-        }
+        //    if (xcall?.SINCall == null)
+        //    {
+        //        _comesFromBackground = true;
+        //        SINCall = call;
+        //    }
+        //    else
+        //    {
+        //        if (xcall.IsConnected)
+        //            call.Hangup();
+        //        else
+        //            SINCall = call;
+        //    }
+        //}
 
-        [Export("client:didReceiveIncomingCall:")]
-        public void DidReceiveIncomingCall(ISINCallClient client, ISINCall call)
-        {
-            if (_comesFromBackground)
-                return;
+        //[Export("client:didReceiveIncomingCall:")]
+        //public void DidReceiveIncomingCall(ISINCallClient client, ISINCall call)
+        //{
+        //    if (_comesFromBackground)
+        //        return;
 
-            var xcall = CallManager.Calls.LastOrDefault();
+        //    var xcall = CallManager.Calls.LastOrDefault();
 
-            if (xcall == null)
-            {
-                _comesFromBackground = false;
-                SINCall = call;
-            }
-            else
-            {
-                if (xcall.IsConnected)
-                    call.Hangup();
-                else
-                    SINCall = call;
-            }
-        }
+        //    if (xcall == null)
+        //    {
+        //        SINCall = call;
+        //    }
+        //    else
+        //    {
+        //        if (xcall.IsConnected)
+        //            call.Hangup();
+        //        else
+        //            SINCall = call;
+        //    }
+        //}
 
         [Export("callDidEnd:")]
         public void CallDidEnd(ISINCall call)
@@ -268,9 +283,8 @@ namespace LetterApp.iOS.CallKit
 
                         using (var appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate)
                         {
-                            if (appDelegate.RootController?.CurrentViewController is MainViewController)
+                            if (appDelegate.RootController?.CurrentViewController is MainViewController view)
                             {
-                                var view = appDelegate.RootController.CurrentViewController as MainViewController;
                                 if (view.TabBar.Items.Any())
                                     view.TabBar.Items[1].BadgeValue = AppSettings.BadgeForCalls.ToString();
                             }
@@ -283,12 +297,12 @@ namespace LetterApp.iOS.CallKit
             _sinCall = null;
         }
 
-        #endregion
+        //#endregion
 
 
         #region AgoraIO
 
-        public void SetupAgoraIO(CallViewController callViewController, string roomName, bool speaker, bool muted)
+        public void SetupAgoraIO(CallViewController callViewController, string roomName, bool speaker, bool muted, bool startedCall)
         {
             _roomName = roomName;
             _callViewController = callViewController;
@@ -296,7 +310,13 @@ namespace LetterApp.iOS.CallKit
             _agoraKit.SetChannelProfile(ChannelProfile.Communication);
             _agoraKit.SetEnableSpeakerphone(speaker);
             _agoraKit.MuteLocalAudioStream(muted);
-            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0, _callViewController.JoinCompleted);
+
+            if (startedCall)
+                _agoraKit.PlayEffect(0, PathForSound("ringback.wav"), 100, 1, 0, 100);
+
+            _agoraKit?.JoinChannelByToken(AgoraSettings.AgoraAPI, _roomName, null, 0,(arg1, arg2, arg3) => {
+                _callViewController.JoinCompleted(); 
+            });
         }
 
         public void AgoraCallStarted()
@@ -306,17 +326,24 @@ namespace LetterApp.iOS.CallKit
             if (call == null)
                 return;
 
+            _agoraKit.SetInEarMonitoringVolume(100);
+            _agoraKit.SetAudioProfile(AudioProfile.Default, AudioScenario.ChatRoomEntertainment);
+            _agoraKit.EnableAudio();
+
+            if(call.IsOutgoing)
+                _agoraKit?.StopEffect(0);
+
             call.AnswerCall();
 
             if (call.IsOutgoing)
-            {
                 CallManager.AnswerCall(call);
+            else
                 call?.SINCall?.Hangup();
-            }
         }
 
         public void AgoraCallEnded()
         {
+            _agoraKit?.StopEffect(0);
             _agoraKit?.LeaveChannel(AgoraLeftChannelCompleted);
         }
 

@@ -14,7 +14,8 @@ namespace LetterApp.Core.ViewModels
 {
     public class DivisionViewModel : XViewModel<int>
     {
-        private IDivisionService _divisionService;
+        private readonly IDialogService _dialogService;
+        private readonly IDivisionService _divisionService;
 
         private int _divisionId;
 
@@ -40,8 +41,9 @@ namespace LetterApp.Core.ViewModels
         private XPCommand _closeViewCommand;
         public XPCommand CloseViewCommand => _closeViewCommand ?? (_closeViewCommand = new XPCommand(async () => await CloseView(), CanExecute));
 
-        public DivisionViewModel(IDivisionService divisionService) 
+        public DivisionViewModel(IDivisionService divisionService, IDialogService dialogService) 
         {
+            _dialogService = dialogService;
             _divisionService = divisionService;
         }
 
@@ -54,6 +56,9 @@ namespace LetterApp.Core.ViewModels
         {
             _division = Realm.Find<DivisionModelProfile>(_divisionId);
             SetupModels(_division);
+
+            if(_division == null)
+                _dialogService.StartLoading();
 
             try
             {
@@ -78,6 +83,10 @@ namespace LetterApp.Core.ViewModels
             catch (Exception ex)
             {
                 Ui.Handle(ex as dynamic);
+            }
+            finally
+            {
+                _dialogService.StopLoading();
             }
         }
 
@@ -139,6 +148,11 @@ namespace LetterApp.Core.ViewModels
         private async Task CloseView()
         {
             await NavigationService.Close(this);
+        }
+
+        public override async Task Disappearing()
+        {
+            _dialogService.StopLoading();
         }
 
         private bool CanExecute() => !IsBusy;

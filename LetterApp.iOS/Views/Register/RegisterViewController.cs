@@ -52,6 +52,9 @@ namespace LetterApp.iOS.Views.Register
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             _buttonView.BackgroundColor = Colors.MainBlue;
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 16f, ViewModel.SubmitButton);
         }
@@ -66,6 +69,14 @@ namespace LetterApp.iOS.Views.Register
 
             _source.AgreementToogleEvent -= OnSource_AgreementToogleEvent;
             _source.AgreementToogleEvent += OnSource_AgreementToogleEvent;
+
+            _source.ReadAgreementEvent -= OnSource_ReadAgreementEvent;
+            _source.ReadAgreementEvent += OnSource_ReadAgreementEvent;
+        }
+
+        private void OnSource_ReadAgreementEvent(object sender, EventArgs e)
+        {
+            ViewModel.ReadAgreementCommand.Execute();
         }
 
         private void OnSource_AgreementToogleEvent(object sender, bool userAgreed)
@@ -75,10 +86,10 @@ namespace LetterApp.iOS.Views.Register
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsBusy);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsBusy);
         }
 
-        public override void OnKeyboardNotification(bool changeKeyboardState)
+        public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool changeKeyboardState)
         {
             if (_keyboardViewState != changeKeyboardState && ViewIsVisible)
             {
@@ -99,9 +110,8 @@ namespace LetterApp.iOS.Views.Register
             this.Title = ViewModel.Title;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
-            NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
-
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "back_black", CloseView);
+            this.NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;
             this.NavigationController.NavigationBar.Translucent = false;
             this.NavigationController.SetNavigationBarHidden(false, true);
@@ -117,15 +127,21 @@ namespace LetterApp.iOS.Views.Register
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            this.NavigationController.SetNavigationBarHidden(true, true);
+
+            if (this.IsMovingFromParentViewController)
+                this.NavigationController?.SetNavigationBarHidden(true, true);
         }
 
         public override void ViewDidDisappear(bool animated)
         {
-            _source?.Dispose();
-            _source = null;
-            MemoryUtility.ReleaseUIViewWithChildren(this.View);
             base.ViewDidDisappear(animated);
+
+            if (this.IsMovingFromParentViewController)
+            {
+                _source?.Dispose();
+                _source = null;
+                MemoryUtility.ReleaseUIViewWithChildren(this.View);
+            }
         }
     }
 }

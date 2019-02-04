@@ -1,11 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using Airbnb.Lottie;
-using Foundation;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
-using LetterApp.iOS.Interfaces;
 using LetterApp.iOS.Sources;
 using LetterApp.iOS.Views.Base;
 using UIKit;
@@ -63,11 +59,16 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+            {
+                _navBarTopConstraint.Constant = LocalConstants.IphoneXNotchHeight;
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
+
             UIButtonExtensions.SetupButtonAppearance(_submitButton, Colors.White, 16f, ViewModel.SubmitButton);
             UILabelExtensions.SetupLabelAppearance(_titleLabel, ViewModel.NewPassTitle, Colors.Black, 17f, UIFontWeight.Semibold);
             _closeButton.SetImage(UIImage.FromBundle("close_black"), UIControlState.Normal);
             _closeButton.TintColor = Colors.Black;
-            _backgroundView.BackgroundColor = Colors.MainBlue4;
             _buttonView.BackgroundColor = Colors.MainBlue;
         }
 
@@ -82,10 +83,10 @@ namespace LetterApp.iOS.Views.RecoverPassword
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsSubmiting);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _submitButton, ViewModel.SubmitButton, ViewModel.IsSubmiting);
         }
 
-        public override void OnKeyboardNotification(bool changeKeyboardState)
+        public override void OnKeyboardNotification(UIKeyboardEventArgs keybordEvent, bool changeKeyboardState)
         {
             if (_keyboardViewState != changeKeyboardState && ViewIsVisible)
             {

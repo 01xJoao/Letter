@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using CoreGraphics;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Models;
@@ -12,12 +11,18 @@ namespace LetterApp.iOS.Views.SelectPosition
 {
     public partial class SelectPositionViewController : XViewController<SelectPositionViewModel>
     {
+        private PositionModel _selectedPosition;
+
         public SelectPositionViewController() : base("SelectPositionViewController", null) {}
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             SetupView();
+
+            _backgroundView.AddGestureRecognizer(new UITapGestureRecognizer(HidePickerAction));
+            _backgroundView.UserInteractionEnabled = true;
 
             _picker.Hidden = true;
 
@@ -31,8 +36,25 @@ namespace LetterApp.iOS.Views.SelectPosition
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
+        void HidePickerAction()
+        {
+            if (_picker.Hidden)
+                return;
+
+            var postionSelected = 0;
+
+            if (_selectedPosition != null)
+                postionSelected = ViewModel.Positions.FindIndex(x => x.PositionID == _selectedPosition.PositionID);
+
+            _picker.Select(postionSelected, 0, true);
+            SelectedPosition(null, _selectedPosition ?? ViewModel.Positions[0]);
+        }
+
         private void OnSubmitButton_TouchUpInside(object sender, EventArgs e)
         {
+            if (!_picker.Hidden)
+                HidePickerAction();
+
             if (ViewModel.SetUserCommand.CanExecute())
                 ViewModel.SetUserCommand.Execute();
         }
@@ -44,19 +66,12 @@ namespace LetterApp.iOS.Views.SelectPosition
                 case nameof(ViewModel.Positions):
                     _picker.Model = new PositionsPickerModel(ViewModel.Positions, SelectedPosition);
                     break;
-                case nameof(ViewModel.IsBusy):
-                    Loading();
-                    break;
             }
-        }
-
-        private void Loading()
-        {
-            UIViewAnimationExtensions.CustomViewLoadingAnimation("loading_white", this.View, _loadingView, ViewModel.IsBusy);
         }
 
         private void SelectedPosition(object sender, PositionModel position)
         {
+            _selectedPosition = position;
             ViewModel.SetPositionCommand.Execute(position.PositionID);
             UILabelExtensions.SetupLabelAppearance(_pickerLabel, position.Name, Colors.Black, 18f);
             AnimatePicker(false);
@@ -79,11 +94,9 @@ namespace LetterApp.iOS.Views.SelectPosition
             }
             else
             {
-                UIView.Animate(0.3, () => _picker.Alpha = 0, HidePicker);
+                UIView.Animate(0.3, () => _picker.Alpha = 0, () => _picker.Hidden = true);
             }
         }
-
-        private void HidePicker() => _picker.Hidden = true;
 
         private void SetupView()
         {
@@ -104,7 +117,19 @@ namespace LetterApp.iOS.Views.SelectPosition
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+
+            if(NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = true;
         }
 
         public override void ViewDidDisappear(bool animated)

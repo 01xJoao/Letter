@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Airbnb.Lottie;
 using CoreGraphics;
+using LetterApp.Core.Models;
 using LetterApp.Core.Services.Interfaces;
 using LetterApp.iOS.Views.CustomViews.Dialog;
 using UIKit;
@@ -30,9 +31,24 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<string> ShowOptions(string title = "", OptionsType optionsType = OptionsType.List, string cancelButtonText = "", params string[] options)
+        public Task<Tuple<ChatOptions, bool>> ShowChatOptions(string name = "", string photo = "", bool muted = false, string[] resources = null)
         {
-            throw new NotImplementedException();
+            var tcs = new TaskCompletionSource<Tuple<ChatOptions, bool>>();
+
+            var chatOptionsView = new ShowChatOptionsViewController(name, photo, muted, resources, val => tcs.TrySetResult(val));
+            chatOptionsView.Show();
+
+            return tcs.Task;
+        }
+
+        public Task<bool> ShowMessageAlert(string photo = "", string name = "", string message = "")
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var messageAlertView = new ChatAlertViewController(photo, name, message, val => tcs.TrySetResult(val));
+            messageAlertView.Show();
+
+            return tcs.Task;
         }
 
         public Task<bool> ShowInformation(string title = "", string text1 = "", string text2 = "", string text3 = "", string confirmButtonText = "")
@@ -55,11 +71,11 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public Task<bool> ShowFilter(string title = "", string switchText = "", string descriptionText = "", string buttonText = "", bool isActive = true)
+        public Task<Tuple<bool,bool>> ShowFilter(string title = "", List<ContactDialogFilter> filters = null, string buttonText = "")
         {
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<Tuple<bool, bool>>();
 
-            var filterView = new FilterContactsViewController(title, switchText, descriptionText, buttonText, isActive, val => tcs.TrySetResult(val));
+            var filterView = new FilterContactsViewController(title, filters, buttonText, val => tcs.TrySetResult(val));
             filterView.Show();
 
             return tcs.Task;
@@ -75,17 +91,43 @@ namespace LetterApp.iOS.Services
             return tcs.Task;
         }
 
-        public void StartLoading()
+        public Task<bool> ShowPicture(string image, string send, string cancel)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var pictureView = new PictureViewController(image, send, cancel, val => tcs.TrySetResult(val));
+            pictureView.Show();
+
+            return tcs.Task;
+        }
+
+        public Task<bool> ShowChatImage(string image, string save)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var imageView = new ShowImageViewController(image, save, val => tcs.TrySetResult(val));
+            imageView.Show();
+
+            return tcs.Task;
+        }
+
+        public void ShowCallStack(string title, List<CallStackModel> calls)
+        {
+            var callStackView = new CallStackViewController(title, calls);
+            callStackView.Show();
+        }
+
+        public void StartLoading(LoadingColor color)
         {
             StopLoading();
 
-            _lottieAnimation = LOTAnimationView.AnimationNamed("loading");
+            _lottieAnimation = color == LoadingColor.Blue ? LOTAnimationView.AnimationNamed("load_blue") : LOTAnimationView.AnimationNamed("load_white");
             _lottieAnimation.ContentMode = UIViewContentMode.ScaleAspectFit;
 
             if(_view == null)
                 _view = ((AppDelegate)UIApplication.SharedApplication.Delegate).Window;
 
-            _lottieAnimation.Frame = new CGRect(0, 0, _view.Bounds.Size.Width * 0.5,  _view.Bounds.Size.Height * 0.5);
+            _lottieAnimation.Frame = new CGRect(0, 0, 90, 90);
             _lottieAnimation.Center = _view.Center;
 
             _view.AddSubview(_lottieAnimation);

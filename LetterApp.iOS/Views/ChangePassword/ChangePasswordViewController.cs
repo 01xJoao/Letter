@@ -31,8 +31,6 @@ namespace LetterApp.iOS.Views.ChangePassword
                 case nameof(ViewModel.CleanPassword):
                     CleanCurrentPassword();
                     break;
-                default:
-                    break;
             }
         }
 
@@ -47,11 +45,14 @@ namespace LetterApp.iOS.Views.ChangePassword
             if(ViewModel.IsBusy)
                 this.View.EndEditing(true);
             
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading_white", _submitButton, ViewModel.ChangePassword, ViewModel.IsBusy);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_white", _submitButton, ViewModel.ChangePassword, ViewModel.IsBusy);
         }
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             _view1.BackgroundColor = Colors.ProfileGrayWhiter;
             _view2.BackgroundColor = Colors.ProfileGrayWhiter;
             _view3.BackgroundColor = Colors.ProfileGrayWhiter;
@@ -104,7 +105,7 @@ namespace LetterApp.iOS.Views.ChangePassword
             NavigationController.NavigationBar.TintColor = Colors.White;
             this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = Colors.Black };
 
-            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(20, "back_black", CloseView);
+            this.NavigationItem.LeftBarButtonItem = UIButtonExtensions.SetupImageBarButton(LocalConstants.TabBarIconSize, "back_black", CloseView);
             NavigationController.InteractivePopGestureRecognizer.Delegate = new UIGestureRecognizerDelegate();
 
             this.NavigationController.NavigationBar.BarTintColor = Colors.White;

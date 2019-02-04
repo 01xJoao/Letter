@@ -22,10 +22,6 @@ namespace LetterApp.iOS.Views.SelectDivision
 
 
         [Outlet]
-        UIKit.UIView _loadingView { get; set; }
-
-
-        [Outlet]
         UIKit.UITableView _tableView { get; set; }
 
 
@@ -42,11 +38,6 @@ namespace LetterApp.iOS.Views.SelectDivision
             if (_closeButton != null) {
                 _closeButton.Dispose ();
                 _closeButton = null;
-            }
-
-            if (_loadingView != null) {
-                _loadingView.Dispose ();
-                _loadingView = null;
             }
 
             if (_tableView != null) {

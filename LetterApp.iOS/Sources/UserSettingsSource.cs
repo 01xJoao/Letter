@@ -181,7 +181,7 @@ namespace LetterApp.iOS.Sources
         {
             MessageNotifications,
             CallNotifications,
-            GroupNotifications,
+            //GroupNotifications,
             Count
         }
 

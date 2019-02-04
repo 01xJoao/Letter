@@ -29,15 +29,16 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
             _descriptionField.AdjustsFontSizeToFitWidth = true;
             _descriptionField.MinimumFontSize = 11f;
 
-            _descriptionField.ShouldReturn -= (field) => TextFieldShouldReturn(field);
-            _descriptionField.ShouldReturn += (field) => TextFieldShouldReturn(field);
+            _descriptionField.ShouldReturn -= TextFieldShouldReturn;
+            _descriptionField.ShouldReturn += TextFieldShouldReturn;
 
             _settingsButton.SetImage(UIImage.FromBundle("settings"), UIControlState.Normal);
             _settingsButton.ContentMode = UIViewContentMode.ScaleAspectFit;
             _settingsButton.TintColor = Colors.White;
 
             _profileImage.Image?.Dispose();
-            ImageService.Instance.LoadStream((token) => {
+            ImageService.Instance.LoadStream((token) =>
+            {
                 return ImageHelper.GetStreamFromImageByte(token, profile.Picture);
             }).ErrorPlaceholder("add_photo", ImageSource.CompiledResource).Transform(new CircleTransformation()).Into(_profileImage);
             CustomUIExtensions.RoundShadow(_profileImage);
@@ -51,10 +52,14 @@ namespace LetterApp.iOS.Views.TabBar.UserProfileViewController.Cells
 
             _descriptionField.ShouldChangeCharacters = OnDescriptionField_ShouldChangeCharacters;
 
-            if(PhoneModelExtensions.IsIphoneX())
+            if (PhoneModelExtensions.IsIphoneX())
             {
-                _settingsHeightConstraint.Constant = 27;
-                _settingsWidthConstraint.Constant = 10;
+                _settingsHeightConstraint.Constant = 25;
+                _settingsWidthConstraint.Constant = 8;
+            }
+            else if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                _settingsHeightConstraint.Constant = 23;
             }
 
             _descriptionField.EditingDidBegin -= OnDescriptionField_EditingDidBegin;

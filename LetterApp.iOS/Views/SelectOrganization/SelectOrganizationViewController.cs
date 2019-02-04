@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using CoreGraphics;
 using Foundation;
+using LetterApp.Core;
 using LetterApp.Core.ViewModels;
 using LetterApp.iOS.Helpers;
 using LetterApp.iOS.Interfaces;
@@ -28,6 +28,9 @@ namespace LetterApp.iOS.Views.SelectOrganization
                 
             _closeButton.TouchUpInside -= OnCloseButton_TouchUpInside;
             _closeButton.TouchUpInside += OnCloseButton_TouchUpInside;
+
+            _createOrgButton.TouchUpInside -= OnCreateOrgButton_TouchUpInside;
+            _createOrgButton.TouchUpInside += OnCreateOrgButton_TouchUpInside;
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -36,6 +39,10 @@ namespace LetterApp.iOS.Views.SelectOrganization
             {
                 case nameof(ViewModel.IsBusy):
                     Loading();
+                    break;
+                case nameof(ViewModel.RegisterUser):
+                    var userInfo = new NSDictionary("userId", AppSettings.UserAndOrganizationIds);
+                    NSNotificationCenter.DefaultCenter.PostNotificationName("UserDidLoginNotification", null, userInfo);
                     break;
                 default:
                     break;
@@ -56,11 +63,14 @@ namespace LetterApp.iOS.Views.SelectOrganization
 
         private void Loading()
         {
-            UIViewAnimationExtensions.CustomButtomLoadingAnimation("loading", _submitButton, ViewModel.AccessButton, ViewModel.IsBusy);
+            UIViewAnimationExtensions.CustomButtomLoadingAnimation("load_blue", _submitButton, ViewModel.AccessButton, ViewModel.IsBusy);
         }
 
         private void SetupView()
         {
+            if (PhoneModelExtensions.IsIphoneX())
+                _buttonHeightConstraint.Constant += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
             _closeButton.SetImage(UIImage.FromBundle("close_white"), UIControlState.Normal);
             _closeButton.TintColor = Colors.White;
             _backgroundView.BackgroundColor = Colors.SelectBlue;
@@ -78,6 +88,8 @@ namespace LetterApp.iOS.Views.SelectOrganization
             _textField.AutocorrectionType = UITextAutocorrectionType.No;
             _textField.TextContentType = new NSString("");
 
+            UIButtonExtensions.SetupButtonUnderlineAppearance(_createOrgButton, Colors.White, 15f, ViewModel.CreateOrganization);
+
             if (!string.IsNullOrEmpty(ViewModel.EmailDomain))
                 _textField.Text = ViewModel.EmailDomain.ToUpper();
         }
@@ -91,10 +103,23 @@ namespace LetterApp.iOS.Views.SelectOrganization
             }
         }
 
+        private void OnCreateOrgButton_TouchUpInside(object sender, EventArgs e)
+        {
+            ViewModel.CreateOrganizationCommand.Execute();
+        }
+
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (NavigationController?.InteractivePopGestureRecognizer != null)
+                NavigationController.InteractivePopGestureRecognizer.Enabled = false;
         }
     }
 }
